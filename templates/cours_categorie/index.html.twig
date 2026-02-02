@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CoursCategorie index{% endblock %}
+
+{% block body %}
+    <h1>CoursCategorie index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Slug</th>
+                <th>Datecreation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cours_categorie in cours_categories %}
+            <tr>
+                <td>{{ cours_categorie.id }}</td>
+                <td>{{ cours_categorie.nom }}</td>
+                <td>{{ cours_categorie.description }}</td>
+                <td>{{ cours_categorie.slug }}</td>
+                <td>{{ cours_categorie.datecreation ? cours_categorie.datecreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_cours_categorie_show', {'id': cours_categorie.id}) }}">show</a>
+                    <a href="{{ path('app_cours_categorie_edit', {'id': cours_categorie.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cours_categorie_new') }}">Create new</a>
+{% endblock %}

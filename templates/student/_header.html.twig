@@ -1,0 +1,45 @@
+<header class="dashboard-header">
+    <div class="header-brand-wrapper">
+        <a href="{{ path('app_home') }}" class="header-brand">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn">
+            <span>InnoLearn</span>
+        </a>
+    </div>
+
+    <nav class="header-nav">
+        <a href="{{ path('app_student_dashboard') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_dashboard' ? 'active' : '' }}">
+            Accueil
+        </a>
+        <a href="{{ path('app_student_courses') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_courses' ? 'active' : '' }}">
+            Cours
+        </a>
+        <a href="{{ path('app_student_projects') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_projects' ? 'active' : '' }}">
+            Projets
+        </a>
+        <a href="{{ path('app_student_events') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_events' ? 'active' : '' }}">
+            Événements
+        </a>
+        <a href="{{ path('app_student_career') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_career' ? 'active' : '' }}">
+            Carrière
+        </a>
+    </nav>
+    
+    <div class="header-actions">
+        <div class="search-bar-compact">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher...">
+        </div>
+
+        <button class="icon-btn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge-dot"></span>
+        </button>
+        
+        <div class="user-profile-toggle" id="profileToggle">
+            <div class="avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Etudiant+User&background=6366f1&color=fff&bold=true" alt="User Avatar">
+                <span class="status-indicator online"></span>
+            </div>
+        </div>
+    </div>
+</header>

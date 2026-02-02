@@ -1,0 +1,104 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Dashboard - Gestion{% endblock %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block admin_content %}
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card animate-fade-in-up">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="3456" data-prefix="$">$0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total views</span>
+            <div class="stat-change positive">
+                <span>0.43%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="45200" data-prefix="$">$0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total Profit</span>
+            <div class="stat-change positive">
+                <span>4.35%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="2450">0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total Product</span>
+            <div class="stat-change positive">
+                <span>2.59%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card animate-fade-in-up" style="animation-delay: 0.3s;">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="3456">0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total Users</span>
+            <div class="stat-change positive">
+                <span>0.95%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-grid">
+    <div class="chart-card large animate-fade-in-up">
+        <div class="chart-header">
+            <h3>Total Revenue</h3>
+            <div class="chart-tabs">
+                <button class="tab-btn active">Day</button>
+                <button class="tab-btn">Week</button>
+                <button class="tab-btn">Month</button>
+            </div>
+        </div>
+        <div class="chart-container" id="revenueChart"></div>
+    </div>
+    
+    <div class="chart-card animate-fade-in-up">
+        <div class="chart-header">
+            <h3>Profit cette semaine</h3>
+        </div>
+        <div class="chart-container" id="profitChart"></div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign Up - InnoLearn{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer_wave %}{% endblock %}
+
+{% block body %}
+<main class="auth-page" style="background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 2rem 0;">
+    <!-- Organic Background Blobs -->
+    <div style="position: absolute; top: -10%; right: -10%; width: 50%; height: 70%; background: var(--gradient-hero); border-radius: 50%; filter: blur(120px); opacity: 0.4;"></div>
+    <div style="position: absolute; bottom: -10%; left: -10%; width: 40%; height: 60%; background: var(--secondary); border-radius: 50%; filter: blur(120px); opacity: 0.3;"></div>
+
+    <!-- Back to Home Button -->
+    <a href="{{ path('app_home') }}" style="position: absolute; top: 2rem; left: 2rem; z-index: 100; display: flex; align-items: center; gap: 0.5rem; color: white; text-decoration: none; font-weight: 500; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 0.75rem 1.25rem; border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Home
+    </a>
+
+    <div class="auth-frame" style="position: relative; z-index: 1; max-width: 1100px; width: 90%; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px; overflow: hidden; display: flex; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);">
+        <!-- Left Side: Sending Animation -->
+        <div class="lock-side" style="flex: 1; padding: 4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border-right: 1px solid rgba(255, 255, 255, 0.05);">
+            <div class="animation-container" style="width: 250px; height: 250px; position: relative; color: var(--primary-light); filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.3));">
+                <svg id="sending-plane" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; transition: all 1s cubic-bezier(0.68, -0.6, 0.32, 1.6);">
+                    <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div style="margin-top: 2rem; text-align: center;">
+                <h2 style="color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Join the Adventure</h2>
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">Your journey to knowledge starts with one click.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="form-side" style="flex: 1.2; padding: 4rem;">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h1 style="color: white; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem;">Create Account</h1>
+                <p style="color: rgba(255, 255, 255, 0.6);">Be part of our innovative community.</p>
+            </div>
+
+            <form method="post" class="auth-form" id="signup-form">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">First Name</label>
+                        <input type="text" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="John" required>
+                    </div>
+                    <div>
+                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Last Name</label>
+                        <input type="text" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="Doe" required>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Email Address</label>
+                    <input type="email" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="john@example.com" required>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Create Password</label>
+                    <input type="password" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="signup-btn" style="width: 100%; justify-content: center; padding: 1.1rem; font-size: 1.1rem; margin-bottom: 1.5rem; transition: all 0.3s;">Let's Go!</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.95rem;">Already a member? <a href="{{ path('app_login') }}" style="color: white; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--secondary);">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const plane = document.getElementById('sending-plane');
+            const btn = document.getElementById('signup-btn');
+            
+            // Button blinking effect
+            btn.style.animation = 'blink 0.2s infinite alternate';
+            btn.innerText = 'Sending...';
+            
+            // Plane takeoff animation
+            plane.style.transform = 'translate(150px, -150px) scale(0.5)';
+            plane.style.opacity = '0';
+            
+            setTimeout(() => {
+                btn.style.animation = 'none';
+                btn.style.background = 'var(--secondary)';
+                btn.innerText = 'Welcome aboard!';
+                alert('Account created! Ready to fly.');
+            }, 1000);
+        });
+    </script>
+</main>
+
+<style>
+    @keyframes blink {
+        from { opacity: 1; transform: scale(1); }
+        to { opacity: 0.7; transform: scale(0.98); }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Accueil Étudiant - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Section-Specific Filter Bar -->
+    {{ include('student/_filter_bar.html.twig', {
+        placeholder: 'Rechercher vos cours, activités...',
+        categories: categories
+    }) }}
+
+    <section class="welcome-banner animate-fade-in">
+        <div class="banner-content">
+            <h1>Ravi de vous revoir, Étudiant ! 👋</h1>
+            <p>Vous avez complété <strong>25%</strong> de votre parcours hebdomadaire. Continuez comme ça !</p>
+        </div>
+        <div class="banner-stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.hours }}h</span>
+                <span class="stat-label">Apprises</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.certificates }}</span>
+                <span class="stat-label">Diplômes</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Progress Section -->
+    <section class="dashboard-section">
+        <div class="section-header">
+            <h2>Aujourd'hui</h2>
+            <a href="#" class="view-all">Voir tout</a>
+        </div>
+        
+        <div class="course-progress-grid">
+            {% for course in courses %}
+            <div class="course-progress-card">
+                <div class="course-icon" style="background: {{ course.color }}20; color: {{ course.color }}">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="course-info">
+                    <h3>{{ course.title }}</h3>
+                    <p>Par {{ course.teacher }}</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: {{ course.progress }}%; background: {{ course.color }}"></div>
+                    </div>
+                    <span class="progress-text">{{ course.progress }}% complété</span>
+                </div>
+                <button class="btn-play"><i class="fas fa-play"></i></button>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Sidebar Alternative / Extra Info -->
+    <div class="dashboard-grid-footer">
+        <section class="upcoming-live dashboard-card">
+            <h3>Sessions en Direct</h3>
+            <div class="live-item">
+                <div class="live-date">24 Mar</div>
+                <div class="live-info">
+                    <h4>Design Thinking Workshop</h4>
+                    <p>14:00 - 15:30</p>
+                </div>
+                <button class="btn-join">Rejoindre</button>
+            </div>
+        </section>
+
+        <section class="achievements dashboard-card">
+            <h3>Dernières Réussites</h3>
+            <div class="badge-row">
+                <div class="badge-item" title="Early Bird"><i class="fas fa-bolt"></i></div>
+                <div class="badge-item" title="Course Finished"><i class="fas fa-check-circle"></i></div>
+                <div class="badge-item" title="Team Player"><i class="fas fa-users"></i></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+/* Page-Specific Overrides */
+.welcome-banner {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 30px;
+    padding: 3rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+}
+.stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 1.5rem 2rem; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+.stat-number { display: block; font-size: 1.8rem; font-weight: 800; }
+
+.section-header h2 { font-size: 1.5rem; color: var(--text-main); }
+.view-all { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+.course-progress-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+.course-progress-card {
+    background: white; border-radius: 24px; padding: 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.3s;
+}
+.course-progress-card:hover { transform: translateY(-5px); }
+.course-icon { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+
+.dashboard-grid-footer { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 3rem; }
+.dashboard-card { background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+.live-item { display: flex; align-items: center; gap: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 16px; border: 1px solid #f1f5f9; }
+.live-date { background: white; padding: 0.5rem 1rem; border-radius: 12px; text-align: center; font-weight: 800; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.btn-join { margin-left: auto; background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+
+.badge-item { width: 60px; height: 60px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #94a3b8; transition: all 0.3s; }
+.badge-item:hover { background: rgba(99, 102, 241, 0.1); color: var(--primary); transform: scale(1.1) rotate(10deg); }
+</style>
+{% endblock %}

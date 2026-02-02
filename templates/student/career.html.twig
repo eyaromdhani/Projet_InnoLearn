@@ -1,0 +1,138 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Opportunités Carrière - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <header class="section-top-header animate-fade-in">
+        <div class="header-info">
+            <h1>Opportunités de Carrière</h1>
+            <p>Propulsez votre avenir avec des offres sélectionnées pour vous.</p>
+        </div>
+        <button class="btn-primary-gradient" onclick="alert('Ouverture de votre CV Builder interactif...')">
+            <i class="fas fa-file-invoice"></i>
+            Mon CV Virtuel
+        </button>
+    </header>
+
+    <!-- Section-Specific Filter Bar -->
+    {{ include('student/_filter_bar.html.twig', {
+        placeholder: 'Poste, entreprise, mots-clés...',
+        categories: [
+            {name: 'Stage', icon: 'fa-user-graduate'},
+            {name: 'CDI', icon: 'fa-briefcase'},
+            {name: 'Freelance', icon: 'fa-laptop-code'}
+        ],
+        extra_action: { id: 'btnSavedJobs', icon: 'fa-bookmark', label: 'Offres sauvées' }
+    }) }}
+
+    <div class="job-grid" id="jobGrid">
+        {% for job in jobs %}
+        <div class="job-card" data-category="{{ job.category|lower }}" data-title="{{ job.title|lower }} {{ job.company|lower }}">
+            <div class="job-company-logo">
+                {{ job.company|slice(0, 1) }}
+            </div>
+            <div>
+                <span class="job-company">{{ job.company }}</span>
+                <h2 class="job-title">{{ job.title }}</h2>
+                <div class="job-tags">
+                    <span class="job-tag">{{ job.category }}</span>
+                    <span class="job-tag">Hybride</span>
+                </div>
+            </div>
+            <div class="job-meta">
+                <span><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
+                <span><i class="fas fa-coins"></i> {{ job.salary }}</span>
+            </div>
+            <button class="btn-apply" onclick="alert('Candidature envoyée avec succès ! Votre profil a été synchronisé.')">
+                Postuler maintenant
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Section Header */
+.section-top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-info h1 { font-size: 2rem; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; }
+.header-info p { color: var(--text-muted); font-weight: 500; }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+.btn-primary-gradient:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3); }
+
+/* Job Grid */
+.job-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+.job-card {
+    background: white; border-radius: 24px; padding: 2rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+    border: 1px solid var(--border-color); transition: all 0.3s;
+}
+.job-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+
+.job-company-logo {
+    width: 48px; height: 48px; border-radius: 14px; background: #f1f5f9;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: var(--primary); font-weight: 800;
+}
+
+.job-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+.job-company { font-weight: 600; color: var(--primary); margin-bottom: 0.5rem; display: block; }
+
+.job-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.job-tag { padding: 0.4rem 0.75rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; background: #f8fafc; color: var(--text-muted); }
+
+.job-meta { display: flex; gap: 1.5rem; font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
+.job-meta span { display: flex; align-items: center; gap: 0.4rem; }
+
+.btn-apply {
+    width: 100%; padding: 1rem; border-radius: 16px; border: none;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white; font-weight: 700; cursor: pointer; transition: all 0.3s;
+}
+.btn-apply:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('jobGrid');
+    
+    // Unified Filtering Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    function updateGrid() {
+        const cards = Array.from(grid.querySelectorAll('.job-card'));
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const cat = card.getAttribute('data-category');
+            
+            const matchesSearch = title.includes(currentSearchQuery);
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+    }
+
+    document.addEventListener('categoryFilter', (e) => {
+        currentCategory = e.detail.value;
+        updateGrid();
+    });
+
+    document.addEventListener('localSearch', (e) => {
+        currentSearchQuery = e.detail.query;
+        updateGrid();
+    });
+
+    const btnSaved = document.getElementById('btnSavedJobs');
+    if(btnSaved) {
+        btnSaved.onclick = () => alert('Affichage de vos offres sauvegardées...');
+    }
+});
+</script>
+{% endblock %}

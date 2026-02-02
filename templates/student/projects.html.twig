@@ -1,0 +1,181 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Projets Collaboratifs - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <header class="section-top-header animate-fade-in">
+        <div class="header-info">
+            <h1>Projets Collaboratifs</h1>
+            <p>Rejoignez des équipes et construisez l'avenir ensemble.</p>
+        </div>
+        <button class="btn-primary-gradient" id="openModalBtn">
+            <i class="fas fa-plus"></i>
+            Créer un Projet
+        </button>
+    </header>
+
+    <!-- Section-Specific Filter Bar -->
+    {{ include('student/_filter_bar.html.twig', {
+        placeholder: 'Rechercher un projet, une technologie...',
+        categories: [
+            {name: 'AI', icon: 'fa-robot'},
+            {name: 'Web', icon: 'fa-code'},
+            {name: 'Design', icon: 'fa-paint-brush'}
+        ],
+        extra_action: { id: 'btnJoinFast', icon: 'fa-bolt', label: 'Match Rapide' }
+    }) }}
+
+    <div class="project-grid" id="projectGrid">
+        {% for project in projects %}
+        <div class="project-card" data-category="{{ project.category|lower }}" data-title="{{ project.title|lower }}">
+            <div class="card-badges">
+                <span class="project-badge badge-tech">{{ project.category }}</span>
+                <span class="project-badge badge-status {{ project.status == 'Recherche membres' ? 'status-recherche' : (project.status == 'Complet' ? 'status-complet' : '') }}">
+                    {{ project.status }}
+                </span>
+            </div>
+            <div class="project-info">
+                <h2>{{ project.title }}</h2>
+                <div class="project-lead">
+                    <img src="https://ui-avatars.com/api/?name={{ project.lead }}&background=random" class="lead-avatar" alt="Lead">
+                    <span>Lead: {{ project.lead }}</span>
+                </div>
+            </div>
+            <div class="project-progress">
+                <div class="progress-header">
+                    <span>Membres</span>
+                    <span>{{ project.members }}/{{ project.max_members }}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ (project.members / project.max_members) * 100 }}%"></div>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn-join" {{ project.status == 'Complet' ? 'disabled' : '' }}>
+                    {{ project.status == 'Complet' ? 'Équipe complète' : 'Postuler' }}
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Add Project Modal -->
+<div class="modal-overlay" id="addProjectModal">
+    <div class="modal-container" style="max-width: 500px;">
+        <button class="modal-close" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 style="margin: 2rem 0; font-size: 1.8rem; text-align: center;">Lancer un Projet</h2>
+        <form id="addProjectForm" style="padding: 0 3rem 3rem;">
+            <div class="form-group">
+                <label>Nom du projet</label>
+                <input type="text" class="form-control" placeholder="ex: Application de Fitness AI" required>
+            </div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Catégorie</label>
+                <select class="form-control" required>
+                    <option value="Web">Web</option>
+                    <option value="AI">AI</option>
+                    <option value="Design">Design</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Nombre de membres max</label>
+                <input type="number" class="form-control" value="4" min="2" max="10" required>
+            </div>
+            <button type="submit" class="btn-primary-gradient" style="width: 100%; justify-content: center; margin-top: 2rem;">
+                Démarrer l'aventure
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Section Header */
+.section-top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-info h1 { font-size: 2rem; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; }
+.header-info p { color: var(--text-muted); font-weight: 500; }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white; border: none; padding: 0.8rem 1.75rem; border-radius: 14px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+.btn-primary-gradient:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3); }
+
+/* Project Grid */
+.project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+.project-card {
+    background: white; border-radius: 24px; padding: 2rem; border: 1px solid var(--border-color);
+    transition: all 0.3s; display: flex; flex-direction: column; gap: 1.5rem;
+}
+.project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
+
+.project-badge { display: inline-flex; align-items: center; padding: 0.5rem 0.8rem; border-radius: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
+.badge-tech { background: #f1f5f9; color: #475569; }
+.badge-status { background: #ecfdf5; color: #10b981; }
+.status-recherche { background: #fdf2f8; color: #db2777; }
+.status-complet { background: #f1f5f9; color: #94a3b8; }
+
+.project-info h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem; }
+.project-lead { display: flex; align-items: center; gap: 0.75rem; color: var(--text-muted); font-size: 0.9rem; }
+.lead-avatar { width: 24px; height: 24px; border-radius: 50%; }
+
+.progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem; }
+.progress-bar { height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 4px; }
+
+.btn-join {
+    width: 100%; background: #f8fafc; color: #475569; border: 1px solid #f1f5f9;
+    padding: 0.85rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-join:hover:not(:disabled) { background: var(--primary); color: white; border-color: var(--primary); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addProjectModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const form = document.getElementById('addProjectForm');
+    const grid = document.getElementById('projectGrid');
+    
+    // Modal logic
+    if(openBtn) openBtn.onclick = () => modal.classList.add('active');
+    if(closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
+    window.onclick = (e) => { if(e.target === modal) modal.classList.remove('active'); };
+
+    // Unified Filtering Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    function updateGrid() {
+        const cards = Array.from(grid.querySelectorAll('.project-card'));
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const cat = card.getAttribute('data-category');
+            
+            const matchesSearch = title.includes(currentSearchQuery);
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+    }
+
+    document.addEventListener('categoryFilter', (e) => {
+        currentCategory = e.detail.value;
+        updateGrid();
+    });
+
+    document.addEventListener('localSearch', (e) => {
+        currentSearchQuery = e.detail.query;
+        updateGrid();
+    });
+
+    form.onsubmit = function(e) { e.preventDefault(); alert('Projet créé avec succès !'); modal.classList.remove('active'); };
+});
+</script>
+{% endblock %}

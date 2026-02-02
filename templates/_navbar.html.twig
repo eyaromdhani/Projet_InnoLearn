@@ -1,0 +1,18 @@
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-brand">
+            <a href="{{ path('app_home') }}" style="display: flex; align-items: center; gap: 0.25rem; text-decoration: none;">
+                <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn" style="height: 45px; width: auto;">
+                <span class="brand-text">InnoLearn</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ path('app_home') }}" class="nav-link">Accueil</a>
+            <a href="#" class="nav-link">Cours</a>
+            <a href="#" class="nav-link">Événements</a>
+            <a href="#" class="nav-link">Opportunités</a>
+            <a href="{{ path('app_login') }}" class="btn btn-outline">Connexion</a>
+            <a href="{{ path('app_signup') }}" class="btn btn-primary">Inscription</a>
+        </div>
+    </div>
+</nav>

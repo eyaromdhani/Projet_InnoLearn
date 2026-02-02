@@ -1,0 +1,190 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Catalogue des Cours - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <header class="section-top-header animate-fade-in">
+        <div class="header-info">
+            <h1>Explorez les Cours</h1>
+            <p>Découvrez de nouvelles compétences parmi nos {{ courses|length }} formations disponibles.</p>
+        </div>
+        <button class="btn-primary-gradient" id="openModalBtn">
+            <i class="fas fa-plus"></i>
+            Ajouter un Cours
+        </button>
+    </header>
+
+    <!-- Section-Specific Filter Bar -->
+    {{ include('student/_filter_bar.html.twig', {
+        placeholder: 'Rechercher un cours ou un enseignant...',
+        categories: categories,
+        extra_action: { id: 'btnSortRating', icon: 'fa-star', label: 'Mieux notés' }
+    }) }}
+
+    <div class="course-catalog-grid" id="courseGrid">
+        {% for course in courses %}
+        <div class="course-card-premium" data-category="{{ course.category|lower }}" data-price="{{ course.price }}" data-rating="{{ course.rating }}" data-title="{{ course.title|lower }}">
+            <div class="course-image-wrapper">
+                <img src="{{ course.image }}" alt="{{ course.title }}">
+                <div class="course-badge">{{ course.category }}</div>
+            </div>
+            <div class="course-content">
+                <h3>{{ course.title }}</h3>
+                <div class="course-teacher">
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ course.teacher }}</span>
+                </div>
+                <div class="course-meta">
+                    <span class="course-price">{{ course.price }} €</span>
+                    <div class="course-rating">
+                        <i class="fas fa-star"></i>
+                        <span>{{ course.rating }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal: Add Course -->
+<div class="modal-overlay" id="addCourseModal">
+    <div class="modal-container">
+        <button class="modal-close" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 style="margin: 2rem 0; font-size: 1.8rem; text-align: center;">Ajouter un Cours</h2>
+        
+        <form id="addCourseForm" style="padding: 0 3rem 3rem;">
+            <div class="form-group">
+                <label>Titre du Cours</label>
+                <input type="text" id="title" class="form-control" placeholder="ex: Advanced Symfony Masterclass" required>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select id="category" class="form-control" required>
+                        {% for category in categories %}
+                            {% if category.name != 'Tout' %}
+                                <option value="{{ category.name }}">{{ category.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prix (€)</label>
+                    <input type="number" id="price" class="form-control" placeholder="ex: 49.99" step="0.01" required>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Enseignant</label>
+                <input type="text" id="teacher" class="form-control" placeholder="Votre nom" required>
+            </div>
+
+            <button type="submit" class="btn-primary-gradient" style="width: 100%; justify-content: center; margin-top: 2rem; padding: 1rem;">
+                Enregistrer le cours
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Section Top Header */
+.section-top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-info h1 { font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem; }
+.header-info p { color: var(--text-muted); }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+.btn-primary-gradient:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3); }
+
+/* Course Grid */
+.course-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
+.course-card-premium {
+    background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s; border: 1px solid var(--border-color); display: flex; flex-direction: column;
+}
+.course-card-premium:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+.course-image-wrapper { position: relative; height: 200px; overflow: hidden; }
+.course-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.course-card-premium:hover .course-image-wrapper img { transform: scale(1.1); }
+.course-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 10px; font-size: 0.75rem; font-weight: 800; color: var(--text-main); }
+.course-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+.course-content h3 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text-main); }
+.course-teacher { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.course-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid #f1f5f9; }
+.course-price { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+.course-rating { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; color: #fbbf24; }
+
+/* Add Course Modal Overrides */
+.modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+.form-control { width: 100%; padding: 0.85rem 1.25rem; border-radius: 14px; border: 1px solid #e2e8f0; outline: none; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addCourseModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const form = document.getElementById('addCourseForm');
+    const grid = document.getElementById('courseGrid');
+    
+    // Modal logic
+    if(openBtn) openBtn.onclick = () => modal.classList.add('active');
+    if(closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
+    window.onclick = (e) => { if(e.target === modal) modal.classList.remove('active'); };
+
+    // Unified Filtering Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    function updateGrid() {
+        const cards = Array.from(grid.querySelectorAll('.course-card-premium'));
+        
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const cat = card.getAttribute('data-category');
+            
+            const matchesSearch = title.includes(currentSearchQuery);
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+    }
+
+    document.addEventListener('categoryFilter', (e) => {
+        currentCategory = e.detail.value;
+        updateGrid();
+    });
+
+    document.addEventListener('localSearch', (e) => {
+        currentSearchQuery = e.detail.query;
+        updateGrid();
+    });
+
+    const btnRating = document.getElementById('btnSortRating');
+    if(btnRating) {
+        btnRating.onclick = () => {
+            let cards = Array.from(grid.querySelectorAll('.course-card-premium'));
+            cards.sort((a, b) => parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating));
+            cards.forEach(card => grid.appendChild(card));
+        };
+    }
+
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        alert('Cours ajouté avec succès !');
+        modal.classList.remove('active');
+    };
+});
+</script>
+{% endblock %}

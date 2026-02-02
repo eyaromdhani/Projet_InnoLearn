@@ -1,0 +1,131 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Événements - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <header class="section-top-header animate-fade-in">
+        <div class="header-info">
+            <h1>Événements & Workshops</h1>
+            <p>Apprenez en direct avec les meilleurs experts de l'industrie.</p>
+        </div>
+        <button class="btn-primary-gradient" onclick="alert('Ouverture de l\'agenda global...')">
+            <i class="fas fa-calendar-plus"></i>
+            Mes Réservations
+        </button>
+    </header>
+
+    <!-- Section-Specific Filter Bar -->
+    {{ include('student/_filter_bar.html.twig', {
+        placeholder: 'Rechercher un webinaire, workshop...',
+        categories: [
+            {name: 'Webinar', icon: 'fa-video'},
+            {name: 'Workshop', icon: 'fa-tools'},
+            {name: 'Networking', icon: 'fa-handshake'}
+        ],
+        extra_action: { id: 'btnExportCalendar', icon: 'fa-file-export', label: 'Exporter' }
+    }) }}
+
+    <div class="event-list" id="eventList">
+        {% for event in events %}
+        <div class="event-card" data-category="{{ event.category|lower }}" data-title="{{ event.title|lower }}">
+            <div class="event-date-box">
+                <span class="date-day">{{ event.date|date('d') }}</span>
+                <span class="date-month">{{ event.date|date('M') }}</span>
+            </div>
+            <div class="event-details">
+                <h2>{{ event.title }}</h2>
+                <p><i class="far fa-clock"></i> {{ event.time }} • Par {{ event.speaker }}</p>
+            </div>
+            <div class="event-type">
+                <span class="event-badge badge-{{ event.category|lower }}">{{ event.category }}</span>
+            </div>
+            <div class="event-action">
+                <button class="btn-rsvp" onclick="this.classList.add('joined'); this.innerHTML='<i class=\'fas fa-check\'></i> Inscrit'">Participer</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Section Header */
+.section-top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-info h1 { font-size: 2rem; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; }
+.header-info p { color: var(--text-muted); font-weight: 500; }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+.btn-primary-gradient:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3); }
+
+/* Event List Design */
+.event-list { display: flex; flex-direction: column; gap: 1.25rem; }
+.event-card {
+    background: white; border-radius: 20px; padding: 1.5rem 2rem;
+    display: grid; grid-template-columns: 80px 1fr 180px 150px;
+    align-items: center; gap: 2rem; border: 1px solid var(--border-color); transition: all 0.3s;
+}
+.event-card:hover { transform: scale(1.01); box-shadow: 0 10px 30px rgba(0,0,0,0.04); border-color: rgba(99, 102, 241, 0.2); }
+
+.event-date-box { text-align: center; background: #f8fafc; padding: 0.75rem; border-radius: 16px; border: 1px solid #f1f5f9; }
+.date-day { display: block; font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
+.date-month { display: block; font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+
+.event-details h2 { font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem; }
+.event-details p { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+
+.event-badge { padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-align: center; }
+.badge-webinar { background: #eef2ff; color: var(--primary); }
+.badge-workshop { background: #fef2f2; color: var(--accent); }
+.badge-networking { background: #f0fdf4; color: #16a34a; }
+
+.btn-rsvp {
+    background: #f1f5f9; color: var(--text-main); border: none; padding: 0.75rem 1.25rem;
+    border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-rsvp:hover { background: var(--primary); color: white; }
+.btn-rsvp.joined { background: #ecfdf5; color: #10b981; pointer-events: none; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const list = document.getElementById('eventList');
+    
+    // Unified Filtering Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    function updateGrid() {
+        const cards = Array.from(list.querySelectorAll('.event-card'));
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const cat = card.getAttribute('data-category');
+            
+            const matchesSearch = title.includes(currentSearchQuery);
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'grid' : 'none';
+        });
+    }
+
+    document.addEventListener('categoryFilter', (e) => {
+        currentCategory = e.detail.value;
+        updateGrid();
+    });
+
+    document.addEventListener('localSearch', (e) => {
+        currentSearchQuery = e.detail.query;
+        updateGrid();
+    });
+
+    const btnExport = document.getElementById('btnExportCalendar');
+    if(btnExport) {
+        btnExport.onclick = () => alert('Exportation de votre calendrier InnoLearn au format .ics (iCal)...');
+    }
+});
+</script>
+{% endblock %}
