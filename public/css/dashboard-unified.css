@@ -128,28 +128,28 @@ footer {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    width: 280px;
-    /* Balance */
+    /* Removed fixed width to allow search bar expansion */
+    flex: 1;
     justify-content: flex-end;
 }
 
 .search-bar-compact {
     display: flex;
     align-items: center;
-    background: #f8fafc;
-    padding: 0 1rem;
+    background: #f1f5f9;
+    padding: 0 1.25rem;
     border-radius: 50px;
-    height: 42px;
-    width: 180px;
-    border: 1px solid transparent;
-    transition: all 0.3s;
+    height: 46px;
+    width: 350px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
 }
 
 .search-bar-compact:focus-within {
     background: white;
-    border-color: rgba(99, 102, 241, 0.3);
-    width: 220px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary);
+    width: 450px;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
 }
 
 .search-bar-compact i {

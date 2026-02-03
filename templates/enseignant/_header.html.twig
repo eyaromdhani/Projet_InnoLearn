@@ -7,25 +7,25 @@
     </div>
 
     <nav class="header-nav">
-        <a href="{{ path('app_student_dashboard') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_dashboard' ? 'active' : '' }}">
+        <a href="{{ path('app_enseignant_dashboard') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_dashboard' ? 'active' : '' }}">
             Accueil
         </a>
-        <a href="{{ path('app_student_courses') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_courses' ? 'active' : '' }}">
-            Cours
+        <a href="{{ path('app_enseignant_courses') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_courses' ? 'active' : '' }}">
+            Mes Cours
         </a>
-        <a href="{{ path('app_student_projects') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_projects' ? 'active' : '' }}">
-            Projets
+        <a href="{{ path('app_enseignant_projects') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_projects' ? 'active' : '' }}">
+            Projets Étudiants
         </a>
-        <a href="{{ path('app_student_events') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_events' ? 'active' : '' }}">
+        <a href="{{ path('app_enseignant_events') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_events' ? 'active' : '' }}">
             Événements
         </a>
-        <a href="{{ path('app_student_career') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_career' ? 'active' : '' }}">
+        <a href="{{ path('app_enseignant_stages') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_stages' ? 'active' : '' }}">
             Stages
         </a>
-        <a href="{{ path('app_student_books') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_books' ? 'active' : '' }}">
+        <a href="{{ path('app_enseignant_books') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_books' ? 'active' : '' }}">
             Livres
         </a>
-        <a href="{{ path('app_student_quizzes') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_quizzes' ? 'active' : '' }}">
+        <a href="{{ path('app_enseignant_quizzes') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_quizzes' ? 'active' : '' }}">
             Quiz
         </a>
     </nav>

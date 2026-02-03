@@ -1,6 +1,6 @@
-{% extends 'student/layout.html.twig' %}
+{% extends 'enseignant/layout.html.twig' %}
 
-{% block title %}Accueil Étudiant - InnoLearn{% endblock %}
+{% block title %}Tableau de Bord Enseignant - InnoLearn{% endblock %}
 
 {% block page_stylesheets %}
 <style>
@@ -854,7 +854,7 @@
             <span class="hero-label">Mon Tableau de Bord</span>
             <h1 class="hero-title">
                 Ravi de vous revoir,<br>
-                <span class="user-name">{{ app.user ? app.user.prenom : 'Étudiant' }}</span> ! <span class="wave-emoji">👋</span>
+                <span class="user-name">Professeur</span> ! <span class="wave-emoji">👋</span>
             </h1>
             
             <!-- Filter Section -->
@@ -882,7 +882,7 @@
                 
                 <div class="hero-search-wrapper">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="localSearch" placeholder="Rechercher vos cours, activités...">
+                    <input type="text" id="localSearch" placeholder="Rechercher vos cours, étudiants, activités...">
                 </div>
                 
                 <div class="hero-sort-wrapper">
@@ -928,27 +928,64 @@
 <!-- Main Dashboard Content -->
 <div class="dashboard-content-main">
     <!-- Course Progress Section -->
+    <!-- Stats Overview -->
     <section class="dashboard-section">
         <div class="section-header">
-            <h2>Aujourd'hui</h2>
-            <a href="{{ path('app_student_courses') }}" class="view-all">Voir tout</a>
+            <h2>Aperçu de mes Statistiques</h2>
+        </div>
+        <div class="course-progress-grid">
+            <div class="course-progress-card">
+                <div class="course-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="course-info">
+                    <h3>{{ stats.total_students }}</h3>
+                    <p>Étudiants inscrits</p>
+                </div>
+            </div>
+            <div class="course-progress-card">
+                <div class="course-icon" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="course-info">
+                    <h3>{{ stats.active_courses }}</h3>
+                    <p>Cours publiés</p>
+                </div>
+            </div>
+            <div class="course-progress-card">
+                <div class="course-icon" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24;">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="course-info">
+                    <h3>{{ stats.avg_rating }} / 5</h3>
+                    <p>Note moyenne</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Grid -->
+    <section class="dashboard-section">
+        <div class="section-header">
+            <h2>Mes Cours Récents</h2>
+            <a href="{{ path('app_enseignant_courses') }}" class="view-all">Gérer tout</a>
         </div>
         
         <div class="course-progress-grid">
             {% for course in courses %}
             <div class="course-progress-card">
                 <div class="course-icon" style="background: {{ course.color }}20; color: {{ course.color }}">
-                    <i class="fas fa-graduation-cap"></i>
+                    <i class="fas fa-chalkboard-teacher"></i>
                 </div>
                 <div class="course-info">
                     <h3>{{ course.title }}</h3>
-                    <p>Par {{ course.teacher }}</p>
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: {{ course.progress }}%; background: {{ course.color }}"></div>
+                    <p>{{ course.students }} étudiants inscrits</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                        <i class="fas fa-star" style="color: #fbbf24; font-size: 0.8rem;"></i>
+                        <span style="font-size: 0.85rem; font-weight: 600;">{{ course.rating }}</span>
                     </div>
-                    <span class="progress-text">{{ course.progress }}% complété</span>
                 </div>
-                <button class="btn-play"><i class="fas fa-play"></i></button>
+                <button class="btn-play" title="Éditer le cours"><i class="fas fa-edit"></i></button>
             </div>
             {% endfor %}
         </div>

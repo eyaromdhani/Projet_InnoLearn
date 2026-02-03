@@ -5,22 +5,26 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Quiz;
+use App\Form\QuizType;
 use App\Repository\QuizRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
-#[Route('/student')]
-class StudentController extends AbstractController
+#[Route('/enseignant')]
+class EnseignantController extends AbstractController
 {
-    #[Route('/dashboard', name: 'app_student_dashboard')]
+    #[Route('/dashboard', name: 'app_enseignant_dashboard')]
     public function dashboard(): Response
     {
-        // Mock data for the dashboard
+        // Mock data for the teacher dashboard
         $courses = [
-            ['title' => 'UI/UX Design Masterclass', 'teacher' => 'John Doe', 'progress' => 75, 'color' => '#6366f1'],
-            ['title' => 'Fullstack Web Development', 'teacher' => 'Jane Smith', 'progress' => 40, 'color' => '#a855f7'],
-            ['title' => 'Advanced PHP & Symfony', 'teacher' => 'Alex Johnson', 'progress' => 10, 'color' => '#f472b6'],
+            ['title' => 'UI/UX Design Masterclass', 'students' => 150, 'rating' => 4.8, 'color' => '#6366f1'],
+            ['title' => 'Fullstack Web Development', 'students' => 85, 'rating' => 4.9, 'color' => '#a855f7'],
+            ['title' => 'Advanced PHP & Symfony', 'students' => 42, 'rating' => 4.7, 'color' => '#f472b6'],
         ];
 
-        // Category data
+        // Category data (Dashboard specific)
         $categories = [
             ['name' => 'Tout', 'icon' => 'fa-th-large', 'active' => true],
             ['name' => 'Design', 'icon' => 'fa-bezier-curve', 'active' => false],
@@ -30,18 +34,18 @@ class StudentController extends AbstractController
             ['name' => 'IA', 'icon' => 'fa-robot', 'active' => false],
         ];
 
-        return $this->render('student/dashboard.html.twig', [
+        return $this->render('enseignant/dashboard.html.twig', [
             'courses' => $courses,
             'categories' => $categories,
             'stats' => [
-                'hours' => 124,
-                'courses' => 3,
-                'certificates' => 5
+                'total_students' => 277,
+                'active_courses' => 3,
+                'avg_rating' => 4.8
             ]
         ]);
     }
 
-    #[Route('/courses', name: 'app_student_courses')]
+    #[Route('/courses', name: 'app_enseignant_courses')]
     public function courses(): Response
     {
         $categories = [
@@ -54,21 +58,18 @@ class StudentController extends AbstractController
         ];
 
         $courses = [
-            ['id' => 1, 'title' => 'UI/UX Design Masterclass', 'teacher' => 'Sarah Connor', 'price' => 49.99, 'rating' => 4.8, 'students' => 1250, 'category' => 'Design', 'image' => 'https://placehold.co/600x400/6366f1/white?text=UI/UX+Design'],
-            ['id' => 2, 'title' => 'Full-Stack Web Dev with Symfony', 'teacher' => 'Alex Johnson', 'price' => 89.99, 'rating' => 4.9, 'students' => 850, 'category' => 'Développement', 'image' => 'https://placehold.co/600x400/a855f7/white?text=Symfony+Dev'],
-            ['id' => 3, 'title' => 'Introduction to Python for AI', 'teacher' => 'Michael Reeds', 'price' => 59.99, 'rating' => 4.7, 'students' => 2100, 'category' => 'IA', 'image' => 'https://placehold.co/600x400/f472b6/white?text=Python+AI'],
-            ['id' => 4, 'title' => 'Modern Marketing Strategies', 'teacher' => 'Emma Watson', 'price' => 39.99, 'rating' => 4.6, 'students' => 1500, 'category' => 'Marketing', 'image' => 'https://placehold.co/600x400/fbbf24/white?text=Marketing'],
-            ['id' => 5, 'title' => 'Advanced React patterns', 'teacher' => 'John Doe', 'price' => 69.99, 'rating' => 4.9, 'students' => 980, 'category' => 'Développement', 'image' => 'https://placehold.co/600x400/0ea5e9/white?text=React+Advanced'],
-            ['id' => 6, 'title' => 'Brand Identity Design', 'teacher' => 'Jane Smith', 'price' => 44.99, 'rating' => 4.8, 'students' => 740, 'category' => 'Design', 'image' => 'https://placehold.co/600x400/8b5cf6/white?text=Brand+Design'],
+            ['id' => 1, 'title' => 'UI/UX Design Masterclass', 'teacher' => 'Vous', 'price' => 49.99, 'rating' => 4.8, 'students' => 1250, 'category' => 'Design', 'image' => 'https://placehold.co/600x400/6366f1/white?text=UI/UX+Design'],
+            ['id' => 2, 'title' => 'Full-Stack Web Dev with Symfony', 'teacher' => 'Vous', 'price' => 89.99, 'rating' => 4.9, 'students' => 850, 'category' => 'Développement', 'image' => 'https://placehold.co/600x400/a855f7/white?text=Symfony+Dev'],
+            ['id' => 3, 'title' => 'Introduction to Python for AI', 'teacher' => 'Vous', 'price' => 59.99, 'rating' => 4.7, 'students' => 2100, 'category' => 'IA', 'image' => 'https://placehold.co/600x400/f472b6/white?text=Python+AI'],
         ];
 
-        return $this->render('student/courses.html.twig', [
+        return $this->render('enseignant/courses.html.twig', [
             'categories' => $categories,
             'courses' => $courses,
         ]);
     }
 
-    #[Route('/projects', name: 'app_student_projects')]
+    #[Route('/projects', name: 'app_enseignant_projects')]
     public function projects(): Response
     {
         $categories = [
@@ -81,29 +82,15 @@ class StudentController extends AbstractController
         $projects = [
             ['id' => 1, 'title' => 'Eco-Track Mobile App', 'category' => 'Web', 'lead' => 'Emma Watson', 'members' => 3, 'max_members' => 5, 'status' => 'En cours'],
             ['id' => 2, 'title' => 'AI Chatbot for Education', 'category' => 'IA', 'lead' => 'John Doe', 'members' => 2, 'max_members' => 4, 'status' => 'Recherche membres'],
-            ['id' => 3, 'title' => 'Branding InnoLearn 2026', 'category' => 'Design', 'lead' => 'Sophie Martin', 'members' => 5, 'max_members' => 5, 'status' => 'Complet'],
         ];
 
-        return $this->render('student/projects.html.twig', [
+        return $this->render('enseignant/projects.html.twig', [
             'categories' => $categories,
             'projects' => $projects,
         ]);
     }
 
-    #[Route('/certificates', name: 'app_student_certificates')]
-    public function certificates(): Response
-    {
-        $certificates = [
-            ['id' => 1, 'title' => 'Fullstack Web Developer', 'date' => '2025-12-15', 'issuer' => 'InnoLearn Academy', 'image' => 'https://placehold.co/600x400/6366f1/white?text=Fullstack+Dev'],
-            ['id' => 2, 'title' => 'Mastering AI Ethics', 'date' => '2026-01-10', 'issuer' => 'Google Cloud', 'image' => 'https://placehold.co/600x400/a855f7/white?text=AI+Ethics'],
-        ];
-
-        return $this->render('student/certificates.html.twig', [
-            'certificates' => $certificates,
-        ]);
-    }
-
-    #[Route('/events', name: 'app_student_events')]
+    #[Route('/events', name: 'app_enseignant_events')]
     public function events(): Response
     {
         $categories = [
@@ -114,18 +101,18 @@ class StudentController extends AbstractController
         ];
 
         $events = [
-            ['id' => 1, 'title' => 'The Future of AI in SaaS', 'category' => 'Webinar', 'date' => '2026-02-15', 'time' => '18:00', 'speaker' => 'Bill Gates'],
-            ['id' => 2, 'title' => 'Symfony Performance Workshop', 'category' => 'Workshop', 'date' => '2026-02-20', 'time' => '14:00', 'speaker' => 'Fabien Potencier'],
+            ['id' => 1, 'title' => 'The Future of AI in SaaS', 'category' => 'Webinar', 'date' => '2026-02-15', 'time' => '18:00', 'speaker' => 'Vous'],
+            ['id' => 2, 'title' => 'Symfony Performance Workshop', 'category' => 'Workshop', 'date' => '2026-02-20', 'time' => '14:00', 'speaker' => 'Vous'],
         ];
 
-        return $this->render('student/events.html.twig', [
+        return $this->render('enseignant/events.html.twig', [
             'categories' => $categories,
             'events' => $events,
         ]);
     }
 
-    #[Route('/career', name: 'app_student_career')]
-    public function career(): Response
+    #[Route('/stages', name: 'app_enseignant_stages')]
+    public function stages(): Response
     {
         $categories = [
             ['name' => 'Tout', 'icon' => 'fa-th-large'],
@@ -139,13 +126,13 @@ class StudentController extends AbstractController
             ['id' => 2, 'title' => 'UX Design Intern', 'company' => 'Adobe', 'category' => 'Internship', 'location' => 'Remote', 'salary' => '1.5k/month'],
         ];
 
-        return $this->render('student/career.html.twig', [
+        return $this->render('enseignant/stages.html.twig', [
             'categories' => $categories,
             'jobs' => $jobs,
         ]);
     }
 
-    #[Route('/books', name: 'app_student_books')]
+    #[Route('/books', name: 'app_enseignant_books')]
     public function books(\App\Repository\BookRepository $bookRepository): Response
     {
         $categories = [
@@ -155,16 +142,36 @@ class StudentController extends AbstractController
             ['name' => 'Business', 'icon' => 'fa-chart-line'],
         ];
 
-        return $this->render('student/books.html.twig', [
+        return $this->render('enseignant/books.html.twig', [
             'categories' => $categories,
             'books' => $bookRepository->findAll(),
         ]);
     }
-    #[Route('/quizzes', name: 'app_student_quizzes')]
+    #[Route('/quizzes', name: 'app_enseignant_quizzes')]
     public function quizzes(QuizRepository $quizRepository): Response
     {
-        return $this->render('student/quiz/index.html.twig', [
+        return $this->render('enseignant/quiz/index.html.twig', [
             'quizzes' => $quizRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/quiz/new', name: 'app_enseignant_quiz_new', methods: ['GET', 'POST'])]
+    public function addQuiz(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $quiz = new Quiz();
+        $form = $this->createForm(QuizType::class, $quiz);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($quiz);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_enseignant_quizzes', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('enseignant/quiz/new.html.twig', [
+            'quiz' => $quiz,
+            'form' => $form->createView(),
         ]);
     }
 }
