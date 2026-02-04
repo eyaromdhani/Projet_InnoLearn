@@ -1,10 +1,13 @@
 <?php
 
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\QuizRepository;
+use App\Repository\ProjectRepository;
 
 #[Route('/student')]
 class StudentController extends AbstractController
@@ -67,28 +70,77 @@ class StudentController extends AbstractController
         ]);
     }
 
-    #[Route('/projects', name: 'app_student_projects')]
-    public function projects(): Response
+   #[Route('/projects', name: 'app_student_projects')]
+    public function projects(ProjectRepository $projectRepository): Response
     {
-        $categories = [
-            ['name' => 'Tout', 'icon' => 'fa-th-large'],
-            ['name' => 'IA', 'icon' => 'fa-robot'],
-            ['name' => 'Web', 'icon' => 'fa-globe'],
-            ['name' => 'Design', 'icon' => 'fa-bezier-curve'],
-        ];
+        // Récupérer tous les projets depuis la base de données
+        $projects = $projectRepository->findAll();
+        
+        // Transformer les entités en tableaux pour le template
+        $projectsData = [];
+        foreach ($projects as $project) {
+            $projectsData[] = [
+                'id' => $project->getId(),
+                'title' => $project->getTitle(),
+                'description' => $project->getDescription(),
+                'status' => $this->getDisplayStatus($project->getStatus()),
+                'start_date' => $project->getStartDate()->format('d/m/Y'),
+                'end_date' => $project->getEndDate() ? $project->getEndDate()->format('d/m/Y') : null,
+                'created_at' => $project->getCreatedAt()->format('d/m/Y'),
+                // Champs avec valeurs fixes (non présents dans votre entité)
+                'category' => 'Développement', // fixe
+                'lead' => 'Équipe InnoLearn', // fixe
+                'members' => 1, // fixe
+                'max_members' => 3, // fixe
+                'technologies' => ['Symfony', 'PHP', 'Twig'], // fixe
+                'difficulty' => 'Intermédiaire', // fixe
+                'duration' => $this->calculateDuration($project)
+            ];
+        }
 
-        $projects = [
-            ['id' => 1, 'title' => 'Eco-Track Mobile App', 'category' => 'Web', 'lead' => 'Emma Watson', 'members' => 3, 'max_members' => 5, 'status' => 'En cours'],
-            ['id' => 2, 'title' => 'AI Chatbot for Education', 'category' => 'IA', 'lead' => 'John Doe', 'members' => 2, 'max_members' => 4, 'status' => 'Recherche membres'],
-            ['id' => 3, 'title' => 'Branding InnoLearn 2026', 'category' => 'Design', 'lead' => 'Sophie Martin', 'members' => 5, 'max_members' => 5, 'status' => 'Complet'],
+        // Catégories pour le filtre
+        $categories = [
+            ['name' => 'AI', 'icon' => 'fa-robot'],
+            ['name' => 'Web', 'icon' => 'fa-code'],
+            ['name' => 'Design', 'icon' => 'fa-paint-brush']
         ];
 
         return $this->render('student/projects.html.twig', [
+            'projects' => $projectsData,
             'categories' => $categories,
-            'projects' => $projects,
         ]);
     }
 
+    private function getDisplayStatus(string $status): string
+    {
+        $statusMap = [
+            'draft' => 'Brouillon',
+            'active' => 'Recherche membres',
+            'completed' => 'Complet',
+            'cancelled' => 'Annulé'
+        ];
+        
+        return $statusMap[$status] ?? $status;
+    }
+
+    private function calculateDuration($project): string
+    {
+        $start = $project->getStartDate();
+        $end = $project->getEndDate();
+        
+        if (!$end) {
+            return 'En cours';
+        }
+        
+        $diff = $start->diff($end);
+        $months = $diff->m + ($diff->y * 12);
+        
+        if ($months > 0) {
+            return $months . ' mois';
+        }
+        
+        return $diff->days . ' jours';
+    }
     #[Route('/certificates', name: 'app_student_certificates')]
     public function certificates(): Response
     {
@@ -141,6 +193,29 @@ class StudentController extends AbstractController
         return $this->render('student/career.html.twig', [
             'categories' => $categories,
             'jobs' => $jobs,
+        ]);
+    }
+
+    #[Route('/books', name: 'app_student_books')]
+    public function books(\App\Repository\BookRepository $bookRepository): Response
+    {
+        $categories = [
+            ['name' => 'Tout', 'icon' => 'fa-th-large'],
+            ['name' => 'Programmation', 'icon' => 'fa-code'],
+            ['name' => 'Design', 'icon' => 'fa-bezier-curve'],
+            ['name' => 'Business', 'icon' => 'fa-chart-line'],
+        ];
+
+        return $this->render('student/books.html.twig', [
+            'categories' => $categories,
+            'books' => $bookRepository->findAll(),
+        ]);
+    }
+    #[Route('/quizzes', name: 'app_student_quizzes')]
+    public function quizzes(QuizRepository $quizRepository): Response
+    {
+        return $this->render('student/quiz/index.html.twig', [
+            'quizzes' => $quizRepository->findAll(),
         ]);
     }
 }

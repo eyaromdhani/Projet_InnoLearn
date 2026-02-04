@@ -1,0 +1,156 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ project.title }} - Détails{% endblock %}
+
+{% block page_title %}Détails du Projet{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">{{ project.title }}</h3>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{{ path('admin_projects_edit', {id: project.id}) }}" class="btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+                Modifier
+            </a>
+            <a href="{{ path('admin_projects') }}" class="btn-primary" style="background: #64748b;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <!-- Main Info -->
+            <div>
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #64748B; margin-bottom: 0.75rem;">Description</h4>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #E2E8F0; line-height: 1.6;">
+                        {{ project.description|nl2br }}
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #64748B; margin-bottom: 0.75rem;">Détails du projet</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                        <div>
+                            <div style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.25rem;">ID du projet</div>
+                            <div style="font-weight: 600; color: #1C2434;">#{{ project.id }}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.25rem;">Durée</div>
+                            <div style="font-weight: 600; color: #1C2434;">
+                                {% if project.endDate %}
+                                    {% set diff = project.startDate.diff(project.endDate) %}
+                                    {{ diff.days }} jours
+                                {% else %}
+                                    En cours
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar Info -->
+            <div>
+                <div style="background: #f8fafc; border-radius: 0.5rem; border: 1px solid #E2E8F0; padding: 1.5rem;">
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #64748B; margin-bottom: 1.5rem;">Statut & Dates</h4>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.5rem;">Statut actuel</div>
+                        {% set status_labels = {
+                            'draft': 'Brouillon',
+                            'active': 'Actif', 
+                            'completed': 'Terminé',
+                            'cancelled': 'Annulé'
+                        } %}
+                        {% set badge_classes = {
+                            'draft': 'badge-warning',
+                            'active': 'badge-success',
+                            'completed': 'badge-info',
+                            'cancelled': 'badge-danger'
+                        } %}
+                        <span class="{{ badge_classes[project.status] }}" style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">
+                            {% if project.status == 'draft' %}
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            {% elseif project.status == 'active' %}
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            {% elseif project.status == 'completed' %}
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            {% else %}
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            {% endif %}
+                            {{ status_labels[project.status] }}
+                        </span>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.25rem;">Date de début</div>
+                        <div style="font-weight: 600; color: #1C2434; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; color: #3B82F6;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            {{ project.startDate|date('d/m/Y') }}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.25rem;">Date de fin</div>
+                        <div style="font-weight: 600; color: #1C2434; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; color: #10B981;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            {% if project.endDate %}
+                                {{ project.endDate|date('d/m/Y') }}
+                            {% else %}
+                                <span style="color: #94a3b8;">Non définie</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+                        <div style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.25rem;">Créé le</div>
+                        <div style="font-size: 0.875rem; font-weight: 600; color: #1C2434;">
+                            {{ project.createdAt|date('d/m/Y à H:i') }}
+                        </div>
+                        
+                        {% if project.updatedAt %}
+                        <div style="font-size: 0.875rem; color: #94A3B8; margin: 0.5rem 0 0.25rem 0;">Dernière modification</div>
+                        <div style="font-size: 0.875rem; font-weight: 600; color: #1C2434;">
+                            {{ project.updatedAt|date('d/m/Y à H:i') }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Delete Form -->
+                <div style="margin-top: 1.5rem;">
+                    <form method="POST" action="{{ path('admin_projects_delete', {id: project.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
+                        <button type="submit" class="btn-primary" style="background: #dc2626; width: 100%; display: flex; align-items: center; justify-content: center;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            Supprimer le projet
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
