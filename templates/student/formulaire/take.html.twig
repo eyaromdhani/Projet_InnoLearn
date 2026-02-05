@@ -1,0 +1,403 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}{{ formulaire.titre }} - Quiz{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Transparent Header */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Quiz Header */
+.quiz-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 400px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 100px;
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+}
+
+.quiz-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+}
+
+.quiz-info {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 10;
+    color: white;
+}
+
+.quiz-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.quiz-description {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.quiz-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.meta-badge {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.meta-badge i {
+    font-size: 1.2rem;
+}
+
+/* Quiz Container */
+.dashboard-main {
+    padding: 0 !important;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.quiz-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+}
+
+.question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e5e7eb;
+    transition: all 0.3s;
+}
+
+.question-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.15);
+}
+
+.question-header {
+    display: flex;
+    align-items: start;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.question-number {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.question-content {
+    flex: 1;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+
+.question-info {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.info-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.type-badge {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.points-badge {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.answer-input {
+    margin-top: 1.5rem;
+}
+
+.answer-input label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.answer-input input,
+.answer-input select,
+.answer-input textarea {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.answer-input input:focus,
+.answer-input select:focus,
+.answer-input textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.submit-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+}
+
+.btn-back {
+    background: white;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-back:hover {
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 20px;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.question-card {
+    animation: slideIn 0.4s ease-out;
+    animation-fill-mode: both;
+}
+
+{% for i in 1..20 %}
+.question-card:nth-child({{ i }}) {
+    animation-delay: {{ i * 0.1 }}s;
+}
+{% endfor %}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Quiz Hero -->
+    <section class="quiz-hero">
+        <div class="quiz-info">
+            <h1 class="quiz-title">{{ formulaire.titre }}</h1>
+            <p class="quiz-description">{{ formulaire.description }}</p>
+            <div class="quiz-meta">
+                <div class="meta-badge">
+                    <i class="bi bi-list-check"></i>
+                    <span>{{ questions|length }} Questions</span>
+                </div>
+                {% if formulaire.tempsLimite %}
+                <div class="meta-badge">
+                    <i class="bi bi-clock"></i>
+                    <span>{{ formulaire.tempsLimite }} minutes</span>
+                </div>
+                {% endif %}
+                <div class="meta-badge">
+                    <i class="bi bi-folder"></i>
+                    <span>{{ formulaire.category }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Questions -->
+    <div class="quiz-container">
+        {% if questions|length > 0 %}
+        <form method="post" id="quizForm">
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="question-header">
+                    <div class="question-number">{{ loop.index }}</div>
+                    <div class="question-content">
+                        <div class="question-text">
+                            {{ question.questionText }}
+                            <small class="text-muted d-block" style="font-size: 0.7rem; opacity: 0.7;">(Question ID: #{{ question.id }})</small>
+                        </div>
+                        <div class="question-info">
+                            <span class="info-badge type-badge">
+                                {% if question.type == 'multiple_choice' %}
+                                    📝 Choix Multiple
+                                {% elseif question.type == 'true_false' %}
+                                    ✅ Vrai/Faux
+                                {% elseif question.type == 'number' %}
+                                    🔢 Nombre
+                                {% else %}
+                                    {{ question.type }}
+                                {% endif %}
+                            </span>
+                            <span class="info-badge points-badge">
+                                🏆 {{ question.points }} points
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="answer-input">
+                    <label for="answer_{{ question.id }}">Votre réponse:</label>
+                    
+                    {% if question.type == 'true_false' %}
+                        <select name="answers[{{ question.id }}]" id="answer_{{ question.id }}" required autocomplete="off">
+                            <option value="">Choisir...</option>
+                            <option value="true">Vrai</option>
+                            <option value="false">Faux</option>
+                        </select>
+                    {% elseif question.type == 'number' %}
+                        <input type="text" name="answers[{{ question.id }}]" id="answer_{{ question.id }}" 
+                               inputmode="numeric" pattern="[0-9]*" autocomplete="off"
+                               placeholder="Entrez un nombre..." required>
+                    {% else %}
+                        <input type="text" name="answers[{{ question.id }}]" id="answer_{{ question.id }}" 
+                               placeholder="Entrez votre réponse..." autocomplete="off" required>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            
+            <div class="submit-section">
+                <a href="{{ path('app_student_quizzes') }}" class="btn-back">
+                    <i class="bi bi-arrow-left me-1"></i>Retour aux Quiz
+                </a>
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle me-2"></i>Soumettre le Quiz
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h3>Aucune question disponible</h3>
+            <p>Ce formulaire ne contient pas encore de questions.</p>
+            <a href="{{ path('app_student_quizzes') }}" class="btn-back mt-3 d-inline-block">
+                Retour aux Quiz
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Prevent mouse wheel from changing values accidentally
+document.addEventListener('wheel', function(event) {
+    if (document.activeElement.getAttribute('inputmode') === 'numeric') {
+        document.activeElement.blur();
+    }
+}, { passive: false });
+
+document.getElementById('quizForm')?.addEventListener('submit', function(e) {
+    console.log('Quiz submitting to server...');
+});
+</script>
+{% endblock %}

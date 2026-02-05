@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New StageCondidature{% endblock %}
+
+{% block body %}
+    <h1>Create new StageCondidature</h1>
+
+    {{ include('stage_condidature/_form.html.twig') }}
+
+    <a href="{{ path('app_stage_condidature_index') }}">back to list</a>
+{% endblock %}

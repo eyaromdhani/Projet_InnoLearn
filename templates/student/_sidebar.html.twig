@@ -1,0 +1,45 @@
+<!-- Sidebar Navigation -->
+<aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+        <a href="{{ path('app_home') }}" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn" style="height: 40px; width: auto;">
+            <span class="brand-text">InnoLearn</span>
+        </a>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <a href="{{ path('app_student_dashboard') }}" class="sidebar-item {{ active_menu == 'dashboard' ? 'active' : '' }}">
+            <i class="fas fa-th-large"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="{{ path('app_student_courses') }}" class="sidebar-item {{ active_menu == 'courses' ? 'active' : '' }}">
+            <i class="fas fa-book"></i>
+            <span>Mes Cours</span>
+        </a>
+        <a href="{{ path('app_student_projects') }}" class="sidebar-item {{ active_menu == 'projects' ? 'active' : '' }}">
+            <i class="fas fa-project-diagram"></i>
+            <span>Projets Collaboratifs</span>
+        </a>
+        <a href="{{ path('app_student_certificates') }}" class="sidebar-item {{ active_menu == 'certificates' ? 'active' : '' }}">
+            <i class="fas fa-award"></i>
+            <span>Certificats</span>
+        </a>
+        <a href="{{ path('app_student_events') }}" class="sidebar-item {{ active_menu == 'events' ? 'active' : '' }}">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Événements</span>
+        </a>
+        <a href="{{ path('app_student_career') }}" class="sidebar-item {{ active_menu == 'opportunities' ? 'active' : '' }}">
+            <i class="fas fa-briefcase"></i>
+            <span>Opportunités Carrière</span>
+        </a>
+        <hr>
+        <a href="javascript:void(0)" class="sidebar-item {{ active_menu == 'settings' ? 'active' : '' }}" onclick="showSettingsModal()">
+            <i class="fas fa-cog"></i>
+            <span>Paramètres</span>
+        </a>
+        <a href="{{ path('app_logout') }}" class="sidebar-item logout-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Déconnexion</span>
+        </a>
+    </nav>
+</aside>

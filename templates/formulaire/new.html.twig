@@ -1,0 +1,67 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Nouveau Quiz{% endblock %}
+{% block page_title %}Ajouter un Quiz{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header">
+        <h3 class="card-title">Détails du Quiz</h3>
+    </div>
+    <div class="p-6">
+        {{ form_start(form, {'attr': {'class': 'settings-form'}}) }}
+        
+        <!-- Titre -->
+        <div class="form-group">
+            {{ form_label(form.titre, 'Titre du Quiz') }}
+            {{ form_widget(form.titre) }}
+            <div class="text-danger small">
+                {{ form_errors(form.titre) }}
+            </div>
+        </div>
+        
+        <!-- Description -->
+        <div class="form-group">
+            {{ form_label(form.description, 'Description') }}
+            {{ form_widget(form.description, {'attr': {'rows': 4}}) }}
+            <div class="text-danger small">
+                {{ form_errors(form.description) }}
+            </div>
+        </div>
+        
+        <!-- Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                {{ form_label(form.tempsLimite, 'Temps Limite (minutes)') }}
+                {{ form_widget(form.tempsLimite) }}
+                <div class="text-danger small">
+                    {{ form_errors(form.tempsLimite) }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.category, 'Catégorie') }}
+                {{ form_widget(form.category) }}
+                <div class="text-danger small">
+                    {{ form_errors(form.category) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+            <button class="btn-primary">Enregistrer</button>
+            <a href="{{ path('app_formulaire_index') }}" class="btn-secondary" 
+               style="padding: 0.75rem 1.5rem;">Annuler</a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<style>
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+.text-danger.small { margin-top: 5px; display: block; }
+</style>
+{% endblock %}

@@ -1,0 +1,86 @@
+/* Organic Redesign Enhancements */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 32px;
+}
+
+.auth-page .glass-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Floating animation for blobs */
+@keyframes blob-float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+.hero-blob-bg {
+    animation: blob-float 15s infinite ease-in-out;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: var(--gradient-organic);
+    width: 0%;
+    z-index: 2000;
+}
+
+/* Micro-interactions */
+.floating-icon:hover {
+    transform: scale(1.2) rotate(10deg);
+    cursor: pointer;
+}
+
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
+}
+
+/* Custom Cursor (Optional subtle design element) */
+/* .custom-cursor {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-light);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 3000;
+    mix-blend-mode: difference;
+    opacity: 0.3;
+} */

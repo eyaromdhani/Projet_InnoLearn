@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StageCondidature{% endblock %}
+
+{% block body %}
+    <h1>StageCondidature</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ stage_condidature.id }}</td>
+            </tr>
+            <tr>
+                <th>Type_request</th>
+                <td>{{ stage_condidature.typeRequest }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ stage_condidature.titre }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ stage_condidature.description }}</td>
+            </tr>
+            <tr>
+                <th>Domaine</th>
+                <td>{{ stage_condidature.domaine }}</td>
+            </tr>
+            <tr>
+                <th>Competences</th>
+                <td>{{ stage_condidature.competences }}</td>
+            </tr>
+            <tr>
+                <th>Cv</th>
+                <td>{{ stage_condidature.cv }}</td>
+            </tr>
+            <tr>
+                <th>Lettre_motivation</th>
+                <td>{{ stage_condidature.lettreMotivation }}</td>
+            </tr>
+            <tr>
+                <th>Date_publication</th>
+                <td>{{ stage_condidature.datePublication ? stage_condidature.datePublication|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ stage_condidature.statut }}</td>
+            </tr>
+            <tr>
+                <th>Id_etudiant</th>
+                <td>{{ stage_condidature.idEtudiant }}</td>
+            </tr>
+            <tr>
+                <th>Id_offre</th>
+                <td>{{ stage_condidature.idOffre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_stage_condidature_index') }}">back to list</a>
+
+    <a href="{{ path('app_stage_condidature_edit', {'id': stage_condidature.id}) }}">edit</a>
+
+    {{ include('stage_condidature/_delete_form.html.twig') }}
+{% endblock %}

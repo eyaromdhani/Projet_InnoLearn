@@ -1,0 +1,256 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Résultats - {{ formulaire.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Same Premium Background as Other Student Pages */
+.dashboard-main {
+    background: #f8fafc;
+    min-height: 100vh;
+    padding-top: 5rem;
+}
+
+.results-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.results-card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.results-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: {% if percentage >= 50 %}linear-gradient(90deg, #10b981, #34d399){% else %}linear-gradient(90deg, #f43f5e, #fb7185){% endif %};
+}
+
+.score-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    margin: 0 auto 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border: 10px solid {% if percentage >= 50 %}#dcfce7{% else %}#fee2e2{% endif %};
+    animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.score-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: {% if percentage >= 50 %}#059669{% else %}#dc2626{% endif %};
+    line-height: 1;
+}
+
+.score-total {
+    font-size: 1.2rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: {% if percentage >= 50 %}#dcfce7{% else %}#fee2e2{% endif %};
+    color: {% if percentage >= 50 %}#059669{% else %}#dc2626{% endif %};
+}
+
+.results-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.results-subtitle {
+    color: #64748b;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+.results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-primary-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.btn-secondary-custom {
+    background: white;
+    color: #1e293b;
+    border: 2px solid #e2e8f0;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-secondary-custom:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #fbbf24;
+    top: -10px;
+    border-radius: 2px;
+    animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+    to { transform: translateY(600px) rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <div class="results-container">
+        <div class="results-card">
+            {% if percentage >= 80 %}
+                <div class="status-badge">Excellent !</div>
+            {% elseif percentage >= 50 %}
+                <div class="status-badge">Réussi !</div>
+            {% else %}
+                <div class="status-badge">Échec</div>
+            {% endif %}
+
+            <div class="score-circle">
+                <div class="score-value">{{ score }}</div>
+                <div class="score-total">sur {{ total }}</div>
+            </div>
+
+            <h2 class="results-title">
+                {% if percentage >= 80 %}
+                    Quelle performance !
+                {% elseif percentage >= 50 %}
+                    Bon travail !
+                {% else %}
+                    Continuez vos efforts !
+                {% endif %}
+            </h2>
+            <p class="results-subtitle">
+                Vous avez complété le quiz <strong>{{ formulaire.titre }}</strong> avec un score de {{ percentage }}%.
+            </p>
+
+            <div class="results-actions">
+                <a href="{{ path('app_student_quizzes') }}" class="btn-primary-custom">
+                    <i class="fas fa-list-ul me-2"></i>Retour aux Quiz
+                </a>
+                <a href="{{ path('app_student_take_formulaire', {'id': formulaire.id}) }}" class="btn-secondary-custom">
+                    <i class="fas fa-redo me-2"></i>Recommencer
+                </a>
+                <a href="{{ path('app_student_formulaire_pdf', {'id': formulaire.id}) }}" class="btn-primary-custom" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="fas fa-file-pdf me-2"></i>Télécharger PDF
+                </a>
+            </div>
+        </div>
+
+        <!-- Detailed Breakdown -->
+        <div class="card shadow-sm mt-4 border-0" style="border-radius: 20px;">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+                <h4 class="fw-bold"><i class="bi bi-list-check me-2"></i>Détails des Réponses</h4>
+            </div>
+            <div class="card-body px-4 pb-4">
+                {% for result in results %}
+                <div class="p-3 mb-3 rounded-4 border-2 border {% if result.isCorrect %}border-success-subtle bg-success-light{% else %}border-danger-subtle bg-danger-light{% endif %}"
+                     style="background-color: {% if result.isCorrect %}#f0fff4{% else %}#fff5f5{% endif %};">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="fw-bold">Question {{ loop.index }} (ID: #{{ result.question.id }})</span>
+                        {% if result.isCorrect %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Correct</span>
+                        {% else %}
+                            <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Incorrect</span>
+                        {% endif %}
+                    </div>
+                    <p class="mb-2 text-dark">{{ result.question.questionText }}</p>
+                    <div class="row g-2 mt-2">
+                        <div class="col-sm-6">
+                            <small class="text-muted d-block">Votre réponse :</small>
+                            <span class="{% if result.isCorrect %}text-success{% else %}text-danger{% endif %} fw-bold">
+                                {{ result.userAnswer ?: '(Vide)' }}
+                            </span>
+                        </div>
+                        {% if not result.isCorrect %}
+                        <div class="col-sm-6">
+                            <small class="text-muted d-block">Réponse correcte :</small>
+                            <span class="text-success fw-bold">{{ result.question.correctAnswer }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if percentage >= 50 %}
+<script>
+function createConfetti() {
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.backgroundColor = ['#fbbf24', '#f87171', '#60a5fa', '#34d399'][Math.floor(Math.random() * 4)];
+        document.querySelector('.results-card').appendChild(confetti);
+    }
+}
+createConfetti();
+</script>
+{% endif %}
+{% endblock %}
