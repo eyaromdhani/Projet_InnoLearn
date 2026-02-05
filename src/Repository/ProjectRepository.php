@@ -16,28 +16,79 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-    //    /**
-    //     * @return Project[] Returns an array of Project objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Find projects with filters
+     */
+    public function findByFilters(?string $search = null, ?string $status = null): array
+    {
+        $qb = $this->createQueryBuilder('p');
 
-    //    public function findOneBySomeField($value): ?Project
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($search) {
+            $qb->andWhere('p.title LIKE :search OR p.description LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($status) {
+            $qb->andWhere('p.status = :status')
+               ->setParameter('status', $status);
+        }
+
+        return $qb->orderBy('p.createdAt', 'DESC')
+                  ->getQuery()
+                  ->getResult();
+    }
+
+    /**
+     * Count projects by status
+     */
+    public function countByStatus(string $status): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->where('p.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Find projects ending soon (within 7 days)
+     */
+    public function findEndingSoon(): array
+    {
+        $dateLimit = new \DateTime('+7 days');
+        
+        return $this->createQueryBuilder('p')
+            ->where('p.endDate <= :dateLimit')
+            ->andWhere('p.status = :status')
+            ->setParameter('dateLimit', $dateLimit)
+            ->setParameter('status', 'active')
+            ->orderBy('p.endDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Save project with automatic timestamps
+     */
+    public function save(Project $project, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($project);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * Remove project
+     */
+    public function remove(Project $project, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($project);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

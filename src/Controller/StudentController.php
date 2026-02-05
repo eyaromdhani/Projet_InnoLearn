@@ -9,6 +9,13 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\QuizRepository;
 use App\Repository\FormulaireRepository;
+use App\Repository\ProjectRepository;        // <-- MISSING
+use App\Repository\DepotRepository;          // <-- MISSING
+use Doctrine\ORM\EntityManagerInterface;     // <-- Needed later
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Entity\Depot;                        // <-- Needed
+use App\Form\DepotType;                      // <-- Needed
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -73,27 +80,302 @@ class StudentController extends AbstractController
         ]);
     }
 
-    #[Route('/projects', name: 'app_student_projects')]
-    public function projects(): Response
+      #[Route('/projects', name: 'app_student_projects')]
+    public function projects(ProjectRepository $projectRepository): Response
     {
-        $categories = [
-            ['name' => 'Tout', 'icon' => 'fa-th-large'],
-            ['name' => 'IA', 'icon' => 'fa-robot'],
-            ['name' => 'Web', 'icon' => 'fa-globe'],
-            ['name' => 'Design', 'icon' => 'fa-bezier-curve'],
-        ];
+        // Récupérer tous les projets depuis la base de données
+        $projects = $projectRepository->findAll();
+        
+        // Transformer les entités en tableaux pour le template
+        $projectsData = [];
+        foreach ($projects as $project) {
+            $projectsData[] = [
+                'id' => $project->getId(),
+                'title' => $project->getTitle(),
+                'description' => $project->getDescription(),
+                'status' => $this->getDisplayStatus($project->getStatus()),
+                'start_date' => $project->getStartDate()->format('d/m/Y'),
+                'end_date' => $project->getEndDate() ? $project->getEndDate()->format('d/m/Y') : null,
+                'created_at' => $project->getCreatedAt()->format('d/m/Y'),
+                // Champs avec valeurs fixes (non présents dans votre entité)
+                'category' => 'Développement',
+                'lead' => 'Équipe InnoLearn',
+                'members' => 1,
+                'max_members' => 3,
+                'technologies' => ['Symfony', 'PHP', 'Twig'],
+                'difficulty' => 'Intermédiaire',
+                'duration' => $this->calculateDuration($project)
+            ];
+        }
 
-        $projects = [
-            ['id' => 1, 'title' => 'Eco-Track Mobile App', 'category' => 'Web', 'lead' => 'Emma Watson', 'members' => 3, 'max_members' => 5, 'status' => 'En cours'],
-            ['id' => 2, 'title' => 'AI Chatbot for Education', 'category' => 'IA', 'lead' => 'John Doe', 'members' => 2, 'max_members' => 4, 'status' => 'Recherche membres'],
-            ['id' => 3, 'title' => 'Branding InnoLearn 2026', 'category' => 'Design', 'lead' => 'Sophie Martin', 'members' => 5, 'max_members' => 5, 'status' => 'Complet'],
+        // Catégories pour le filtre
+        $categories = [
+            ['name' => 'AI', 'icon' => 'fa-robot'],
+            ['name' => 'Web', 'icon' => 'fa-code'],
+            ['name' => 'Design', 'icon' => 'fa-paint-brush']
         ];
 
         return $this->render('student/projects.html.twig', [
+            'projects' => $projectsData,
             'categories' => $categories,
-            'projects' => $projects,
         ]);
     }
+
+    #[Route('/projects/{id}/detail', name: 'app_student_project_detail', methods: ['GET'])]
+    public function projectDetail(int $id, ProjectRepository $projectRepository, DepotRepository $depotRepository): Response
+    {
+        $project = $projectRepository->find($id);
+        
+        if (!$project) {
+            throw $this->createNotFoundException('Projet non trouvé');
+        }
+        
+        // Transformer l'entité en tableau pour le template
+        $projectData = [
+            'id' => $project->getId(),
+            'title' => $project->getTitle(),
+            'description' => $project->getDescription(),
+            'status' => $this->getDisplayStatus($project->getStatus()),
+            'start_date' => $project->getStartDate()->format('d/m/Y'),
+            'end_date' => $project->getEndDate() ? $project->getEndDate()->format('d/m/Y') : null,
+            'created_at' => $project->getCreatedAt()->format('d/m/Y'),
+            // Champs avec valeurs fixes (non présents dans votre entité)
+            'category' => 'Développement',
+            'lead' => 'Équipe InnoLearn',
+            'members' => 1,
+            'max_members' => 3,
+            'technologies' => ['Symfony', 'PHP', 'Twig'],
+            'difficulty' => 'Intermédiaire',
+            'duration' => $this->calculateDuration($project)
+        ];
+        
+        // Récupérer les dépôts pour ce projet
+        $depots = $depotRepository->findBy(['project' => $project]);
+        
+        return $this->render('student/project_detail.html.twig', [
+            'project' => $projectData,
+            'depots' => $depots,
+        ]);
+    }
+
+#[Route('/projects/{id}/depot/new', name: 'app_student_depot_new', methods: ['GET', 'POST'])]
+public function newDepot(Request $request, int $id, ProjectRepository $projectRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+{
+    $project = $projectRepository->find($id);
+    
+    if (!$project) {
+        throw $this->createNotFoundException('Projet non trouvé');
+    }
+    
+    $depot = new Depot();
+    $depot->setProject($project);
+    
+    // Remplir automatiquement le nom de l'étudiant
+    $depot->setStudentName($this->getUser() ? $this->getUser()->getFullName() : 'Étudiant InnoLearn');
+    
+    $form = $this->createForm(DepotType::class, $depot, [
+        'is_edit' => false
+    ]);
+    
+    $form->handleRequest($request);
+    
+    if ($form->isSubmitted()) {
+        // Validation SIMPLE - seulement pour type et description
+        $errors = $validator->validate($depot, null, ['Default']);
+        
+        // Validation du fichier (basique)
+        $file = $form->get('file')->getData();
+        $fileErrors = [];
+        
+        if (!$file) {
+            $fileErrors[] = 'Le fichier est obligatoire';
+        }
+        
+        // Si aucune erreur
+        if (count($errors) === 0 && count($fileErrors) === 0 && $form->isValid()) {
+            if ($file) {
+                // Get file properties BEFORE moving it
+                $fileSize = $file->getSize();
+                $fileType = $file->getMimeType();
+                
+                // Générez un nom de fichier unique
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->sanitizeFilename($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+                
+                // Déplacez le fichier dans le dossier de stockage
+                try {
+                    $file->move(
+                        $this->getParameter('depot_directory'),
+                        $newFilename
+                    );
+                    
+                    $depot->setFilePath($newFilename);
+                    $depot->setFileSize((string) $fileSize);
+                    $depot->setFileType($fileType);
+                    
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload du fichier: ' . $e->getMessage());
+                    return $this->redirectToRoute('app_student_project_detail', ['id' => $id]);
+                }
+            }
+            
+            $entityManager->persist($depot);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Dépôt ajouté avec succès !');
+            return $this->redirectToRoute('app_student_project_detail', ['id' => $id]);
+        } else {
+            // Afficher seulement les erreurs importantes
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+            
+            foreach ($fileErrors as $fileError) {
+                $this->addFlash('error', $fileError);
+            }
+        }
+    }
+    
+    return $this->render('student/depot/new.html.twig', [
+        'project' => $project,
+        'form' => $form->createView(),
+    ]);
+}
+
+    #[Route('/depot/{id}/download', name: 'app_student_depot_download', methods: ['GET'])]
+    public function downloadDepot(int $id, DepotRepository $depotRepository, EntityManagerInterface $entityManager): Response
+    {
+        $depot = $depotRepository->find($id);
+        
+        if (!$depot) {
+            throw $this->createNotFoundException('Dépôt non trouvé');
+        }
+        
+        // Incrémenter le compteur de téléchargements
+        $depot->incrementDownloadCount();
+        $entityManager->flush();
+        
+        // Chemin vers le fichier
+        $filePath = $this->getParameter('depot_directory') . '/' . $depot->getFilePath();
+        
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException('Fichier non trouvé');
+        }
+        
+        return $this->file($filePath);
+    }
+
+#[Route('/depot/{id}/delete', name: 'app_student_depot_delete', methods: ['POST'])]
+public function deleteDepot(Request $request, int $id, DepotRepository $depotRepository, EntityManagerInterface $entityManager): Response
+{
+    $depot = $depotRepository->find($id);
+    
+    if (!$depot) {
+        throw $this->createNotFoundException('Dépôt non trouvé');
+    }
+    
+    $projectId = $depot->getProject()->getId();
+    
+    // Optionnel: garder la vérification CSRF pour la sécurité
+    $token = $request->request->get('_token');
+    if (!$this->isCsrfTokenValid('delete' . $depot->getId(), $token)) {
+        $this->addFlash('error', 'Token CSRF invalide.');
+        return $this->redirectToRoute('app_student_project_detail', ['id' => $projectId]);
+    }
+    
+    // Supprimer le fichier physique
+    $filePath = $this->getParameter('depot_directory') . '/' . $depot->getFilePath();
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+    
+    // Supprimer de la base de données
+    $entityManager->remove($depot);
+    $entityManager->flush();
+    
+    $this->addFlash('success', 'Dépôt supprimé avec succès.');
+    return $this->redirectToRoute('app_student_project_detail', ['id' => $projectId]);
+}
+
+    #[Route('/projects/{id}/depots', name: 'app_student_project_depots', methods: ['GET'])]
+    public function projectDepots(int $id, ProjectRepository $projectRepository, DepotRepository $depotRepository): Response
+    {
+        $project = $projectRepository->find($id);
+        
+        if (!$project) {
+            throw $this->createNotFoundException('Projet non trouvé');
+        }
+        
+        // Récupérer les dépôts depuis la base de données
+        $depots = $depotRepository->findByProject($id);
+        
+        // Transformer en tableau pour le template
+        $depotsData = array_map(function($depot) {
+            return [
+                'id' => $depot->getId(),
+                'title' => $depot->getTitle(),
+                'description' => $depot->getDescription(),
+                'type' => $depot->getType(),
+                'file_size' => $depot->getFormattedFileSize(),
+                'uploaded_at' => $depot->getUploadedAt()->format('d/m/Y'),
+                'student_name' => $depot->getStudentName(),
+                'download_count' => $depot->getDownloadCount(),
+                'type_icon' => $depot->getTypeIcon(),
+                'type_color' => $depot->getTypeColor()
+            ];
+        }, $depots);
+        
+        return $this->render('student/_depots_list.html.twig', [
+            'project' => $project,
+            'depots' => $depotsData,
+        ]);
+    }
+
+#[Route('/depot/{id}/edit', name: 'app_student_depot_edit', methods: ['GET', 'POST'])]
+public function editDepot(Request $request, int $id, DepotRepository $depotRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+{
+    $depot = $depotRepository->find($id);
+    
+    if (!$depot) {
+        throw $this->createNotFoundException('Dépôt non trouvé');
+    }
+    
+    // Get the project from the depot
+    $project = $depot->getProject();
+    
+    $form = $this->createForm(DepotType::class, $depot, [
+        'is_edit' => true,
+        'allow_file_change' => false
+    ]);
+    
+    $form->handleRequest($request);
+    
+    if ($form->isSubmitted()) {
+        // Validation SIMPLE - seulement pour type et description
+        $errors = $validator->validate($depot, null, ['Default']);
+        
+        // Si aucune erreur
+        if (count($errors) === 0 && $form->isValid()) {
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Dépôt modifié avec succès !');
+            return $this->redirectToRoute('app_student_project_detail', ['id' => $project->getId()]);
+        } else {
+            // Afficher seulement les erreurs importantes
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+        }
+    }
+    
+    return $this->render('student/depot/edit.html.twig', [
+        'depot' => $depot,
+        'project' => $project,
+        'form' => $form->createView(),
+    ]);
+}
+
 
     #[Route('/certificates', name: 'app_student_certificates')]
     public function certificates(): Response
@@ -293,4 +575,53 @@ class StudentController extends AbstractController
             'Content-Disposition' => 'attachment; filename="resultats_quiz_' . $formulaire->getId() . '.pdf"'
         ]);
     }
+
+    private function getDisplayStatus(string $status): string
+    {
+        $statusMap = [
+            'draft' => 'Brouillon',
+            'active' => 'Recherche membres',
+            'completed' => 'Complet',
+            'cancelled' => 'Annulé'
+        ];
+        
+        return $statusMap[$status] ?? $status;
+    }
+
+    private function calculateDuration($project): string
+    {
+        $start = $project->getStartDate();
+        $end = $project->getEndDate();
+        
+        if (!$end) {
+            return 'En cours';
+        }
+        
+        $diff = $start->diff($end);
+        $months = $diff->m + ($diff->y * 12);
+        
+        if ($months > 0) {
+            return $months . ' mois';
+        }
+        
+        return $diff->days . ' jours';
+    }
+
+
+        private function sanitizeFilename(string $filename): string
+    {
+        // Supprimer les caractères dangereux
+        $filename = preg_replace('/[^\p{L}\p{N}\s\-_\.]/u', '', $filename);
+        // Limiter la longueur
+        $filename = substr($filename, 0, 100);
+        // Supprimer les points multiples
+        $filename = preg_replace('/\.+/', '.', $filename);
+        // Remplacer les espaces par des tirets
+        $filename = str_replace(' ', '-', $filename);
+        // Convertir en minuscules
+        $filename = strtolower($filename);
+        
+        return $filename;
+    }
+
 }
