@@ -1,0 +1,246 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Nouveau Événement - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">Créer un nouvel événement</h3>
+    </div>
+    
+    {{ form_start(form, {'attr': {'class': 'settings-form'}}) }}
+        
+        <div class="form-group" style="grid-column: span 2;">
+            <label for="{{ form.titre.vars.id }}">Titre de l'événement</label>
+            {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Conférence sur l\'IA'}}) }}
+            {{ form_errors(form.titre) }}
+        </div>
+        
+        <div class="form-group" style="grid-column: span 2;">
+            <label for="{{ form.description.vars.id }}">Description</label>
+            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4', 'placeholder': 'Détails de l\'événement...'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.typeEvenement.vars.id }}">Type d'événement</label>
+            {{ form_widget(form.typeEvenement, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.typeEvenement) }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.statut.vars.id }}">Statut</label>
+            {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.statut) }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.dateDebut.vars.id }}">Date de début</label>
+            {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.dateDebut) }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.dateFin.vars.id }}">Date de fin</label>
+            {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.dateFin) }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.lieu.vars.id }}">Lieu</label>
+            {{ form_widget(form.lieu, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Salle A, En ligne...', 'autocomplete': 'off'}}) }}
+            {{ form_errors(form.lieu) }}
+            <div id="location-suggestions-{{ form.lieu.vars.id }}" class="location-dropdown"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.capacite.vars.id }}">Capacité</label>
+             {{ form_widget(form.capacite, {'attr': {'class': 'form-control', 'type': 'number'}}) }}
+             {{ form_errors(form.capacite) }}
+        </div>
+
+        <div style="grid-column: span 2; margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
+            <a href="{{ path('admin_events') }}" class="btn-secondary" style="padding: 0.75rem 1.5rem; border: 1px solid #e2e8f0; border-radius: 0.375rem; color: #64748b; text-decoration: none; font-weight: 600; display: flex; align-items: center;">Annuler</a>
+            <button class="btn-primary" type="submit">Enregistrer l'événement</button>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+
+<style>
+/* Local override for form controls to match dashboard style strictly if classes differ in rendered form */
+.settings-form input[type="text"],
+.settings-form input[type="number"],
+.settings-form input[type="date"],
+.settings-form input[type="datetime-local"],
+.settings-form select,
+.settings-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E2E8F0;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    transition: all 0.2s;
+}
+
+.settings-form input:focus,
+.settings-form select:focus,
+.settings-form textarea:focus {
+    border-color: #3C50E0;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(60, 80, 224, 0.1);
+}
+
+/* Location Autocomplete Dropdown */
+.location-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 4px;
+}
+
+.location-dropdown.show {
+    display: block;
+}
+
+.location-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.location-item:last-child {
+    border-bottom: none;
+}
+
+.location-item:hover {
+    background-color: #F8FAFC;
+}
+
+.location-item strong {
+    display: block;
+    color: #1E293B;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.location-item small {
+    color: #64748B;
+    font-size: 0.875rem;
+}
+
+.form-group {
+    position: relative;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Find the lieu input field dynamically (Symfony generates IDs like 'event_lieu')
+    const lieuInput = document.querySelector('input[name*="[lieu]"]');
+    const suggestionsContainer = lieuInput ? lieuInput.parentElement.querySelector('.location-dropdown') : null;
+    
+    console.log('Location autocomplete initialized:', {
+        lieuInput: lieuInput ? 'Found' : 'Not found',
+        suggestionsContainer: suggestionsContainer ? 'Found' : 'Not found'
+    });
+    
+    if (!lieuInput || !suggestionsContainer) {
+        console.error('Location autocomplete elements not found');
+        return;
+    }
+    
+    let debounceTimer;
+    
+    lieuInput.addEventListener('input', function(e) {
+        const query = e.target.value.trim();
+        
+        // Clear previous timer
+        clearTimeout(debounceTimer);
+        
+        // Hide suggestions if query is too short
+        if (query.length < 3) {
+            suggestionsContainer.classList.remove('show');
+            suggestionsContainer.innerHTML = '';
+            return;
+        }
+        
+        // Debounce the API call (300ms)
+        debounceTimer = setTimeout(() => {
+            fetchLocations(query);
+        }, 300);
+    });
+    
+    function fetchLocations(query) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`;
+        
+        console.log('Fetching locations for:', query);
+        
+        fetch(url, {
+            headers: {
+                'User-Agent': 'InnoLearn Event Platform'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Locations received:', data.length);
+            displaySuggestions(data);
+        })
+        .catch(error => {
+            console.error('Error fetching locations:', error);
+            suggestionsContainer.classList.remove('show');
+        });
+    }
+    
+    function displaySuggestions(locations) {
+        suggestionsContainer.innerHTML = '';
+        
+        if (locations.length === 0) {
+            suggestionsContainer.classList.remove('show');
+            return;
+        }
+        
+        locations.forEach(location => {
+            const item = document.createElement('div');
+            item.className = 'location-item';
+            
+            const name = document.createElement('strong');
+            name.textContent = location.name || location.display_name.split(',')[0];
+            
+            const address = document.createElement('small');
+            address.textContent = location.display_name;
+            
+            item.appendChild(name);
+            item.appendChild(address);
+            
+            item.addEventListener('click', function() {
+                lieuInput.value = location.display_name;
+                suggestionsContainer.classList.remove('show');
+                suggestionsContainer.innerHTML = '';
+            });
+            
+            suggestionsContainer.appendChild(item);
+        });
+        
+        suggestionsContainer.classList.add('show');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!lieuInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+            suggestionsContainer.classList.remove('show');
+        }
+    });
+});
+</script>
+{% endblock %}

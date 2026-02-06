@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\QuizRepository;
+use App\Repository\EventRepository;
 
 #[Route('/student')]
 class StudentController extends AbstractController
@@ -104,7 +105,7 @@ class StudentController extends AbstractController
     }
 
     #[Route('/events', name: 'app_student_events')]
-    public function events(): Response
+    public function events(EventRepository $eventRepository, \App\Repository\InscritEventRepository $inscritEventRepository, \Symfony\Component\HttpFoundation\Request $request, \Doctrine\ORM\EntityManagerInterface $entityManager): Response
     {
         $categories = [
             ['name' => 'Tout', 'icon' => 'fa-th-large'],
@@ -113,14 +114,67 @@ class StudentController extends AbstractController
             ['name' => 'Networking', 'icon' => 'fa-users'],
         ];
 
-        $events = [
-            ['id' => 1, 'title' => 'The Future of AI in SaaS', 'category' => 'Webinar', 'date' => '2026-02-15', 'time' => '18:00', 'speaker' => 'Bill Gates'],
-            ['id' => 2, 'title' => 'Symfony Performance Workshop', 'category' => 'Workshop', 'date' => '2026-02-20', 'time' => '14:00', 'speaker' => 'Fabien Potencier'],
-        ];
+        $now = new \DateTime();
+        $allEvents = $eventRepository->findAll();
+        
+        // Filter out cancelled events and auto-clean past events
+        $events = [];
+        foreach ($allEvents as $event) {
+            // Skip cancelled events
+            if ($event->getStatut() === \App\Enum\StatutEvenementEnum::ANNULE) {
+                continue;
+            }
+            
+            // Auto-delete past terminated events
+            if ($event->getStatut() === \App\Enum\StatutEvenementEnum::TERMINE && $event->getDateFin() < $now) {
+                // Delete associated registrations first to avoid foreign key constraint
+                $registrations = $inscritEventRepository->findBy(['event' => $event]);
+                foreach ($registrations as $registration) {
+                    $entityManager->remove($registration);
+                }
+                
+                $entityManager->remove($event);
+                continue;
+            }
+            
+            $events[] = $event;
+        }
+        $entityManager->flush();
+        
+        // Fetch registration statuses for the current session user
+        $session = $request->getSession();
+        $studentEmail = $session->get('student_email');
+        $registrationStatuses = [];
+        $eventCapacityStatus = [];
+
+        if ($studentEmail) {
+            $registrations = $inscritEventRepository->findBy(['email' => $studentEmail]);
+            foreach ($registrations as $registration) {
+                if ($registration->getEvent()) {
+                    $registrationStatuses[$registration->getEvent()->getId()] = $registration->getStatus();
+                }
+            }
+        }
+        
+        // Calculate capacity status for each event
+        foreach ($events as $event) {
+            $confirmedCount = $inscritEventRepository->count([
+                'event' => $event,
+                'status' => 'Confirmé'
+            ]);
+            
+            $eventCapacityStatus[$event->getId()] = [
+                'isFull' => $confirmedCount >= $event->getCapacite(),
+                'confirmed' => $confirmedCount,
+                'capacity' => $event->getCapacite()
+            ];
+        }
 
         return $this->render('student/events.html.twig', [
             'categories' => $categories,
             'events' => $events,
+            'registrationStatuses' => $registrationStatuses,
+            'eventCapacityStatus' => $eventCapacityStatus,
         ]);
     }
 
@@ -166,5 +220,40 @@ class StudentController extends AbstractController
         return $this->render('student/quiz/index.html.twig', [
             'quizzes' => $quizRepository->findAll(),
         ]);
+    }
+
+    #[Route('/event/participate', name: 'student_event_participate', methods: ['POST'])]
+    public function participate(\Symfony\Component\HttpFoundation\Request $request, \Doctrine\ORM\EntityManagerInterface $entityManager, EventRepository $eventRepository): Response
+    {
+        $eventId = $request->request->get('event_id');
+        $name = $request->request->get('name');
+        $email = $request->request->get('email');
+
+        if (!$eventId || !$name || !$email) {
+            $this->addFlash('error', 'Tous les champs sont requis.');
+            return $this->redirectToRoute('app_student_events');
+        }
+
+        $event = $eventRepository->find($eventId);
+        if (!$event) {
+            $this->addFlash('error', 'Événement non trouvé.');
+            return $this->redirectToRoute('app_student_events');
+        }
+
+        $inscription = new \App\Entity\InscritEvent();
+        $inscription->setEvent($event);
+        $inscription->setName($name);
+        $inscription->setEmail($email);
+        $inscription->setDateInscrit(new \DateTime());
+        $inscription->setStatus('En attente');
+        
+        $entityManager->persist($inscription);
+        $entityManager->flush();
+
+        // Save email to session to remember the user
+        $request->getSession()->set('student_email', $email);
+
+        $this->addFlash('success', 'Votre demande d\'inscription a été envoyée avec succès.');
+        return $this->redirectToRoute('app_student_events');
     }
 }

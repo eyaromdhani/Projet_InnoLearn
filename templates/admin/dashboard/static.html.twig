@@ -8,7 +8,11 @@
 <div class="card animate-fade-in-up">
     <div class="card-header">
         <h3 class="card-title">Recent {{ title }}</h3>
-        <button class="btn-primary">Ajouter Nouveau</button>
+        {% if title == 'Événements' %}
+             <a href="{{ path('admin_event_new') }}" class="btn-primary">Ajouter Nouveau</a>
+        {% else %}
+             <button class="btn-primary">Ajouter Nouveau</button>
+        {% endif %}
     </div>
     <div class="table-responsive">
         {% if title == 'Projets' %}
@@ -85,6 +89,126 @@
                     <button type="button" class="btn-primary">Enregistrer les modifications</button>
                 </div>
             </form>
+        {% elseif title == 'Événements' %}
+            <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; border-bottom: 1px solid #e2e8f0;">
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn active" style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 2px solid #3C50E0; color: #3C50E0; font-weight: 600; cursor: pointer;">Liste des Événements</button>
+                <button onclick="switchTab('inscriptions')" id="btn-inscriptions" class="tab-btn" style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer;">Inscriptions</button>
+            </div>
+
+            <div id="view-events">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Type</th>
+                            <th>Date Début</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.titre }}</td>
+                            <td>{{ event.typeEvenement ? event.typeEvenement.value : '' }}</td>
+                            <td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i') : '' }}</td>
+                            <td>
+                                <form action="{{ path('admin_event_change_status', {'id': event.id}) }}" method="post" style="display: inline-block;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ event.id) }}">
+                                    <select name="status" onchange="this.form.submit()" style="padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
+                                        <option value="actif" {% if event.statut.value == 'actif' %}selected{% endif %}>Actif</option>
+                                        <option value="termine" {% if event.statut.value == 'termine' %}selected{% endif %}>Termin\u00e9</option>
+                                        <option value="annule" {% if event.statut.value == 'annule' %}selected{% endif %} style="color: #ef4444;">Annuler (Supprimer)</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_event_new') }}" style="color: #6366f1; text-decoration: none; font-weight: 600;">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #64748b;">Aucun événement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="view-inscriptions" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Événement</th>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Date Inscrit</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for inscription in inscriptions %}
+                        <tr>
+                            <td>#{{ inscription.id }}</td>
+                            <td>{{ inscription.event ? inscription.event.titre : 'N/A' }}</td>
+                            <td>{{ inscription.name }}</td>
+                            <td>{{ inscription.email }}</td>
+                            <td>{{ inscription.dateInscrit ? inscription.dateInscrit|date('Y-m-d H:i') : '' }}</td>
+                            <td>
+                                {% if inscription.status == 'Confirmé' %}
+                                    <span class="badge badge-success">Confirmé</span>
+                                {% else %}
+                                    <span class="badge badge-warning">En attente</span>
+                                {% endif %}
+                            </td>
+                            <td style="display: flex; gap: 0.5rem;">
+                                {% if inscription.status != 'Confirmé' %}
+                                <form action="{{ path('admin_inscription_approve', {'id': inscription.id}) }}" method="post">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ inscription.id) }}">
+                                    <button type="submit" style="background: none; border: none; color: #10b981; cursor: pointer; font-weight: 600;">Approuver</button>
+                                </form>
+                                {% endif %}
+                                <form action="{{ path('admin_inscription_delete', {'id': inscription.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ inscription.id) }}">
+                                    <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600;">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #64748b;">Aucune inscription trouvée</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <script>
+                function switchTab(tab) {
+                    const btnEvents = document.getElementById('btn-events');
+                    const btnInsc = document.getElementById('btn-inscriptions');
+                    const viewEvents = document.getElementById('view-events');
+                    const viewInsc = document.getElementById('view-inscriptions');
+
+                    if (tab === 'events') {
+                        viewEvents.style.display = 'block';
+                        viewInsc.style.display = 'none';
+                        btnEvents.style.borderBottomColor = '#3C50E0';
+                        btnEvents.style.color = '#3C50E0';
+                        btnInsc.style.borderBottomColor = 'transparent';
+                        btnInsc.style.color = '#64748b';
+                    } else {
+                        viewEvents.style.display = 'none';
+                        viewInsc.style.display = 'block';
+                        btnEvents.style.borderBottomColor = 'transparent';
+                        btnEvents.style.color = '#64748b';
+                        btnInsc.style.borderBottomColor = '#3C50E0';
+                        btnInsc.style.color = '#3C50E0';
+                    }
+                }
+            </script>
         {% else %}
             <div style="padding: 3rem; text-align: center;">
                 <p style="color: #64748B;">Pas encore de données disponibles pour {{ title }}.</p>
