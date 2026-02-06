@@ -1,0 +1,240 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Gérer Questions - {{ formulaire.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+.quiz-header-premium {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+    border-radius: 24px;
+    padding: 3rem;
+    color: white;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(67, 56, 202, 0.2);
+}
+
+.quiz-header-premium::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.add-question-section {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title i { color: #6366f1; }
+
+.form-label { font-weight: 700; color: #475569; margin-bottom: 0.5rem; font-size: 0.9rem; }
+
+.form-control, .form-select {
+    border-radius: 12px;
+    border: 2px solid #f1f5f9;
+    padding: 0.8rem 1rem;
+    background: #f8fafc;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 0.8rem 2rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    cursor: pointer;
+}
+
+.question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.question-card:hover { border-color: #6366f1; transform: translateX(5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+.q-number {
+    width: 40px; height: 40px; background: #f1f5f9; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #6366f1;
+}
+
+.q-text { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; }
+
+.q-badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+.q-badge {
+    padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; gap: 0.4rem;
+}
+
+.badge-type { background: #e0e7ff; color: #4338ca; }
+.badge-points { background: #fef3c7; color: #92400e; }
+.badge-answer { background: #dcfce7; color: #166534; }
+
+.q-actions { display: flex; gap: 0.5rem; }
+.btn-icon {
+    width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; transition: all 0.2s; border: none; cursor: pointer;
+}
+.btn-edit { background: #fef3c7; color: #92400e; }
+.btn-delete { background: #fee2e2; color: #b91c1c; }
+
+.btn-back {
+    background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 700; text-decoration: none;
+    transition: all 0.2s;
+}
+.btn-back:hover { background: white; color: #4338ca; }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="container py-5" style="max-width: 1000px;">
+    <!-- Quiz Header -->
+    <div class="quiz-header-premium">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <span class="badge bg-white text-primary mb-2 px-3 py-2 rounded-pill font-weight-bold">{{ formulaire.category }}</span>
+                <h1 class="display-5 font-weight-bold mb-2">{{ formulaire.titre }}</h1>
+                <p class="opacity-75 lead mb-0">{{ formulaire.description }}</p>
+            </div>
+            <a href="{{ path('app_enseignant_quizzes') }}" class="btn-back">
+                <i class="fas fa-arrow-left me-2"></i>Retour aux Quiz
+            </a>
+        </div>
+        
+        <div class="d-flex gap-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="far fa-clock"></i>
+                <span>{{ formulaire.tempsLimite }} minutes</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-question-circle"></i>
+                <span>{{ questions|length }} questions</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Question -->
+    <div class="add-question-section">
+        <h2 class="section-title">
+            <i class="fas fa-plus-circle"></i>
+            Ajouter une Question
+        </h2>
+
+        <form method="post" action="{{ path('app_enseignant_quiz_questions', {id: formulaire.id}) }}">
+            <div class="mb-4">
+                <label class="form-label">Texte de la Question</label>
+                <textarea name="question_text" class="form-control" rows="3" required placeholder="Saisissez votre question ici..."></textarea>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label">Type de Question</label>
+                    <select name="type" class="form-select" required>
+                        <option value="multiple_choice">Choix Multiple</option>
+                        <option value="true_false">Vrai / Faux</option>
+                        <option value="number">Nombre</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Points</label>
+                    <input type="number" name="points" class="form-control" value="1" min="1" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Réponse Correcte</label>
+                <input type="text" name="correct_answer" class="form-control" required placeholder="La réponse attendue...">
+                <small class="text-muted mt-1 d-block">Pour Vrai/Faux, utilisez "Vrai" ou "Faux".</small>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn-primary-gradient">
+                    <i class="fas fa-save"></i> Ajouter à la Liste
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Questions List -->
+    <h2 class="section-title">
+        <i class="fas fa-list-ul"></i>
+        Liste des Questions
+    </h2>
+
+    {% if questions|length > 0 %}
+        {% for question in questions %}
+        <div class="question-card">
+            <div class="q-number">{{ loop.index }}</div>
+            <div class="q-content">
+                <div class="q-text">{{ question.questionText }}</div>
+                <div class="q-badges">
+                    <span class="q-badge badge-type">
+                        <i class="fas fa-tag"></i> {{ question.type|replace({'_': ' '})|title }}
+                    </span>
+                    <span class="q-badge badge-points">
+                        <i class="fas fa-star"></i> {{ question.points }} Points
+                    </span>
+                    <span class="q-badge badge-answer">
+                        <i class="fas fa-check-circle"></i> {{ question.correctAnswer }}
+                    </span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <a href="{{ path('app_enseignant_question_edit', {id: question.id}) }}" class="btn-icon btn-edit" title="Modifier">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <form method="post" action="{{ path('app_enseignant_question_delete', {id: question.id}) }}" onsubmit="return confirm('Supprimer cette question ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                    <button class="btn-icon btn-delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5 bg-white rounded-24 border border-dashed">
+            <i class="fas fa-ghost fa-3x text-muted mb-3 opacity-25"></i>
+            <h4 class="text-muted">Aucune question pour le moment</h4>
+            <p class="text-muted mb-0">Commencez par en ajouter une via le formulaire ci-dessus.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -5,9 +5,12 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Quiz;
-use App\Form\QuizType;
-use App\Repository\QuizRepository;
+use App\Entity\Formulaire;
+use App\Entity\Question;
+use App\Form\FormulaireType;
+use App\Form\QuestionType;
+use App\Repository\FormulaireRepository;
+use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -148,30 +151,125 @@ class EnseignantController extends AbstractController
         ]);
     }
     #[Route('/quizzes', name: 'app_enseignant_quizzes')]
-    public function quizzes(QuizRepository $quizRepository): Response
+    public function quizzes(FormulaireRepository $formulaireRepository): Response
     {
-        return $this->render('enseignant/quiz/index.html.twig', [
-            'quizzes' => $quizRepository->findAll(),
+        return $this->render('enseignant/formulaire/index.html.twig', [
+            'formulaires' => $formulaireRepository->findAll(),
         ]);
     }
 
-    #[Route('/quiz/new', name: 'app_enseignant_quiz_new', methods: ['GET', 'POST'])]
-    public function addQuiz(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/quizzes/new', name: 'app_enseignant_quiz_new', methods: ['GET', 'POST'])]
+    public function newQuiz(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $quiz = new Quiz();
-        $form = $this->createForm(QuizType::class, $quiz);
+        $formulaire = new Formulaire();
+        $form = $this->createForm(FormulaireType::class, $formulaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($quiz);
+            $entityManager->persist($formulaire);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_enseignant_quizzes', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('enseignant/quiz/new.html.twig', [
-            'quiz' => $quiz,
+        return $this->render('enseignant/formulaire/new.html.twig', [
+            'formulaire' => $formulaire,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/quizzes/{id}/edit', name: 'app_enseignant_quiz_edit', methods: ['GET', 'POST'])]
+    public function editQuiz(Request $request, Formulaire $formulaire, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(FormulaireType::class, $formulaire);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_enseignant_quizzes', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('enseignant/formulaire/edit.html.twig', [
+            'formulaire' => $formulaire,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/quizzes/{id}', name: 'app_enseignant_quiz_delete', methods: ['POST'])]
+    public function deleteQuiz(Request $request, Formulaire $formulaire, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $formulaire->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($formulaire);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_enseignant_quizzes', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/quizzes/{id}/questions', name: 'app_enseignant_quiz_questions', methods: ['GET', 'POST'])]
+    public function manageQuestions(Request $request, Formulaire $formulaire, EntityManagerInterface $entityManager): Response
+    {
+        // Handle new question creation
+        if ($request->isMethod('POST')) {
+            $questionText = $request->request->get('question_text');
+            $type = $request->request->get('type');
+            $correctAnswer = $request->request->get('correct_answer');
+            $points = $request->request->get('points');
+
+            if ($questionText && $type && $correctAnswer && $points) {
+                $question = new Question();
+                $question->setQuestionText($questionText);
+                $question->setType($type);
+                $question->setCorrectAnswer($correctAnswer);
+                $question->setPoints((int)$points);
+                $question->setFormulaire($formulaire);
+
+                $entityManager->persist($question);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Question ajoutée avec succès!');
+                return $this->redirectToRoute('app_enseignant_quiz_questions', ['id' => $formulaire->getId()]);
+            }
+        }
+
+        return $this->render('enseignant/formulaire/questions.html.twig', [
+            'formulaire' => $formulaire,
+            'questions' => $formulaire->getQuestions(),
+        ]);
+    }
+
+    #[Route('/quizzes/question/{id}/edit', name: 'app_enseignant_question_edit', methods: ['GET', 'POST'])]
+    public function editQuestion(Request $request, Question $question, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(QuestionType::class, $question);
+        $form->remove('formulaire'); // We don't want to change the quiz here
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Question modifiée avec succès!');
+            return $this->redirectToRoute('app_enseignant_quiz_questions', ['id' => $question->getFormulaire()->getId()]);
+        }
+
+        return $this->render('enseignant/formulaire/edit_question.html.twig', [
+            'question' => $question,
+            'form' => $form->createView(),
+            'formulaire' => $question->getFormulaire(),
+        ]);
+    }
+
+    #[Route('/quizzes/question/{id}', name: 'app_enseignant_question_delete', methods: ['POST'])]
+    public function deleteQuestion(Request $request, Question $question, EntityManagerInterface $entityManager): Response
+    {
+        $formulaireId = $question->getFormulaire()->getId();
+        if ($this->isCsrfTokenValid('delete' . $question->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($question);
+            $entityManager->flush();
+            $this->addFlash('success', 'Question supprimée!');
+        }
+
+        return $this->redirectToRoute('app_enseignant_quiz_questions', ['id' => $formulaireId]);
     }
 }
