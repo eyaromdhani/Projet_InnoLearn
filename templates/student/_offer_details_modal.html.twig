@@ -1,0 +1,98 @@
+<div class="modal-header" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+        <div>
+            <span class="domain-badge" style="position: static; margin-bottom: 0.5rem; display: inline-block;">{{ offre.domaine }}</span>
+            <h2 style="font-size: 2rem; font-weight: 800; color: #1e293b; margin: 0;">{{ offre.titre }}</h2>
+            <p style="color: #64748b; font-size: 1.1rem; margin-top: 0.5rem;">
+                <i class="fas fa-building" style="color: #6366f1;"></i> {{ offre.entreprise }}
+            </p>
+        </div>
+        <button class="close-modal" onclick="closeOfferDetailsModal()" style="background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; transition: all 0.2s;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>
+
+<div class="modal-body" style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+    <!-- Left Column: Description & Skills -->
+    <div class="modal-main-content">
+        <div style="margin-bottom: 2.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-align-left" style="color: #6366f1;"></i> Description du Poste
+            </h3>
+            <div style="line-height: 1.7; color: #475569; font-size: 1.05rem;">
+                {{ offre.description|nl2br }}
+            </div>
+        </div>
+
+        <div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-star" style="color: #6366f1;"></i> Compétences Recherchées
+            </h3>
+            <div style="line-height: 1.7; color: #475569; font-size: 1.05rem;">
+                {{ offre.competences|nl2br }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Meta Info & Action -->
+    <div class="modal-sidebar">
+        <div style="background: #f8fafc; border-radius: 20px; padding: 1.5rem; border: 1px solid #e2e8f0;">
+            <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1.25rem;">Détails de l'offre</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; color: #64748b;">
+                    <i class="fas fa-map-marker-alt" style="width: 20px; color: #6366f1;"></i>
+                    <span>{{ offre.lieu }}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; color: #64748b;">
+                    <i class="fas fa-calendar-alt" style="width: 20px; color: #6366f1;"></i>
+                    <span>Publié le {{ offre.datePublication|date('d/m/Y') }}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; color: #64748b;">
+                    <i class="fas fa-hourglass-half" style="width: 20px; color: #6366f1;"></i>
+                    <span>Durée : {{ offre.duree }} mois</span>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 1.5rem 0;">
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.5rem;">CV (fichier PDF) *</label>
+                <div class="file-upload-wrapper" style="position: relative;">
+                    <input type="file" id="applicationCvFile" accept=".pdf,application/pdf" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;">
+                    <div id="applicationCvBox" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 12px; transition: all 0.2s; cursor: pointer;">
+                        <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem;">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;" id="applicationCvFileName">Choisir un fichier PDF</div>
+                            <div style="font-size: 0.7rem; color: #94a3b8;">Taille max: 5 Mo</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="cvError" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.5rem;">Lettre de motivation</label>
+                <textarea id="motivationLetter" 
+                          placeholder="Expliquez pourquoi vous êtes le candidat idéal..." 
+                          style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; transition: all 0.2s; outline: none; resize: vertical; min-height: 120px;"
+                          onfocus="this.style.borderColor='#6366f1'"
+                          onblur="this.style.borderColor='#e2e8f0'"></textarea>
+                <div id="motivationError" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+            </div>
+
+            <button class="btn-primary-gradient" onclick="submitApplication({{ offre.id }})" style="width: 100%; justify-content: center;">
+                <i class="fas fa-paper-plane"></i> Postuler maintenant
+            </button>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding: 0 1rem;">
+            <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5; text-align: center;">
+                En postulant, votre profil sera partagé avec {{ offre.entreprise }}.
+            </p>
+        </div>
+    </div>
+</div>

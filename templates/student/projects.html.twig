@@ -1,0 +1,2490 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Projets Collaboratifs - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dashboard-header .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hero Section */
+.projects-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 550px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+/* Design Element - Floating Icons */
+.hero-design-elements {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    max-width: 400px;
+    flex-wrap: wrap;
+}
+
+.design-element {
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: float-element 6s ease-in-out infinite;
+}
+
+.design-element:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.design-element:nth-child(1) {
+    animation-delay: 0s;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.2) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.design-element:nth-child(2) {
+    animation-delay: 1s;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.2) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.design-element:nth-child(3) {
+    animation-delay: 2s;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.design-element i {
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.design-element:nth-child(1) i {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.design-element:nth-child(2) i {
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.design-element:nth-child(3) i {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes float-element {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Waves */
+.hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 70px;
+    animation: waveMove 15s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.hero-waves .wave-1 {
+    height: 90px;
+    margin-bottom: -70px;
+    opacity: 0.3;
+    animation-duration: 7s;
+    animation-direction: reverse;
+}
+
+.hero-waves .wave-2 {
+    height: 80px;
+    margin-bottom: -50px;
+    opacity: 0.5;
+    animation-duration: 10s;
+}
+
+.hero-waves .wave-3 { 
+    fill: #f8fafc; 
+    height: 60px;
+    animation-duration: 13s;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-25%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Visual Side */
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.hero-illustration-wrapper {
+    width: 450px;
+    height: 450px;
+    background: #3b3898;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { width: 100%; height: 100%; object-fit: cover; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
+.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
+.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* Grid Adjustment */
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+.project-grid { padding: 0 10% 5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+
+/* Toolbar - Updated design to match hero */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    align-items: center;
+    max-width: 1400px;
+    width: 90%;
+    position: relative;
+    z-index: 10;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6366f1;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 3rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    background: #f8fafc;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.sort-dropdown select {
+    padding: 0.85rem 2rem 0.85rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    background: #f8fafc;
+    font-size: 0.95rem;
+    min-width: 200px;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sort-dropdown select:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.btn-stats, .btn-pdf {
+    padding: 0.85rem 1.8rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    color: white;
+}
+
+.btn-stats {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+}
+
+.btn-stats:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+.btn-pdf {
+    background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.25);
+}
+
+.btn-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.35);
+    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+}
+
+/* Statistiques Graphiques - Updated design */
+.stats-graphique-container {
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    max-width: 1400px;
+    width: 90%;
+    position: relative;
+    z-index: 10;
+}
+
+.graphiques-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.graphiques-header h2 {
+    font-size: 1.75rem;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.graphiques-header p {
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.graphiques-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.graphique-card {
+    background: #f8fafc;
+    border-radius: 18px;
+    padding: 1.75rem;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s;
+}
+
+.graphique-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.graphique-card h3 {
+    font-size: 1.25rem;
+    color: #374151;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.graphique-wrapper {
+    position: relative;
+    height: 280px;
+    margin-bottom: 1rem;
+}
+
+.graphique-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+.legend-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.legend-count {
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.legend-percentage {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.graphique-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.info-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+/* Tableau récapitulatif */
+.summary-table {
+    margin-top: 2.5rem;
+    padding: 1.75rem;
+    background: #f8fafc;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+}
+
+.summary-table h3 {
+    font-size: 1.25rem;
+    color: #374151;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#statusTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#statusTable thead {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+}
+
+#statusTable th {
+    padding: 1.25rem;
+    text-align: left;
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+#statusTable tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.2s;
+}
+
+#statusTable tbody tr:hover {
+    background: #f3f4f6;
+}
+
+#statusTable td {
+    padding: 1.25rem;
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.status-recherche { background: #fce7f3; color: #be185d; }
+.status-complet { background: #dcfce7; color: #166534; }
+.status-encours { background: #dbeafe; color: #1d4ed8; }
+.status-brouillon { background: #f3f4f6; color: #6b7280; }
+.status-annule { background: #fee2e2; color: #dc2626; }
+
+/* Premium Project Card */
+.project-card {
+    background: white;
+    border-radius: 32px;
+    padding: 2.2rem;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+    min-height: 440px;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-badge {
+    padding: 0.5rem 1.1rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-tech { background: #f1f5f9; color: #64748b; }
+.badge-status-recherche { background: #fff1f2; color: #e11d48; }
+.badge-status-encours { background: #eff6ff; color: #2563eb; }
+.badge-status-complet { background: #f8fafc; color: #94a3b8; }
+
+.project-info h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.5px;
+}
+
+.project-description {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-lead {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.lead-avatar-wrap {
+    width: 36px;
+    height: 36px;
+    background: #6366f1;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.lead-avatar-wrap img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
+
+.project-lead span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.project-meta {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.project-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-card {
+    padding: 0.9rem 1.25rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-details-light {
+    flex: 1;
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+.btn-details-light:hover { background: #f1f5f9; }
+
+.btn-action-primary {
+    flex: 1.5;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    box-shadow: 0 8px 15px rgba(99, 102, 241, 0.2);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-action-primary:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 12px 25px rgba(99, 102, 241, 0.3);
+}
+
+.btn-action-primary:disabled {
+    background: #cbd5e1;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 3rem auto;
+    padding: 1rem;
+    max-width: 1400px;
+    width: 90%;
+}
+
+.page-btn {
+    width: 44px;
+    height: 44px;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #f3f4f6;
+    border-color: #6366f1;
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.page-number {
+    width: 44px;
+    height: 44px;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.page-number.active {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    border-color: #6366f1;
+}
+
+.page-number:hover:not(.active) {
+    background: #f3f4f6;
+}
+
+/* ===================== */
+/* IMPROVED DETAILS MODAL */
+/* ===================== */
+.modal-overlay {
+    position: fixed; 
+    inset: 0; 
+    background: rgba(15, 23, 42, 0.7); 
+    backdrop-filter: blur(12px);
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 2000;
+    opacity: 0; 
+    visibility: hidden; 
+    transition: all 0.3s ease-out;
+}
+
+.modal-overlay.active { 
+    opacity: 1; 
+    visibility: visible; 
+}
+
+.modal-container {
+    background: white; 
+    width: 100%; 
+    max-width: 700px; /* Increased width for better layout */
+    border-radius: 28px;
+    position: relative; 
+    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-overlay.active .modal-container {
+    transform: translateY(0);
+}
+
+.modal-close { 
+    position: absolute; 
+    top: 1.5rem; 
+    right: 1.5rem; 
+    background: #f1f5f9; 
+    border: none; 
+    width: 44px; 
+    height: 44px; 
+    border-radius: 14px; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: all 0.2s; 
+    z-index: 10;
+    font-size: 1.2rem;
+}
+
+.modal-close:hover {
+    background: #e5e7eb;
+    transform: rotate(90deg);
+}
+
+/* Details Modal Content Styling */
+.modal-header {
+    padding: 2.5rem 2.5rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.modal-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.modal-badges {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.modal-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary { background: #eef2ff; color: #4f46e5; }
+.badge-success { background: #dcfce7; color: #166534; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.badge-danger { background: #fee2e2; color: #dc2626; }
+
+.modal-content {
+    padding: 2rem 2.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-section {
+    margin-bottom: 2.5rem;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.modal-section-title i {
+    color: #6366f1;
+    font-size: 1.1rem;
+}
+
+.modal-description {
+    color: #4b5563;
+    line-height: 1.7;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    background: #f8fafc;
+    padding: 1.25rem;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s;
+}
+
+.info-item:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+}
+
+.info-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/* Technologies List */
+.technologies-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.tech-tag {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.tech-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -9px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #6366f1;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.timeline-date {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.timeline-text {
+    font-size: 1rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 1.5rem 2.5rem 2.5rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 1rem;
+}
+
+.modal-footer .btn-details {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 14px;
+    font-size: 1rem;
+}
+
+.modal-footer .btn-join {
+    flex: 2;
+    padding: 1rem;
+    border-radius: 14px;
+    font-size: 1rem;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+}
+
+/* No projects */
+.no-projects {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    color: #6b7280;
+    font-size: 1.1rem;
+    background: white;
+    border-radius: 24px;
+    border: 2px dashed #e5e7eb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-content-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-design-elements {
+        justify-content: center;
+    }
+    
+    .hero-illustration-wrapper {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+    }
+    
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box,
+    .sort-dropdown select {
+        min-width: 100%;
+    }
+    
+    .graphiques-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-grid {
+        grid-template-columns: 1fr;
+        padding: 0 5% 3rem;
+    }
+    
+    #statusTable {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .modal-container {
+        max-width: 95%;
+        margin: 1rem;
+        border-radius: 20px;
+    }
+    
+    .modal-header,
+    .modal-content,
+    .modal-footer {
+        padding: 1.5rem;
+    }
+    
+    .modal-title {
+        font-size: 1.5rem;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="projects-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <span class="hero-label">Collaboration & Innovation</span>
+                <h1 class="hero-title">
+                    Bâtissons<br>
+                    <span>L'Avenir Ensemble</span>
+                </h1>
+                
+                <!-- DESIGN ELEMENT - Floating Icons -->
+                <div class="hero-design-elements">
+                    <div class="design-element">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="design-element">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="design-element">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/student_hero.png') }}" class="hero-illustration" alt="Projects illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-3"></div>
+                <div class="hero-frame frame-4"></div>
+                <div class="hero-frame frame-5"></div>
+                <div class="hero-frame frame-6"></div>
+            </div>
+        </div>
+
+        <div class="hero-waves">
+            <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.3)" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-2" xmlns="http://www.w3.org2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.5)" d="M0,32L48,37.3C96,43,192,53,288,64C384,75,480,85,576,80C672,75,768,53,864,48C960,43,1056,53,1152,58.7C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Barre d'outils simplifiée -->
+    <div class="toolbar">
+        <!-- Recherche -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher un projet...">
+        </div>
+
+        <!-- Tri simple -->
+        <div class="sort-dropdown">
+            <select id="sortSelect">
+                <option value="date-desc">Trier par: Date (récent)</option>
+                <option value="date-asc">Date (ancien)</option>
+                <option value="title-asc">Titre (A-Z)</option>
+                <option value="title-desc">Titre (Z-A)</option>
+            </select>
+        </div>
+
+        <!-- Statistiques -->
+        <button class="btn-stats" id="showStatsBtn">
+            <i class="fas fa-chart-bar"></i>
+            Graphiques
+        </button>
+
+        <!-- Export PDF -->
+        <button class="btn-pdf" id="exportPdfBtn">
+            <i class="fas fa-file-pdf"></i>
+            PDF
+        </button>
+    </div>
+
+    <!-- Statistiques Graphiques -->
+    <div class="stats-graphique-container" id="statsContainer" style="display: none;">
+        <div class="graphiques-header">
+            <h2><i class="fas fa-chart-pie"></i> Analyse Graphique</h2>
+            <p>Visualisation des données des projets par statut et date de création</p>
+        </div>
+        
+        <div class="graphiques-grid">
+            <!-- Graphique 1: Répartition par statut (Camembert) -->
+            <div class="graphique-card">
+                <h3><i class="fas fa-chart-pie"></i> Répartition par Statut</h3>
+                <div class="graphique-wrapper">
+                    <canvas id="statusChart" width="350" height="350"></canvas>
+                </div>
+                <div class="graphique-legend" id="statusLegend"></div>
+            </div>
+            
+            <!-- Graphique 2: Évolution par date de création -->
+            <div class="graphique-card">
+                <h3><i class="fas fa-chart-line"></i> Évolution des Créations</h3>
+                <div class="graphique-wrapper">
+                    <canvas id="creationChart" width="400" height="250"></canvas>
+                </div>
+                <div class="graphique-info">
+                    <div class="info-item">
+                        <span class="info-label">Période:</span>
+                        <span class="info-value" id="periodLabel">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Total:</span>
+                        <span class="info-value" id="totalProjects">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tableau récapitulatif -->
+        <div class="summary-table">
+            <h3><i class="fas fa-table"></i> Récapitulatif par Statut</h3>
+            <table id="statusTable">
+                <thead>
+                    <tr>
+                        <th>Statut</th>
+                        <th>Nombre</th>
+                        <th>Pourcentage</th>
+                        <th>Dernier projet</th>
+                    </tr>
+                </thead>
+                <tbody id="statusTableBody">
+                    <!-- Rempli par JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Liste des projets -->
+    <div class="project-grid" id="projectGrid">
+        {% for project in projects %}
+        <div class="project-card">
+            <div class="card-badges">
+                <span class="project-badge badge-tech">{{ project.category|upper }}</span>
+                <span class="project-badge badge-status-{{ project.status|lower|replace({' ': ''}) }}">
+                    {{ project.status == 'Recherche' ? 'RECHERCHE MEMBRES' : (project.status == 'En cours' ? 'PROJET EN COURS' : 'PROJET TERMINÉ') }}
+                </span>
+            </div>
+
+            <div class="project-info">
+                <h2>{{ project.title|lower }}</h2>
+                <p class="project-description">{{ project.description }}</p>
+                
+                <div class="project-lead">
+                    <div class="lead-avatar-wrap">
+                        <img src="https://ui-avatars.com/api/?name={{ project.lead|url_encode }}&background=6366f1&color=fff" alt="Lead">
+                    </div>
+                    <span>Lead: {{ project.lead }}</span>
+                </div>
+            </div>
+
+            <div class="project-meta">
+                <span>{{ project.members }}/{{ project.max_members }}</span>
+                <span>Créé: {{ project.created_at }}</span>
+                <span>{{ project.duration }}</span>
+            </div>
+
+            <div class="project-actions">
+                <a href="{{ path('app_student_project_detail', {'id': project.id}) }}" class="btn-card btn-details-light">
+                    Détails
+                </a>
+                <button class="btn-card btn-action-primary" {{ project.members >= project.max_members ? 'disabled' : '' }}>
+                    Postuler
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-projects">
+            <p>Aucun projet disponible pour le moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination">
+        <button class="page-btn" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+        <div class="page-numbers" id="pageNumbers"></div>
+        <button class="page-btn" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- ============================= -->
+<!-- IMPROVED DETAILS MODAL -->
+<!-- ============================= -->
+<div class="modal-overlay" id="detailsModal">
+    <div class="modal-container">
+        <button class="modal-close" onclick="closeDetails()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div id="detailsContent">
+            <!-- Content will be loaded dynamically -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal de chargement PDF -->
+<div class="modal-overlay" id="pdfLoadingModal" style="display: none;">
+    <div class="modal-container" style="max-width: 400px; text-align: center;">
+        <h3>Génération du PDF en cours...</h3>
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin fa-3x" style="color: #6366f1;"></i>
+        </div>
+        <p style="margin-top: 1.5rem; color: #6b7280;">
+            Veuillez patienter pendant la génération du document.
+        </p>
+    </div>
+</div>
+
+<!-- Depot Modals Container -->
+<div id="depotModalsContainer"></div>
+
+<script>
+// Données des projets
+const projects = {{ projects|json_encode|raw }};
+
+// Configuration de pagination
+let currentPage = 1;
+const itemsPerPage = 6;
+let filteredProjects = [...projects];
+
+// Chart.js instances
+let statusChart = null;
+let creationChart = null;
+
+// Variables de filtrage/sorting
+let currentCategory = 'all';
+let currentSort = 'date-desc';
+let currentSearchQuery = '';
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', function() {
+    renderProjects();
+    setupEventListeners();
+});
+
+// Écouteurs d'événements
+function setupEventListeners() {
+    // Recherche dans toolbar
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value.toLowerCase();
+        filterProjects();
+    });
+    
+    // Tri simple
+    document.getElementById('sortSelect').addEventListener('change', sortProjects);
+    
+    // Statistiques
+    document.getElementById('showStatsBtn').addEventListener('click', toggleStats);
+    
+    // Export PDF
+    document.getElementById('exportPdfBtn').addEventListener('click', generatePDF);
+    
+    // Pagination
+    document.getElementById('prevPage').addEventListener('click', prevPage);
+    document.getElementById('nextPage').addEventListener('click', nextPage);
+    
+    // Close modal on overlay click
+    document.getElementById('detailsModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDetails();
+        }
+    });
+}
+
+// Fonction de recherche
+function filterProjects() {
+    filteredProjects = projects.filter(project => {
+        const searchMatch = !currentSearchQuery || 
+                           project.title.toLowerCase().includes(currentSearchQuery) ||
+                           project.description.toLowerCase().includes(currentSearchQuery) ||
+                           project.lead.toLowerCase().includes(currentSearchQuery);
+        
+        return searchMatch;
+    });
+    
+    currentPage = 1;
+    sortProjects();
+}
+
+// Tri des projets
+function sortProjects() {
+    const sortValue = document.getElementById('sortSelect').value || currentSort;
+    
+    filteredProjects.sort((a, b) => {
+        switch(sortValue) {
+            case 'date-desc':
+                return new Date(b.created_at.split('/').reverse().join('-')) - 
+                       new Date(a.created_at.split('/').reverse().join('-'));
+            case 'date-asc':
+                return new Date(a.created_at.split('/').reverse().join('-')) - 
+                       new Date(b.created_at.split('/').reverse().join('-'));
+            case 'title-asc':
+                return a.title.localeCompare(b.title);
+            case 'title-desc':
+                return b.title.localeCompare(a.title);
+            default:
+                return 0;
+        }
+    });
+    
+    renderProjects();
+    updateCharts();
+}
+
+// Afficher/masquer les statistiques
+function toggleStats() {
+    const statsContainer = document.getElementById('statsContainer');
+    const isVisible = statsContainer.style.display === 'block';
+    statsContainer.style.display = isVisible ? 'none' : 'block';
+    
+    // Mettre à jour les graphiques si on les affiche
+    if (!isVisible) {
+        updateCharts();
+    }
+}
+
+// Mettre à jour tous les graphiques
+function updateCharts() {
+    destroyCharts(); // Détruire les anciens graphiques
+    createStatusChart();
+    createCreationChart();
+    updateStatusTable();
+}
+
+// Détruire les anciens graphiques
+function destroyCharts() {
+    if (statusChart) statusChart.destroy();
+    if (creationChart) creationChart.destroy();
+}
+
+// 1. Graphique des statuts (Camembert)
+function createStatusChart() {
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    
+    // Compter les projets par statut
+    const statusCounts = {};
+    const statusColors = {
+        'Recherche membres': { color: '#f87171', light: '#fce7f3' },
+        'Complet': { color: '#10b981', light: '#dcfce7' },
+        'En cours': { color: '#60a5fa', light: '#dbeafe' },
+        'Brouillon': { color: '#9ca3af', light: '#f3f4f6' },
+        'Annulé': { color: '#6b7280', light: '#fee2e2' }
+    };
+    
+    filteredProjects.forEach(project => {
+        statusCounts[project.status] = (statusCounts[project.status] || 0) + 1;
+    });
+    
+    // Filtrer les statuts qui ont des données
+    const labels = Object.keys(statusCounts);
+    const data = Object.values(statusCounts);
+    const backgroundColors = labels.map(label => statusColors[label]?.color || '#9ca3af');
+    const borderColors = labels.map(label => '#ffffff');
+    
+    // Calculer les pourcentages
+    const total = data.reduce((a, b) => a + b, 0);
+    
+    statusChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                            return `${label}: ${value} projets (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '65%',
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    });
+    
+    // Mettre à jour la légende
+    updateStatusLegend(labels, data, backgroundColors, statusColors, total);
+}
+
+function updateStatusLegend(labels, data, colors, statusColors, total) {
+    const legendContainer = document.getElementById('statusLegend');
+    
+    legendContainer.innerHTML = labels.map((label, index) => {
+        const value = data[index];
+        const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+        const colorInfo = statusColors[label] || { color: '#9ca3af', light: '#f3f4f6' };
+        
+        return `
+            <div class="legend-item">
+                <span class="legend-color" style="background: ${colors[index]}"></span>
+                <div class="legend-details">
+                    <span class="legend-label" style="color: ${colorInfo.color}; font-weight: 600;">${label}</span>
+                    <div class="legend-stats">
+                        <span class="legend-count">${value} projets</span>
+                        <span class="legend-percentage">(${percentage}%)</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// 2. Graphique d'évolution par date de création
+function createCreationChart() {
+    const ctx = document.getElementById('creationChart').getContext('2d');
+    
+    // Grouper par mois/année
+    const monthlyData = {};
+    filteredProjects.forEach(project => {
+        try {
+            const dateStr = project.created_at;
+            if (!dateStr) return;
+            
+            // Format: "jj/mm/aaaa" → extraire mois/année
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                const day = parts[0];
+                const month = parts[1];
+                const year = parts[2];
+                
+                // Vérifier si c'est une date valide
+                if (day && month && year && month.length === 2 && year.length === 4) {
+                    const monthYear = `${month}/${year}`;
+                    monthlyData[monthYear] = (monthlyData[monthYear] || 0) + 1;
+                }
+            }
+        } catch (e) {
+            console.warn('Date format error:', project.created_at);
+        }
+    });
+    
+    // Trier par date
+    const sortedEntries = Object.entries(monthlyData).sort(([dateA], [dateB]) => {
+        try {
+            const [monthA, yearA] = dateA.split('/');
+            const [monthB, yearB] = dateB.split('/');
+            const dateObjA = new Date(yearA, monthA - 1);
+            const dateObjB = new Date(yearB, monthB - 1);
+            return dateObjA - dateObjB;
+        } catch (e) {
+            return 0;
+        }
+    });
+    
+    const labels = sortedEntries.map(([date]) => date);
+    const data = sortedEntries.map(([, count]) => count);
+    
+    // Mettre à jour les informations
+    const total = filteredProjects.length;
+    const period = labels.length > 0 ? `${labels[0]} - ${labels[labels.length - 1]}` : 'Aucune donnée';
+    
+    document.getElementById('periodLabel').textContent = period;
+    document.getElementById('totalProjects').textContent = total;
+    
+    // Créer un gradient pour la ligne
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.8)');
+    gradient.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
+    
+    creationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Projets créés',
+                data: data,
+                backgroundColor: gradient,
+                borderColor: '#6366f1',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#6366f1',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}`;
+                        },
+                        title: function(context) {
+                            return `Mois: ${context[0].label}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Nombre de projets',
+                        color: '#6b7280'
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois/Année',
+                        color: '#6b7280'
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 3. Tableau récapitulatif par statut
+function updateStatusTable() {
+    const tableBody = document.getElementById('statusTableBody');
+    
+    // Compter les projets par statut
+    const statusData = {};
+    const statusColors = {
+        'Recherche membres': 'status-recherche',
+        'Complet': 'status-complet',
+        'En cours': 'status-encours',
+        'Brouillon': 'status-brouillon',
+        'Annulé': 'status-annule'
+    };
+    
+    filteredProjects.forEach(project => {
+        if (!statusData[project.status]) {
+            statusData[project.status] = {
+                count: 0,
+                projects: [],
+                lastDate: null
+            };
+        }
+        statusData[project.status].count++;
+        statusData[project.status].projects.push(project);
+        
+        // Trouver la date la plus récente
+        try {
+            const dateStr = project.created_at;
+            if (dateStr) {
+                const [day, month, year] = dateStr.split('/');
+                const projectDate = new Date(year, month - 1, day);
+                
+                if (!statusData[project.status].lastDate || 
+                    projectDate > statusData[project.status].lastDate.date) {
+                    statusData[project.status].lastDate = {
+                        date: projectDate,
+                        title: project.title
+                    };
+                }
+            }
+        } catch (e) {
+            // Ignorer les erreurs de date
+        }
+    });
+    
+    const total = filteredProjects.length;
+    
+    // Créer les lignes du tableau
+    let tableHTML = '';
+    
+    Object.entries(statusData).forEach(([status, data]) => {
+        const percentage = total > 0 ? Math.round((data.count / total) * 100) : 0;
+        const lastProject = data.lastDate 
+            ? `${data.lastDate.title} (${formatDate(data.lastDate.date)})`
+            : 'Aucun';
+        
+        tableHTML += `
+            <tr>
+                <td>
+                    <span class="status-badge ${statusColors[status] || 'status-brouillon'}">
+                        ${status}
+                    </span>
+                </td>
+                <td style="font-weight: 600;">${data.count}</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span>${percentage}%</span>
+                        <div style="flex: 1; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                            <div style="width: ${percentage}%; height: 100%; background: #6366f1;"></div>
+                        </div>
+                    </div>
+                </td>
+                <td style="color: #6b7280; font-size: 0.85rem;">${lastProject}</td>
+            </tr>
+        `;
+    });
+    
+    // Ligne totale
+    tableHTML += `
+        <tr style="background: #f8fafc; font-weight: 600;">
+            <td>Total</td>
+            <td>${total}</td>
+            <td>100%</td>
+            <td>-</td>
+        </tr>
+    `;
+    
+    tableBody.innerHTML = tableHTML;
+}
+
+// Helper function pour formater la date
+function formatDate(date) {
+    if (!date) return '';
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
+// Rendu des projets avec pagination
+function renderProjects() {
+    const grid = document.getElementById('projectGrid');
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageProjects = filteredProjects.slice(startIndex, endIndex);
+    
+    if (pageProjects.length === 0) {
+        grid.innerHTML = `
+            <div class="no-projects">
+                <p>Aucun projet ne correspond à votre recherche.</p>
+            </div>
+        `;
+    } else {
+        grid.innerHTML = pageProjects.map(project => `
+            <div class="project-card">
+                <div class="card-badges">
+                    <span class="project-badge badge-tech">${project.category.toUpperCase()}</span>
+                    <span class="project-badge ${getStatusBadgeClass(project.status)}">
+                        ${project.status === 'Recherche membres' ? 'RECHERCHE MEMBRES' : (project.status === 'En cours' ? 'PROJET EN COURS' : 'PROJET TERMINÉ')}
+                    </span>
+                </div>
+                <div class="project-info">
+                    <h2>${project.title.toLowerCase()}</h2>
+                    <p class="project-description">${project.description.substring(0, 120)}...</p>
+                    <div class="project-lead">
+                        <div class="lead-avatar-wrap">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(project.lead)}&background=6366f1&color=fff" alt="Lead">
+                        </div>
+                        <span>Lead: ${project.lead}</span>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <span>${project.members}/${project.max_members}</span>
+                    <span>Créé: ${project.created_at}</span>
+                    <span>${project.duration}</span>
+                </div>
+                <div class="project-actions">
+                    <a href="/student/projects/${project.id}/detail" class="btn-card btn-details-light">
+                        Détails
+                    </a>
+                    <button class="btn-card btn-action-primary" ${project.members >= project.max_members ? 'disabled' : ''} 
+                            onclick="applyToProject(${project.id})">
+                        Postuler
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    updatePagination();
+}
+
+// Pagination
+function updatePagination() {
+    const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+    const pageNumbers = document.getElementById('pageNumbers');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+    
+    pageNumbers.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-number ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.addEventListener('click', () => {
+            currentPage = i;
+            renderProjects();
+        });
+        pageNumbers.appendChild(pageBtn);
+    }
+}
+
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderProjects();
+    }
+}
+
+function nextPage() {
+    if (currentPage < Math.ceil(filteredProjects.length / itemsPerPage)) {
+        currentPage++;
+        renderProjects();
+    }
+}
+
+// =============================
+// IMPROVED SHOW DETAILS FUNCTION WITH DEPOT TABLE & CRUD
+// =============================
+function showDetails(projectId) {
+    const project = projects.find(p => p.id == projectId);
+    if (!project) return;
+    
+    // Determine badge class based on status
+    let statusBadgeClass = 'badge-primary';
+    if (project.status === 'Recherche membres') statusBadgeClass = 'badge-warning';
+    else if (project.status === 'Complet') statusBadgeClass = 'badge-success';
+    else if (project.status === 'Annulé') statusBadgeClass = 'badge-danger';
+    
+    // Sample depot data - in real app, this would come from backend
+    const depotData = [
+        {
+            id: 1,
+            student: "Marie Dubois",
+            date: "15/03/2024",
+            type: "Rapport intermédiaire",
+            file: "rapport_intermediaire.pdf",
+            status: "validé",
+            comment: "Bon travail, continuez comme ça."
+        },
+        {
+            id: 2,
+            student: "Jean Martin",
+            date: "10/03/2024",
+            type: "Code source",
+            file: "code_source.zip",
+            status: "en attente",
+            comment: ""
+        },
+        {
+            id: 3,
+            student: "Sophie Laurent",
+            date: "05/03/2024",
+            type: "Présentation",
+            file: "presentation.pptx",
+            status: "correction",
+            comment: "Veuillez ajouter plus de détails techniques."
+        },
+        {
+            id: 4,
+            student: "Pierre Bernard",
+            date: "28/02/2024",
+            type: "Documentation",
+            file: "documentation.pdf",
+            status: "rejeté",
+            comment: "Format incorrect, soumettre en PDF."
+        }
+    ];
+    
+    const detailsContent = `
+        <div class="modal-header">
+            <h1 class="modal-title">${project.title}</h1>
+            <div class="modal-badges">
+                <span class="modal-badge badge-primary">${project.category}</span>
+                <span class="modal-badge ${statusBadgeClass}">${project.status}</span>
+            </div>
+        </div>
+        
+        <div class="modal-content">
+            <div class="modal-section">
+                <h3 class="modal-section-title"><i class="fas fa-align-left"></i> Description</h3>
+                <p class="modal-description">${project.description}</p>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title"><i class="fas fa-info-circle"></i> Informations du Projet</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-user-tie"></i> Chef de projet
+                        </div>
+                        <div class="info-value">${project.lead}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-users"></i> Équipe
+                        </div>
+                        <div class="info-value">${project.members}/${project.max_members} membres</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-calendar-plus"></i> Date de création
+                        </div>
+                        <div class="info-value">${project.created_at}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-hourglass-half"></i> Durée
+                        </div>
+                        <div class="info-value">${project.duration}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-signal"></i> Difficulté
+                        </div>
+                        <div class="info-value">${project.difficulty || 'Intermédiaire'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-rocket"></i> Statut
+                        </div>
+                        <div class="info-value">${project.status}</div>
+                    </div>
+                </div>
+            </div>
+            
+            ${project.technologies && project.technologies.length > 0 ? `
+            <div class="modal-section">
+                <h3 class="modal-section-title"><i class="fas fa-code"></i> Technologies Utilisées</h3>
+                <div class="technologies-list">
+                    ${project.technologies.map(tech => `
+                        <span class="tech-tag">
+                            <i class="fas fa-cube"></i> ${tech}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title"><i class="fas fa-upload"></i> Dépôts & Soumissions</h3>
+                <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <button class="btn-stats" onclick="openNewDepotModal(${project.id})" style="padding: 0.75rem 1.5rem;">
+                        <i class="fas fa-plus"></i> Nouveau dépôt
+                    </button>
+                    <div style="color: #6b7280; font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> ${depotData.length} dépôt(s) trouvé(s)
+                    </div>
+                </div>
+                
+                <div style="background: #f8fafc; border-radius: 12px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);">
+                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Étudiant</th>
+                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Type</th>
+                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Date</th>
+                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Statut</th>
+                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${depotData.map(depot => `
+                                <tr style="border-bottom: 1px solid #e5e7eb; transition: background 0.2s;">
+                                    <td style="padding: 1rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(depot.student)}&background=6366f1&color=fff" 
+                                                 style="width: 32px; height: 32px; border-radius: 50%;">
+                                            <span style="font-weight: 600;">${depot.student}</span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 1rem;">${depot.type}</td>
+                                    <td style="padding: 1rem;">${depot.date}</td>
+                                    <td style="padding: 1rem;">
+                                        <span class="status-badge ${getDepotStatusClass(depot.status)}" style="display: inline-block; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+                                            ${depot.status}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button onclick="viewDepot(${depot.id})" style="background: #e5e7eb; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-eye" style="color: #4b5563;"></i>
+                                            </button>
+                                            <button onclick="downloadDepot(${depot.id})" style="background: #dbeafe; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-download" style="color: #1d4ed8;"></i>
+                                            </button>
+                                            <button onclick="editDepot(${depot.id}, ${project.id})" style="background: #fef3c7; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-edit" style="color: #92400e;"></i>
+                                            </button>
+                                            <button onclick="deleteDepot(${depot.id}, ${project.id})" style="background: #fee2e2; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash" style="color: #dc2626;"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                ${depotData.some(d => d.comment) ? `
+                <div style="margin-top: 1.5rem;">
+                    <h4 style="font-size: 1rem; color: #374151; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-comments"></i> Commentaires récents
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        ${depotData.filter(d => d.comment).map(depot => `
+                            <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #6366f1;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 600; color: #374151;">${depot.student}</span>
+                                    <span style="color: #6b7280; font-size: 0.85rem;">${depot.date}</span>
+                                </div>
+                                <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">${depot.comment}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title"><i class="fas fa-history"></i> Chronologie</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">${project.created_at}</div>
+                        <div class="timeline-text">Début du projet</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">${project.start_date || project.created_at}</div>
+                        <div class="timeline-text">Phase de développement</div>
+                    </div>
+                    ${project.end_date ? `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">${project.end_date}</div>
+                        <div class="timeline-text">Date de fin prévue</div>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn-details" onclick="closeDetails()">
+                <i class="fas fa-times"></i> Fermer
+            </button>
+            <button class="btn-join" ${project.status === 'Complet' ? 'disabled' : ''} 
+                    onclick="applyToProject(${project.id}); closeDetails();">
+                ${project.status === 'Complet' ? '<i class="fas fa-check-circle"></i> Équipe complète' : '<i class="fas fa-paper-plane"></i> Postuler maintenant'}
+            </button>
+        </div>
+    `;
+    
+    document.getElementById('detailsContent').innerHTML = detailsContent;
+    document.getElementById('detailsModal').classList.add('active');
+}
+
+// Helper function for depot status badges
+function getDepotStatusClass(status) {
+    const statusClasses = {
+        'validé': 'status-complet',
+        'en attente': 'status-recherche',
+        'correction': 'status-encours',
+        'rejeté': 'status-annule'
+    };
+    return statusClasses[status] || 'status-brouillon';
+}
+
+// =============================
+// DEPOT CRUD FUNCTIONS - CORRIGÉES
+// =============================
+
+// Fonction principale pour ouvrir la modale de nouveau dépôt
+function openNewDepotModal(projectId) {
+    console.log('Ouverture de la modale pour projet:', projectId);
+    
+    const project = projects.find(p => p.id == projectId);
+    
+    // Créer la modale HTML
+    const modalHTML = `
+        <div class="modal-overlay active" id="newDepotModal" style="display: flex;">
+            <div class="modal-container" style="max-width: 600px;">
+                <button class="modal-close" onclick="closeDepotModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="modal-header">
+                    <h1 class="modal-title">Nouveau dépôt</h1>
+                    <p style="color: #6b7280; margin-top: 0.5rem;">Projet: ${project?.title || 'Projet #' + projectId}</p>
+                </div>
+                
+                <div class="modal-content">
+                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 2px dashed #e5e7eb;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="background: #6366f1; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-upload" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; color: #1f2937;">Fonctionnalité de dépôt</h4>
+                                <p style="margin: 0.25rem 0 0; color: #6b7280; font-size: 0.9rem;">
+                                    Bientôt disponible ! Cette fonctionnalité est en cours de développement.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn-details" onclick="closeDepotModal()" style="flex: 1;">
+                            <i class="fas fa-times"></i> Fermer
+                        </button>
+                        <button type="button" class="btn-join" onclick="simulateDepotCreation(${projectId})" style="flex: 2;">
+                            <i class="fas fa-plus"></i> Simuler un dépôt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Vérifier si le conteneur existe
+    let container = document.getElementById('depotModalsContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'depotModalsContainer';
+        document.body.appendChild(container);
+    }
+    
+    // Ajouter la modale
+    container.innerHTML = modalHTML;
+}
+
+// Fonction pour fermer la modale
+function closeDepotModal() {
+    const modal = document.getElementById('newDepotModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Fonction de simulation (pour tester)
+function simulateDepotCreation(projectId) {
+    const students = ["Marie Dubois", "Jean Martin", "Sophie Laurent", "Pierre Bernard"];
+    const types = ["Rapport intermédiaire", "Code source", "Présentation", "Documentation"];
+    const statuses = ["en attente", "validé", "correction", "rejeté"];
+    
+    const randomStudent = students[Math.floor(Math.random() * students.length)];
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+    
+    alert(`✅ Dépôt simulé créé avec succès !\n\nÉtudiant: ${randomStudent}\nType: ${randomType}\nStatut: ${randomStatus}\n\nCette simulation montre comment la fonctionnalité fonctionnera une fois implémentée.`);
+    
+    closeDepotModal();
+}
+
+// Fonctions CRUD pour les dépôts
+function viewDepot(depotId) {
+    alert(`Visualisation du dépôt #${depotId}\n\nFonctionnalité à implémenter: afficher les détails complets du dépôt.`);
+}
+
+function downloadDepot(depotId) {
+    alert(`Téléchargement du dépôt #${depotId}\n\nFonctionnalité à implémenter: téléchargement du fichier.`);
+}
+
+function editDepot(depotId, projectId) {
+    alert(`Modification du dépôt #${depotId}\n\nFonctionnalité à implémenter: formulaire d'édition.`);
+}
+
+function deleteDepot(depotId, projectId) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer le dépôt #${depotId} ?\n\nCette action est irréversible.`)) {
+        alert(`✅ Dépôt #${depotId} supprimé avec succès ! (simulation)`);
+    }
+}
+
+// Fermer les détails
+function closeDetails() {
+    document.getElementById('detailsModal').classList.remove('active');
+}
+
+// Postuler à un projet
+function applyToProject(projectId) {
+    const project = projects.find(p => p.id == projectId);
+    if (!project || project.status === 'Complet') return;
+    
+    if (confirm(`Voulez-vous postuler au projet "${project.title}" ?`)) {
+        alert(`✅ Votre candidature pour "${project.title}" a été envoyée !\nLe chef de projet vous contactera bientôt.`);
+    }
+}
+
+// =============================================
+// FONCTION PDF RÉELLE
+// =============================================
+async function generatePDF() {
+    // Afficher le modal de chargement
+    const loadingModal = document.getElementById('pdfLoadingModal');
+    loadingModal.style.display = 'flex';
+    
+    try {
+        // Charger les bibliothèques dynamiquement si elles ne sont pas déjà chargées
+        await loadPDFLibraries();
+        
+        const { jsPDF } = window.jspdf;
+        
+        // Créer un nouveau document PDF
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+        
+        // Couleurs
+        const primaryColor = [99, 102, 241]; // #6366f1
+        const secondaryColor = [16, 185, 129]; // #10b981
+        const textColor = [31, 41, 55]; // #1f2937
+        const mutedColor = [107, 114, 128]; // #6b7280
+        
+        // En-tête
+        doc.setFillColor(...primaryColor);
+        doc.rect(0, 0, 210, 40, 'F');
+        
+        doc.setFontSize(24);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.text('InnoLearn - Projets Collaboratifs', 105, 20, { align: 'center' });
+        
+        doc.setFontSize(12);
+        doc.setTextColor(255, 255, 255, 0.9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Rapport généré le ' + new Date().toLocaleDateString('fr-FR'), 105, 30, { align: 'center' });
+        
+        let yPosition = 50;
+        
+        // Statistiques résumées
+        doc.setFontSize(16);
+        doc.setTextColor(...textColor);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Statistiques Générales', 20, yPosition);
+        
+        yPosition += 10;
+        
+        // Compter les projets par statut
+        const statusCounts = {};
+        const totalMembers = filteredProjects.reduce((sum, p) => sum + p.members, 0);
+        const totalSpots = filteredProjects.reduce((sum, p) => sum + p.max_members, 0);
+        const availableSpots = totalSpots - totalMembers;
+        
+        filteredProjects.forEach(project => {
+            statusCounts[project.status] = (statusCounts[project.status] || 0) + 1;
+        });
+        
+        // Tableau des statistiques
+        doc.setFontSize(10);
+        doc.setTextColor(...mutedColor);
+        doc.setFont('helvetica', 'normal');
+        
+        // Ligne 1
+        doc.text(`Total projets: ${filteredProjects.length}`, 20, yPosition);
+        doc.text(`Membres actifs: ${totalMembers}`, 90, yPosition);
+        doc.text(`Places disponibles: ${availableSpots}`, 160, yPosition);
+        
+        yPosition += 7;
+        
+        // Ligne 2
+        const fillRate = totalSpots > 0 ? Math.round((totalMembers / totalSpots) * 100) : 0;
+        doc.text(`Taux de remplissage: ${fillRate}%`, 20, yPosition);
+        
+        yPosition += 15;
+        
+        // Tableau des projets
+        doc.setFontSize(16);
+        doc.setTextColor(...textColor);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Liste des Projets', 20, yPosition);
+        
+        yPosition += 10;
+        
+        // En-tête du tableau
+        doc.setFillColor(243, 244, 246);
+        doc.rect(20, yPosition - 5, 170, 8, 'F');
+        
+        doc.setFontSize(10);
+        doc.setTextColor(...textColor);
+        doc.setFont('helvetica', 'bold');
+        
+        doc.text('Projet', 22, yPosition);
+        doc.text('Statut', 80, yPosition);
+        doc.text('Membres', 120, yPosition);
+        doc.text('Date création', 150, yPosition);
+        
+        yPosition += 10;
+        
+        // Lignes des projets
+        doc.setFontSize(9);
+        doc.setTextColor(...mutedColor);
+        doc.setFont('helvetica', 'normal');
+        
+        let projectCount = 0;
+        for (let i = 0; i < filteredProjects.length && projectCount < 20; i++) {
+            const project = filteredProjects[i];
+            
+            // Vérifier si on dépasse la page
+            if (yPosition > 270) {
+                doc.addPage();
+                yPosition = 20;
+                
+                // Nouvel en-tête de page
+                doc.setFillColor(...primaryColor);
+                doc.rect(0, 0, 210, 40, 'F');
+                doc.setFontSize(24);
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'bold');
+                doc.text('InnoLearn - Projets Collaboratifs', 105, 20, { align: 'center' });
+                doc.setFontSize(12);
+                doc.setTextColor(255, 255, 255, 0.9);
+                doc.text('Suite de la liste des projets', 105, 30, { align: 'center' });
+                yPosition = 50;
+            }
+            
+            // Couleur du statut
+            let statusColor = mutedColor;
+            if (project.status === 'Recherche membres') statusColor = [239, 68, 68];
+            else if (project.status === 'Complet') statusColor = [16, 185, 129];
+            else if (project.status === 'En cours') statusColor = [59, 130, 246];
+            
+            doc.setTextColor(...statusColor);
+            doc.setFont('helvetica', 'bold');
+            doc.text(project.status.substring(0, 15), 80, yPosition);
+            
+            doc.setTextColor(...textColor);
+            doc.setFont('helvetica', 'normal');
+            doc.text(project.title.substring(0, 30), 22, yPosition);
+            
+            doc.setTextColor(...mutedColor);
+            doc.text(`${project.members}/${project.max_members}`, 120, yPosition);
+            doc.text(project.created_at, 150, yPosition);
+            
+            yPosition += 7;
+            projectCount++;
+            
+            // Ligne séparatrice
+            if (i < filteredProjects.length - 1 && projectCount < 20) {
+                doc.setDrawColor(229, 231, 235);
+                doc.line(20, yPosition - 2, 190, yPosition - 2);
+                yPosition += 3;
+            }
+        }
+        
+        // Pied de page
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(...mutedColor);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Page ${i}/${pageCount}`, 105, 290, { align: 'center' });
+            doc.text('© InnoLearn ' + new Date().getFullYear(), 105, 295, { align: 'center' });
+        }
+        
+        // Sauvegarder le PDF
+        doc.save(`projets-innolearn-${new Date().toISOString().slice(0,10)}.pdf`);
+        
+        // Cacher le modal de chargement
+        loadingModal.style.display = 'none';
+        
+        // Message de succès
+        alert(`✅ PDF généré avec succès !\nLe fichier a été téléchargé.`);
+        
+    } catch (error) {
+        // Cacher le modal de chargement en cas d'erreur
+        loadingModal.style.display = 'none';
+        
+        console.error('Erreur lors de la génération du PDF:', error);
+        alert(`❌ Erreur lors de la génération du PDF:\n${error.message}\n\nAssurez-vous que les bibliothèques jsPDF sont chargées.`);
+    }
+}
+
+// Charger dynamiquement les bibliothèques PDF
+function loadPDFLibraries() {
+    return new Promise((resolve, reject) => {
+        // Vérifier si jsPDF est déjà chargé
+        if (window.jspdf) {
+            resolve();
+            return;
+        }
+        
+        // Charger jsPDF depuis CDN
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Échec du chargement de jsPDF'));
+        document.head.appendChild(script);
+    });
+}
+
+// Helper function
+function getStatusBadgeClass(status) {
+    if (status === 'Recherche membres') return 'badge-status-recherche';
+    if (status === 'Complet') return 'badge-status-complet';
+    if (status === 'En cours') return 'badge-status-encours';
+    return '';
+}
+</script>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

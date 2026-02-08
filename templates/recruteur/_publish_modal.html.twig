@@ -1,0 +1,178 @@
+<div id="publishStageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.7); backdrop-filter: blur(10px); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; padding:2.5rem; border-radius:24px; width:95%; max-width:700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.3);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:2rem; align-items: center;">
+            <h2 style="font-weight: 800; font-size: 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">Publier un Stage</h2>
+            <button onclick="hidePublishModal()" style="border:none; background:#f1f5f9; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor:pointer; color: #64748b; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'"><i class="fas fa-times"></i></button>
+        </div>
+        
+        {{ form_start(form, {'attr': {'style': 'display: flex; flex-direction: column; gap: 1.25rem;', 'class': 'publish-form', 'novalidate': 'novalidate'}}) }}
+            {# Row 1: Titre & Entreprise #}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Titre du stage</label>
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-input-premium', 'placeholder': 'Ex: Développeur Web Frontend'}}) }}
+                    <div class="error-message" id="error-{{ form.titre.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Entreprise</label>
+                    {{ form_widget(form.entreprise, {'attr': {'class': 'form-input-premium', 'placeholder': 'Ex: InnoLearn'}}) }}
+                    <div class="error-message" id="error-{{ form.entreprise.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+                </div>
+            </div>
+
+            {# Row 2: Lieu & Domaine #}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Lieu</label>
+                    {{ form_widget(form.lieu, {'attr': {'class': 'form-input-premium', 'placeholder': 'Ex: Paris, France'}}) }}
+                    <div class="error-message" id="error-{{ form.lieu.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Domaine</label>
+                    {{ form_widget(form.domaine, {'attr': {'class': 'form-input-premium', 'placeholder': 'Ex: Informatique'}}) }}
+                    <div class="error-message" id="error-{{ form.domaine.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+                </div>
+            </div>
+
+            {# Row 3: Durée & Compétences #}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Durée (en mois)</label>
+                    {{ form_widget(form.duree, {'attr': {'class': 'form-input-premium', 'placeholder': 'Ex: 6'}}) }}
+                    <div class="error-message" id="error-{{ form.duree.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Compétences requises</label>
+                    {{ form_widget(form.competences, {'attr': {'class': 'form-input-premium', 'placeholder': 'Ex: React, JavaScript, CSS', 'rows': '1'}}) }}
+                    <div class="error-message" id="error-{{ form.competences.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+                </div>
+            </div>
+
+            {# Row 4: Description #}
+            <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Description du stage</label>
+                {{ form_widget(form.description, {'attr': {'class': 'form-input-premium', 'placeholder': 'Décrivez les missions et responsabilités...', 'rows': '4'}}) }}
+                <div class="error-message" id="error-{{ form.description.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
+            </div>
+
+            {# Hidden/Auto Fields #}
+            <div style="display: none;">
+                {{ form_widget(form.datePublication) }}
+                {{ form_widget(form.statut) }}
+            </div>
+
+            {# Submit Button #}
+            <button type="submit" style="margin-top: 0.5rem; width: 100%; padding: 1rem; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 15px 35px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px rgba(99, 102, 241, 0.3)'">
+                <i class="fas fa-paper-plane"></i>
+                Publier l'offre
+            </button>
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+</div>
+
+<style>
+.form-input-premium {
+    padding: 0.75rem 1rem; 
+    border: 2px solid #e2e8f0; 
+    border-radius: 12px; 
+    font-size: 0.95rem; 
+    transition: all 0.2s; 
+    outline: none;
+    width: 100%;
+}
+.form-input-premium:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+.form-input-premium.is-invalid {
+    border-color: #ef4444;
+}
+.form-input-premium.is-invalid:focus {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+</style>
+
+<script>
+function showPublishModal() { 
+    document.getElementById('publishStageModal').style.display = 'flex'; 
+    document.body.style.overflow = 'hidden'; 
+}
+function hidePublishModal() { 
+    document.getElementById('publishStageModal').style.display = 'none'; 
+    document.body.style.overflow = 'auto'; 
+}
+// Close modal on backdrop click
+document.getElementById('publishStageModal').addEventListener('click', function(e) {
+    if (e.target === this) hidePublishModal();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.publish-form');
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    const validationRules = {
+        '{{ form.titre.vars.id }}': { minLength: 5, message: "Le titre doit faire au moins 5 caractères." },
+        '{{ form.description.vars.id }}': { minLength: 20, message: "La description doit faire au moins 20 caractères." },
+        '{{ form.duree.vars.id }}': { isPositive: true, message: "La durée doit être un nombre positif." }
+    };
+
+    function validateInput(input) {
+        // Skip validation for fields in hidden containers
+        if (input.closest('div[style*="display: none"]')) return true;
+
+        const id = input.id;
+        const value = input.value.trim();
+        const errorDiv = document.getElementById('error-' + id);
+        let isValid = true;
+        let message = "";
+
+        if (input.required && !value) {
+            isValid = false;
+            message = "Ce champ est obligatoire.";
+        } else if (validationRules[id]) {
+            const rules = validationRules[id];
+            if (rules.minLength && value.length < rules.minLength) {
+                isValid = false;
+                message = rules.message;
+            } else if (rules.isPositive && (isNaN(value) || parseFloat(value) <= 0)) {
+                isValid = false;
+                message = rules.message;
+            }
+        }
+
+        if (!isValid) {
+            input.classList.add('is-invalid');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+        } else {
+            input.classList.remove('is-invalid');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        }
+        return isValid;
+    }
+
+    inputs.forEach(input => {
+        ['input', 'blur'].forEach(evt => {
+            input.addEventListener(evt, () => validateInput(input));
+        });
+    });
+
+    form.addEventListener('submit', function(e) {
+        let isFormValid = true;
+        inputs.forEach(input => {
+            if (!validateInput(input)) {
+                isFormValid = false;
+            }
+        });
+
+        if (!isFormValid) {
+            e.preventDefault();
+            alert('Veuillez corriger les erreurs dans le formulaire.');
+        }
+    });
+});
+</script>

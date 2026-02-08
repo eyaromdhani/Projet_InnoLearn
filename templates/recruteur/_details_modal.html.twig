@@ -1,0 +1,54 @@
+<div class="modal-details-header" style="margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem;">
+    <h2 style="font-size: 1.8rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">{{ condidature.titre|upper }}</h2>
+    <div style="display: flex; gap: 1.5rem; color: #64748b; font-size: 0.95rem;">
+        <span><i class="fas fa-tag" style="color: #6366f1;"></i> {{ condidature.domaine }}</span>
+        <span><i class="fas fa-calendar-alt" style="color: #6366f1;"></i> {{ condidature.datePublication|date('d/m/Y') }}</span>
+        <span class="badge" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">{{ condidature.statut }}</span>
+    </div>
+</div>
+
+<div class="modal-details-body" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <div class="details-section">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #334155; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-align-left" style="color: #a855f7;"></i> Description
+        </h3>
+        <p style="color: #475569; line-height: 1.6; font-size: 0.95rem;">{{ condidature.description }}</p>
+    </div>
+
+    <div class="details-section">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #334155; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-tools" style="color: #a855f7;"></i> Compétences
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            {% for skill in condidature.competences|split(',') %}
+                <span style="background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600;">{{ skill|trim }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="details-section" style="grid-column: span 2;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #334155; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-envelope-open-text" style="color: #a855f7;"></i> Lettre de Motivation
+        </h3>
+        <div style="background: #f8fafc; border-radius: 15px; padding: 1.5rem; border: 1px dashed #cbd5e1; color: #475569; line-height: 1.6; font-style: italic;">
+            "{{ condidature.lettreMotivation }}"
+        </div>
+    </div>
+</div>
+
+<div class="modal-details-footer" style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 2px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 1rem; flex-wrap: wrap;">
+    <button class="btn-primary-gradient" style="margin-top: 0; background: #f1f5f9; color: #475569; box-shadow: none;" onclick="closeDetailsModal()">Fermer</button>
+    
+    {% if condidature.statut == 'en_attente' %}
+        <button class="btn-primary-gradient" style="margin-top: 0; background: #ef4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);" onclick="updateCandidatureStatus({{ condidature.id }}, 'refusée')">
+            <i class="fas fa-times-circle"></i> Refuser
+        </button>
+        <button class="btn-primary-gradient" style="margin-top: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="updateCandidatureStatus({{ condidature.id }}, 'acceptée')">
+            <i class="fas fa-check-circle"></i> Accepter
+        </button>
+    {% endif %}
+
+    <a href="{{ asset('uploads/cv/' ~ condidature.cv) }}" target="_blank" class="btn-primary-gradient" style="margin-top: 0; text-decoration: none;">
+        <i class="fas fa-file-pdf"></i> Voir CV
+    </a>
+</div>

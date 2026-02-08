@@ -1,0 +1,1100 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}{{ project.title }} - Détails du Projet{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section */
+.project-detail-hero {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    padding: 4rem 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background-size: cover;
+}
+
+.hero-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.breadcrumb a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.breadcrumb a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.project-title-section h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.project-meta-badges {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.project-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-category {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.badge-status {
+    background: #10b981;
+    color: white;
+}
+
+.badge-difficulty {
+    background: #f59e0b;
+    color: white;
+}
+
+.project-actions-header {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-5px);
+}
+
+.btn-join-large {
+    background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+
+.btn-join-large:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+}
+
+/* Main Content */
+.project-detail-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+}
+
+/* Left Column - Project Details */
+.project-info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.section-title i {
+    color: #6366f1;
+    font-size: 1.2rem;
+}
+
+.project-description {
+    color: #4b5563;
+    line-height: 1.7;
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -9px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #6366f1;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.timeline-date {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.timeline-text {
+    font-size: 1rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+/* Technologies */
+.technologies-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.tech-tag {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Team Members */
+.team-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.member-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s;
+}
+
+.member-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.member-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: #1f2937;
+}
+
+.member-role {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.member-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.skill-tag {
+    background: #e5e7eb;
+    color: #4b5563;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+/* Right Column - Sidebar */
+.project-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.info-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.info-value {
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.progress-container {
+    margin-top: 1.5rem;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+
+/* Dépôts Section */
+.depots-section {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-top: 3rem;
+}
+
+.depots-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.btn-new-depot {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.btn-new-depot:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Depot Table */
+.depot-table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.depot-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.depot-table thead {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+}
+
+.depot-table th {
+    padding: 1.25rem;
+    text-align: left;
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.depot-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.2s;
+}
+
+.depot-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.depot-table td {
+    padding: 1.25rem;
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+.depot-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.depot-status-valid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.depot-status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.depot-status-correction {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.depot-status-rejected {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.btn-view {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+
+.btn-view:hover {
+    background: #d1d5db;
+}
+
+.btn-download {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.btn-download:hover {
+    background: #bfdbfe;
+}
+
+.btn-edit {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.btn-edit:hover {
+    background: #fde68a;
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    font-size: 14px;
+}
+
+.btn-delete:hover {
+    background: #fecaca;
+}
+
+/* Commentaires */
+.comments-section {
+    margin-top: 3rem;
+}
+
+.comment-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #6366f1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #374151;
+}
+
+.comment-date {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+.comment-text {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .project-detail-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-header {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .project-title-section h1 {
+        font-size: 2rem;
+    }
+    
+    .project-actions-header {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .project-info-card {
+        padding: 1.5rem;
+    }
+    
+    .depots-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+}
+
+/* Flash messages */
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: #10b981;
+    color: white;
+    border-left: 4px solid #059669;
+}
+
+.alert-error {
+    background: #ef4444;
+    color: white;
+    border-left: 4px solid #dc2626;
+}
+
+.alert-info {
+    background: #3b82f6;
+    color: white;
+    border-left: 4px solid #1d4ed8;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<!-- Flash Messages -->
+{% for message in app.flashes('success') %}
+    <div class="flash-messages">
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div class="flash-messages">
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Hero Section -->
+<section class="project-detail-hero">
+    <div class="hero-content">
+        <div class="breadcrumb">
+            <a href="{{ path('app_student_projects') }}"><i class="fas fa-arrow-left"></i> Retour aux projets</a>
+            <span>/</span>
+            <span>{{ project.title }}</span>
+        </div>
+        
+        <div class="project-header">
+            <div class="project-title-section">
+                <h1>{{ project.title }}</h1>
+                <div class="project-meta-badges">
+                    <span class="project-badge badge-category">{{ project.category }}</span>
+                    <span class="project-badge badge-status">{{ project.status }}</span>
+                    <span class="project-badge badge-difficulty">{{ project.difficulty }}</span>
+                </div>
+            </div>
+            
+            <div class="project-actions-header">
+                <a href="{{ path('app_student_projects') }}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+                <button class="btn-join-large" {{ project.status == 'Complet' ? 'disabled' : '' }} onclick="applyToProject()">
+                    <i class="fas fa-paper-plane"></i> Postuler au projet
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="project-detail-container">
+    <!-- Left Column -->
+    <div class="project-details">
+        <!-- Description Section -->
+        <div class="project-info-card">
+            <h2 class="section-title"><i class="fas fa-align-left"></i> Description du Projet</h2>
+            <div class="project-description">
+                {{ project.description }}
+            </div>
+        </div>
+
+        <!-- Objectifs & Technologies -->
+        <div class="project-info-card">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> Objectifs</h2>
+            <div class="project-description">
+                Ce projet vise à développer une application web complète utilisant Symfony pour le backend
+                et modernes pour le frontend. Les objectifs incluent:
+                <ul style="margin: 1rem 0; padding-left: 1.5rem; color: #4b5563;">
+                    <li>Création d'une architecture MVC robuste</li>
+                    <li>Implémentation d'un système d'authentification sécurisé</li>
+                    <li>Développement d'une API RESTful</li>
+                    <li>Intégration avec des services tiers</li>
+                    <li>Déploiement sur serveur de production</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 2rem;"><i class="fas fa-code"></i> Technologies</h2>
+            <div class="technologies-list">
+                {% for tech in project.technologies %}
+                <span class="tech-tag">
+                    <i class="fas fa-cube"></i> {{ tech }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="project-info-card">
+            <h2 class="section-title"><i class="fas fa-history"></i> Chronologie</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">{{ project.created_at }}</div>
+                    <div class="timeline-text">Début du projet</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">{{ project.start_date }}</div>
+                    <div class="timeline-text">Phase de développement</div>
+                </div>
+                {% if project.end_date %}
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">{{ project.end_date }}</div>
+                    <div class="timeline-text">Date de fin prévue</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Team Members -->
+        <div class="project-info-card">
+            <h2 class="section-title"><i class="fas fa-users"></i> Équipe</h2>
+            <div class="team-members">
+                <!-- Team Lead -->
+                <div class="member-card">
+                    <img src="https://ui-avatars.com/api/?name={{ project.lead }}&background=6366f1&color=fff" 
+                         class="member-avatar" alt="{{ project.lead }}">
+                    <div class="member-info">
+                        <h4>{{ project.lead }}</h4>
+                        <span class="member-role">Chef de projet</span>
+                        <div class="member-skills">
+                            <span class="skill-tag">Symfony</span>
+                            <span class="skill-tag">PHP</span>
+                            <span class="skill-tag">Leadership</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example Team Members -->
+                <div class="member-card">
+                    <img src="https://ui-avatars.com/api/?name=Marie+Dubois&background=10b981&color=fff" 
+                         class="member-avatar" alt="Marie Dubois">
+                    <div class="member-info">
+                        <h4>Marie Dubois</h4>
+                        <span class="member-role">Développeuse Frontend</span>
+                        <div class="member-skills">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://ui-avatars.com/api/?name=Jean+Martin&background=0ea5e9&color=fff" 
+                         class="member-avatar" alt="Jean Martin">
+                    <div class="member-info">
+                        <h4>Jean Martin</h4>
+                        <span class="member-role">Développeur Backend</span>
+                        <div class="member-skills">
+                            <span class="skill-tag">Symfony</span>
+                            <span class="skill-tag">API</span>
+                            <span class="skill-tag">Database</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Sidebar -->
+    <div class="project-sidebar">
+        <!-- Project Info -->
+        <div class="sidebar-card">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> Informations</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-user-tie"></i> Chef de projet
+                    </span>
+                    <span class="info-value">{{ project.lead }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-users"></i> Équipe
+                    </span>
+                    <span class="info-value">{{ project.members }}/{{ project.max_members }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-calendar-plus"></i> Date de création
+                    </span>
+                    <span class="info-value">{{ project.created_at }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-hourglass-half"></i> Durée
+                    </span>
+                    <span class="info-value">{{ project.duration }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-signal"></i> Difficulté
+                    </span>
+                    <span class="info-value">{{ project.difficulty }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-rocket"></i> Statut
+                    </span>
+                    <span class="info-value">{{ project.status }}</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Progression</span>
+                    <span>65%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="sidebar-card">
+            <h2 class="section-title"><i class="fas fa-bolt"></i> Actions rapides</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="{{ path('app_student_depot_new', {'id': project.id}) }}" class="btn-new-depot">
+                    <i class="fas fa-plus"></i> Nouveau dépôt
+                </a>
+                <button class="btn-back" onclick="contactTeamLead()" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-envelope"></i> Contacter l'équipe
+                </button>
+                <button class="btn-back" onclick="shareProject()" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-share-alt"></i> Partager
+                </button>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        <div class="sidebar-card">
+            <h2 class="section-title"><i class="fas fa-link"></i> Ressources</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="#" class="btn-back" style="justify-content: start;">
+                    <i class="fab fa-github"></i> Repository GitHub
+                </a>
+                <a href="#" class="btn-back" style="justify-content: start;">
+                    <i class="fas fa-file-contract"></i> Documentation
+                </a>
+                <a href="#" class="btn-back" style="justify-content: start;">
+                    <i class="fas fa-video"></i> Vidéo démo
+                </a>
+                <a href="#" class="btn-back" style="justify-content: start;">
+                    <i class="fas fa-tasks"></i> Tableau de bord
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dépôts Section -->
+<div class="depots-section">
+    <div class="depots-header">
+        <h2 class="section-title"><i class="fas fa-upload"></i> Dépôts & Soumissions</h2>
+        <a href="{{ path('app_student_depot_new', {'id': project.id}) }}" class="btn-new-depot">
+            <i class="fas fa-plus"></i> Nouveau dépôt
+        </a>
+    </div>
+
+    <div class="depot-table-container">
+        <table class="depot-table">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Étudiant</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Taille</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for depot in depots %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="{{ depot.typeIcon }}" style="color: {{ depot.typeColor }};"></i>
+                            <div>
+                                <div style="font-weight: 600; color: #1f2937;">{{ depot.title }}</div>
+                                <div style="font-size: 0.85rem; color: #6b7280;">Dépôt {{ depot.type }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <img src="https://ui-avatars.com/api/?name={{ depot.studentName }}&background=6366f1&color=fff" 
+                                 style="width: 32px; height: 32px; border-radius: 50%;">
+                            <span style="font-weight: 600;">{{ depot.studentName }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="{{ depot.typeIcon }}" style="color: {{ depot.typeColor }};"></i>
+                            {{ depot.type|capitalize }}
+                        </div>
+                    </td>
+                    <td>{{ depot.uploadedAt|date('d/m/Y') }}</td>
+                    <td>{{ depot.formattedFileSize }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ path('app_student_depot_download', {'id': depot.id}) }}" 
+                               class="btn-action btn-download" title="Télécharger">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <a href="{{ path('app_student_depot_edit', {'id': depot.id}) }}" 
+                               class="btn-action btn-edit" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form method="POST" action="{{ path('app_student_depot_delete', {'id': depot.id}) }}" 
+                                  style="display: inline;" 
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce dépôt ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ depot.id) }}">
+                                <button type="submit" class="btn-action btn-delete" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <div>Aucun dépôt pour ce projet</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Commentaires Section -->
+<div class="comments-section">
+    <div class="project-info-card">
+        <h2 class="section-title"><i class="fas fa-comments"></i> Commentaires & Feedback</h2>
+        
+        <!-- Add Comment Form -->
+        <div style="margin-bottom: 2rem;">
+            <form id="commentForm" style="display: flex; gap: 1rem;">
+                <div style="flex: 1;">
+                    <textarea placeholder="Ajouter un commentaire..." 
+                              style="width: 100%; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 12px; resize: vertical; min-height: 100px;"></textarea>
+                </div>
+                <div>
+                    <button type="submit" class="btn-new-depot" style="height: fit-content;">
+                        <i class="fas fa-paper-plane"></i> Publier
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comment-list">
+            <div class="comment-card">
+                <div class="comment-header">
+                    <span class="comment-author">{{ project.lead }}</span>
+                    <span class="comment-date">15/03/2024</span>
+                </div>
+                <div class="comment-text">
+                    Excellent travail sur l'architecture du projet. Veuillez vous assurer de documenter 
+                    toutes les décisions techniques dans le wiki du projet.
+                </div>
+            </div>
+
+            <div class="comment-card">
+                <div class="comment-header">
+                    <span class="comment-author">Marie Dubois</span>
+                    <span class="comment-date">10/03/2024</span>
+                </div>
+                <div class="comment-text">
+                    J'ai terminé le composant de navigation principale. Prochaine étape: 
+                    l'intégration avec le système d'authentification.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function applyToProject() {
+    const projectStatus = "{{ project.status }}";
+    if (projectStatus === 'Complet') {
+        alert('Ce projet est complet. Aucune candidature possible.');
+        return;
+    }
+    
+    if (confirm('Voulez-vous postuler à ce projet ?')) {
+        alert('Candidature envoyée ! Le chef de projet vous contactera bientôt.');
+        // Ici, vous pouvez ajouter un appel AJAX pour envoyer la candidature
+    }
+}
+
+function contactTeamLead() {
+    alert('Fonctionnalité de contact à implémenter.');
+}
+
+function shareProject() {
+    if (navigator.share) {
+        navigator.share({
+            title: "{{ project.title }}",
+            text: "Découvrez ce projet sur InnoLearn",
+            url: window.location.href
+        });
+    } else {
+        prompt('Partager ce lien:', window.location.href);
+    }
+}
+
+// Handle comment form submission
+document.getElementById('commentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const textarea = this.querySelector('textarea');
+    if (textarea.value.trim()) {
+        alert('Commentaire publié ! (Fonctionnalité de démonstration)');
+        textarea.value = '';
+    }
+});
+
+// Auto-hide flash messages after 5 seconds
+setTimeout(function() {
+    const flashMessages = document.querySelector('.flash-messages');
+    if (flashMessages) {
+        flashMessages.style.transition = 'opacity 0.5s';
+        flashMessages.style.opacity = '0';
+        setTimeout(function() {
+            if (flashMessages.parentNode) {
+                flashMessages.parentNode.removeChild(flashMessages);
+            }
+        }, 500);
+    }
+}, 5000);
+</script>
+{% endblock %}

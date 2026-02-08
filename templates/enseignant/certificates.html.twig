@@ -1,0 +1,151 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Mes Certificats - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <header class="section-top-header animate-fade-in">
+        <div class="header-info">
+            <h1>Ma Vitrine de Succès</h1>
+            <p>Visualisez et partagez vos accomplissements avec le monde.</p>
+        </div>
+        <button class="btn-verify" onclick="alert('Module de vérification Blockchain en cours de chargement...')">
+            <i class="fas fa-shield-alt"></i>
+            Vérifier un Certificat
+        </button>
+    </header>
+
+    <!-- Section-Specific Filter Bar -->
+    {{ include('student/_filter_bar.html.twig', {
+        placeholder: 'Rechercher un certificat ou une compétence...',
+        categories: [
+            {name: 'Intelligence Artificielle', icon: 'fa-robot'},
+            {name: 'Développement Web', icon: 'fa-code'},
+            {name: 'UI/UX Design', icon: 'fa-paint-brush'}
+        ],
+        extra_action: { id: 'btnDownloadAll', icon: 'fa-file-archive', label: 'Tout télécharger' }
+    }) }}
+
+    <div class="certificate-grid" id="certGrid">
+        {% for cert in certificates %}
+        <div class="certificate-card" data-category="{{ cert.category|default('all')|lower }}" data-title="{{ cert.title|lower }}">
+            <div class="cert-image-wrapper">
+                <img src="{{ cert.image }}" alt="{{ cert.title }}">
+                <div class="cert-overlay">
+                    <button class="btn-preview-circle" title="Voir l'aperçu" onclick="alert('Ouverture de l\'aperçu HD...')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="cert-content">
+                <div class="cert-info">
+                    <h2>{{ cert.title }}</h2>
+                    <div class="cert-meta">
+                        <span><i class="far fa-calendar-alt"></i> Obtenu le {{ cert.date|date('d/m/Y') }}</span>
+                        <span><i class="far fa-building"></i> {{ cert.issuer }}</span>
+                    </div>
+                </div>
+                <div class="cert-actions">
+                    <button class="btn-download" onclick="alert('Génération du PDF en cours...')">
+                        <i class="fas fa-download"></i>
+                        Télécharger PDF
+                    </button>
+                    <button class="btn-share" title="Partager sur LinkedIn" onclick="alert('Lancement de l\'intégration LinkedIn...')">
+                        <i class="fab fa-linkedin-in"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Section Header */
+.section-top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-info h1 { font-size: 2rem; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; }
+.header-info p { color: var(--text-muted); font-weight: 500; }
+
+.btn-verify {
+    background: white; color: var(--text-main); padding: 0.85rem 1.75rem; border-radius: 14px;
+    border: 1px solid #e2e8f0; font-weight: 700; cursor: pointer; display: flex;
+    align-items: center; gap: 0.75rem; transition: all 0.3s;
+}
+.btn-verify:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-2px); }
+
+/* Certificate Grid */
+.certificate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 2.5rem; }
+.certificate-card {
+    background: white; border-radius: 28px; overflow: hidden; border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;
+}
+.certificate-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08); }
+
+.cert-image-wrapper { position: relative; height: 240px; overflow: hidden; background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
+.cert-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.certificate-card:hover .cert-image-wrapper img { transform: scale(1.05); }
+
+.cert-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+.certificate-card:hover .cert-overlay { opacity: 1; }
+
+.btn-preview-circle { width: 50px; height: 50px; border-radius: 50%; background: white; color: var(--text-main); display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 1.2rem; transition: all 0.2s; }
+.btn-preview-circle:hover { transform: scale(1.1); background: var(--primary); color: white; }
+
+.cert-content { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.cert-info h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; }
+.cert-meta { font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 1rem; }
+.cert-meta span { display: flex; align-items: center; gap: 0.5rem; }
+
+.cert-actions { display: flex; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9; }
+.btn-download {
+    flex: 1; background: #f8fafc; color: var(--text-main); border: 1px solid #e2e8f0;
+    padding: 0.75rem; border-radius: 12px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem; transition: all 0.2s;
+}
+.btn-download:hover { background: white; border-color: var(--primary); color: var(--primary); }
+
+.btn-share {
+    background: #0077b5; color: white; width: 45px; height: 45px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: all 0.2s;
+}
+.btn-share:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 119, 181, 0.3); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('certGrid');
+    
+    // Unified Filtering Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    function updateGrid() {
+        const cards = Array.from(grid.querySelectorAll('.certificate-card'));
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const cat = card.getAttribute('data-category');
+            
+            const matchesSearch = title.includes(currentSearchQuery);
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+    }
+
+    document.addEventListener('categoryFilter', (e) => {
+        currentCategory = e.detail.value;
+        updateGrid();
+    });
+
+    document.addEventListener('localSearch', (e) => {
+        currentSearchQuery = e.detail.query;
+        updateGrid();
+    });
+
+    const btnDownloadAll = document.getElementById('btnDownloadAll');
+    if(btnDownloadAll) {
+        btnDownloadAll.onclick = () => alert('Préparation de l\'archive ZIP de tous vos certificats...');
+    }
+});
+</script>
+{% endblock %}

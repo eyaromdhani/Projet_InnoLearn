@@ -1,0 +1,1290 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Événements - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dashboard-header .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hero Section */
+.events-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 550px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+/* Vertical Filter Bar */
+.hero-filter-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 350px;
+    position: relative;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.hero-filter-bar .dropdown-toggle, .hero-search-wrapper, .hero-sort-select-wrapper {
+    padding: 1rem 1.25rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hero-sort-select-wrapper {
+    position: relative;
+    padding-right: 2.5rem;
+}
+
+.hero-sort-select-wrapper span:first-child {
+    color: #64748b;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.hero-sort-select-wrapper .selected-sort {
+    color: #6366f1;
+    font-weight: 700;
+}
+
+.hero-sort-select-wrapper i.arrow {
+    position: absolute;
+    right: 1.25rem;
+    color: #94a3b8;
+    transition: transform 0.3s;
+}
+
+.custom-dropdown.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-options::-webkit-scrollbar { width: 6px; }
+.dropdown-options::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+.dropdown-options::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.dropdown-options::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+.custom-dropdown.active .dropdown-options {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    animation: dropdownAnim 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes dropdownAnim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-opt {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.dropdown-opt:hover {
+    background: #f8fafc;
+    color: #6366f1;
+}
+
+.dropdown-opt.active {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
+.hero-search-wrapper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+}
+
+.hero-search-wrapper input::placeholder { color: #94a3b8; }
+.hero-filter-bar i { color: #6366f1; }
+
+
+/* Waves */
+.hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 70px;
+    animation: waveMove 15s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.hero-waves .wave-1 {
+    height: 90px;
+    margin-bottom: -70px;
+    opacity: 0.3;
+    animation-duration: 7s;
+    animation-direction: reverse;
+}
+
+.hero-waves .wave-2 {
+    height: 80px;
+    margin-bottom: -50px;
+    opacity: 0.5;
+    animation-duration: 10s;
+}
+
+.hero-waves .wave-3 {
+    fill: #f8fafc;
+    height: 60px;
+    animation-duration: 13s;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-25%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Visual Side */
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.hero-illustration-wrapper {
+    width: 450px;
+    height: 450px;
+    background: #3b3898;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { width: 100%; height: 100%; object-fit: cover; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
+.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
+.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+
+/* Grid Adjustment */
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+.event-list { 
+    padding: 0 10% 5rem; 
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+}
+
+/* Event Card Design - Vertical Cards */
+.event-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Full Event Styling */
+.event-card-full {
+    opacity: 0.5;
+    position: relative;
+    filter: grayscale(100%);
+    cursor: not-allowed !important;
+    background-color: #f8fafc !important;
+}
+
+.event-card-full:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #e2e8f0;
+}
+
+.event-card-full .event-card-header {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.complet-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(239, 68, 68, 0.95);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.complet-badge i, .terminer-badge i {
+    font-size: 0.875rem;
+}
+
+.terminer-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(71, 85, 105, 0.95);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(71, 85, 105, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Card Header with Gradients */
+.event-card-header {
+    position: relative;
+    height: 140px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.event-header-webinar { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+.event-header-workshop { background: linear-gradient(135deg, #e11d48 0%, #f97316 100%); }
+.event-header-networking { background: linear-gradient(135deg, #16a34a 0%, #65a30d 100%); }
+.event-header-default { background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%); }
+
+.event-date-badge {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-date-badge .date-day {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.event-date-badge .date-month {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+.event-type-badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Card Body */
+.event-card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.event-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.meta-item i {
+    color: #6366f1;
+    width: 16px;
+}
+
+.event-description {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Card Footer */
+.event-card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    background: #fafbfc;
+}
+
+.btn-event-action {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.btn-event-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-event-action.btn-registered {
+    background: #ecfdf5;
+    color: #10b981;
+    box-shadow: none;
+    cursor: default;
+}
+
+.btn-event-action.btn-registered:hover {
+    transform: none;
+}
+
+.btn-event-action.btn-full {
+    background: #fef2f2;
+    color: #ef4444;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.btn-event-action.btn-full:hover {
+    transform: none;
+}
+
+/* My Reservations Filter Button */
+.btn-reservations-filter {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #6366f1;
+    border-radius: 12px;
+    background: transparent;
+    color: #6366f1;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.btn-reservations-filter:hover {
+    background: rgba(99, 102, 241, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.15);
+}
+
+.btn-reservations-filter.active {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-reservations-filter i {
+    font-size: 1.1rem;
+}
+
+.btn-reservations-filter.active i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Legacy badge styles for compatibility */
+.event-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+}
+.badge-webinar { background: #eef2ff; color: #6366f1; }
+.badge-workshop { background: #fef2f2; color: #e11d48; }
+.badge-networking { background: #f0fdf4; color: #16a34a; }
+.badge-default { background: #f1f5f9; color: #64748b; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .event-list {
+        padding: 0 5% 3rem;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="events-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <span class="hero-label">Apprentissage & Réseautage</span>
+                <h1 class="hero-title">
+                    Événements &<br>
+                    <span>Workshops Live</span>
+                </h1>
+                
+                <div class="hero-filter-bar">
+                    <!-- Category Dropdown -->
+                    <div class="custom-dropdown" id="pageCategoryDropdown">
+                        <div class="dropdown-toggle">
+                            <i class="fas fa-filter"></i>
+                            <span class="selected-category">Toutes les catégories</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            {% for cat in categories %}
+                            <div class="dropdown-opt {% if cat.value == 'all' %}active{% endif %}" data-value="{{ cat.value }}">
+                                <i class="fas {{ cat.icon }}"></i> {{ cat.name }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Search Wrapper -->
+                    <div class="hero-search-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="localSearch" placeholder="Rechercher un événement...">
+                    </div>
+                    
+                    <!-- Sort Dropdown -->
+                    <div class="custom-dropdown" id="pageSortDropdown">
+                        <div class="dropdown-toggle hero-sort-select-wrapper">
+                            <i class="fas fa-sort-amount-down"></i>
+                            <span>Trier par:</span>
+                            <span class="selected-sort">Plus récents</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="newest">Plus récents</div>
+                            <div class="dropdown-opt" data-value="date">Prochainement</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Events illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-3"></div>
+                <div class="hero-frame frame-4"></div>
+                <div class="hero-frame frame-5"></div>
+                <div class="hero-frame frame-6"></div>
+            </div>
+        </div>
+
+        <div class="hero-waves">
+            <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.3)" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.5)" d="M0,32L48,37.3C96,43,192,53,288,64C384,75,480,85,576,80C672,75,768,53,864,48C960,43,1056,53,1152,58.7C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Content List Controls -->
+    <div class="event-list-controls" style="padding: 2rem 10% 0; display: flex; justify-content: flex-end; margin-bottom: -1rem; position: relative; z-index: 10;">
+        <button id="reservationsFilterBtn" class="btn-reservations-filter">
+            <i class="fas fa-calendar-check"></i>
+            Mes Réservations
+        </button>
+    </div>
+
+    <!-- Content List -->
+    <div class="event-list" id="eventList">
+        {% for event in events %}
+        {% set isFull = eventCapacityStatus[event.id].isFull %}
+        {% set isTerminated = event.statut and event.statut.value == 'termine' %}
+        <div class="event-card event-card-clickable {% if isFull or isTerminated %}event-card-full{% endif %}" 
+             data-category="{{ event.typeEvenement ? event.typeEvenement.value|lower : '' }}" 
+             data-title="{{ event.titre|lower }}"
+             data-event-id="{{ event.id }}"
+             data-event-title="{{ event.titre }}"
+             data-event-type="{{ event.typeEvenement ? event.typeEvenement.value : 'Événement' }}"
+             data-event-type-class="{{ event.typeEvenement ? event.typeEvenement.value|lower : 'default' }}"
+             data-event-date="{{ event.dateDebut|date('d') }}"
+             data-event-month="{{ event.dateDebut|date('M') }}"
+             data-event-time="{{ event.dateDebut|date('H:i') }}"
+             data-event-location="{{ event.lieu|default('En ligne') }}"
+             data-event-capacity="{{ event.capacite }}"
+             data-event-description="{{ event.description }}"
+             onclick="openEventDetail(this, event)"
+             data-has-status="{% if registrationStatuses[event.id] is defined %}yes{% else %}no{% endif %}"
+             data-status-text="{% if registrationStatuses[event.id] is defined %}{{ registrationStatuses[event.id] }}{% endif %}"
+             data-is-full="{% if isFull %}yes{% else %}no{% endif %}"
+             data-is-terminated="{% if isTerminated %}yes{% else %}no{% endif %}"
+        >
+            {% if isTerminated %}
+            <div class="terminer-badge">
+                <i class="fas fa-check-circle"></i> TERMINÉ
+            </div>
+            {% elseif isFull %}
+            <div class="complet-badge">
+                <i class="fas fa-users"></i> COMPLET
+            </div>
+            {% endif %}
+            
+            <div class="event-card-header event-header-{{ event.typeEvenement ? event.typeEvenement.value|lower : 'default' }}">
+                <div class="event-date-badge">
+                    <span class="date-day">{{ event.dateDebut|date('d') }}</span>
+                    <span class="date-month">{{ event.dateDebut|date('M') }}</span>
+                </div>
+                <span class="event-type-badge badge-{{ event.typeEvenement ? event.typeEvenement.value|lower : 'default' }}">
+                    {{ event.typeEvenement ? event.typeEvenement.value : 'Événement' }}
+                </span>
+            </div>
+            
+            <div class="event-card-body">
+                <h3 class="event-title">{{ event.titre }}</h3>
+                
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <i class="far fa-clock"></i>
+                        <span>{{ event.dateDebut|date('H:i') }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {% set location = event.lieu|default('En ligne') %}
+                        {% if location != 'En ligne' %}
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ location|url_encode }}" 
+                               target="_blank" 
+                               style="text-decoration: underline; color: inherit;"
+                               onclick="event.stopPropagation()">
+                                {{ location }}
+                            </a>
+                        {% else %}
+                            <span>{{ location }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <p class="event-description">{{ event.description }}</p>
+            </div>
+            
+            <div class="event-card-footer">
+                {% if isTerminated %}
+                    <button class="btn-event-action btn-full" disabled onclick="event.stopPropagation()">
+                        <i class="fas fa-check-circle"></i>
+                        Événement terminé
+                    </button>
+                {% elseif isFull %}
+                    <button class="btn-event-action btn-full" disabled onclick="event.stopPropagation()">
+                        <i class="fas fa-ban"></i>
+                        Événement complet
+                    </button>
+                {% elseif registrationStatuses[event.id] is defined %}
+                    <button class="btn-event-action btn-registered" disabled onclick="event.stopPropagation()">
+                        <i class="fas fa-check-circle"></i>
+                        {{ registrationStatuses[event.id] }}
+                    </button>
+                {% else %}
+                    <button class="btn-event-action" onclick="event.stopPropagation(); openModal({{ event.id }})">
+                        <i class="fas fa-calendar-check"></i>
+                        Participer
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64748b;">
+                <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p style="font-size: 1.1rem; font-weight: 600;">Aucun événement trouvé pour le moment.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 3000; justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; padding: 2rem; border-radius: 20px; width: 100%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); animation: modalPop 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin: 0;">Inscription à l'événement</h3>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 1.25rem; color: #64748b; cursor: pointer;"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <form action="{{ path('enseignant_event_participate') }}" method="post">
+                <input type="hidden" name="event_id" id="modalEventId">
+                
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #64748b; font-weight: 600;">Nom Complet</label>
+                    <input type="text" name="name" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #64748b; font-weight: 600;">Email</label>
+                    <input type="email" name="email" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+                </div>
+
+                <button type="submit" class="btn-primary-gradient" style="width: 100%; justify-content: center;">
+                    Confirmer l'inscription
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Detail Modal -->
+    <div id="eventDetailModal" class="modal-overlay" style="display: none;">
+        <div class="event-detail-modal-content">
+            <button onclick="closeEventDetail()" class="modal-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="event-detail-header" id="detailModalHeader">
+                <div class="event-date-badge-large">
+                    <span class="date-day" id="detailDate"></span>
+                    <span class="date-month" id="detailMonth"></span>
+                </div>
+                <span class="event-type-badge-large" id="detailType"></span>
+            </div>
+            
+            <div class="event-detail-body">
+                <h2 id="detailTitle"></h2>
+                
+                <div class="event-detail-meta">
+                    <div class="detail-meta-item">
+                        <i class="far fa-clock"></i>
+                        <span id="detailTime"></span>
+                    </div>
+                    <div class="detail-meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="detailLocation"></span>
+                    </div>
+                    <div class="detail-meta-item">
+                        <i class="fas fa-users"></i>
+                        <span id="detailCapacity"></span>
+                    </div>
+                </div>
+                
+                <div class="event-detail-description">
+                    <h3>Description</h3>
+                    <p id="detailDescription"></p>
+                </div>
+            </div>
+            
+            <div class="event-detail-footer" id="detailFooter">
+                <!-- Action button will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal-overlay.active { display: flex !important; }
+        
+        /* Event Detail Modal Styles */
+        .event-card-clickable {
+            cursor: pointer;
+        }
+        
+        .event-detail-modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            animation: modalPop 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+        }
+        
+        .modal-close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: #1e293b;
+            transition: all 0.2s;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .modal-close-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .event-detail-header {
+            height: 180px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .event-detail-header.event-header-webinar { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .event-detail-header.event-header-workshop { background: linear-gradient(135deg, #e11d48 0%, #f97316 100%); }
+        .event-detail-header.event-header-networking { background: linear-gradient(135deg, #16a34a 0%, #65a30d 100%); }
+        .event-detail-header.event-header-default { background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%); }
+        
+        .event-date-badge-large {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .event-date-badge-large .date-day {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+        }
+        
+        .event-date-badge-large .date-month {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.25rem;
+        }
+        
+        .event-type-badge-large {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .event-detail-body {
+            padding: 2rem;
+        }
+        
+        .event-detail-body h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.3;
+        }
+        
+        .event-detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .detail-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .detail-meta-item i {
+            color: #6366f1;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+        
+        .event-detail-description h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 0.75rem 0;
+        }
+        
+        .event-detail-description p {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        
+        .event-detail-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            background: #fafbfc;
+            border-radius: 0 0 24px 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .event-detail-modal-content {
+                max-width: 95%;
+                margin: 1rem;
+            }
+            
+            .event-detail-header {
+                height: 150px;
+                padding: 1.5rem;
+            }
+            
+            .event-detail-body {
+                padding: 1.5rem;
+            }
+            
+            .event-detail-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+
+    <script>
+        function openModal(eventId) {
+            document.getElementById('modalEventId').value = eventId;
+            document.getElementById('registrationModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('registrationModal').classList.remove('active');
+        }
+
+        // Close on click outside
+        document.getElementById('registrationModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        
+        // Event Detail Modal Functions
+        function openEventDetail(card, e) {
+            // Populate modal with event data from card's data attributes
+            const eventId = card.dataset.eventId;
+            const title = card.dataset.eventTitle;
+            const type = card.dataset.eventType;
+            const typeClass = card.dataset.eventTypeClass;
+            const date = card.dataset.eventDate;
+            const month = card.dataset.eventMonth;
+            const time = card.dataset.eventTime;
+            const location = card.dataset.eventLocation;
+            const capacity = card.dataset.eventCapacity;
+            const description = card.dataset.eventDescription;
+            const hasStatus = card.dataset.hasStatus === 'yes';
+            const statusText = card.dataset.statusText;
+            const isFull = card.dataset.isFull === 'yes';
+            const isTerminated = card.dataset.isTerminated === 'yes';
+            
+            // Set header gradient based on event type
+            const header = document.getElementById('detailModalHeader');
+            header.className = 'event-detail-header event-header-' + typeClass;
+            
+            // Set content
+            document.getElementById('detailDate').textContent = date;
+            document.getElementById('detailMonth').textContent = month;
+            document.getElementById('detailType').textContent = type;
+            document.getElementById('detailTitle').textContent = title;
+            document.getElementById('detailTime').textContent = time;
+            
+            // Set Location as Link if not "En ligne"
+            const locationSpan = document.getElementById('detailLocation');
+            if (location && location !== 'En ligne') {
+                locationSpan.innerHTML = `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}" target="_blank" style="text-decoration: underline; color: inherit;">${location}</a>`;
+            } else {
+                locationSpan.textContent = location || 'En ligne';
+            }
+            
+            document.getElementById('detailCapacity').textContent = capacity + ' personnes';
+            document.getElementById('detailDescription').textContent = description;
+            
+            // Set action button
+            const footer = document.getElementById('detailFooter');
+            if (isTerminated) {
+                footer.innerHTML = `
+                    <button class="btn-event-action btn-full" disabled style="width: 100%;">
+                        <i class="fas fa-check-circle"></i>
+                        Événement terminé
+                    </button>
+                `;
+            } else if (isFull && !hasStatus) {
+                footer.innerHTML = `
+                    <button class="btn-event-action btn-full" disabled style="width: 100%;">
+                        <i class="fas fa-ban"></i>
+                        Événement complet
+                    </button>
+                `;
+            } else if (hasStatus) {
+                footer.innerHTML = `
+                    <button class="btn-event-action btn-registered" disabled style="width: 100%;">
+                        <i class="fas fa-check-circle"></i>
+                        ${statusText}
+                    </button>
+                `;
+            } else {
+                footer.innerHTML = `
+                    <button class="btn-event-action" onclick="closeEventDetail(); openModal(${eventId})" style="width: 100%;">
+                        <i class="fas fa-calendar-check"></i>
+                        Participer
+                    </button>
+                `;
+            }
+            
+            // Show modal
+            document.getElementById('eventDetailModal').classList.add('active');
+        }
+        
+        function closeEventDetail() {
+            document.getElementById('eventDetailModal').classList.remove('active');
+        }
+        
+        // Close detail modal on click outside
+        document.getElementById('eventDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeEventDetail();
+        });
+        
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeEventDetail();
+            }
+        });
+    </script>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const list = document.getElementById('eventList');
+
+    // Unified Dropdown Logic (Reinforced)
+    function setupDropdown(dropdownId, onSelect) {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) return;
+        
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const options = dropdown.querySelectorAll('.dropdown-opt');
+        const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = dropdown.classList.contains('active');
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+            if (!isActive) dropdown.classList.add('active');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const val = opt.getAttribute('data-value');
+                selectedSpan.textContent = opt.textContent.trim();
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                dropdown.classList.remove('active');
+                onSelect(val);
+            });
+        });
+    }
+
+    // Window clicks to close dropdowns
+    window.onclick = (e) => { 
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+        }
+    };
+
+    // Unified Filtering & Sorting Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+    let currentSort = 'newest';
+    let showOnlyRegistered = false;
+
+    function updateGrid() {
+        if (!list) return;
+        let cards = Array.from(list.querySelectorAll('.event-card'));
+        
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title') || '';
+            const cat = card.getAttribute('data-category') || '';
+            const hasStatus = card.getAttribute('data-has-status') === 'yes';
+            
+            const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            const matchesReservation = !showOnlyRegistered || hasStatus;
+            
+            card.style.display = (matchesSearch && matchesCat && matchesReservation) ? 'grid' : 'none';
+        });
+
+        cards.forEach(card => list.appendChild(card));
+    }
+
+    // Reservation Filter Toggle
+    const resFilterBtn = document.getElementById('reservationsFilterBtn');
+    if (resFilterBtn) {
+        resFilterBtn.addEventListener('click', () => {
+            showOnlyRegistered = !showOnlyRegistered;
+            resFilterBtn.classList.toggle('active', showOnlyRegistered);
+            updateGrid();
+        });
+    }
+
+    // Setup Dropdowns
+    setupDropdown('pageCategoryDropdown', (val) => {
+        currentCategory = val;
+        updateGrid();
+    });
+
+    setupDropdown('pageSortDropdown', (val) => {
+        currentSort = val;
+        updateGrid();
+    });
+
+    const searchInput = document.getElementById('localSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            updateGrid();
+        });
+    }
+});
+</script>
+{% endblock %}

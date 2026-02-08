@@ -1,0 +1,257 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Projets - InnoLearn{% endblock %}
+
+{% block page_title %}Gestion des Projets{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">Liste des Projets</h3>
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div class="search-box" style="margin: 0; width: 250px;">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <form method="GET" style="display: contents;">
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ search_query }}" style="width: 100%;">
+                </form>
+            </div>
+            <a href="{{ path('admin_projects_new') }}" class="btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Nouveau Projet
+            </a>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        <!-- Stats Cards -->
+        <div class="stats-grid" style="margin-bottom: 2rem; grid-template-columns: repeat(5, 1fr);">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3>Total</h3>
+                    <div class="stat-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-value">{{ stats.total }}</div>
+                <div class="stat-footer">
+                    <span class="stat-label">Projets</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3>Brouillons</h3>
+                    <div class="stat-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-value">{{ stats.draft }}</div>
+                <div class="stat-footer">
+                    <span class="stat-label">En attente</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3>Actifs</h3>
+                    <div class="stat-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-value">{{ stats.active }}</div>
+                <div class="stat-footer">
+                    <span class="stat-label">En cours</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3>Terminés</h3>
+                    <div class="stat-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-value">{{ stats.completed }}</div>
+                <div class="stat-footer">
+                    <span class="stat-label">Complétés</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3>Annulés</h3>
+                    <div class="stat-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-value">{{ stats.cancelled }}</div>
+                <div class="stat-footer">
+                    <span class="stat-label">Arrêtés</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Filters -->
+        <div style="margin-bottom: 2rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="{{ path('admin_projects') }}" class="filter-btn {{ current_status is null ? 'active' : '' }}">
+                Tous les projets
+            </a>
+            <a href="{{ path('admin_projects', {status: 'draft'}) }}" class="filter-btn {{ current_status == 'draft' ? 'active' : '' }}">
+                Brouillons
+            </a>
+            <a href="{{ path('admin_projects', {status: 'active'}) }}" class="filter-btn {{ current_status == 'active' ? 'active' : '' }}">
+                Actifs
+            </a>
+            <a href="{{ path('admin_projects', {status: 'completed'}) }}" class="filter-btn {{ current_status == 'completed' ? 'active' : '' }}">
+                Terminés
+            </a>
+            <a href="{{ path('admin_projects', {status: 'cancelled'}) }}" class="filter-btn {{ current_status == 'cancelled' ? 'active' : '' }}">
+                Annulés
+            </a>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Statut</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Créé le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>
+                            <strong style="color: #1C2434; display: block; margin-bottom: 0.25rem;">{{ project.title }}</strong>
+                            <small style="color: #64748b; font-size: 0.85rem;">
+                                {{ project.description|length > 80 ? project.description|slice(0, 80) ~ '...' : project.description }}
+                            </small>
+                        </td>
+                        <td>
+                            {% set status_labels = {
+                                'draft': 'Brouillon',
+                                'active': 'Actif', 
+                                'completed': 'Terminé',
+                                'cancelled': 'Annulé'
+                            } %}
+                            {% set badge_classes = {
+                                'draft': 'badge-warning',
+                                'active': 'badge-success',
+                                'completed': 'badge-info',
+                                'cancelled': 'badge-danger'
+                            } %}
+                            <span class="{{ badge_classes[project.status] }}" style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                                {% if project.status == 'draft' %}
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 12px; height: 12px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                {% elseif project.status == 'active' %}
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 12px; height: 12px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                {% elseif project.status == 'completed' %}
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 12px; height: 12px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 12px; height: 12px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                {% endif %}
+                                {{ status_labels[project.status] }}
+                            </span>
+                        </td>
+                        <td>{{ project.startDate|date('d/m/Y') }}</td>
+                        <td>
+                            {% if project.endDate %}
+                                {{ project.endDate|date('d/m/Y') }}
+                            {% else %}
+                                <span style="color: #94a3b8; font-style: italic;">—</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ project.createdAt|date('d/m/Y') }}</td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <a href="{{ path('admin_projects_show', {id: project.id}) }}" class="icon-btn" style="width: 32px; height: 32px;" title="Voir">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="{{ path('admin_projects_edit', {id: project.id}) }}" class="icon-btn" style="width: 32px; height: 32px;" title="Modifier">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+                                <form method="POST" action="{{ path('admin_projects_delete', {id: project.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
+                                    <button type="submit" class="icon-btn" style="width: 32px; height: 32px; background: #fee2e2; border-color: #fecaca; color: #dc2626;" title="Supprimer">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem; color: #64748b;">
+                            Aucun projet trouvé.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+.filter-btn:hover {
+    background: #f1f5f9;
+    color: #475569;
+}
+.filter-btn.active {
+    background: #3C50E0;
+    color: white;
+    border-color: #3C50E0;
+}
+.badge-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+</style>
+{% endblock %}

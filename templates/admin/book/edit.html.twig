@@ -1,0 +1,48 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Modifier Livre{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header" style="justify-content: space-between; display: flex; align-items: center;">
+        <h3 class="card-title">Modifier le livre</h3>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{{ path('admin_book_index') }}" class="btn-primary" style="text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; background-color: #64748b; border: none;">Retour à la liste</a>
+            {{ include('admin/book/_delete_form.html.twig') }}
+        </div>
+    </div>
+    <div style="padding: 1.5rem;">
+        {{ form_start(form) }}
+            <div style="display: grid; gap: 1.5rem; max-width: 800px;">
+                <div class="form-group">
+                    {{ form_label(form.titre, 'Titre du livre', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1e293b;'}}) }}
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px;'}}) }}
+                    {{ form_errors(form.titre) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.author, 'Auteur', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1e293b;'}}) }}
+                    {{ form_widget(form.author, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px;'}}) }}
+                    {{ form_errors(form.author) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.publier, 'Date de publication', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1e293b;'}}) }}
+                    {{ form_widget(form.publier, {'attr': {'class': 'form-control', 'style': 'padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px;'}}) }}
+                    {{ form_errors(form.publier) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.description, 'Description', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1e293b;'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px;', 'rows': '5'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <button class="btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 8px; border: none; cursor: pointer;">{{ button_label|default('Mettre à jour') }}</button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

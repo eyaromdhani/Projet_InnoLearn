@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Login - InnoLearn{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer_wave %}{% endblock %}
+
+{% block body %}
+<main style="background: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+    <div style="width: 100%; max-width: 440px; padding: 2rem;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <div style="background: #6366f1; width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);">
+                <i class="fas fa-shield-alt" style="color: white; font-size: 1.75rem;"></i>
+            </div>
+            <h1 style="color: #1e293b; font-size: 1.875rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.5rem;">Administration</h1>
+            <p style="color: #64748b; font-size: 1rem;">Connectez-vous pour gérer la plateforme</p>
+        </div>
+
+        {% if error %}
+            <div style="background: #fef2f2; border: 1px solid #fee2e2; color: #dc2626; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; font-size: 0.875rem; text-align: center;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form method="post" action="{{ path('admin_login') }}" style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04); border: 1px solid #f1f5f9;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="username" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Email</label>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8;">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus
+                           style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: all 0.2s;"
+                           placeholder="admin@innolearn.com">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <label for="password" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Mot de passe</label>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8;">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" name="_password" id="password" autocomplete="current-password" required
+                           style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: all 0.2s;"
+                           placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit" style="width: 100%; background: #1e293b; color: white; padding: 0.875rem; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                Se connecter
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{{ path('app_home') }}" style="color: #64748b; font-size: 0.875rem; text-decoration: none; font-weight: 500;">
+                <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Retour au site
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

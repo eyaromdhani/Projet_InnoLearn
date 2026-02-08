@@ -1,0 +1,14 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Créer un événement{% endblock %}
+
+{% block page_title %}Créer un événement{% endblock %}
+
+{% block admin_content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="glass-card" style="background: white; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0;">
+        <h2 style="margin-bottom: 2rem; color: #1e1b4b; font-size: 1.5rem;">Nouveau Événement</h2>
+        {{ include('admin/event/_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

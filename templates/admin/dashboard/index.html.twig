@@ -1,0 +1,219 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Dashboard - Gestion{% endblock %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block admin_content %}
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card animate-fade-in-up">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="3456" data-prefix="$">$0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total views</span>
+            <div class="stat-change positive">
+                <span>0.43%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="45200" data-prefix="$">$0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total Profit</span>
+            <div class="stat-change positive">
+                <span>4.35%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="2450">0</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total Product</span>
+            <div class="stat-change positive">
+                <span>2.59%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card animate-fade-in-up" style="animation-delay: 0.3s;">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="stat-value" data-target="{{ total_users }}">{{ total_users }}</div>
+        <div class="stat-footer">
+            <span class="stat-label">Total Users</span>
+            <div class="stat-change positive">
+                <span>0.95%</span>
+                <span class="arrow">↑</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-grid">
+    <div class="chart-card large animate-fade-in-up">
+        <div class="chart-header">
+            <h3>Total Revenue</h3>
+            <div class="chart-tabs">
+                <button class="tab-btn active">Day</button>
+                <button class="tab-btn">Week</button>
+                <button class="tab-btn">Month</button>
+            </div>
+        </div>
+        <div class="chart-container" id="revenueChart"></div>
+    </div>
+    
+    <div class="chart-card animate-fade-in-up">
+        <div class="chart-header">
+            <h3>Profit cette semaine</h3>
+        </div>
+        <div class="chart-container" id="profitChart"></div>
+    </div>
+</div>
+
+<!-- Recent Opportunités -->
+<div class="card animate-fade-in-up" style="margin-top: 2rem;">
+    <div class="card-header" style="justify-content: space-between; display: flex; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; margin-bottom: 1rem;">
+        <h3 class="card-title" style="font-size: 1.125rem; font-weight: 600; color: #1e293b;">Recent Opportunités</h3>
+        <a href="{{ path('admin_opportunity_offres_new') }}" class="btn-primary" style="text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; display: inline-block;">Ajouter Nouveau</a>
+    </div>
+    
+    {% if recent_opportunities is empty %}
+        <div style="text-align: center; padding: 3rem; color: #64748b;">
+            <p>Pas encore de données disponibles pour Opportunités.</p>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Entreprise</th>
+                        <th>Domaine</th>
+                        <th>Date Pub.</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for offre in recent_opportunities %}
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600;">{{ offre.titre }}</div>
+                        </td>
+                        <td>{{ offre.entreprise }}</td>
+                        <td><span class="badge" style="background: #e0e7ff; color: #4338ca; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">{{ offre.domaine }}</span></td>
+                        <td>{{ offre.datePublication ? offre.datePublication|date('Y-m-d') : '' }}</td>
+                        <td>
+                            {% if offre.statut == 'ouverte' %}
+                                <span class="badge" style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">Ouverte</span>
+                            {% else %}
+                                <span class="badge" style="background: #fee2e2; color: #b91c1c; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">{{ offre.statut }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_opportunity_offres_edit', {'id': offre.id}) }}" style="color: #4f46e5;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="padding: 1rem; border-top: 1px solid #f1f5f9; text-align: center;">
+            <a href="{{ path('admin_opportunity_offres_index') }}" style="color: #4f46e5; text-decoration: none; font-weight: 500; font-size: 0.875rem;">Voir toutes les offres &rarr;</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Recent Utilisateurs -->
+<div class="card animate-fade-in-up" style="margin-top: 2rem; margin-bottom: 3rem;">
+    <div class="card-header" style="justify-content: space-between; display: flex; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; margin-bottom: 1rem;">
+        <h3 class="card-title" style="font-size: 1.125rem; font-weight: 600; color: #1e293b;">Recent Utilisateurs</h3>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{{ path('admin_user_index') }}" style="text-decoration: none; padding: 0.5rem 1rem; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem; color: #64748b; font-weight: 500;">Voir Tout</a>
+            <a href="{{ path('admin_user_new') }}" class="btn-primary" style="text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; display: inline-block;">Ajouter Nouveau</a>
+        </div>
+    </div>
+    
+    {% if recent_users is empty %}
+        <div style="text-align: center; padding: 3rem; color: #64748b;">
+            <p>Pas encore d'utilisateurs inscrits.</p>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for u in recent_users %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 32px; height: 32px; border-radius: 8px; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">
+                                    {{ u.name|slice(0, 1)|upper }}
+                                </div>
+                                <span style="font-weight: 600;">{{ u.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ u.email }}</td>
+                        <td>
+                            {% for role in u.roles %}
+                                <span class="badge" style="background: #f1f5f9; color: #475569; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem;">{{ role }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_user_edit', {'id': u.id}) }}" style="color: #4f46e5;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

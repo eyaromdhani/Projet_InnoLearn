@@ -1,0 +1,549 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Gestion des Offres de Stage - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* User Profile Toggle Consistency */
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hero Section */
+.career-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 550px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+/* Vertical Filter Bar */
+.hero-filter-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 350px;
+    position: relative;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.hero-filter-bar .dropdown-toggle, .hero-search-wrapper, .hero-sort-select-wrapper {
+    padding: 1rem 1.25rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hero-sort-select-wrapper {
+    position: relative;
+    padding-right: 2.5rem;
+}
+
+.hero-sort-select-wrapper span:first-child {
+    color: #64748b;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.hero-sort-select-wrapper .selected-sort {
+    color: #6366f1;
+    font-weight: 700;
+}
+
+.hero-sort-select-wrapper i.arrow {
+    position: absolute;
+    right: 1.25rem;
+    color: #94a3b8;
+    transition: transform 0.3s;
+}
+
+.custom-dropdown.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-options::-webkit-scrollbar { width: 6px; }
+.dropdown-options::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+.dropdown-options::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.dropdown-options::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+.custom-dropdown.active .dropdown-options {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    animation: dropdownAnim 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes dropdownAnim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-opt {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.dropdown-opt:hover {
+    background: #f8fafc;
+    color: #6366f1;
+}
+
+.dropdown-opt.active {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
+.hero-search-wrapper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+}
+
+.hero-search-wrapper input::placeholder { color: #94a3b8; }
+.hero-filter-bar i { color: #6366f1; }
+
+
+/* Waves */
+.hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 70px;
+    animation: waveMove 15s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.hero-waves .wave-1 {
+    height: 90px;
+    margin-bottom: -70px;
+    opacity: 0.3;
+    animation-duration: 7s;
+    animation-direction: reverse;
+}
+
+.hero-waves .wave-2 {
+    height: 80px;
+    margin-bottom: -50px;
+    opacity: 0.5;
+    animation-duration: 10s;
+}
+
+.hero-waves .wave-3 { 
+    fill: #f8fafc; 
+    height: 60px;
+    animation-duration: 13s;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-25%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Visual Side */
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.hero-illustration-wrapper {
+    width: 450px;
+    height: 450px;
+    background: #3b3898;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { width: 100%; height: 100%; object-fit: cover; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
+.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
+.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* Grid Adjustment */
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+.job-listings-section { padding: 0 10% 5rem; }
+
+/* Job Card Styling */
+.job-card {
+    background: white; border-radius: 24px; padding: 2rem; border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 1.5rem;
+    display: grid; grid-template-columns: 80px 1fr 200px; gap: 2rem; align-items: center;
+}
+.job-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border-color: #6366f1; }
+
+.job-company-logo { width: 80px; height: 80px; background: #f8fafc; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #6366f1; border: 1px solid #f1f5f9; }
+
+.job-info h2 { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem; }
+.job-meta { display: flex; gap: 1.5rem; color: #64748b; font-size: 0.9rem; font-weight: 500; }
+.job-meta span { display: flex; align-items: center; gap: 0.5rem; }
+
+.job-tags { display: flex; gap: 0.75rem; }
+.job-tag { padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+.tag-fulltime { background: #eef2ff; color: #6366f1; }
+.tag-remote { background: #f0fdf4; color: #16a34a; }
+.tag-contract { background: #fff7ed; color: #f59e0b; }
+
+.btn-apply {
+    background: #f1f5f9; color: #1e293b; border: none; padding: 0.85rem 1.5rem;
+    border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    text-align: center;
+}
+.btn-apply:hover { background: #6366f1; color: white; }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="career-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <span class="hero-label">Opportunités Professionnelles</span>
+                <h1 class="hero-title">
+                    Gérez vos<br>
+                    <span>Offres de Stage</span>
+                </h1>
+                
+                <div class="hero-filter-bar">
+                    <!-- Category Dropdown -->
+                    <div class="custom-dropdown" id="pageCategoryDropdown">
+                        <div class="dropdown-toggle">
+                            <i class="fas fa-filter"></i>
+                            <span class="selected-category">Tous les types</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="all">
+                                <i class="fas fa-th-large"></i> Tous les types
+                            </div>
+                            <div class="dropdown-opt" data-value="cdi">CDI</div>
+                            <div class="dropdown-opt" data-value="stage">Stage</div>
+                            <div class="dropdown-opt" data-value="freelance">Freelance</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Wrapper -->
+                    <div class="hero-search-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="localSearch" placeholder="Rechercher une offre...">
+                    </div>
+                    
+                    <!-- Sort Dropdown -->
+                    <div class="custom-dropdown" id="pageSortDropdown">
+                        <div class="dropdown-toggle hero-sort-select-wrapper">
+                            <i class="fas fa-sort-amount-down"></i>
+                            <span>Trier par:</span>
+                            <span class="selected-sort">Plus récents</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="newest">Plus récents</div>
+                            <div class="dropdown-opt" data-value="salary">Salaire</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary-gradient" id="openModalBtn" style="margin-top: 1rem; width: fit-content;">
+                        <i class="fas fa-plus"></i>
+                        Publier un Stage
+                    </button>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Career illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-3"></div>
+                <div class="hero-frame frame-4"></div>
+                <div class="hero-frame frame-5"></div>
+                <div class="hero-frame frame-6"></div>
+            </div>
+        </div>
+
+        <div class="hero-waves">
+            <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.3)" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.5)" d="M0,32L48,37.3C96,43,192,53,288,64C384,75,480,85,576,80C672,75,768,53,864,48C960,43,1056,53,1152,58.7C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Job Listings -->
+    <section class="job-listings-section" id="jobGrid">
+        {% for job in jobs %}
+        <div class="job-card" data-category="{{ job.category|lower }}" data-title="{{ job.title|lower }} {{ job.company|lower }}">
+            <div class="job-company-logo">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="job-info">
+                <h2>{{ job.title }}</h2>
+                <div class="job-meta">
+                    <span><i class="fas fa-city"></i> {{ job.company }}</span>
+                    <span><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
+                    <span><i class="fas fa-coins"></i> {{ job.salary }}</span>
+                </div>
+                <div class="job-tags" style="margin-top: 1rem;">
+                    <span class="job-tag tag-{{ job.category|lower }}">{{ job.category }}</span>
+                </div>
+            </div>
+            <div class="job-action">
+                <button class="btn-apply" onclick="alert('Candidature envoyée pour {{ job.title }} !')">Postuler</button>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('jobGrid');
+
+    // Unified Dropdown Logic (Reinforced)
+    function setupDropdown(dropdownId, onSelect) {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) return;
+        
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const options = dropdown.querySelectorAll('.dropdown-opt');
+        const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = dropdown.classList.contains('active');
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+            if (!isActive) dropdown.classList.add('active');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const val = opt.getAttribute('data-value');
+                selectedSpan.textContent = opt.textContent.trim();
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                dropdown.classList.remove('active');
+                onSelect(val);
+            });
+        });
+    }
+
+    // Window clicks to close dropdowns
+    window.onclick = (e) => { 
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+        }
+    };
+
+    // Unified Filtering & Sorting Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+    let currentSort = 'newest';
+
+    function updateGrid() {
+        if (!grid) return;
+        let cards = Array.from(grid.querySelectorAll('.job-card'));
+        
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title') || '';
+            const cat = card.getAttribute('data-category') || '';
+            const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            card.style.display = (matchesSearch && matchesCat) ? 'grid' : 'none';
+        });
+
+        cards.forEach(card => grid.appendChild(card));
+    }
+
+    // Setup Dropdowns
+    setupDropdown('pageCategoryDropdown', (val) => {
+        currentCategory = val;
+        updateGrid();
+    });
+
+    setupDropdown('pageSortDropdown', (val) => {
+        currentSort = val;
+        updateGrid();
+    });
+
+    const searchInput = document.getElementById('localSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            updateGrid();
+        });
+    }
+});
+</script>
+{% endblock %}

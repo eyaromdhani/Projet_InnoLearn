@@ -1,0 +1,151 @@
+<div class="filter-bar-container">
+    <div class="filter-left">
+        <div class="custom-dropdown" id="pageCategoryDropdown">
+            <button class="dropdown-toggle">
+                <i class="fas fa-filter"></i>
+                <span class="selected-category">Toutes les catégories</span>
+                <i class="fas fa-chevron-down arrow"></i>
+            </button>
+            <div class="dropdown-options">
+                <div class="dropdown-opt active" data-value="all">Toutes les catégories</div>
+                {% if categories is defined %}
+                    {% for cat in categories %}
+                        {% if cat.name != 'Tout' %}
+                            <div class="dropdown-opt" data-value="{{ cat.name|lower }}">
+                                <i class="fas {{ cat.icon|default('fa-tag') }}"></i>
+                                {{ cat.name }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="local-search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="localSearch" placeholder="{{ placeholder|default('Rechercher dans cette section...') }}">
+        </div>
+    </div>
+
+    <div class="filter-right">
+        <div class="sort-wrapper">
+            <span>Trier par:</span>
+            <select class="sort-select" id="localSort">
+                <option value="newest">Plus récents</option>
+                <option value="popular">Popularité</option>
+                <option value="name">Nom (A-Z)</option>
+            </select>
+        </div>
+        {% if extra_action is defined %}
+            <button class="btn-extra-action" id="{{ extra_action.id }}">
+                <i class="fas {{ extra_action.icon }}"></i>
+                {{ extra_action.label }}
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .filter-bar-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 0;
+        margin-bottom: 2rem;
+        gap: 2rem;
+    }
+
+    .filter-left, .filter-right { display: flex; align-items: center; gap: 1.5rem; }
+
+    /* Category Dropdown */
+    .custom-dropdown { position: relative; min-width: 220px; }
+    .dropdown-toggle {
+        width: 100%; padding: 0.85rem 1.25rem; border-radius: 14px; background: white;
+        border: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; align-items: center;
+        gap: 0.75rem; font-weight: 700; color: #475569; transition: all 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .dropdown-toggle:hover { border-color: #6366f1; color: #6366f1; }
+    .dropdown-toggle i.arrow { margin-left: auto; font-size: 0.7rem; transition: transform 0.3s; }
+    .custom-dropdown.active .dropdown-toggle i.arrow { transform: rotate(180deg); }
+
+    .dropdown-options {
+        position: absolute; top: calc(100% + 10px); left: 0; right: 0; background: white;
+        border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 0.6rem;
+        z-index: 100; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .custom-dropdown.active .dropdown-options { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    .dropdown-opt {
+        padding: 0.8rem 1rem; border-radius: 12px; cursor: pointer; display: flex; align-items: center;
+        gap: 0.75rem; font-size: 0.9rem; font-weight: 600; color: #64748b; transition: all 0.2s;
+    }
+    .dropdown-opt:hover { background: #f8fafc; color: #6366f1; }
+    .dropdown-opt.active { background: #6366f108; color: #6366f1; }
+
+    /* Local Search */
+    .local-search-wrapper {
+        display: flex; align-items: center; background: white; padding: 0 1.25rem;
+        border-radius: 14px; border: 1px solid rgba(0,0,0,0.05); width: 350px; height: 48px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s;
+    }
+    .local-search-wrapper:focus-within { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.05); }
+    .local-search-wrapper i { color: #94a3b8; margin-right: 0.75rem; }
+    .local-search-wrapper input { border: none; outline: none; width: 100%; font-size: 0.9rem; font-weight: 600; color: #1e293b; background: transparent; }
+
+    /* Sort & Extra */
+    .sort-wrapper { display: flex; align-items: center; gap: 0.75rem; color: #64748b; font-weight: 600; font-size: 0.9rem; }
+    .sort-select { padding: 0.6rem 1rem; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); background: white; font-weight: 700; color: #1e293b; outline: none; cursor: pointer; }
+
+    .btn-extra-action {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        color: white; padding: 0.85rem 1.5rem; border-radius: 14px; border: none;
+        font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;
+        box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3); transition: all 0.3s;
+    }
+    .btn-extra-action:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.4); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdown = document.getElementById('pageCategoryDropdown');
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    const options = dropdown.querySelectorAll('.dropdown-opt');
+    const label = dropdown.querySelector('.selected-category');
+
+    if (toggle) {
+        toggle.onclick = (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        };
+    }
+
+    options.forEach(opt => {
+        opt.onclick = function() {
+            options.forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            label.textContent = this.textContent.trim();
+            dropdown.classList.remove('active');
+            
+            // Emit custom event for page-specific filtering
+            const categoryEvent = new CustomEvent('categoryFilter', { 
+                detail: { value: this.getAttribute('data-value') } 
+            });
+            document.dispatchEvent(categoryEvent);
+        };
+    });
+
+    document.addEventListener('click', () => dropdown.classList.remove('active'));
+
+    // Emit event for local search
+    const localSearch = document.getElementById('localSearch');
+    if (localSearch) {
+        localSearch.oninput = (e) => {
+            const searchEvent = new CustomEvent('localSearch', { 
+                detail: { query: e.target.value.toLowerCase() } 
+            });
+            document.dispatchEvent(searchEvent);
+        };
+    }
+});
+</script>

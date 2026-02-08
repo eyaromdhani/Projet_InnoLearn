@@ -1,0 +1,342 @@
+{
+    "book": [
+        {
+            "Field": "id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "titre",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "author",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "description",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "publier",
+            "Type": "date",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        }
+    ],
+    "cours": [
+        {
+            "Field": "id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "PRI",
+            "Default": null,
+            "Extra": "auto_increment"
+        },
+        {
+            "Field": "titre",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "description",
+            "Type": "longtext",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "niveau",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "datepublication",
+            "Type": "datetime",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "categorie_id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "MUL",
+            "Default": null,
+            "Extra": ""
+        }
+    ],
+    "project": [
+        {
+            "Field": "id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "PRI",
+            "Default": null,
+            "Extra": "auto_increment"
+        },
+        {
+            "Field": "title",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "description",
+            "Type": "longtext",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "status",
+            "Type": "varchar(50)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "start_date",
+            "Type": "date",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "end_date",
+            "Type": "date",
+            "Null": "YES",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "created_at",
+            "Type": "datetime",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "updated_at",
+            "Type": "datetime",
+            "Null": "YES",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        }
+    ],
+    "stagecondidature": [
+        {
+            "Field": "id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "PRI",
+            "Default": null,
+            "Extra": "auto_increment"
+        },
+        {
+            "Field": "type_request",
+            "Type": "enum('offre','demande')",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "titre",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "description",
+            "Type": "text",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "domaine",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "competences",
+            "Type": "text",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "cv",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "lettre_motivation",
+            "Type": "text",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "date_publication",
+            "Type": "date",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "statut",
+            "Type": "enum('en_attente','selectionnee','refusee','contactee')",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "id_etudiant",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "id_offre",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        }
+    ],
+    "book_categorie": [
+        {
+            "Field": "id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "titre",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "description",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "date",
+            "Type": "date",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "status",
+            "Type": "varchar(20)",
+            "Null": "NO",
+            "Key": "",
+            "Default": "active",
+            "Extra": ""
+        }
+    ],
+    "cours_categorie": [
+        {
+            "Field": "id",
+            "Type": "int(11)",
+            "Null": "NO",
+            "Key": "PRI",
+            "Default": null,
+            "Extra": "auto_increment"
+        },
+        {
+            "Field": "nom",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "description",
+            "Type": "longtext",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "slug",
+            "Type": "varchar(255)",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        },
+        {
+            "Field": "datecreation",
+            "Type": "datetime",
+            "Null": "NO",
+            "Key": "",
+            "Default": null,
+            "Extra": ""
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+<header class="dashboard-header">
+    <div class="header-brand-wrapper">
+        <a href="{{ path('app_home') }}" class="header-brand">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn">
+            <span>InnoLearn <small style="font-size: 0.6em; opacity: 0.8; vertical-align: middle; margin-left: 5px; padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px;">RECRUTEUR</small></span>
+        </a>
+    </div>
+
+    <nav class="header-nav">
+        <a href="{{ path('app_recruiter_home') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_recruiter_home' ? 'active' : '' }}">
+            Accueil
+        </a>
+        <a href="{{ path('app_recruteur_stages') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_recruteur_stages' ? 'active' : '' }}">
+            Stages
+        </a>
+    </nav>
+    
+    <div class="header-actions">
+        <div class="search-bar-compact">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher...">
+        </div>
+
+        <button class="icon-btn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge-dot"></span>
+        </button>
+        
+        <div class="user-profile-toggle" id="profileToggle">
+            <div class="avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name={{ app.user.name|url_encode }}&background=6366f1&color=fff&bold=true" alt="User Avatar" style="width: 100%; height: 100%; border-radius: 8px;">
+                <span class="status-indicator online"></span>
+            </div>
+        </div>
+    </div>
+</header>

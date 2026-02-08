@@ -1,0 +1,597 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Gestion des Quiz - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Hero Section */
+.courses-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 480px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Vertical Filter Bar */
+.hero-filter-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 350px;
+    position: relative;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.hero-filter-bar .dropdown-toggle, .hero-search-wrapper {
+    padding: 1rem 1.25rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000;
+}
+
+.custom-dropdown.active .dropdown-options {
+    display: block;
+    animation: dropdownAnim 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes dropdownAnim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-opt {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.dropdown-opt:hover, .dropdown-opt.active {
+    background: #f8fafc;
+    color: #6366f1;
+}
+
+.hero-search-wrapper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Grid Adjustment */
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+.course-catalog-grid { padding: 0 10% 5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
+
+/* New Quiz Card Style */
+.course-card-premium {
+    background: white;
+    border-radius: 30px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f1f5f9;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+}
+
+.course-card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-badge {
+    padding: 0.5rem 1.1rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-cat { background: #f1f5f9; color: #64748b; }
+.badge-status { background: #fff1f2; color: #e11d48; }
+
+.card-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.5px;
+}
+
+.card-subtitle {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.card-lead {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+}
+
+.lead-icon {
+    width: 36px;
+    height: 36px;
+    background: #6366f1;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.lead-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.card-footer-meta {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.card-btn-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-card {
+    padding: 0.9rem 1.25rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-details-light {
+    flex: 1;
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+.btn-details-light:hover { background: #f1f5f9; }
+
+.btn-action-primary {
+    flex: 1.3;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    box-shadow: 0 8px 15px rgba(99, 102, 241, 0.2);
+}
+
+.btn-action-primary:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 25px rgba(99, 102, 241, 0.3);
+}
+
+.btn-delete-small {
+    padding: 0.9rem;
+    border-radius: 15px;
+    background: #fff1f2;
+    color: #e11d48;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-delete-small:hover { background: #ffe4e6; }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 1rem 2rem; border-radius: 15px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    text-decoration: none; width: fit-content;
+}
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+}
+
+/* Hero Visual Side */
+.hero-visual { position: relative; display: flex; justify-content: flex-end; align-items: center; }
+.hero-illustration-wrapper {
+    width: 420px;
+    height: 420px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.hero-waves {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 100px;
+}
+
+.hero-waves .wave-path {
+    animation: waveMove 20s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.hero-waves .wave-1 { background: transparent; opacity: 0.4; }
+.hero-waves .wave-2 { background: transparent; opacity: 0.6; margin-top: -80px; }
+.hero-waves .wave-3 { background: transparent; opacity: 1; margin-top: -80px; }
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-15%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
+.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
+.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="courses-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <span class="hero-label">Espace Enseignant</span>
+                <h1 class="hero-title">
+                    Gérez et<br>
+                    <span>Optimisez Vos Quiz</span>
+                </h1>
+                
+                <div class="hero-filter-bar">
+                    <!-- Category Dropdown -->
+                    <div class="custom-dropdown" id="pageCategoryDropdown">
+                        <div class="dropdown-toggle">
+                            <i class="fas fa-filter"></i>
+                            <span class="selected-category">Toutes les catégories</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="all">
+                                <i class="fas fa-th-large"></i> Toutes les catégories
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Wrapper -->
+                    <div class="hero-search-wrapper">
+                        <i class="fas fa-search" style="color: #6366f1;"></i>
+                        <input type="text" id="localSearch" placeholder="Rechercher un quiz...">
+                    </div>
+
+                    <a href="{{ path('app_enseignant_quiz_new') }}" class="btn-primary-gradient" style="margin-top: 1rem; width: fit-content;">
+                        <i class="fas fa-plus"></i>
+                        Créer un Quiz
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Quiz illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-3"></div>
+                <div class="hero-frame frame-4"></div>
+                <div class="hero-frame frame-5"></div>
+                <div class="hero-frame frame-6"></div>
+            </div>
+        </div>
+
+        <!-- Hero Transition Waves (Layered Design) -->
+        <div class="hero-waves">
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.3;">
+                <path class="wave-path" fill="#4338ca" d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 15s;"></path>
+            </svg>
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.5; margin-top: -90px;">
+                <path class="wave-path" fill="#6366f1" d="M0,32L80,37.3C160,43,320,53,480,64C640,75,800,85,960,80C1120,75,1280,53,1360,42.7L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 10s; animation-direction: reverse;"></path>
+            </svg>
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="margin-top: -90px;">
+                <path class="wave-path" fill="#f8fafc" d="M0,96L80,85.3C160,75,320,53,480,42.7C640,32,800,32,960,42.7C1120,53,1280,75,1360,85.3L1440,96L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 7s;"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Content Grid -->
+    <div class="course-catalog-grid">
+        {% for formulaire in formulaires %}
+        <div class="course-card-premium">
+            <div class="card-badges">
+                <span class="card-badge badge-cat">{{ formulaire.category|upper }}</span>
+                <span class="card-badge badge-status">RECHERCHE MEMBRES</span>
+            </div>
+            
+            <h3 class="card-title">{{ formulaire.titre|lower }}</h3>
+            <p class="card-subtitle">{{ formulaire.description|u.truncate(60, '...') }}</p>
+            
+            <div class="card-lead">
+                <div class="lead-icon">ÉI</div>
+                <div class="lead-text">Lead: Équipe InnoLearn</div>
+            </div>
+            
+            <div class="card-footer-meta">
+                <span>1/{{ formulaire.questions|length }}</span>
+                <span>Créé: {{ "now"|date("d/m/Y") }}</span>
+                <span>{{ formulaire.tempsLimite }} min</span>
+            </div>
+
+            <div class="card-btn-group">
+                <a href="{{ path('app_enseignant_quiz_edit', {id: formulaire.id}) }}" class="btn-card btn-details-light">
+                    Détails
+                </a>
+                <a href="{{ path('app_enseignant_quiz_questions', {id: formulaire.id}) }}" class="btn-card btn-action-primary">
+                    Questions
+                </a>
+                <form method="post" action="{{ path('app_enseignant_quiz_delete', {id: formulaire.id}) }}" onsubmit="return confirm('Supprimer ce quiz ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formulaire.id) }}">
+                    <button class="btn-delete-small">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.querySelector('.course-catalog-grid');
+    
+    // Unified Dropdown Logic
+    function setupDropdown(dropdownId, onSelect) {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) return;
+        
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const options = dropdown.querySelectorAll('.dropdown-opt');
+        const selectedSpan = dropdown.querySelector('.selected-category');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const val = opt.getAttribute('data-value');
+                selectedSpan.textContent = opt.textContent.trim();
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                dropdown.classList.remove('active');
+                onSelect(val);
+            });
+        });
+    }
+
+    window.onclick = (e) => { 
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+        }
+    };
+
+    // Filtering Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    function updateGrid() {
+        let cards = Array.from(grid.querySelectorAll('.course-card-premium'));
+        
+        cards.forEach(card => {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const cat = card.querySelector('.course-badge').textContent.toLowerCase();
+            
+            const matchesSearch = title.includes(currentSearchQuery.toLowerCase());
+            const matchesCat = currentCategory === 'all' || cat.includes(currentCategory.toLowerCase());
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+    }
+
+    setupDropdown('pageCategoryDropdown', (val) => {
+        currentCategory = val;
+        updateGrid();
+    });
+
+    document.getElementById('localSearch').addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        updateGrid();
+    });
+});
+</script>
+{% endblock %}

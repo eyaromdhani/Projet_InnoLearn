@@ -1,0 +1,28 @@
+{% for offre in offres %}
+<div class="job-card" data-title="{{ offre.titre|lower }} {{ offre.entreprise|lower }}">
+    <div class="job-company-logo">
+        <i class="fas fa-building"></i>
+    </div>
+    <div class="job-info">
+        <h2>{{ offre.titre }}</h2>
+        <div class="job-meta">
+            <span><i class="fas fa-city"></i> {{ offre.entreprise }}</span>
+            <span><i class="fas fa-map-marker-alt"></i> {{ offre.lieu }}</span>
+            <span><i class="fas fa-clock"></i> {{ offre.duree }} mois</span>
+        </div>
+        <div class="job-tags" style="margin-top: 1rem;">
+            <span class="job-tag tag-domain">{{ offre.domaine }}</span>
+        </div>
+    </div>
+    <div class="job-action" style="display: flex; gap: 0.75rem;">
+        <button class="btn-apply" onclick="showOfferDetails({{ offre.id }})" style="background: #f1f5f9; color: #475569;">Détails</button>
+        <button class="btn-primary-gradient" onclick="applyToOffer({{ offre.id }})">Postuler</button>
+    </div>
+</div>
+{% else %}
+<div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+    <i class="fas fa-briefcase" style="font-size: 4rem; color: #e2e8f0; margin-bottom: 1rem;"></i>
+    <h3 style="color: #64748b; font-weight: 700;">Aucune offre trouvée</h3>
+    <p style="color: #94a3b8;">Essayez de modifier vos critères de recherche</p>
+</div>
+{% endfor %}

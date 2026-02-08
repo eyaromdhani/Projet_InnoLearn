@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Résultats du Quiz - {{ formulaire.titre }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 22px;
+            margin: 10px 0;
+            color: #1e293b;
+        }
+        .info-section {
+            margin-bottom: 30px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .info-grid {
+            width: 100%;
+        }
+        .info-grid td {
+            padding: 5px 0;
+        }
+        .label {
+            font-weight: bold;
+            color: #64748b;
+            width: 150px;
+        }
+        .score-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid {% if percentage >= 50 %}#10b981{% else %}#f43f5e{% endif %};
+            border-radius: 12px;
+            background: {% if percentage >= 50 %}#f0fff4{% else %}#fff5f5{% endif %};
+        }
+        .score-value {
+            font-size: 40px;
+            font-weight: bold;
+            color: {% if percentage >= 50 %}#059669{% else %}#dc2626{% endif %};
+        }
+        .score-percentage {
+            font-size: 20px;
+            color: #64748b;
+        }
+        .details-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #1e293b;
+            border-left: 4px solid #6366f1;
+            padding-left: 10px;
+        }
+        .question-block {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .answer {
+            margin-bottom: 5px;
+        }
+        .correct {
+            color: #059669;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">InnoLearn Academy</div>
+        <div class="title">Rapport de Résultats de Quiz</div>
+    </div>
+
+    <div class="info-section">
+        <table class="info-grid">
+            <tr>
+                <td class="label">Quiz :</td>
+                <td>{{ formulaire.titre }}</td>
+            </tr>
+            <tr>
+                <td class="label">Date :</td>
+                <td>{{ "now"|date("d/m/Y H:i") }}</td>
+            </tr>
+            <tr>
+                <td class="label">Statut :</td>
+                <td style="font-weight: bold; color: {% if percentage >= 50 %}#059669{% else %}#dc2626{% endif %};">
+                    {% if percentage >= 50 %}Réussi{% else %}Échec{% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="score-box">
+        <div class="score-value">{{ score }} / {{ total }}</div>
+        <div class="score-percentage">Score Final : {{ percentage }}%</div>
+    </div>
+
+    <div class="details-title">Détails des Réponses</div>
+
+    {% for result in results %}
+    <div class="question-block">
+        <div class="question-text">Question {{ loop.index }} : {{ result.question.questionText }}</div>
+        <div class="answer">
+            Votre réponse : 
+            <span class="{% if result.isCorrect %}correct{% else %}incorrect{% endif %}">
+                {{ result.userAnswer ?: '(Vide)' }}
+            </span>
+        </div>
+        {% if not result.isCorrect %}
+        <div class="answer">
+            Réponse correcte : <span class="correct">{{ result.expected }}</span>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="footer">
+        &copy; {{ "now"|date("Y") }} InnoLearn Academy. Tous droits réservés.
+    </div>
+</body>
+</html>

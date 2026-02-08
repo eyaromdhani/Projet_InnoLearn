@@ -1,0 +1,220 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer_wave %}{% endblock %}
+
+{% block body %}
+<main class="auth-page" style="background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 2rem 0;">
+    <!-- Organic Background Blobs -->
+    <div style="position: absolute; top: -10%; right: -10%; width: 50%; height: 70%; background: var(--gradient-hero); border-radius: 50%; filter: blur(120px); opacity: 0.4;"></div>
+    <div style="position: absolute; bottom: -10%; left: -10%; width: 40%; height: 60%; background: var(--secondary); border-radius: 50%; filter: blur(120px); opacity: 0.3;"></div>
+
+    <!-- Back to Home Button -->
+    <a href="{{ path('app_home') }}" style="position: absolute; top: 2rem; left: 2rem; z-index: 100; display: flex; align-items: center; gap: 0.5rem; color: white; text-decoration: none; font-weight: 500; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 0.75rem 1.25rem; border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Home
+    </a>
+
+    <div class="auth-frame" style="position: relative; z-index: 1; max-width: 1100px; width: 90%; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px; overflow: hidden; display: flex; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);">
+        <!-- Left Side: Portal Animation -->
+        <div class="lock-side" style="flex: 1; padding: 4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border-right: 1px solid rgba(255, 255, 255, 0.05); position: relative;">
+            <div class="portal-scene" style="position: relative; width: 280px; height: 320px; display: flex; flex-direction: column; align-items: center;">
+                <svg id="portal-device" viewBox="0 0 200 240" style="width: 100%; height: 100%; overflow: visible;">
+                    <defs>
+                        <filter id="portalGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur id="slotBlur" stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        <linearGradient id="portalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--secondary-light);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:var(--secondary);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <rect x="30" y="20" width="140" height="200" rx="20" fill="var(--bg-dark)" stroke="url(#portalGrad)" stroke-width="4" />
+                    <rect id="slot-highlight" x="60" y="40" width="80" height="150" rx="4" fill="rgba(255,255,255,0.03)" stroke="url(#portalGrad)" stroke-width="1" filter="url(#portalGlow)"/>
+                    <path class="energy-line" d="M60 60 H140 M60 100 H140 M60 140 H140" stroke="url(#portalGrad)" stroke-width="0.5" stroke-dasharray="2 4" opacity="0.3"/>
+                    
+                    <g class="id-card" style="transform: translateY(-100px);">
+                        <rect x="65" y="45" width="70" height="90" rx="8" fill="rgba(255,255,255,0.1)" stroke="url(#portalGrad)" stroke-width="2"/>
+                        <rect x="75" y="55" width="30" height="30" rx="4" fill="url(#portalGrad)" opacity="0.6"/>
+                        <rect x="75" y="95" width="50" height="4" rx="2" fill="white" opacity="0.4"/>
+                        <rect x="75" y="105" width="40" height="4" rx="2" fill="white" opacity="0.4"/>
+                    </g>
+                    
+                    <line id="scanner-beam" x1="60" y1="40" x2="140" y2="40" stroke="var(--secondary-light)" stroke-width="2" opacity="0" filter="url(#portalGlow)"/>
+                </svg>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <h2 style="color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Join the Adventure</h2>
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">Your journey to knowledge starts with one click.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="form-side" style="flex: 1.2; padding: 4rem;">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h1 style="color: white; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem;">Create Account</h1>
+                <p style="color: rgba(255, 255, 255, 0.6);">Be part of our innovative community.</p>
+            </div>
+
+            {% if errors is defined and errors|length > 0 %}
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                    <p style="margin: 0; font-weight: 500; margin-bottom: 0.5rem;">Please correct the following errors:</p>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        {% for field, message in errors %}
+                            <li><strong>{{ field }}:</strong> {{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="post" class="auth-form" id="signup-form" data-turbo="false">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Full Name</label>
+                        <input type="text" name="name" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Username</label>
+                        <input type="text" name="username" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="johndoe123" required>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Email Address</label>
+                    <input type="email" name="email" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="john@example.com" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Code</label>
+                        <input type="text" name="countryCode" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="+1">
+                    </div>
+                    <div>
+                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Phone Number</label>
+                        <input type="text" name="phoneNumber" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="1234567890">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">I want to be a...</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+                        <label class="role-card" style="cursor: pointer; position: relative;">
+                            <input type="radio" name="role" value="student" style="display: none;" required checked>
+                            <div class="card-inner" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem; text-align: center; color: white; transition: all 0.3s;">
+                                <span style="display: block; font-size: 1.2rem; margin-bottom: 0.25rem;">🎓</span>
+                                <span style="font-weight: 500; font-size: 0.85rem;">Student</span>
+                            </div>
+                        </label>
+                        <label class="role-card" style="cursor: pointer; position: relative;">
+                            <input type="radio" name="role" value="instructor" style="display: none;">
+                            <div class="card-inner" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem; text-align: center; color: white; transition: all 0.3s;">
+                                <span style="display: block; font-size: 1.2rem; margin-bottom: 0.25rem;">👨‍🏫</span>
+                                <span style="font-weight: 500; font-size: 0.85rem;">Instructor</span>
+                            </div>
+                        </label>
+                        <label class="role-card" style="cursor: pointer; position: relative;">
+                            <input type="radio" name="role" value="recruiter" style="display: none;">
+                            <div class="card-inner" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem; text-align: center; color: white; transition: all 0.3s;">
+                                <span style="display: block; font-size: 1.2rem; margin-bottom: 0.25rem;">💼</span>
+                                <span style="font-weight: 500; font-size: 0.85rem;">Recruiter</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Create Password</label>
+                    <input type="password" name="password" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="signup-btn" style="width: 100%; justify-content: center; padding: 1.1rem; font-size: 1.1rem; margin-bottom: 1.5rem; transition: all 0.3s; position: relative; overflow: hidden; background: var(--gradient-organic); border: none; color: white; font-weight: 900; border-radius: 12px; cursor: pointer;">
+                    <span class="btn-text">Let's Go!</span>
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.95rem;">Already a member? <a href="{{ path('app_login') }}" style="color: white; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--secondary);">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('signup-form');
+            const inputs = form.querySelectorAll('input:not([type="radio"])');
+            const radioInputs = form.querySelectorAll('input[type="radio"]');
+            const card = document.querySelector('.id-card');
+            const slot = document.getElementById('slot-highlight');
+            const slotBlur = document.getElementById('slotBlur');
+            const scanner = document.getElementById('scanner-beam');
+            const portal = document.getElementById('portal-device');
+            const scene = document.querySelector('.portal-scene');
+            
+            const weights = { name: 0.15, username: 0.15, email: 0.15, countryCode: 0.05, phoneNumber: 0.1, role: 0.15, password: 0.25 };
+            
+            const updateProgress = () => {
+                let totalProgress = 0;
+                inputs.forEach(input => {
+                    const weight = weights[input.name] || 0.1;
+                    const valLength = input.value.length;
+                    const fieldProgress = Math.min(valLength / 8, 1); 
+                    totalProgress += fieldProgress * weight;
+                });
+
+                totalProgress += weights['role'];
+
+                gsap.to(card, { y: -100 + (totalProgress * 130), duration: 0.5, ease: "power2.out" });
+                gsap.to(slot, { strokeWidth: 1 + (totalProgress * 3), duration: 0.4 });
+                gsap.to(slotBlur, { attr: { stdDeviation: 2 + (totalProgress * 4) }, duration: 0.4 });
+                gsap.to('.energy-line', { opacity: 0.3 + (totalProgress * 0.7), duration: 0.4 });
+            };
+
+            inputs.forEach(input => input.addEventListener('input', updateProgress));
+            radioInputs.forEach(radio => radio.addEventListener('change', updateProgress));
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const tl = gsap.timeline({ onComplete: () => { form.submit(); } });
+
+                tl.to(card, { y: 70, duration: 0.25, ease: "power4.in" })
+                  .to(scene, { y: 10, duration: 0.1, ease: "power2.in" }, "-=0.05")
+                  .to(scene, { y: 0, duration: 0.4, ease: "elastic.out(1, 0.3)" })
+                  .to(scanner, { opacity: 1, attr: { y1: 190, y2: 190 }, duration: 0.3, ease: "power2.inOut" }, "-=0.2")
+                  .to(slotBlur, { attr: { stdDeviation: 10 }, duration: 0.15 }, "-=0.1")
+                  .to(portal, { scale: 1.05, filter: "drop-shadow(0 0 30px var(--secondary-light))", duration: 0.4, ease: "back.out(2)" }, "-=0.1");
+            });
+
+            {% if errors is defined and errors|length > 0 %}
+            // Error Animation
+            gsap.timeline()
+                .fromTo(scene, { x: -10 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true })
+                .to(scanner, { opacity: 1, stroke: "#ef4444", attr: { y1: 80, y2: 80 }, duration: 0.3 }, 0)
+                .to(card, { y: -120, duration: 0.5, ease: "back.out(2)" }, 0.5)
+                .to(portal, { filter: "drop-shadow(0 0 30px rgba(239, 68, 68, 0.5))", duration: 0.3 }, 0);
+            {% endif %}
+        });
+    </script>
+</main>
+
+<style>
+    input[type="radio"]:checked + .card-inner {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: var(--secondary) !important;
+        box-shadow: 0 0 20px rgba(116, 185, 255, 0.2);
+    }
+    
+    .role-card:hover .card-inner {
+        background: rgba(255, 255, 255, 0.08) !important;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

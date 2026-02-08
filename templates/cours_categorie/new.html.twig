@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CoursCategorie{% endblock %}
+
+{% block body %}
+    <h1>Create new CoursCategorie</h1>
+
+    {{ include('cours_categorie/_form.html.twig') }}
+
+    <a href="{{ path('app_cours_categorie_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ title }} - Gestion{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">Recent {{ title }}</h3>
+        <button class="btn-primary">Ajouter Nouveau</button>
+    </div>
+    <div class="table-responsive">
+        {% if title == 'Projets' %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom du Projet</th>
+                        <th>Client</th>
+                        <th>Statut</th>
+                        <th>Progression</th>
+                        <th>Échéance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TailAdmin Brand Design</td>
+                        <td>Google Inc.</td>
+                        <td><span class="badge badge-success">Complété</span></td>
+                        <td>
+                            <div class="progress-container"><div class="progress-bar" style="width: 100%;"></div></div>
+                        </td>
+                        <td>24 Oct, 2025</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile App Development</td>
+                        <td>Apple Support</td>
+                        <td><span class="badge badge-warning">En cours</span></td>
+                        <td>
+                            <div class="progress-container"><div class="progress-bar" style="width: 65%;"></div></div>
+                        </td>
+                        <td>12 Nov, 2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% elseif title == 'Utilisateurs' %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Inscrit le</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="user-avatar" style="width:32px; height:32px;">TA</div>
+                                <span>Thomas Anree</span>
+                            </div>
+                        </td>
+                        <td>UX Designer</td>
+                        <td><span class="badge badge-success">Actif</span></td>
+                        <td>20 Jan, 2026</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% elseif title == 'Paramètres' %}
+            <form class="settings-form">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" value="Thomas Anree">
+                </div>
+                <div class="form-group">
+                    <label>Adresse Email</label>
+                    <input type="email" value="thomas@example.com">
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Biographie</label>
+                    <textarea rows="4">Professional UX Designer based in Paris.</textarea>
+                </div>
+                <div>
+                    <button type="button" class="btn-primary">Enregistrer les modifications</button>
+                </div>
+            </form>
+        {% else %}
+            <div style="padding: 3rem; text-align: center;">
+                <p style="color: #64748B;">Pas encore de données disponibles pour {{ title }}.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+ -------------------- ----------- ------------- 
+  column_name          data_type   is_nullable  
+ -------------------- ----------- ------------- 
+  id                   int         NO           
+  nom                  varchar     NO           
+  description          longtext    NO           
+  slug                 varchar     NO           
+  type_media           varchar     NO           
+  media_url            varchar     NO           
+  duree                int         NO           
+  niveau               varchar     NO           
+  date_creation        datetime    NO           
+  enseignant           varchar     NO           
+  categorie_cours_id   int         NO           
+ -------------------- ----------- ------------- 
+

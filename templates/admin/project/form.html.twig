@@ -1,0 +1,91 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ form_title }} - Admin{% endblock %}
+
+{% block page_title %}{{ form_title }}{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">{{ form_title }}</h3>
+        <a href="{{ path('admin_projects') }}" class="btn-primary" style="background: #64748b;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Retour à la liste
+        </a>
+    </div>
+    
+    <div class="card-body">
+        {{ form_start(form, {'attr': {'class': 'settings-form'}}) }}
+        
+        {% if form_errors(form) %}
+            <div style="background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+        
+        <div class="form-group" style="grid-column: span 2;">
+            {{ form_label(form.title, 'Titre du projet', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1C2434;'}}) }}
+            {{ form_widget(form.title, {'attr': {
+                'class': 'form-control',
+                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;',
+                'placeholder': 'Entrez le titre du projet'
+            }}) }}
+            {{ form_errors(form.title) }}
+        </div>
+        
+        <div class="form-group" style="grid-column: span 2;">
+            {{ form_label(form.description, 'Description', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1C2434;'}}) }}
+            {{ form_widget(form.description, {'attr': {
+                'class': 'form-control',
+                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; min-height: 120px;',
+                'placeholder': 'Décrivez le projet en détail',
+                'rows': 4
+            }}) }}
+            {{ form_errors(form.description) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.status, 'Statut', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1C2434;'}}) }}
+            {{ form_widget(form.status, {'attr': {
+                'class': 'form-control',
+                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;'
+            }}) }}
+            {{ form_errors(form.status) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.startDate, 'Date de début', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1C2434;'}}) }}
+            {{ form_widget(form.startDate, {'attr': {
+                'class': 'form-control',
+                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;'
+            }}) }}
+            {{ form_errors(form.startDate) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.endDate, 'Date de fin (optionnel)', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1C2434;'}}) }}
+            {{ form_widget(form.endDate, {'attr': {
+                'class': 'form-control',
+                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;'
+            }}) }}
+            {{ form_errors(form.endDate) }}
+        </div>
+        
+        <div style="grid-column: span 2; margin-top: 1.5rem;">
+            <button type="submit" class="btn-primary" style="display: inline-flex; align-items: center;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+                {% if project.id %}Mettre à jour{% else %}Créer le projet{% endif %}
+            </button>
+            <a href="{{ path('admin_projects') }}" style="margin-left: 1rem; padding: 0.75rem 1.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; color: #64748B; text-decoration: none; font-weight: 500;">
+                Annuler
+            </a>
+        </div>
+        
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
