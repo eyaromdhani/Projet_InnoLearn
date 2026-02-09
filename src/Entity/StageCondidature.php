@@ -56,11 +56,13 @@ class StageCondidature
     #[Assert\NotBlank(message: "Le statut est obligatoire.")]
     private ?string $statut = null;
 
-    #[ORM\Column]
-    private ?int $id_etudiant = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'stageCondidatures')]
+    #[ORM\JoinColumn(name: "id_etudiant", referencedColumnName: "id")]
+    private ?User $id_etudiant = null;
 
-    #[ORM\Column]
-    private ?int $id_offre = null;
+    #[ORM\ManyToOne(targetEntity: OffreStage::class, inversedBy: 'stageCondidatures')]
+    #[ORM\JoinColumn(name: "id_offre", referencedColumnName: "id", nullable: true)]
+    private ?OffreStage $id_offre = null;
 
     public function getId(): ?int
     {
@@ -175,24 +177,24 @@ class StageCondidature
         return $this;
     }
 
-    public function getIdEtudiant(): ?int
+    public function getIdEtudiant(): ?User
     {
         return $this->id_etudiant;
     }
 
-    public function setIdEtudiant(int $id_etudiant): static
+    public function setIdEtudiant(?User $id_etudiant): static
     {
         $this->id_etudiant = $id_etudiant;
 
         return $this;
     }
 
-    public function getIdOffre(): ?int
+    public function getIdOffre(): ?OffreStage
     {
         return $this->id_offre;
     }
 
-    public function setIdOffre(int $id_offre): static
+    public function setIdOffre(?OffreStage $id_offre): static
     {
         $this->id_offre = $id_offre;
 

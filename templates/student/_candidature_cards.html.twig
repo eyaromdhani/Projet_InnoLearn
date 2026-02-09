@@ -11,6 +11,11 @@
             <span class="status-badge status-{{ candidature.statut }}">
                 <i class="fas fa-circle"></i> {{ candidature.statut|capitalize }}
             </span>
+            {% if candidature.statut == 'acceptée' %}
+                <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #10b981; font-weight: 600;">
+                    <i class="fas fa-info-circle"></i> Un email vous sera envoyé dans les plus brefs délais.
+                </div>
+            {% endif %}
         </div>
         <p class="candidature-desc">{{ candidature.description|slice(0, 120) }}{% if candidature.description|length > 120 %}...{% endif %}</p>
     </div>

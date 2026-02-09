@@ -94,7 +94,7 @@ class OffreStageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function searchAllStages(string $input = '', ?int $duree = null, string $sort = 'desc', ?string $entreprise = null, ?\DateTimeInterface $minDate = null, ?\DateTimeInterface $maxDate = null): array
+    public function searchAllStages(string $input = '', ?int $duree = null, string $sort = 'desc', ?string $entreprise = null, ?\DateTimeInterface $minDate = null, ?\DateTimeInterface $maxDate = null, ?\App\Entity\User $recruteur = null): array
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.statut = :statut')
@@ -113,6 +113,11 @@ class OffreStageRepository extends ServiceEntityRepository
         if ($entreprise) {
             $qb->andWhere('o.entreprise = :entreprise')
                 ->setParameter('entreprise', $entreprise);
+        }
+
+        if ($recruteur) {
+            $qb->andWhere('o.id_recruteur = :recruteur')
+                ->setParameter('recruteur', $recruteur);
         }
 
         if ($minDate) {

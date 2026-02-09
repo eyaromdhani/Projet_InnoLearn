@@ -55,10 +55,9 @@
                 <div class="error-message" id="error-{{ form.description.vars.id }}" style="color: #ef4444; font-size: 0.75rem; font-weight: 600; display: none;"></div>
             </div>
 
-            {# Hidden/Auto Fields #}
+            {# Hidden/Auto Fields & CSRF Token #}
             <div style="display: none;">
-                {{ form_widget(form.datePublication) }}
-                {{ form_widget(form.statut) }}
+                {{ form_rest(form) }}
             </div>
 
             {# Submit Button #}

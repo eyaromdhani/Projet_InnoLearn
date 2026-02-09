@@ -32,6 +32,8 @@ use App\Repository\EventRepository;
 use App\Repository\InscritEventRepository;
 use App\Enum\StatutEvenementEnum;
 use App\Entity\InscritEvent;
+use App\Form\InscritEventType;
+use App\Entity\User;
 #[Route('/student')]
 class StudentController extends AbstractController
 {
@@ -98,8 +100,10 @@ class StudentController extends AbstractController
         $course->setDateCreation(new \DateTime());
 
         // Try to set current user as teacher if logged in
-        if ($this->getUser()) {
-            $course->setEnseignant($this->getUser());
+        if ($user = $this->getUser()) {
+            if ($user instanceof User) {
+                $course->setEnseignant($user->getName() ?? $user->getUserIdentifier());
+            }
         }
 
         $form = $this->createForm(CoursType::class, $course);
@@ -564,14 +568,14 @@ class StudentController extends AbstractController
     }
 
     #[Route('/event/participate', name: 'student_event_participate', methods: ['POST'])]
-    public function participate(Request $request, EntityManagerInterface $entityManager, EventRepository $eventRepository): Response
+    public function participate(Request $request, EntityManagerInterface $entityManager, EventRepository $eventRepository, ValidatorInterface $validator): Response
     {
         $eventId = $request->request->get('event_id');
         $name = $request->request->get('name');
         $email = $request->request->get('email');
 
-        if (!$eventId || !$name || !$email) {
-            $this->addFlash('error', 'Tous les champs sont requis.');
+        if (!$eventId) {
+            $this->addFlash('error', 'Événement non spécifié.');
             return $this->redirectToRoute('app_student_events');
         }
 
@@ -583,10 +587,19 @@ class StudentController extends AbstractController
 
         $inscription = new InscritEvent();
         $inscription->setEvent($event);
-        $inscription->setName($name);
-        $inscription->setEmail($email);
+        $inscription->setName($name ?? '');
+        $inscription->setEmail($email ?? '');
         $inscription->setDateInscrit(new \DateTime());
         $inscription->setStatus('En attente');
+
+        $errors = $validator->validate($inscription);
+
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+            return $this->redirectToRoute('app_student_events');
+        }
 
         $entityManager->persist($inscription);
         $entityManager->flush();
@@ -640,8 +653,7 @@ class StudentController extends AbstractController
             $maxDateFilter
         );
 
-        $currentStudentId = $ownership === 'mine' ? 1 : null; // Mock ID
-
+        $user = $this->getUser();
         // Fetch candidatures
         $candidatures = $stageCondidatureRepository->searchAll(
             $search,
@@ -651,7 +663,7 @@ class StudentController extends AbstractController
             $sort,
             null,
             null,
-            $currentStudentId
+            ($ownership === 'mine' && $user instanceof \App\Entity\User) ? $user : null
         );
 
         // Filter options
@@ -724,11 +736,14 @@ class StudentController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
-        $studentId = 1; // Mock ID
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            return $this->json(['success' => false, 'message' => 'Vous devez être connecté pour postuler.'], 401);
+        }
 
         $existing = $entityManager->getRepository(StageCondidature::class)->findOneBy([
-            'id_etudiant' => $studentId,
-            'id_offre' => $offre->getId()
+            'id_etudiant' => $user,
+            'id_offre' => $offre
         ]);
 
         if ($existing) {
@@ -737,7 +752,23 @@ class StudentController extends AbstractController
 
         // Get FormData (not JSON anymore)
         $motivation = $request->request->get('motivation', '');
+        $titre = trim($request->request->get('titre', ''));
+        $domaine = trim($request->request->get('domaine', ''));
+        $competences = trim($request->request->get('competences', ''));
+        $description = trim($request->request->get('description', ''));
         $cvFile = $request->files->get('cv');
+
+        if (strlen($titre) < 5) {
+            return $this->json(['success' => false, 'message' => 'Le titre doit faire au moins 5 caractères.'], 400);
+        }
+
+        if (empty($domaine)) {
+            return $this->json(['success' => false, 'message' => 'Le domaine est obligatoire.'], 400);
+        }
+
+        if (strlen($description) < 20) {
+            return $this->json(['success' => false, 'message' => 'La description doit faire au moins 20 caractères.'], 400);
+        }
 
         if (strlen($motivation) < 50) {
             return $this->json(['success' => false, 'message' => 'La lettre de motivation doit faire au moins 50 caractères.'], 400);
@@ -771,12 +802,12 @@ class StudentController extends AbstractController
         }
 
         $candidature = new StageCondidature();
-        $candidature->setIdOffre($offre->getId());
-        $candidature->setIdEtudiant($studentId);
-        $candidature->setTitre($offre->getTitre());
-        $candidature->setDescription($offre->getDescription());
-        $candidature->setDomaine($offre->getDomaine());
-        $candidature->setCompetences($offre->getCompetences() ?? '');
+        $candidature->setIdOffre($offre);
+        $candidature->setIdEtudiant($user);
+        $candidature->setTitre($titre);
+        $candidature->setDescription($description);
+        $candidature->setDomaine($domaine);
+        $candidature->setCompetences($competences);
         $candidature->setDatePublication(new \DateTime());
         $candidature->setStatut('en_attente');
         $candidature->setTypeRequest('offre');
@@ -804,6 +835,11 @@ class StudentController extends AbstractController
     ): Response {
         if (!$request->isXmlHttpRequest()) {
             return $this->json(['success' => false, 'message' => 'Requête invalide.'], 400);
+        }
+
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            return $this->json(['success' => false, 'message' => 'Vous devez être connecté.'], 401);
         }
 
         // Get form data (FormData, not JSON)
@@ -882,8 +918,8 @@ class StudentController extends AbstractController
         $candidature->setTypeRequest('demande');
         $candidature->setDatePublication(new \DateTime());
         $candidature->setStatut('en_attente');
-        $candidature->setIdEtudiant(1); // Mock student ID
-        $candidature->setIdOffre(0); // 0 for spontaneous applications
+        $candidature->setIdEtudiant($user);
+        $candidature->setIdOffre(null); // null for spontaneous applications
 
         $entityManager->persist($candidature);
         $entityManager->flush();

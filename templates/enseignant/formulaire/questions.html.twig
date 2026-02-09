@@ -31,6 +31,34 @@
     z-index: 10;
 }
 
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.btn-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-back-link:hover {
+    color: white;
+    transform: translateX(-5px);
+}
+
 .hero-visual { position: relative; display: flex; justify-content: flex-end; align-items: center; }
 .hero-illustration-wrapper {
     width: 420px;
@@ -98,60 +126,146 @@
 }
 
 
-/* Decorative Bottom Section */
-.decorative-bottom-section {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
-    padding: 6rem 0 100px;
-    position: relative;
-    overflow: hidden;
-    margin-top: 4rem;
-}
-
-.bottom-content-wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    z-index: 10;
-}
-
-.bottom-visual { position: relative; }
-.bottom-illustration-wrapper {
-    width: 250px;
-    height: 250px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
+/* Premium Primary Button */
+.btn-primary-gradient {
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-    animation: float 6s ease-in-out infinite;
+    gap: 0.75rem;
+    font-size: 1rem;
+    text-decoration: none;
 }
 
-.bottom-illustration { width: 85%; height: 85%; object-fit: contain; }
-
-.bottom-waves {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    line-height: 0;
-    z-index: 20;
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+    filter: brightness(1.1);
 }
 
-.bottom-waves svg {
+.btn-primary-gradient:active {
+    transform: translateY(1px);
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.add-question-section {
+    background: white;
+    border-radius: 30px;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 4rem;
+}
+
+.question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+}
+
+.question-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    border-color: #6366f1;
+}
+
+.q-number {
+    width: 40px;
+    height: 40px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #6366f1;
+    font-size: 1.1rem;
+}
+
+.q-content { flex: 1; }
+.q-text { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
+.q-badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+.q-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-type { background: #eef2ff; color: #6366f1; }
+.badge-points { background: #fff7ed; color: #f97316; }
+.badge-answer { background: #f0fdf4; color: #16a34a; }
+
+.q-actions { display: flex; gap: 0.75rem; }
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-edit { background: #f1f5f9; color: #475569; }
+.btn-edit:hover { background: #e2e8f0; color: #1e293b; }
+.btn-delete { background: #fef2f2; color: #ef4444; }
+.btn-delete:hover { background: #fee2e2; transform: scale(1.1); }
+
+.form-label {
     display: block;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
     width: 100%;
-    height: 80px;
-    fill: #f8fafc;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid #f1f5f9;
+    background: #f8fafc !important;
+    font-weight: 600;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6366f1;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
 .dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
@@ -211,7 +325,7 @@
         </div>
     </section>
 
-    <div class="container py-4" style="max-width: 1000px; padding: 0 2rem;">
+    <div class="container py-5" style="max-width: 1000px; padding: 0 2rem 150px;">
         <!-- Add Question -->
         <div class="add-question-section">
             <h2 class="section-title">
@@ -300,26 +414,6 @@
         {% endif %}
     </div>
 
-    <!-- Decorative Bottom Section -->
-    <section class="decorative-bottom-section">
-        <div class="bottom-content-wrapper">
-            <div class="bottom-visual">
-                <div class="bottom-illustration-wrapper">
-                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="bottom-illustration" alt="Teacher Illustration">
-                </div>
-                <div class="hero-frame frame-1"></div>
-                <div class="hero-frame frame-2"></div>
-                <div class="hero-frame frame-4"></div>
-            </div>
-        </div>
-        
-        <!-- Bottom Waves -->
-        <div class="bottom-waves">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-            </svg>
-        </div>
-    </section>
 </div>
 {% endblock %}
 

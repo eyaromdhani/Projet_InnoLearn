@@ -1,14 +1,16 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'eventForm'}}) }}
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
         <div class="form-group" style="grid-column: span 2;">
             {{ form_label(form.titre, 'Titre de l\'événement', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #475569;'}}) }}
-            {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px;', 'placeholder': 'Ex: Conférence IA'}}) }}
+            {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px;', 'placeholder': 'Ex: Conférence IA', 'id': 'event_titre'}}) }}
+            <div id="titre-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">Le titre doit contenir au moins 3 caractères.</div>
             {{ form_errors(form.titre) }}
         </div>
 
         <div class="form-group" style="grid-column: span 2;">
             {{ form_label(form.description, 'Description', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #475569;'}}) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; min-height: 100px;'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; min-height: 100px;', 'id': 'event_description'}}) }}
+            <div id="description-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">La description est obligatoire.</div>
             {{ form_errors(form.description) }}
         </div>
 
@@ -45,7 +47,8 @@
 
         <div class="form-group">
             {{ form_label(form.capacite, 'Capacité', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 500; color: #475569;'}}) }}
-            {{ form_widget(form.capacite, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px;'}}) }}
+            {{ form_widget(form.capacite, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px;', 'id': 'event_capacite'}}) }}
+            <div id="capacite-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">La capacité doit être un nombre positif.</div>
             {{ form_errors(form.capacite) }}
         </div>
 
@@ -116,6 +119,66 @@
         document.addEventListener('click', function(e) {
             if (e.target !== input && e.target !== suggestionsContainer) {
                 suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        // Real-time validation
+        const form = document.getElementById('eventForm');
+        const titre = document.getElementById('event_titre');
+        const description = document.getElementById('event_description');
+        const capacite = document.getElementById('event_capacite');
+        
+        const titreError = document.getElementById('titre-error');
+        const descriptionError = document.getElementById('description-error');
+        const capaciteError = document.getElementById('capacite-error');
+
+        function validateTitre() {
+            if (titre.value.trim().length < 3) {
+                titre.style.borderColor = '#ef4444';
+                titreError.style.display = 'block';
+                return false;
+            } else {
+                titre.style.borderColor = '#cbd5e1';
+                titreError.style.display = 'none';
+                return true;
+            }
+        }
+
+        function validateDescription() {
+            if (description.value.trim().length < 1) {
+                description.style.borderColor = '#ef4444';
+                descriptionError.style.display = 'block';
+                return false;
+            } else {
+                description.style.borderColor = '#cbd5e1';
+                descriptionError.style.display = 'none';
+                return true;
+            }
+        }
+
+        function validateCapacite() {
+            if (parseInt(capacite.value) <= 0 || isNaN(parseInt(capacite.value))) {
+                capacite.style.borderColor = '#ef4444';
+                capaciteError.style.display = 'block';
+                return false;
+            } else {
+                capacite.style.borderColor = '#cbd5e1';
+                capaciteError.style.display = 'none';
+                return true;
+            }
+        }
+
+        titre.addEventListener('input', validateTitre);
+        description.addEventListener('input', validateDescription);
+        capacite.addEventListener('input', validateCapacite);
+
+        form.addEventListener('submit', function(e) {
+            const isTitreValid = validateTitre();
+            const isDescriptionValid = validateDescription();
+            const isCapaciteValid = validateCapacite();
+
+            if (!isTitreValid || !isDescriptionValid || !isCapaciteValid) {
+                e.preventDefault();
             }
         });
     });

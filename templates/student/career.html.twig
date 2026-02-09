@@ -1613,16 +1613,71 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     window.submitApplication = function(id) {
-        const motivation = document.getElementById('motivationLetter');
-        const motivationError = document.getElementById('motivationError');
+        const titreInput = document.getElementById('applicationTitre');
+        const domaineInput = document.getElementById('applicationDomaine');
+        const competencesInput = document.getElementById('applicationCompetences');
+        const descriptionInput = document.getElementById('applicationDescription');
+        const motivationInput = document.getElementById('motivationLetter');
         const cvInput = document.getElementById('applicationCvFile');
+        
+        const titreError = document.getElementById('titreError');
+        const domaineError = document.getElementById('domaineError');
+        const competencesError = document.getElementById('competencesError');
+        const descriptionError = document.getElementById('descriptionError');
+        const motivationError = document.getElementById('motivationError');
         const cvError = document.getElementById('cvError');
         
         let isValid = true;
         
-        // Validate CV file
+        // Reset errors
+        [titreError, domaineError, competencesError, descriptionError, motivationError, cvError].forEach(el => {
+            if (el) {
+                el.style.display = 'none';
+                el.textContent = '';
+            }
+        });
+        [titreInput, domaineInput, competencesInput, descriptionInput, motivationInput].forEach(el => {
+            if (el) el.style.borderColor = '#e2e8f0';
+        });
+
+        // Validation
+        if (!titreInput || titreInput.value.trim().length < 5) {
+            if (titreError) {
+                titreError.textContent = "Le titre doit faire au moins 5 caractères.";
+                titreError.style.display = 'block';
+            }
+            if (titreInput) titreInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        if (!domaineInput || !domaineInput.value.trim()) {
+            if (domaineError) {
+                domaineError.textContent = "Le domaine est obligatoire.";
+                domaineError.style.display = 'block';
+            }
+            if (domaineInput) domaineInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        if (!competencesInput || !competencesInput.value.trim()) {
+            if (competencesError) {
+                competencesError.textContent = "Les compétences sont obligatoires.";
+                competencesError.style.display = 'block';
+            }
+            if (competencesInput) competencesInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        if (!descriptionInput || descriptionInput.value.trim().length < 20) {
+            if (descriptionError) {
+                descriptionError.textContent = "La description doit faire au moins 20 caractères.";
+                descriptionError.style.display = 'block';
+            }
+            if (descriptionInput) descriptionInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
         const cvFile = cvInput ? cvInput.files[0] : null;
-        
         if (!cvFile) {
             if (cvError) {
                 cvError.textContent = "Le CV est obligatoire.";
@@ -1641,24 +1696,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 cvError.style.display = 'block';
             }
             isValid = false;
-        } else {
-            if (cvError) cvError.style.display = 'none';
         }
         
-        // Validate motivation letter
-        if (!motivation) return;
-        
-        const motivationValue = motivation.value.trim();
+        const motivationValue = motivationInput ? motivationInput.value.trim() : '';
         if (motivationValue.length < 50) {
-            motivation.style.borderColor = '#ef4444';
+            if (motivationInput) motivationInput.style.borderColor = '#ef4444';
             if (motivationError) {
                 motivationError.textContent = "Votre lettre de motivation doit faire au moins 50 caractères.";
                 motivationError.style.display = 'block';
             }
             isValid = false;
-        } else {
-            motivation.style.borderColor = '#e2e8f0';
-            if (motivationError) motivationError.style.display = 'none';
         }
         
         if (!isValid) return;
@@ -1667,6 +1714,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Create FormData for file upload
         const formData = new FormData();
+        formData.append('titre', titreInput.value.trim());
+        formData.append('domaine', domaineInput.value.trim());
+        formData.append('competences', competencesInput.value.trim());
+        formData.append('description', descriptionInput.value.trim());
         formData.append('cv', cvFile);
         formData.append('motivation', motivationValue);
 

@@ -23,9 +23,9 @@ class RecruteurController extends AbstractController
     }
 
     #[Route('/stages', name: 'app_recruteur_stages')]
-    public function stages(Request $request, OffreStageRepository $offreStageRepository, EntityManagerInterface $entityManager): Response
+    public function stages(Request $request, OffreStageRepository $offreStageRepository, StageCondidatureRepository $stageCondidatureRepository, EntityManagerInterface $entityManager): Response
     {
-        return $this->handleOffers($request, $offreStageRepository, $entityManager, 'recruteur/stages.html.twig');
+        return $this->handleOffers($request, $offreStageRepository, $stageCondidatureRepository, $entityManager, 'recruteur/stages.html.twig');
     }
 
     private function handleStages(Request $request, StageCondidatureRepository $repository, OffreStageRepository $offreStageRepository, EntityManagerInterface $entityManager, string $template): Response
@@ -41,7 +41,20 @@ class RecruteurController extends AbstractController
         $minDate = $minDateStr ? new \DateTime('@' . $minDateStr) : null;
         $maxDate = $maxDateStr ? new \DateTime('@' . $maxDateStr) : null;
 
-        $condidatures = $repository->searchAll($search, $domaine, $minDate, $maxDate, $sort, $typeRequest, $idOffre ? (int) $idOffre : null);
+        // Filter candidatures for the recruiter's offers
+        $condidatures = $repository->searchAll(
+            $search,
+            $domaine,
+            $minDate,
+            $maxDate,
+            $sort,
+            $typeRequest,
+            $idOffre ? (int) $idOffre : null,
+            null,
+            $this->getUser()
+        );
+
+        $recentCandidatures = $repository->findRecentByRecruiter($this->getUser());
         $domains = $repository->getDistinctDomains();
         $allOffers = $offreStageRepository->findAll();
         $dateRangeRaw = $repository->getDateRange();
@@ -80,6 +93,9 @@ class RecruteurController extends AbstractController
                 $offre->setStatut('ouverte');
             }
 
+            // Automatically assign the current logged-in user as the recruiter
+            $offre->setIdRecruteur($this->getUser());
+
             $entityManager->persist($offre);
             $entityManager->flush();
 
@@ -107,11 +123,12 @@ class RecruteurController extends AbstractController
                 'type_request' => $typeRequest,
                 'id_offre' => $idOffre
             ],
-            'all_offers' => $allOffers
+            'all_offers' => $allOffers,
+            'recent_candidatures' => $recentCandidatures
         ]);
     }
 
-    private function handleOffers(Request $request, OffreStageRepository $offreStageRepository, EntityManagerInterface $entityManager, string $template): Response
+    private function handleOffers(Request $request, OffreStageRepository $offreStageRepository, StageCondidatureRepository $stageCondidatureRepository, EntityManagerInterface $entityManager, string $template): Response
     {
         $search = $request->query->get('searchbar', '');
         $entreprise = $request->query->get('entreprise', 'all');
@@ -124,12 +141,16 @@ class RecruteurController extends AbstractController
         $minDate = $minDateStr ? (new \DateTime())->setTimestamp((int) $minDateStr) : null;
         $maxDate = $maxDateStr ? (new \DateTime())->setTimestamp((int) $maxDateStr) : null;
 
+        $recentCandidatures = $stageCondidatureRepository->findRecentByRecruiter($this->getUser());
+
         // For the sake of this prototype, we'll assume the recruiter's company is "InnoLearn"
         $myEntreprise = "InnoLearn";
 
         $entrepriseFilter = null;
+        $recruteurFilter = null;
+
         if ($ownership === 'mine') {
-            $entrepriseFilter = $myEntreprise;
+            $recruteurFilter = $this->getUser();
         } elseif ($entreprise !== 'all' && !empty($entreprise)) {
             $entrepriseFilter = $entreprise;
         }
@@ -140,7 +161,8 @@ class RecruteurController extends AbstractController
             $sort,
             $entrepriseFilter,
             $minDate,
-            $maxDate
+            $maxDate,
+            $recruteurFilter
         );
 
         $companies = $offreStageRepository->getDistinctCompanies();
@@ -174,6 +196,9 @@ class RecruteurController extends AbstractController
                 $offre->setStatut('ouverte');
             }
 
+            // Automatically assign the current logged-in user as the recruiter
+            $offre->setIdRecruteur($this->getUser());
+
             $entityManager->persist($offre);
             $entityManager->flush();
 
@@ -201,14 +226,19 @@ class RecruteurController extends AbstractController
                 'ownership' => $ownership,
                 'min_date' => $request->query->get('min_date'),
                 'max_date' => $request->query->get('max_date'),
-            ]
+            ],
+            'recent_candidatures' => $recentCandidatures
         ]);
     }
     #[Route('/candidature/{id}/details', name: 'app_recruteur_candidature_details_ajax', methods: ['GET'])]
-    public function showDetailsAjax(StageCondidature $condidature): Response
+    public function showDetailsAjax(StageCondidature $condidature, OffreStageRepository $offreStageRepository): Response
     {
+        // Fetch all offers by this recruiter for "Associer à une offre" feature
+        $myOffers = $offreStageRepository->findBy(['id_recruteur' => $this->getUser()]);
+
         return $this->render('recruteur/_details_modal.html.twig', [
             'condidature' => $condidature,
+            'my_offers' => $myOffers
         ]);
     }
 
@@ -229,6 +259,29 @@ class RecruteurController extends AbstractController
             'success' => true,
             'message' => 'Statut mis à jour avec succès.',
             'new_status' => $status
+        ]);
+    }
+
+    #[Route('/candidature/{id}/associate/{offerId}', name: 'app_recruteur_candidature_associate', methods: ['POST'])]
+    public function associateToOffer(
+        StageCondidature $condidature,
+        int $offerId,
+        OffreStageRepository $offreStageRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $offer = $offreStageRepository->find($offerId);
+        if (!$offer || $offer->getIdRecruteur() !== $this->getUser()) {
+            return $this->json(['success' => false, 'message' => 'Offre invalide.'], 400);
+        }
+
+        $condidature->setIdOffre($offer);
+        $condidature->setTypeRequest('offre'); // Important: change type to offer application now
+        $entityManager->flush();
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Candidature associée à l\'offre avec succès.',
+            'offre_titre' => $offer->getTitre()
         ]);
     }
 }

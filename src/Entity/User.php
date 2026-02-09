@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 3, max: 20, minMessage: 'Your username must be at least {{ limit }} characters long')]
     private ?string $username = null;
 
-    
+
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Please enter an email')]
     #[Assert\Email(message: 'The email "{{ value }}" is not a valid email.')]
@@ -54,6 +56,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(options: ["default" => true])]
     private bool $isActive = true;
+
+    #[ORM\OneToMany(mappedBy: 'id_etudiant', targetEntity: StageCondidature::class)]
+    private Collection $stageCondidatures;
+
+    public function __construct()
+    {
+        $this->stageCondidatures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -170,6 +180,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        
+
+    }
+
+    /**
+     * @return Collection<int, StageCondidature>
+     */
+    public function getStageCondidatures(): Collection
+    {
+        return $this->stageCondidatures;
+    }
+
+    public function addStageCondidature(StageCondidature $stageCondidature): static
+    {
+        if (!$this->stageCondidatures->contains($stageCondidature)) {
+            $this->stageCondidatures->add($stageCondidature);
+            $stageCondidature->setIdEtudiant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStageCondidature(StageCondidature $stageCondidature): static
+    {
+        if ($this->stageCondidatures->removeElement($stageCondidature)) {
+            // set the owning side to null (unless already changed)
+            if ($stageCondidature->getIdEtudiant() === $this) {
+                $stageCondidature->setIdEtudiant(null);
+            }
+        }
+
+        return $this;
     }
 }

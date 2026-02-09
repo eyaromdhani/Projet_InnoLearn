@@ -21,6 +21,7 @@ use App\Repository\EventRepository;
 use App\Repository\InscritEventRepository;
 use App\Enum\StatutEvenementEnum;
 use App\Entity\InscritEvent;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/enseignant')]
 class EnseignantController extends AbstractController
@@ -219,14 +220,14 @@ class EnseignantController extends AbstractController
     }
 
     #[Route('/event/participate', name: 'enseignant_event_participate', methods: ['POST'])]
-    public function participate(Request $request, EntityManagerInterface $entityManager, EventRepository $eventRepository): Response
+    public function participate(Request $request, EntityManagerInterface $entityManager, EventRepository $eventRepository, ValidatorInterface $validator): Response
     {
         $eventId = $request->request->get('event_id');
         $name = $request->request->get('name');
         $email = $request->request->get('email');
 
-        if (!$eventId || !$name || !$email) {
-            $this->addFlash('error', 'Tous les champs sont requis.');
+        if (!$eventId) {
+            $this->addFlash('error', 'Événement non spécifié.');
             return $this->redirectToRoute('app_enseignant_events');
         }
 
@@ -238,10 +239,19 @@ class EnseignantController extends AbstractController
 
         $inscription = new InscritEvent();
         $inscription->setEvent($event);
-        $inscription->setName($name);
-        $inscription->setEmail($email);
+        $inscription->setName($name ?? '');
+        $inscription->setEmail($email ?? '');
         $inscription->setDateInscrit(new \DateTime());
         $inscription->setStatus('En attente');
+
+        $errors = $validator->validate($inscription);
+
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+            return $this->redirectToRoute('app_enseignant_events');
+        }
 
         $entityManager->persist($inscription);
         $entityManager->flush();

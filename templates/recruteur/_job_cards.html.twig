@@ -15,7 +15,7 @@
         <div class="card-body">
             <h3 class="body-title">{{ cond.titre }}</h3>
             <div class="body-meta">
-                <p><i class="far fa-user" style="margin-right: 0.5rem;"></i> Étudiant #{{ cond.idEtudiant }}</p>
+                <p><i class="far fa-user" style="margin-right: 0.5rem;"></i> {{ cond.idEtudiant.name }} (ID: {{ cond.idEtudiant.id }})</p>
                 <p><i class="far fa-calendar-alt" style="margin-right: 0.5rem;"></i> Envoyé le {{ cond.datePublication|date('d/m/Y') }}</p>
                 <div style="margin-top: 0.5rem;">
                     {% if cond.statut == 'en_attente' %}

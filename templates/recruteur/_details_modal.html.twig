@@ -1,5 +1,8 @@
 <div class="modal-details-header" style="margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem;">
     <h2 style="font-size: 1.8rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">{{ condidature.titre|upper }}</h2>
+    <p style="color: #64748b; font-weight: 600; margin-bottom: 1rem;">
+        <i class="fas fa-user-graduate" style="color: #a855f7;"></i> {{ condidature.idEtudiant.name }} (ID: {{ condidature.idEtudiant.id }})
+    </p>
     <div style="display: flex; gap: 1.5rem; color: #64748b; font-size: 0.95rem;">
         <span><i class="fas fa-tag" style="color: #6366f1;"></i> {{ condidature.domaine }}</span>
         <span><i class="fas fa-calendar-alt" style="color: #6366f1;"></i> {{ condidature.datePublication|date('d/m/Y') }}</span>
@@ -40,6 +43,20 @@
     <button class="btn-primary-gradient" style="margin-top: 0; background: #f1f5f9; color: #475569; box-shadow: none;" onclick="closeDetailsModal()">Fermer</button>
     
     {% if condidature.statut == 'en_attente' %}
+        {% if condidature.typeRequest == 'demande' %}
+            <div style="display: flex; gap: 0.5rem; align-items: center; background: #f1f5f9; padding: 0.5rem 1rem; border-radius: 12px; margin-right: auto;">
+                <select id="associateOfferSelect" style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.4rem; font-size: 0.85rem; background: white; outline: none;">
+                    <option value="">Sélectionner une offre...</option>
+                    {% for offer in my_offers %}
+                        <option value="{{ offer.id }}">{{ offer.titre }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn-primary-gradient" style="margin-top: 0; padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="associateToOffer({{ condidature.id }})">
+                    <i class="fas fa-link"></i> Associer
+                </button>
+            </div>
+        {% endif %}
+
         <button class="btn-primary-gradient" style="margin-top: 0; background: #ef4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);" onclick="updateCandidatureStatus({{ condidature.id }}, 'refusée')">
             <i class="fas fa-times-circle"></i> Refuser
         </button>

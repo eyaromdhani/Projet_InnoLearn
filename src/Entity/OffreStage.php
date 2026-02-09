@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\OffreStageRepository;
+use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -54,6 +57,15 @@ class OffreStage
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $statut = null;
+
+    #[ORM\OneToMany(mappedBy: 'id_offre', targetEntity: StageCondidature::class)]
+    private Collection $stageCondidatures;
+
+    public function __construct()
+    {
+        $this->stageCondidatures = new ArrayCollection();
+        $this->datePublication = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -156,6 +168,10 @@ class OffreStage
         return $this;
     }
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_recruteur", referencedColumnName: "id", nullable: true)]
+    private ?User $id_recruteur = null;
+
     public function getStatut(): ?string
     {
         return $this->statut;
@@ -164,6 +180,46 @@ class OffreStage
     public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
+        return $this;
+    }
+
+    public function getIdRecruteur(): ?User
+    {
+        return $this->id_recruteur;
+    }
+
+    public function setIdRecruteur(?User $id_recruteur): static
+    {
+        $this->id_recruteur = $id_recruteur;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StageCondidature>
+     */
+    public function getStageCondidatures(): Collection
+    {
+        return $this->stageCondidatures;
+    }
+
+    public function addStageCondidature(StageCondidature $stageCondidature): static
+    {
+        if (!$this->stageCondidatures->contains($stageCondidature)) {
+            $this->stageCondidatures->add($stageCondidature);
+            $stageCondidature->setIdOffre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStageCondidature(StageCondidature $stageCondidature): static
+    {
+        if ($this->stageCondidatures->removeElement($stageCondidature)) {
+            // set the owning side to null (unless already changed)
+            if ($stageCondidature->getIdOffre() === $this) {
+                $stageCondidature->setIdOffre(null);
+            }
+        }
 
         return $this;
     }

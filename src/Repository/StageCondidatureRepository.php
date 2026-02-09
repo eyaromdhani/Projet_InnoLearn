@@ -16,11 +16,17 @@ class StageCondidatureRepository extends ServiceEntityRepository
         parent::__construct($registry, StageCondidature::class);
     }
 
-    public function searchAll(string $input, ?string $domaine = null, ?\DateTimeInterface $minDate = null, ?\DateTimeInterface $maxDate = null, string $sort = 'desc', ?string $typeRequest = null, ?int $idOffre = null, ?int $idEtudiant = null): array
+    public function searchAll(string $input, ?string $domaine = null, ?\DateTimeInterface $minDate = null, ?\DateTimeInterface $maxDate = null, string $sort = 'desc', ?string $typeRequest = null, ?int $idOffre = null, ?\App\Entity\User $etudiant = null, ?\App\Entity\User $recruteur = null): array
     {
         $qb = $this->createQueryBuilder('s')
-            ->where('s.statut = :statut')
-            ->setParameter('statut', 'en_attente');
+            ->innerJoin('s.id_etudiant', 'e'); // Ensure the student exists
+
+        // If it's a student viewing their own (ownership=mine), show all statuses.
+        // If it's a recruiter OR general browsing, show only 'en_attente'.
+        if (!$etudiant) {
+            $qb->andWhere('s.statut = :statut')
+                ->setParameter('statut', 'en_attente');
+        }
 
         if ($typeRequest && $typeRequest !== 'all') {
             $qb->andWhere('s.type_request = :typeRequest')
@@ -32,9 +38,23 @@ class StageCondidatureRepository extends ServiceEntityRepository
                 ->setParameter('idOffre', $idOffre);
         }
 
-        if ($idEtudiant) {
-            $qb->andWhere('s.id_etudiant = :idEtudiant')
-                ->setParameter('idEtudiant', $idEtudiant);
+        if ($etudiant) {
+            $qb->andWhere('s.id_etudiant = :etudiant')
+                ->setParameter('etudiant', $etudiant);
+        }
+
+        if ($recruteur) {
+            $qb->leftJoin('s.id_offre', 'o');
+            if ($typeRequest === 'offre') {
+                $qb->andWhere('o.id_recruteur = :recruteur')
+                    ->setParameter('recruteur', $recruteur);
+            } elseif ($typeRequest === 'all' || !$typeRequest) {
+                // Show recruiter's offers OR any public demand
+                $qb->andWhere('(o.id_recruteur = :recruteur OR s.type_request = :typeDemande)')
+                    ->setParameter('typeDemande', 'demande')
+                    ->setParameter('recruteur', $recruteur);
+            }
+            // If typeRequest is 'demande', we don't filter by recruiter's offers link, so no :recruteur needed
         }
 
         if ($input) {
@@ -70,6 +90,7 @@ class StageCondidatureRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->select('DISTINCT s.domaine')
+            ->innerJoin('s.id_etudiant', 'e')
             ->where('s.domaine IS NOT NULL')
             ->getQuery()
             ->getResult();
@@ -79,7 +100,23 @@ class StageCondidatureRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->select('MIN(s.date_publication) as minDate', 'MAX(s.date_publication) as maxDate')
+            ->innerJoin('s.id_etudiant', 'e')
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findRecentByRecruiter(\App\Entity\User $recruteur, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.id_etudiant', 'e')
+            ->innerJoin('s.id_offre', 'o')
+            ->where('o.id_recruteur = :recruteur')
+            ->andWhere('s.statut = :statut')
+            ->setParameter('recruteur', $recruteur)
+            ->setParameter('statut', 'en_attente')
+            ->orderBy('s.date_publication', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }
