@@ -2,6 +2,10 @@
 
 namespace App\Controller\Admin;
 
+<<<<<<< HEAD
+=======
+use App\Repository\OffreStageRepository;
+>>>>>>> user
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminDashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'admin_dashboard')]
+<<<<<<< HEAD
     public function index(): Response
     {
         return $this->render('admin/dashboard/index.html.twig');
@@ -19,6 +24,15 @@ class AdminDashboardController extends AbstractController
     public function projects(): Response
     {
         return $this->render('admin/dashboard/static.html.twig', ['title' => 'Projets']);
+=======
+    public function index(OffreStageRepository $offreStageRepository, \App\Repository\UserRepository $userRepository): Response
+    {
+        return $this->render('admin/dashboard/index.html.twig', [
+            'recent_opportunities' => $offreStageRepository->findBy([], ['datePublication' => 'DESC'], 5),
+            'recent_users' => $userRepository->findBy([], ['id' => 'DESC'], 5),
+            'total_users' => $userRepository->count([])
+        ]);
+>>>>>>> user
     }
 
     #[Route('/subscriptions', name: 'admin_subscriptions')]
@@ -27,6 +41,7 @@ class AdminDashboardController extends AbstractController
         return $this->render('admin/dashboard/static.html.twig', ['title' => 'Abonnements']);
     }
 
+<<<<<<< HEAD
     #[Route('/users', name: 'admin_users')]
     public function users(): Response
     {
@@ -57,6 +72,8 @@ class AdminDashboardController extends AbstractController
         return $this->render('admin/dashboard/static.html.twig', ['title' => 'Candidatures']);
     }
 
+=======
+>>>>>>> user
     #[Route('/reports', name: 'admin_reports')]
     public function reports(): Response
     {

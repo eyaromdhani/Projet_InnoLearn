@@ -3,10 +3,23 @@
 namespace App\Entity;
 
 use App\Repository\OffreStageRepository;
+<<<<<<< HEAD
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OffreStageRepository::class)]
+=======
+use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: OffreStageRepository::class)]
+#[ORM\Table(name: 'offrestage')]
+>>>>>>> user
 class OffreStage
 {
     #[ORM\Id]
@@ -15,6 +28,7 @@ class OffreStage
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+<<<<<<< HEAD
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -38,6 +52,54 @@ class OffreStage
     #[ORM\Column]
     private ?\DateTime $datePublication = null;
 
+=======
+    #[Assert\NotBlank(message: "Le titre est obligatoire.")]
+    #[Assert\Length(min: 5, max: 255, minMessage: "Le titre doit faire au moins {{ limit }} caractères.")]
+    private ?string $titre = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "La description est obligatoire.")]
+    #[Assert\Length(min: 20, minMessage: "La description doit faire au moins {{ limit }} caractères.")]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de l'entreprise est obligatoire.")]
+    private ?string $entreprise = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le lieu est obligatoire.")]
+    private ?string $lieu = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le domaine est obligatoire.")]
+    private ?string $domaine = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Les compétences sont obligatoires.")]
+    private ?string $competences = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "La durée est obligatoire.")]
+    #[Assert\Positive(message: "La durée doit être un nombre positif.")]
+    private ?int $duree = null;
+
+    #[ORM\Column]
+    #[Assert\Type("\DateTimeInterface")]
+    private ?\DateTime $datePublication = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $statut = null;
+
+    #[ORM\OneToMany(mappedBy: 'id_offre', targetEntity: StageCondidature::class)]
+    private Collection $stageCondidatures;
+
+    public function __construct()
+    {
+        $this->stageCondidatures = new ArrayCollection();
+        $this->datePublication = new \DateTime();
+    }
+
+>>>>>>> user
     public function getId(): ?int
     {
         return $this->id;
@@ -132,10 +194,73 @@ class OffreStage
         return $this->datePublication;
     }
 
+<<<<<<< HEAD
     public function setDatePublication(\DateTime $datePublication): static
+=======
+    public function setDatePublication(?\DateTime $datePublication): static
+>>>>>>> user
     {
         $this->datePublication = $datePublication;
 
         return $this;
     }
+<<<<<<< HEAD
+=======
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_recruteur", referencedColumnName: "id", nullable: true)]
+    private ?User $id_recruteur = null;
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): static
+    {
+        $this->statut = $statut;
+        return $this;
+    }
+
+    public function getIdRecruteur(): ?User
+    {
+        return $this->id_recruteur;
+    }
+
+    public function setIdRecruteur(?User $id_recruteur): static
+    {
+        $this->id_recruteur = $id_recruteur;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StageCondidature>
+     */
+    public function getStageCondidatures(): Collection
+    {
+        return $this->stageCondidatures;
+    }
+
+    public function addStageCondidature(StageCondidature $stageCondidature): static
+    {
+        if (!$this->stageCondidatures->contains($stageCondidature)) {
+            $this->stageCondidatures->add($stageCondidature);
+            $stageCondidature->setIdOffre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStageCondidature(StageCondidature $stageCondidature): static
+    {
+        if ($this->stageCondidatures->removeElement($stageCondidature)) {
+            // set the owning side to null (unless already changed)
+            if ($stageCondidature->getIdOffre() === $this) {
+                $stageCondidature->setIdOffre(null);
+            }
+        }
+
+        return $this;
+    }
+>>>>>>> user
 }

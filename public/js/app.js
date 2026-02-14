@@ -89,6 +89,7 @@ if (passwordInput) {
     });
 }
 
+<<<<<<< HEAD
 // Form validation animations
 const forms = document.querySelectorAll('.auth-form');
 forms.forEach(form => {
@@ -111,6 +112,10 @@ forms.forEach(form => {
 
     // Input focus animations
     const inputs = form.querySelectorAll('input');
+=======
+// Input focus animations
+    const inputs = document.querySelectorAll('.auth-form input');
+>>>>>>> user
     inputs.forEach(input => {
         input.addEventListener('focus', function () {
             this.parentElement.classList.add('focused');
@@ -120,7 +125,10 @@ forms.forEach(form => {
             this.parentElement.classList.remove('focused');
         });
     });
+<<<<<<< HEAD
 });
+=======
+>>>>>>> user
 
 // Animate stats on scroll
 const statsObserver = new IntersectionObserver((entries) => {

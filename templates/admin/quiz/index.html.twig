@@ -1,6 +1,7 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block title %}Gestion des Quiz{% endblock %}
+<<<<<<< HEAD
 
 {% block admin_content %}
 <div class="card animate-fade-in-up">
@@ -53,8 +54,163 @@
                     </td>
                 </tr>
             {% endfor %}
+=======
+{% block page_title %}Gestion des Quiz{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 8px;
+            margin: 0 2px;
+        }
+    </style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="card shadow-sm animate-fade-in-up">
+
+    <!-- Header -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">Liste des Quiz</h3>
+        <a href="{{ path('admin_quiz_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Ajouter Nouveau
+        </a>
+    </div>
+
+    <!-- Search by Category -->
+    <div class="p-3">
+        <input type="text" id="category-search" class="form-control form-control-sm"
+               placeholder="Rechercher par catégorie" value="{{ currentCategory|default('') }}">
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive p-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th><a href="#" data-sort="id" class="text-white">ID</a></th>
+                    <th><a href="#" data-sort="titre" class="text-white">Titre</a></th>
+                    <th><a href="#" data-sort="description" class="text-white">Description</a></th>
+                    <th><a href="#" data-sort="tempsLimite" class="text-white">Temps Limite</a></th>
+                    <th><a href="#" data-sort="category" class="text-white">Catégorie</a></th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="quiz-table-body">
+                {{ include('admin/quiz/_table_rows.html.twig') }}
+>>>>>>> user
             </tbody>
         </table>
     </div>
 </div>
+<<<<<<< HEAD
 {% endblock %}
+=======
+
+<!-- Statistics Section -->
+<div class="card shadow-sm mt-4 animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">Statistiques des Durées</h3>
+    </div>
+    <div class="card-body">
+        <div id="quiz-duration-chart" style="min-height: 300px; display: flex; justify-content: center;"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var options = {
+        series: [{{ countBelow10|default(0) }}, {{ countAbove10|default(0) }}],
+        chart: {
+            width: 380,
+            type: 'donut',
+        },
+        labels: ['< 10 minutes', '>= 10 minutes'],
+        colors: ['#f43f5e', '#10b981'],
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: true
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#quiz-duration-chart"), options);
+    chart.render();
+});
+</script>
+
+<!-- Dynamic search & sorting JS -->
+<script>
+const tableBody = document.getElementById('quiz-table-body');
+const searchInput = document.getElementById('category-search');
+
+let currentSort = '{{ currentSort }}';
+let currentDirection = '{{ currentDirection }}';
+
+function fetchTable() {
+    const category = encodeURIComponent(searchInput.value);
+
+    fetch(`{{ path('admin_quiz_index') }}?category=${category}&sort=${currentSort}&direction=${currentDirection}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.text())
+    .then(html => {
+        tableBody.innerHTML = html;
+    });
+}
+
+searchInput.addEventListener('input', () => {
+    fetchTable();
+});
+
+document.querySelectorAll('thead th a').forEach(header => {
+    header.addEventListener('click', e => {
+        e.preventDefault();
+        const sortField = header.dataset.sort;
+
+        if (currentSort === sortField) {
+            currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort = sortField;
+            currentDirection = 'asc';
+        }
+
+        fetchTable();
+    });
+});
+</script>
+{% endblock %}
+
+>>>>>>> user

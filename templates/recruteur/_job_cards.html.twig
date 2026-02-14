@@ -1,0 +1,52 @@
+{% for cond in condidatures %}
+    {% set themes = ['theme-purple', 'theme-violet', 'theme-pink', 'theme-blue', 'theme-orange', 'theme-cyan'] %}
+    {% set theme = themes[loop.index0 % 6] %}
+    
+    <div class="job-card">
+        <!-- Card Header with vibrant background -->
+        <div class="card-header {{ theme }}">
+            <span class="domain-badge">{{ cond.domaine }}</span>
+            <div class="card-title-container">
+                <h2>{{ cond.titre|replace({' ': '<br>'})|raw }}</h2>
+            </div>
+        </div>
+
+        <!-- Card Body with Info -->
+        <div class="card-body">
+            <h3 class="body-title">{{ cond.titre }}</h3>
+            <div class="body-meta">
+                <p><i class="far fa-user" style="margin-right: 0.5rem;"></i> {{ cond.idEtudiant.name }} (ID: {{ cond.idEtudiant.id }})</p>
+                <p><i class="far fa-calendar-alt" style="margin-right: 0.5rem;"></i> Envoyé le {{ cond.datePublication|date('d/m/Y') }}</p>
+                <div style="margin-top: 0.5rem;">
+                    {% if cond.statut == 'en_attente' %}
+                        <span class="status-badge status-en_attente" style="background: #fef3c7; color: #f59e0b; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                            <i class="fas fa-clock"></i> En attente
+                        </span>
+                    {% elseif cond.statut == 'acceptée' %}
+                        <span class="status-badge status-acceptée" style="background: #d1fae5; color: #10b981; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                            <i class="fas fa-check-circle"></i> Acceptée
+                        </span>
+                    {% else %}
+                        <span class="status-badge status-refusée" style="background: #fee2e2; color: #ef4444; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                            <i class="fas fa-times-circle"></i> Refusée
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Footer with Action -->
+        <div class="card-footer">
+            <div class="price-box">Gratuit</div>
+            <div class="rating-box">
+                <button class="btn-apply" onclick="showDetails({{ cond.id }})">Voir Profil</button>
+            </div>
+        </div>
+    </div>
+{% else %}
+<div style="text-align: center; padding: 5rem; background: white; border-radius: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+    <i class="fas fa-search" style="font-size: 4rem; color: #e2e8f0; margin-bottom: 1.5rem;"></i>
+    <h3 style="color: #1e293b; margin-bottom: 0.5rem;">Aucune candidature trouvée</h3>
+    <p style="color: #64748b;">Essayez de modifier vos filtres ou de rechercher un autre terme.</p>
+</div>
+{% endfor %}

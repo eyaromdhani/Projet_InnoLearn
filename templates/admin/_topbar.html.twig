@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="top-bar">
     <div class="top-bar-left">
         <button class="mobile-menu-btn" id="mobile-menu-btn">
@@ -30,6 +31,34 @@
                 <span class="user-role">Administrateur</span>
             </div>
             <div class="user-avatar">{{ app.user.fullName|default('Admin')|slice(0, 2)|upper }}</div>
+=======
+<div class="top-bar" style="background: white; box-shadow: 0 1px 0 rgba(0,0,0,0.05); padding: 1rem 2.5rem;">
+    <div class="top-bar-left">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" style="color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0;">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="page-title">
+            <h1 style="color: #1e1b4b; font-size: 1.5rem; font-weight: 700;">{% block page_title %}Dashboard Overview{% endblock %}</h1>
+        </div>
+    </div>
+    <div class="top-bar-actions">
+        <div class="search-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; width: 300px;">
+            <i class="fas fa-search" style="color: #94a3b8; margin-left: 1rem;"></i>
+            <input type="text" placeholder="Rechercher..." style="background: transparent; border: none; color: #1e1b4b; padding: 0.75rem 1rem; width: 100%; outline: none;">
+        </div>
+        
+        <button class="icon-btn" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b;">
+            <i class="far fa-bell"></i>
+            <span class="badge" style="background: #ffb82b; border: 2px solid white; top: -2px; right: -2px;"></span>
+        </button>
+        
+        <div class="user-profile" id="profileToggle" style="border-left: 1px solid #f1f5f9; padding-left: 1.5rem; gap: 0.75rem; cursor: pointer;">
+            <div class="user-info">
+                <span class="user-name" style="color: #1e1b4b; font-weight: 700; font-size: 0.9rem;">{{ app.user.name|default('Admin User') }}</span>
+                <span class="user-role" style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">Administrateur</span>
+            </div>
+            <div class="user-avatar" style="background: #6366f1; color: white; width: 40px; height: 40px; border-radius: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{ app.user.name|default('Admin')|slice(0, 1)|upper }}</div>
+>>>>>>> user
         </div>
     </div>
 </div>

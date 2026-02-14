@@ -1,0 +1,284 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Catalogue - {{ category.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section */
+.category-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 350px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 60px;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.category-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.4) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem 6rem;
+    width: 100%;
+    z-index: 10;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.category-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.category-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); 
+    backdrop-filter: blur(0px);
+    display: flex; align-items: center; justify-content: center; z-index: 2000;
+    opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-overlay.active { 
+    opacity: 1; 
+    visibility: visible;
+    backdrop-filter: blur(15px);
+}
+
+.modal-container {
+    background: white; width: 100%; max-width: 650px; border-radius: 30px;
+    position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+}
+.modal-overlay.active .modal-container {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.modal-close:hover { background: #e2e8f0; transform: rotate(90deg); }
+
+/* Form styling improvements */
+.form-error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; font-weight: 600; }
+.form-control:focus, .form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+.is-invalid { border-color: #ef4444 !important; }
+
+body.modal-open { overflow: hidden; }
+
+/* Course Grid */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .course-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .course-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .course-grid { grid-template-columns: 1fr; }
+}
+
+.course-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.course-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+.course-media {
+    height: 150px;
+    background: #f1f5f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.course-media img { width: 100%; height: 100%; object-fit: cover; }
+.course-media .video-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center; color: white;
+    font-size: 2rem;
+}
+
+.course-info { padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column; }
+.course-info h4 { margin-bottom: 0.5rem; color: #1e293b; font-size: 1rem; font-weight: 800; line-height: 1.4; }
+.course-info p { color: #64748b; font-size: 0.85rem; line-height: 1.6; margin-bottom: 1.25rem; }
+
+.course-meta {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.meta-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meta-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.btn-enroll {
+    background: #6366f1;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.btn-enroll:hover { background: #4f46e5; }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="category-hero">
+    <div class="hero-container">
+        <a href="{{ path('app_student_courses') }}" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-weight: 600;">
+            <i class="fas fa-arrow-left"></i> Retour au catalogue
+        </a>
+        <span class="category-badge">{{ category.niveau }}</span>
+        <h1 class="category-title">{{ category.titre }}</h1>
+        <p class="category-description">{{ category.description }}</p>
+    </div>
+</div>
+
+<div class="container-fluid" style="padding: 0 2rem 5rem 6rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 3rem; gap: 1rem;">
+        <h2 style="color: #1e293b; margin: 0; font-size: 2rem; font-weight: 800;">Cours disponibles</h2>
+        <span style="background: #f1f5f9; padding: 0.6rem 1.25rem; border-radius: 12px; color: #64748b; font-weight: 700; font-size: 0.9rem;">
+            {{ courses|length }} modules
+        </span>
+    </div>
+    
+    {% if courses is empty %}
+        <div style="text-align: center; padding: 5rem 0; background: white; border-radius: 30px; border: 2px dashed #e2e8f0;">
+            <i class="fas fa-graduation-cap" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 1.5rem;"></i>
+            <h3 style="color: #64748b;">Aucun cours dans cette catégorie pour le moment.</h3>
+            <p style="color: #94a3b8;">Revenez plus tard pour voir les nouveautés !</p>
+        </div>
+    {% else %}
+        <div class="course-grid">
+            {% set colors = ['#6366f1', '#a855f7', '#ec4899', '#f97316', '#10b981', '#06b6d4'] %}
+            {% for course in courses %}
+                {% set accentColor = colors[loop.index0 % colors|length] %}
+                <div class="course-card" style="border-top: 5px solid {{ accentColor }};">
+                    <div class="course-media">
+                        {% set isValidUrl = course.mediaUrl and (course.mediaUrl starts with 'http' or course.mediaUrl starts with '/' or course.mediaUrl starts with 'data:') %}
+                        {% set fallbackBg = accentColor %}
+                        <div class="course-img-container" style="width: 100%; height: 100%; background: {{ fallbackBg }}; position: relative; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: 800; font-size: 1.5rem; text-transform: uppercase; opacity: 0.3; position: absolute; z-index: 1;">{{ course.nom|slice(0, 2) }}</span>
+                            
+                            {% if course.typeMedia == 'video_intro' %}
+                                <img src="https://placehold.co/600x400/1e1b4b/white?text={{ course.nom|url_encode }}" 
+                                     alt="{{ course.nom }}"
+                                     style="width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2;"
+                                     onerror="this.style.display='none'">
+                                <div class="video-overlay" style="color: {{ accentColor }}; z-index: 3;">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            {% else %}
+                                <img src="{{ isValidUrl ? course.mediaUrl : '' }}" 
+                                     alt="{{ course.nom }}"
+                                     style="width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2; {{ not isValidUrl ? 'display: none;' : '' }}"
+                                     onerror="this.style.display='none'">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <span style="font-size: 0.7rem; color: {{ accentColor }}; font-weight: 800; text-transform: uppercase; background: {{ accentColor }}15; padding: 0.2rem 0.6rem; border-radius: 6px;">{{ course.niveau }}</span>
+                        </div>
+                        <h4>{{ course.nom }}</h4>
+                        <p>{{ course.description|length > 80 ? course.description|slice(0, 80) ~ '...' : course.description }}</p>
+                        
+                        <div class="course-meta">
+                                <div class="meta-details">
+                                    <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                        <div class="meta-info-item">
+                                            <i class="fas fa-clock"></i> {{ course.duree }}h
+                                        </div>
+                                        <div class="meta-info-item">
+                                            <i class="fas fa-user-circle"></i> {{ course.enseignant }}
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                                        <a href="{{ path('app_student_course_show', {'id': course.id}) }}" class="btn-enroll" style="background: {{ accentColor }}; color: white; padding: 0.5rem 0.7rem; font-size: 0.7rem; border-radius: 8px; width: auto; height: auto; display: flex; align-items: center; gap: 0.3rem; text-decoration: none; font-weight: 700;" title="Détails">
+                                            <i class="fas fa-eye"></i> Détails
+                                        </a>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // No specific logic needed for now
+});
+</script>
+{% endblock %}

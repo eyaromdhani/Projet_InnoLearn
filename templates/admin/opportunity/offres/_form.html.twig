@@ -1,0 +1,144 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'validated-form'}}) }}
+    <style>
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #475569; }
+        .form-control { width: 100%; padding: 0.625rem; border: 1px solid #e2e8f0; border-radius: 6px; transition: all 0.2s; }
+        .form-control:focus { border-color: #4f46e5; outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .form-control.is-invalid { border-color: #ef4444; }
+        .error-feedback { color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem; display: none; }
+        .btn-save { background: #4f46e5; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.2s; }
+        .btn-save:hover { background: #4338ca; }
+    </style>
+    
+    <div class="form-group">
+        {{ form_label(form.titre) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.titre.vars.id }}"></div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.domaine) }}
+        {{ form_widget(form.domaine, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.domaine.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.lieu) }}
+        {{ form_widget(form.lieu, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.lieu.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.entreprise) }}
+        {{ form_widget(form.entreprise, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.entreprise.vars.id }}"></div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+        <div class="error-feedback" id="error-{{ form.description.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.competences) }}
+        {{ form_widget(form.competences, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.competences.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.datePublication) }}
+        {{ form_widget(form.datePublication, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.datePublication.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.statut) }}
+        {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.statut.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.duree) }}
+        {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.duree.vars.id }}"></div>
+    </div>
+    
+    <button class="btn-save">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.validated-form');
+    if (!form) return;
+
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    const validationRules = {
+        '{{ form.titre.vars.id }}': { required: true, minLength: 5, label: "Le titre" },
+        '{{ form.description.vars.id }}': { required: true, minLength: 20, label: "La description" },
+        '{{ form.duree.vars.id }}': { required: true, isPositive: true, label: "La durée" },
+        '{{ form.domaine.vars.id }}': { required: true, label: "Le domaine" },
+        '{{ form.entreprise.vars.id }}': { required: true, label: "L'entreprise" },
+        '{{ form.lieu.vars.id }}': { required: true, label: "Le lieu" },
+        '{{ form.competences.vars.id }}': { required: true, label: "Les compétences" }
+    };
+
+    function validateField(input) {
+        const rules = validationRules[input.id];
+        if (!rules) return true;
+
+        const value = input.value.trim();
+        const errorDiv = document.getElementById('error-' + input.id);
+        let isValid = true;
+        let message = "";
+
+        if (rules.required && !value) {
+            isValid = false;
+            message = `${rules.label} est obligatoire.`;
+        } else if (value) {
+            if (rules.minLength && value.length < rules.minLength) {
+                isValid = false;
+                message = `${rules.label} doit faire au moins ${rules.minLength} caractères.`;
+            } else if (rules.isPositive && (isNaN(value) || parseFloat(value) <= 0)) {
+                isValid = false;
+                message = `${rules.label} doit être un nombre positif.`;
+            }
+        }
+
+        if (!isValid) {
+            input.classList.add('is-invalid');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+        } else {
+            input.classList.remove('is-invalid');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        }
+        return isValid;
+    }
+
+    inputs.forEach(input => {
+        ['input', 'blur'].forEach(evt => {
+            input.addEventListener(evt, () => validateField(input));
+        });
+    });
+
+    form.addEventListener('submit', function(e) {
+        let isFormValid = true;
+        inputs.forEach(input => {
+            if (!validateField(input)) {
+                isFormValid = false;
+            }
+        });
+
+        if (!isFormValid) {
+            e.preventDefault();
+            alert('Veuillez remplir correctement tous les champs obligatoires.');
+        }
+    });
+});
+</script>

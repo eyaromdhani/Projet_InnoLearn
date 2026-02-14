@@ -4,6 +4,7 @@
 
 {% block admin_content %}
 <div class="card animate-fade-in-up">
+<<<<<<< HEAD
     <div class="card-header" style="justify-content: space-between; display: flex; align-items: center;">
         <h3 class="card-title">Modifier le quiz</h3>
         <div style="display: flex; gap: 1rem;">
@@ -45,4 +46,20 @@
         {{ form_end(form) }}
     </div>
 </div>
+=======
+    <div class="card-header">
+        <h3 class="card-title">Modifier le quiz : {{ formulaire.titre }}</h3>
+    </div>
+    <div class="card-body">
+        {{ include('admin/quiz/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div>
+</div>
+
+<div style="display: flex; gap: 1rem; margin-top: 1rem;">
+    <a href="{{ path('admin_quiz_index') }}" class="btn-secondary" style="text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px;">
+        Retour à la liste
+    </a>
+    {{ include('admin/quiz/_delete_form.html.twig') }}
+</div>
+>>>>>>> user
 {% endblock %}

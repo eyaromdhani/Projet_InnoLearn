@@ -1,0 +1,81 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}{{ course.nom }} - InnoLearn{% endblock %}
+
+{% block student_content %}
+<div class="container" style="max-width: 1000px; margin: 5rem auto; padding: 0 2rem 5rem 6rem;">
+    <a href="{{ path('app_student_category_show', {'id': course.categorieCours.id}) }}" style="color: #6366f1; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;">
+        <i class="fas fa-arrow-left"></i> Retour au catalogue
+    </a>
+
+    <div style="background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
+        <div style="height: 400px; background: #1e1b4b; position: relative;">
+            {% if course.typeMedia == 'video_intro' %}
+                <div style="width: 100%; height: 100%; background: #000;">
+                    {% if 'youtube.com' in course.mediaUrl or 'youtu.be' in course.mediaUrl %}
+                        {% set videoId = '' %}
+                        {% if 'v=' in course.mediaUrl %}
+                            {% set videoId = course.mediaUrl|split('v=')|last|split('&')|first %}
+                        {% elseif 'youtu.be/' in course.mediaUrl %}
+                            {% set videoId = course.mediaUrl|split('youtu.be/')|last|split('?')|first %}
+                        {% elseif 'embed/' in course.mediaUrl %}
+                            {% set videoId = course.mediaUrl|split('embed/')|last|split('?')|first %}
+                        {% endif %}
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ videoId }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    {% elseif 'vimeo.com' in course.mediaUrl %}
+                        {% set videoId = course.mediaUrl|split('/')|last %}
+                        <iframe src="https://player.vimeo.com/video/{{ videoId }}" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                    {% else %}
+                        <video controls style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                            <source src="{{ course.mediaUrl }}" type="video/mp4">
+                            <source src="{{ course.mediaUrl }}" type="video/webm">
+                            <source src="{{ course.mediaUrl }}" type="video/ogg">
+                            Votre navigateur ne supporte pas la lecture de vidéos.
+                        </video>
+                    {% endif %}
+                </div>
+            {% else %}
+                {% set isValidUrl = course.mediaUrl and (course.mediaUrl starts with 'http' or course.mediaUrl starts with '/' or course.mediaUrl starts with 'data:') %}
+                <div style="width: 100%; height: 100%; background: #6366f1; position: relative; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: white; font-weight: 800; font-size: 4rem; text-transform: uppercase; opacity: 0.1; position: absolute; z-index: 1;">{{ course.nom }}</span>
+                    <img src="{{ isValidUrl ? course.mediaUrl : '' }}" 
+                         alt="{{ course.nom }}" 
+                         style="width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2; {{ not isValidUrl ? 'display: none;' : '' }}"
+                         onerror="this.style.display='none'">
+                </div>
+            {% endif %}
+            
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 3rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white;">
+                <span style="background: #6366f1; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase;">{{ course.niveau }}</span>
+                <h1 style="font-size: 2.5rem; margin: 1rem 0;">{{ course.nom }}</h1>
+                <div style="display: flex; gap: 1.5rem; font-size: 0.9rem; opacity: 0.9;">
+                    <span><i class="fas fa-user"></i> {{ course.enseignant }}</span>
+                    <span><i class="fas fa-clock"></i> {{ course.duree }}h de contenu</span>
+                    <span><i class="fas fa-calendar"></i> {{ course.dateCreation|date('d/m/Y') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 3rem;">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 4rem;">
+                <div>
+                    <h2 style="margin-bottom: 1.5rem; color: #1e293b;">À propos de ce cours</h2>
+                    <p style="color: #64748b; line-height: 1.8; font-size: 1.1rem; white-space: pre-line;">
+                        {{ course.description }}
+                    </p>
+                </div>
+                
+                <div>
+                    <div style="background: #f8fafc; padding: 2rem; border-radius: 20px; border: 1px solid #f1f5f9; position: sticky; top: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: #1e293b;">Prêt à commencer ?</h3>
+                        <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 2rem;">Rejoignez la communauté et apprenez à votre rythme.</p>
+                        <button style="width: 100%; background: #6366f1; color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#4f46e5'" onmouseout="this.style.background='#6366f1'">
+                            Commencer le cours
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

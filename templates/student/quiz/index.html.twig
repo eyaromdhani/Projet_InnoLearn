@@ -366,6 +366,7 @@
     padding: 0.75rem; background: #e0f2fe; color: #0284c7; border-radius: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s;
 }
 .btn-start-quiz:hover { background: #bae6fd; color: #0369a1; }
+
 </style>
 {% endblock %}
 
@@ -455,32 +456,36 @@
 
     <!-- Content Grid -->
     <div class="course-catalog-grid" id="courseGrid">
-        {% for quiz in quizzes %}
-        <div class="course-card-premium" data-category="{{ quiz.difficulty|lower }}" data-duration="{{ quiz.duration }}" data-title="{{ quiz.title|lower }}">
+        {% for formulaire in formulaires %}
+        <div class="course-card-premium" data-category="{{ formulaire.category ?? 'general' }}" data-duration="{{ formulaire.tempsLimite ?? 30 }}" data-title="{{ formulaire.titre|lower }}">
             <div class="course-image-wrapper">
-                <div class="course-badge">{{ quiz.difficulty }}</div>
-                <i class="fas fa-brain"></i>
+                <div class="course-badge">{{ formulaire.category ?? 'Quiz' }}</div>
+                <i class="fas fa-clipboard-check"></i>
             </div>
             <div class="course-content">
-                <h3>{{ quiz.title }}</h3>
-                <p class="course-desc">{{ quiz.description|u.truncate(80, '...') }}</p>
+                <h3>{{ formulaire.titre }}</h3>
+                <p class="course-desc">{{ formulaire.description|length > 80 ? formulaire.description|slice(0, 80) ~ '...' : formulaire.description }}</p>
                 <div class="course-meta">
-                    <span><i class="far fa-clock"></i> {{ quiz.duration }} min</span>
-                    <span><i class="far fa-calendar-alt"></i> {{ quiz.createdAt|date('d M') }}</span>
+                    <span><i class="far fa-clock"></i> {{ formulaire.tempsLimite ?? 30 }} min</span>
+                    <span><i class="far fa-question-circle"></i> {{ formulaire.questions|length }} questions</span>
                 </div>
-                <a href="#" class="btn-start-quiz" onclick="alert('Fonctionnalité de passage de quiz à venir !'); return false;">
+                <a href="{{ path('app_student_take_formulaire', {'id': formulaire.id}) }}" class="btn-start-quiz">
                     Commencer le Quiz
                 </a>
             </div>
         </div>
-        {% else %}
+        {% endfor %}
+        
+        {% if formulaires is empty %}
         <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #64748b;">
             <i class="fas fa-filter" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
             <h3>Aucun quiz trouvé</h3>
             <p>Essayez de modifier vos filtres.</p>
         </div>
-        {% endfor %}
+        {% endif %}
     </div>
+</div>
+
 </div>
 
 <script>

@@ -128,10 +128,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+<<<<<<< HEAD
     background: white;
     padding: 1rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     margin-bottom: 0;
+=======
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    padding: 1.2rem 2rem;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    margin-bottom: 0;
+    color: white;
+>>>>>>> user
 }
 
 .content-wrapper {
@@ -148,8 +156,14 @@
 .page-title h1 {
     font-size: 1.625rem;
     font-weight: 700;
+<<<<<<< HEAD
     color: #1C2434;
     margin: 0;
+=======
+    color: white;
+    margin: 0;
+    letter-spacing: -0.5px;
+>>>>>>> user
 }
 
 .top-bar-actions {
@@ -169,18 +183,29 @@
     left: 1rem;
     width: 20px;
     height: 20px;
+<<<<<<< HEAD
     color: #64748B;
+=======
+    color: rgba(255, 255, 255, 0.7);
+>>>>>>> user
 }
 
 .search-box input {
     padding: 0.75rem 1rem 0.75rem 3rem;
+<<<<<<< HEAD
     border: 1px solid #E2E8F0;
     background-color: #F9FAFB;
     border-radius: 0.5rem;
+=======
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+>>>>>>> user
     font-size: 0.9375rem;
     width: 350px;
     outline: none;
     transition: all 0.3s;
+<<<<<<< HEAD
     color: #1C2434;
 }
 
@@ -192,27 +217,56 @@
     border-color: #3C50E0;
     background-color: white;
     box-shadow: 0 0 0 4px rgba(60, 80, 224, 0.05);
+=======
+    color: white;
+    backdrop-filter: blur(4px);
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-box input:focus {
+    border-color: white;
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+>>>>>>> user
 }
 
 .icon-btn {
     width: 44px;
     height: 44px;
+<<<<<<< HEAD
     background: #EFF4FB;
     border: 1px solid #E2E8F0;
     border-radius: 50%;
+=======
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+>>>>>>> user
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+<<<<<<< HEAD
     color: #64748B;
+=======
+    color: white;
+>>>>>>> user
     position: relative;
     padding: 0;
 }
 
 .icon-btn:hover {
+<<<<<<< HEAD
     background-color: #E2E8F0;
     color: #3C50E0;
+=======
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+>>>>>>> user
 }
 
 .icon-btn svg {
@@ -235,8 +289,13 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+<<<<<<< HEAD
     padding-left: 1rem;
     border-left: 1px solid #E2E8F0;
+=======
+    padding-left: 1.25rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+>>>>>>> user
 }
 
 .user-info {
@@ -248,12 +307,17 @@
     display: block;
     font-size: 0.9375rem;
     font-weight: 700;
+<<<<<<< HEAD
     color: #1C2434;
+=======
+    color: white;
+>>>>>>> user
 }
 
 .user-role {
     display: block;
     font-size: 0.75rem;
+<<<<<<< HEAD
     color: #64748B;
 }
 
@@ -270,6 +334,23 @@
     color: white;
     font-weight: 700;
     font-size: 1rem;
+=======
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: white;
+    color: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+>>>>>>> user
 }
 
 /* Stats Grid */
@@ -433,9 +514,15 @@
 /* Mobile Menu Button */
 .mobile-menu-btn {
     display: none;
+<<<<<<< HEAD
     background: none;
     border: none;
     color: #1f2937;
+=======
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+>>>>>>> user
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 0.5rem;

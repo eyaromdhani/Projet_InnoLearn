@@ -1,0 +1,34 @@
+{% for candidature in candidatures %}
+<div class="candidature-card" data-title="{{ candidature.titre|lower }} {{ candidature.domaine|lower }}">
+    <div class="candidature-icon">
+        <i class="fas fa-file-alt"></i>
+    </div>
+    <div class="candidature-info">
+        <h2>{{ candidature.titre }}</h2>
+        <div class="candidature-meta">
+            <span><i class="fas fa-folder"></i> {{ candidature.domaine }}</span>
+            <span><i class="fas fa-calendar"></i> {{ candidature.datePublication|date('d/m/Y') }}</span>
+            <span class="status-badge status-{{ candidature.statut }}">
+                <i class="fas fa-circle"></i> {{ candidature.statut|capitalize }}
+            </span>
+            {% if candidature.statut == 'acceptée' %}
+                <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #10b981; font-weight: 600;">
+                    <i class="fas fa-info-circle"></i> Un email vous sera envoyé dans les plus brefs délais.
+                </div>
+            {% endif %}
+        </div>
+        <p class="candidature-desc">{{ candidature.description|slice(0, 120) }}{% if candidature.description|length > 120 %}...{% endif %}</p>
+    </div>
+    <div class="candidature-action">
+        <button class="btn-view" onclick="showCandidatureDetails({{ candidature.id }})">
+            <i class="fas fa-eye"></i> Voir
+        </button>
+    </div>
+</div>
+{% else %}
+<div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+    <i class="fas fa-file-alt" style="font-size: 4rem; color: #e2e8f0; margin-bottom: 1rem;"></i>
+    <h3 style="color: #64748b; font-weight: 700;">Aucune candidature trouvée</h3>
+    <p style="color: #94a3b8;">Vous n'avez pas encore de candidatures correspondantes</p>
+</div>
+{% endfor %}

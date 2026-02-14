@@ -1,0 +1,191 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    
+    <div style="display: grid; gap: 1.5rem;">
+        
+        <!-- Titre -->
+        <div>
+            {% set titre_valid = form.titre.vars.valid and form.vars.submitted %}
+            {% set titre_invalid = not form.titre.vars.valid and form.vars.submitted %}
+            
+            {{ form_label(form.titre, 'Titre du cours', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: ' ~ (titre_invalid ? '#ef4444' : (titre_valid ? '#166534' : '#334155')) }}) }}
+            
+            {{ form_widget(form.titre, {'attr': {
+                'style': 'width: 100%; padding: 0.75rem 1rem; border-radius: 8px; outline: none; transition: all 0.2s; font-size: 0.95rem; color: #1e293b;' ~
+                (titre_invalid ? ' border: 1px solid #ef4444; background: #fef2f2;' : (titre_valid ? ' border: 1px solid #22c55e; background: #f0fdf4;' : ' border: 1px solid #cbd5e1;')),
+                'placeholder': 'Ex: Introduction à Symfony'
+            }}) }}
+            
+            {% if titre_invalid %}
+                <div style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ form_errors(form.titre) }}
+                </div>
+            {% elseif titre_valid %}
+                <div style="color: #166534; font-size: 0.85rem; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Titre valide
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Description -->
+        <div>
+            {% set desc_valid = form.description.vars.valid and form.vars.submitted %}
+            {% set desc_invalid = not form.description.vars.valid and form.vars.submitted %}
+
+            {{ form_label(form.description, 'Description détaillée', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: ' ~ (desc_invalid ? '#ef4444' : (desc_valid ? '#166534' : '#334155')) }}) }}
+            
+            {{ form_widget(form.description, {'attr': {
+                'style': 'width: 100%; padding: 0.75rem 1rem; border-radius: 8px; outline: none; transition: all 0.2s; font-size: 0.95rem; color: #1e293b; min-height: 120px; resize: vertical;' ~
+                (desc_invalid ? ' border: 1px solid #ef4444; background: #fef2f2;' : (desc_valid ? ' border: 1px solid #22c55e; background: #f0fdf4;' : ' border: 1px solid #cbd5e1;')),
+                'placeholder': 'Décrivez le contenu du cours...'
+            }}) }}
+
+            {% if desc_invalid %}
+                <div style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ form_errors(form.description) }}
+                </div>
+            {% elseif desc_valid %}
+                <div style="color: #166534; font-size: 0.85rem; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Description valide
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <!-- Niveau -->
+            <div>
+                {% set niveau_valid = form.niveau.vars.valid and form.vars.submitted %}
+                {% set niveau_invalid = not form.niveau.vars.valid and form.vars.submitted %}
+
+                {{ form_label(form.niveau, 'Niveau de difficulté', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: ' ~ (niveau_invalid ? '#ef4444' : (niveau_valid ? '#166534' : '#334155')) }}) }}
+                
+                {{ form_widget(form.niveau, {'attr': {
+                    'style': 'width: 100%; padding: 0.75rem 1rem; border-radius: 8px; outline: none; transition: all 0.2s; font-size: 0.95rem; color: #1e293b;' ~
+                    (niveau_invalid ? ' border: 1px solid #ef4444; background: #fef2f2;' : (niveau_valid ? ' border: 1px solid #22c55e; background: #f0fdf4;' : ' border: 1px solid #cbd5e1; background-color: #fff;'))
+                }}) }}
+                
+                 {% if niveau_invalid %}
+                    <div style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem;">{{ form_errors(form.niveau) }}</div>
+                {% elseif niveau_valid %}
+                    <div style="color: #166534; font-size: 0.85rem; margin-top: 0.35rem;">
+                        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Date -->
+            <div>
+                {% set date_valid = form.datepublication.vars.valid and form.vars.submitted %}
+                {% set date_invalid = not form.datepublication.vars.valid and form.vars.submitted %}
+
+                {{ form_label(form.datepublication, 'Date de publication', {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: ' ~ (date_invalid ? '#ef4444' : (date_valid ? '#166534' : '#334155')) }}) }}
+                
+                {{ form_widget(form.datepublication, {'attr': {
+                    'style': 'width: 100%; padding: 0.75rem 1rem; border-radius: 8px; outline: none; transition: all 0.2s; font-size: 0.95rem; color: #1e293b;' ~
+                    (date_invalid ? ' border: 1px solid #ef4444; background: #fef2f2;' : (date_valid ? ' border: 1px solid #22c55e; background: #f0fdf4;' : ' border: 1px solid #cbd5e1;'))
+                }}) }}
+                
+                 {% if date_invalid %}
+                    <div style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem;">{{ form_errors(form.datepublication) }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 2.5rem; display: flex; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
+        <button class="btn-gradient" style="
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); 
+            color: white; 
+            border: none; 
+            padding: 0.75rem 2rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); 
+            display: flex; 
+            align-items: center; 
+            gap: 0.5rem;
+            transition: transform 0.2s;">
+            <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+
+{{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fields = [
+            { id: '{{ form.titre.vars.id }}', min: 5, msg: 'Le titre doit avoir au moins 5 caractères', hint: 'Min. 5 caractères', type: 'text' },
+            { id: '{{ form.description.vars.id }}', min: 20, msg: 'La description doit avoir au moins 20 caractères', hint: 'Min. 20 caractères', type: 'text' },
+            { id: '{{ form.niveau.vars.id }}', type: 'select', msg: 'Veuillez choisir un niveau', hint: 'Choisissez un niveau' },
+            { id: '{{ form.datepublication.vars.id }}', type: 'date', msg: 'Date requise', hint: 'Date valide requise' }
+        ];
+
+        fields.forEach(field => {
+            const input = document.getElementById(field.id);
+            if (!input) return;
+
+            const container = input.parentElement;
+            
+            // Apply base transition to container
+            container.style.transition = 'all 0.3s ease';
+            container.style.borderRadius = '8px';
+            container.style.padding = '10px'; // Add padding for the background effect
+
+            // Find or create feedback element
+            let feedback = container.querySelector('.js-feedback');
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'js-feedback';
+                feedback.style.fontSize = '0.9rem';
+                feedback.style.marginTop = '5px';
+                feedback.style.fontWeight = '500';
+                feedback.style.display = 'block';
+                container.appendChild(feedback);
+            }
+
+            const validate = (isInit = false) => {
+                let isValid = false;
+                const val = input.value.trim();
+                const isEmpty = val === '';
+
+                if (field.type === 'text') {
+                    isValid = val.length >= field.min;
+                } else if (field.type === 'select' || field.type === 'date') {
+                    isValid = !isEmpty;
+                }
+
+                if (isEmpty && isInit) {
+                    // Initial State: Neutral
+                    container.style.backgroundColor = 'transparent';
+                    input.style.borderColor = '#cbd5e1';
+                    feedback.style.color = '#64748b';
+                    feedback.textContent = field.hint;
+                } else if (isValid) {
+                    // Valid State: Green Box
+                    container.style.backgroundColor = '#f0fdf4'; // Light Green BG
+                    input.style.borderColor = '#22c55e';
+                    feedback.style.color = '#15803d'; // Dark Green Text
+                    feedback.textContent = 'Valide';
+                } else {
+                    // Invalid State: Pink Box (Matches user screenshot)
+                    container.style.backgroundColor = '#fff1f2'; // Light Pink BG
+                    input.style.borderColor = '#e11d48'; // Red Border
+                    feedback.style.color = '#9f1239'; // Dark Red Text
+                    feedback.textContent = field.msg;
+                }
+            };
+
+            input.addEventListener('input', () => validate(false));
+            input.addEventListener('change', () => validate(false));
+            
+            // Run on load
+            validate(true);
+        });
+    });
+</script>

@@ -1,0 +1,117 @@
+{% extends 'student/depot/new.html.twig' %}
+
+{% block title %}Modifier Dépôt - {{ project.title }}{% endblock %}
+
+{% block student_content %}
+<!-- Hero Section -->
+<section class="depot-hero">
+    <div class="hero-content">
+        <div class="breadcrumb">
+            <a href="{{ path('app_student_projects') }}"><i class="fas fa-arrow-left"></i> Projets</a>
+            <span>/</span>
+            <a href="{{ path('app_student_project_detail', {'id': project.id}) }}">{{ project.title }}</a>
+            <span>/</span>
+            <span>Modifier dépôt</span>
+        </div>
+        
+        <div class="page-header">
+            <h1>Modifier le Dépôt</h1>
+            <p>Modifiez les informations de votre dépôt pour le projet "{{ project.title }}"</p>
+        </div>
+    </div>
+</section>
+
+<!-- Form Container -->
+<div class="depot-form-container">
+    <div class="form-card">
+        <!-- Current File Info -->
+        <div class="info-box">
+            <div class="info-box-header">
+                <i class="fas fa-file"></i>
+                <h4>Fichier actuel</h4>
+            </div>
+            <div class="selected-file" style="background: white; border: none; padding: 0; margin-top: 1rem;">
+                <div class="file-icon">
+                    <i class="{{ depot.typeIcon }}"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">{{ depot.filePath }}</div>
+                    <div class="file-size">{{ depot.formattedFileSize }}</div>
+                </div>
+                <a href="{{ path('app_student_depot_download', {'id': depot.id}) }}" class="btn-submit" style="width: auto; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-download"></i> Télécharger
+                </a>
+            </div>
+            <p style="margin-top: 1rem;">
+                <small><i class="fas fa-info-circle"></i> Le fichier actuel sera conservé. Vous ne pouvez pas modifier le fichier après soumission.</small>
+            </p>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'depot-form'}}) }}
+        
+        <!-- Form Errors -->
+        {% if form.vars.errors|length > 0 %}
+        <div class="form-errors">
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+
+        <!-- Basic Information -->
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> Informations de base</h2>
+            
+            <div class="form-group">
+                <label for="{{ form.title.vars.id }}" class="form-label required">
+                    Titre du dépôt
+                </label>
+                {{ form_widget(form.title, {'attr': {'class': 'form-input'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.type.vars.id }}" class="form-label required">
+                    Type de fichier
+                </label>
+                {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.type) }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.description.vars.id }}" class="form-label">
+                    Description (optionnel)
+                </label>
+                {{ form_widget(form.description, {'attr': {'class': 'form-textarea', 'rows': 4}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <a href="{{ path('app_student_project_detail', {'id': project.id}) }}" class="btn-cancel">
+                <i class="fas fa-times"></i> Annuler
+            </a>
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-save"></i> Enregistrer les modifications
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.depot-form');
+    const submitBtn = document.querySelector('.btn-submit');
+
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+        
+        return true;
+    });
+});
+</script>
+{% endblock %}

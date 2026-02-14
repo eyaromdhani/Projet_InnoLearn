@@ -1,0 +1,64 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails de l'événement{% endblock %}
+
+{% block page_title %}Détails de l'événement{% endblock %}
+
+{% block admin_content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="glass-card" style="background: white; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0;">
+        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between;">
+            <h2 style="margin: 0; color: #1e1b4b; font-size: 1.5rem;">{{ event.titre }}</h2>
+            <div style="display: flex; gap: 1rem;">
+                <a href="{{ path('admin_event_edit', {'id': event.id}) }}" style="color: #6366f1; background: #eef2ff; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600;">Modifier</a>
+                <a href="{{ path('admin_event_index') }}" style="color: #64748b; background: #f1f5f9; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600;">Retour</a>
+            </div>
+        </div>
+
+        <table class="table" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b; width: 200px;">Id</th>
+                    <td style="padding: 1rem;">{{ event.id }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Titre</th>
+                    <td style="padding: 1rem; font-weight: 600;">{{ event.titre }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Description</th>
+                    <td style="padding: 1rem;">{{ event.description }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Type</th>
+                    <td style="padding: 1rem;">{{ event.typeEvenement ? event.typeEvenement.value : '' }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Date Début</th>
+                    <td style="padding: 1rem;">{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Date Fin</th>
+                    <td style="padding: 1rem;">{{ event.dateFin ? event.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Lieu</th>
+                    <td style="padding: 1rem;">{{ event.lieu }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Capacité</th>
+                    <td style="padding: 1rem;">{{ event.capacite }}</td>
+                </tr>
+                <tr>
+                    <th style="padding: 1rem; text-align: left; color: #64748b;">Statut</th>
+                    <td style="padding: 1rem;">{{ event.statut ? event.statut.value : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+         <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+             {{ include('admin/event/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

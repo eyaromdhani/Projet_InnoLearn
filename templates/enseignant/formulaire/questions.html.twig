@@ -1,0 +1,425 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Gérer Questions - {{ formulaire.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section Extension */
+.courses-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 400px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-top: 100px;
+    margin-bottom: 3rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.btn-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-back-link:hover {
+    color: white;
+    transform: translateX(-5px);
+}
+
+.hero-visual { position: relative; display: flex; justify-content: flex-end; align-items: center; }
+.hero-illustration-wrapper {
+    width: 420px;
+    height: 420px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.hero-waves {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 80px;
+}
+
+.hero-waves .wave-path {
+    animation: waveMove 20s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-15%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 140px; height: 140px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 50px; height: 50px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-4 { width: 100px; height: 50px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+
+/* Premium Primary Button */
+.btn-primary-gradient {
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+    filter: brightness(1.1);
+}
+
+.btn-primary-gradient:active {
+    transform: translateY(1px);
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.add-question-section {
+    background: white;
+    border-radius: 30px;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 4rem;
+}
+
+.question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+}
+
+.question-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    border-color: #6366f1;
+}
+
+.q-number {
+    width: 40px;
+    height: 40px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #6366f1;
+    font-size: 1.1rem;
+}
+
+.q-content { flex: 1; }
+.q-text { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
+.q-badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+.q-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-type { background: #eef2ff; color: #6366f1; }
+.badge-points { background: #fff7ed; color: #f97316; }
+.badge-answer { background: #f0fdf4; color: #16a34a; }
+
+.q-actions { display: flex; gap: 0.75rem; }
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-edit { background: #f1f5f9; color: #475569; }
+.btn-edit:hover { background: #e2e8f0; color: #1e293b; }
+.btn-delete { background: #fef2f2; color: #ef4444; }
+.btn-delete:hover { background: #fee2e2; transform: scale(1.1); }
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid #f1f5f9;
+    background: #f8fafc !important;
+    font-weight: 600;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6366f1;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="courses-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <div class="mb-4">
+                    <a href="{{ path('app_enseignant_quizzes') }}" class="btn-back-link mb-4">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </a>
+                </div>
+                <h1 class="hero-title">
+                    Gérer les<br>
+                    <span>Questions</span>
+                </h1>
+                <p class="text-white opacity-75 lead mb-4">{{ formulaire.titre }}</p>
+                
+                <div class="d-flex gap-4">
+                    <div class="d-flex align-items-center gap-2 text-white">
+                        <i class="far fa-clock"></i>
+                        <span class="font-weight-bold">{{ formulaire.tempsLimite }} min</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-white">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="font-weight-bold">{{ questions|length }} questions</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Quiz illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-4"></div>
+            </div>
+        </div>
+
+        <!-- Hero Transition Waves (Layered Design) -->
+        <div class="hero-waves">
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.3;">
+                <path class="wave-path" fill="#4338ca" d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 15s;"></path>
+            </svg>
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.5; margin-top: -70px;">
+                <path class="wave-path" fill="#6366f1" d="M0,32L80,37.3C160,43,320,53,480,64C640,75,800,85,960,80C1120,75,1280,53,1360,42.7L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 10s; animation-direction: reverse;"></path>
+            </svg>
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="margin-top: -70px;">
+                <path class="wave-path" fill="#f8fafc" d="M0,96L80,85.3C160,75,320,53,480,42.7C640,32,800,32,960,42.7C1120,53,1280,75,1360,85.3L1440,96L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 7s;"></path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="container py-5" style="max-width: 1000px; padding: 0 2rem 150px;">
+        <!-- Add Question -->
+        <div class="add-question-section">
+            <h2 class="section-title">
+                <i class="fas fa-plus-circle"></i>
+                Ajouter une Question
+            </h2>
+
+            <form method="post" action="{{ path('app_enseignant_quiz_questions', {id: formulaire.id}) }}">
+                <div class="mb-4">
+                    <label class="form-label">Texte de la Question</label>
+                    <textarea name="question_text" class="form-control" rows="3" required placeholder="Saisissez votre question ici..."></textarea>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Type de Question</label>
+                        <select name="type" class="form-select" required>
+                            <option value="multiple_choice">Choix Multiple</option>
+                            <option value="true_false">Vrai / Faux</option>
+                            <option value="number">Nombre</option>
+                            <option value="text">Texte</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Points</label>
+                        <input type="number" name="points" class="form-control" value="1" min="1" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Réponse Correcte</label>
+                    <input type="text" name="correct_answer" class="form-control" required placeholder="La réponse attendue...">
+                    <small class="text-muted mt-1 d-block">Pour Vrai/Faux, utilisez "Vrai" ou "Faux".</small>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn-primary-gradient">
+                        <i class="fas fa-save"></i> Ajouter à la Liste
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Questions List -->
+        <h2 class="section-title">
+            <i class="fas fa-list-ul"></i>
+            Liste des Questions
+        </h2>
+
+        {% if questions|length > 0 %}
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="q-number">{{ loop.index }}</div>
+                <div class="q-content">
+                    <div class="q-text">{{ question.questionText }}</div>
+                    <div class="q-badges">
+                        <span class="q-badge badge-type">
+                            <i class="fas fa-tag"></i> 
+                            {% if question.type == 'multiple_choice' %}Choix Multiple
+                            {% elseif question.type == 'true_false' %}Vrai/Faux
+                            {% elseif question.type == 'number' %}Nombre
+                            {% elseif question.type == 'text' %}Texte
+                            {% else %}{{ question.type|replace({'_': ' '})|title }}{% endif %}
+                        </span>
+                        <span class="q-badge badge-points">
+                            <i class="fas fa-star"></i> {{ question.points }} Points
+                        </span>
+                        <span class="q-badge badge-answer">
+                            <i class="fas fa-check-circle"></i> {{ question.correctAnswer }}
+                        </span>
+                    </div>
+                </div>
+                <div class="q-actions">
+                    <a href="{{ path('app_enseignant_question_edit', {id: question.id}) }}" class="btn-icon btn-edit" title="Modifier">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <form method="post" action="{{ path('app_enseignant_question_delete', {id: question.id}) }}" onsubmit="return confirm('Supprimer cette question ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                        <button class="btn-icon btn-delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5 bg-white rounded-24 border border-dashed">
+                <i class="fas fa-ghost fa-3x text-muted mb-3 opacity-25"></i>
+                <h4 class="text-muted">Aucune question pour le moment</h4>
+                <p class="text-muted mb-0">Commencez par en ajouter une via le formulaire ci-dessus.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+

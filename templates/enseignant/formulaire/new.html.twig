@@ -1,0 +1,232 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Nouveau Quiz - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section Extension */
+.courses-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 400px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-top: 100px;
+    margin-bottom: 2rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.hero-visual { position: relative; display: flex; justify-content: flex-end; align-items: center; }
+.hero-illustration-wrapper {
+    width: 420px;
+    height: 420px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.hero-waves {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 80px;
+}
+
+.hero-waves .wave-path {
+    animation: waveMove 20s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-15%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 140px; height: 140px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 50px; height: 50px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-4 { width: 100px; height: 50px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid #f1f5f9;
+    background: #f8fafc !important;
+    font-weight: 600;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6366f1;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="courses-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <h1 class="hero-title">
+                    Créer un<br>
+                    <span>Nouveau Quiz</span>
+                </h1>
+                <p class="text-white opacity-75 lead mt-3">Définissez les bases de votre assessment premium.</p>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Quiz illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-4"></div>
+            </div>
+        </div>
+
+        <!-- Hero Transition Waves (Layered Design) -->
+        <div class="hero-waves">
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.3;">
+                <path class="wave-path" fill="#4338ca" d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 15s;"></path>
+            </svg>
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.5; margin-top: -70px;">
+                <path class="wave-path" fill="#6366f1" d="M0,32L80,37.3C160,43,320,53,480,64C640,75,800,85,960,80C1120,75,1280,53,1360,42.7L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 10s; animation-direction: reverse;"></path>
+            </svg>
+            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="margin-top: -70px;">
+                <path class="wave-path" fill="#f8fafc" d="M0,96L80,85.3C160,75,320,53,480,42.7C640,32,800,32,960,42.7C1120,53,1280,75,1360,85.3L1440,96L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 7s;"></path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="container py-5" style="max-width: 900px; padding: 0 2rem 150px;">
+        <div class="premium-card" style="background: white; border-radius: 30px; padding: 3rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;">
+            <h1 class="form-title" style="font-size: 2rem; font-weight: 800; color: #1e293b; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-magic" style="color: #6366f1;"></i>
+                Configuration d'Assessment
+            </h1>
+
+            {{ form_start(form) }}
+                <div class="form-group mb-4">
+                    {{ form_label(form.titre, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Introduction au Design UI'}}) }}
+                    {{ form_errors(form.titre) }}
+                </div>
+
+                <div class="form-group mb-4">
+                    {{ form_label(form.description, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4', 'placeholder': 'Décrivez les objectifs de ce quiz...'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            {{ form_label(form.tempsLimite, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.tempsLimite, {'attr': {'class': 'form-control', 'placeholder': 'En minutes'}}) }}
+                            {{ form_errors(form.tempsLimite) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            {{ form_label(form.category, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.category, {'attr': {'class': 'form-control', 'placeholder': 'Ex: UI/UX, Backend...'}}) }}
+                            {{ form_errors(form.category) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+                    <a href="{{ path('app_enseignant_quizzes') }}" class="btn-secondary" style="background: #f1f5f9; color: #475569; text-decoration: none; padding: 1rem 2rem; border-radius: 15px; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </a>
+                    <button type="submit" class="btn-primary-gradient" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white; border: none; padding: 1rem 2.5rem; border-radius: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-check-circle"></i> Enregistrer le Quiz
+                    </button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

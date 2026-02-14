@@ -1,0 +1,71 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ user.id ? 'Modifier' : 'Nouvel' }} Utilisateur - Admin{% endblock %}
+{% block page_title %}{{ user.id ? 'Modification' : 'Création' }} d'utilisateur{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header" style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9;">
+        <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600; color: #1e293b;">Informations de l'utilisateur</h3>
+    </div>
+
+    <form method="post" style="padding: 2rem;">
+        <input type="hidden" name="_token" value="{{ csrf_token('user-form') }}">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Nom Complet</label>
+                <input type="text" name="name" value="{{ user.name }}" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Nom d'utilisateur</label>
+                <input type="text" name="username" value="{{ user.username }}" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Email</label>
+            <input type="email" name="email" value="{{ user.email }}" required
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Code</label>
+                <input type="text" name="countryCode" value="{{ user.countryCode ?: '+212' }}" 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Téléphone</label>
+                <input type="text" name="phoneNumber" value="{{ user.phoneNumber }}" 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Rôle</label>
+                <select name="role" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; background: white;">
+                    <option value="ROLE_USER" {{ 'ROLE_USER' in user.roles ? 'selected' : '' }}>Utilisateur</option>
+                    <option value="ROLE_ENSEIGNANT" {{ 'ROLE_ENSEIGNANT' in user.roles ? 'selected' : '' }}>Enseignant</option>
+                    <option value="ROLE_RECRUTEUR" {{ 'ROLE_RECRUTEUR' in user.roles ? 'selected' : '' }}>Recruteur</option>
+                    <option value="ROLE_ADMIN" {{ 'ROLE_ADMIN' in user.roles ? 'selected' : '' }}>Administrateur</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Mot de passe {{ user.id ? '(laisser vide pour ne pas changer)' : '' }}</label>
+                <input type="password" name="password" {{ user.id ? '' : 'required' }}
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+            <a href="{{ path('admin_user_index') }}" style="padding: 0.75rem 1.5rem; border: 1px solid #e2e8f0; border-radius: 8px; color: #64748b; text-decoration: none; font-weight: 600; font-size: 0.875rem;">Annuler</a>
+            <button type="submit" class="btn-primary" style="padding: 0.75rem 2rem; border-radius: 8px; border: none; font-weight: 600; font-size: 0.875rem; cursor: pointer;">
+                {{ user.id ? 'Mettre à jour' : 'Créer l\'utilisateur' }}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

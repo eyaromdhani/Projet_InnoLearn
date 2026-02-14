@@ -1,0 +1,39 @@
+{% for offer in offers %}
+    {% set themes = ['theme-purple', 'theme-violet', 'theme-pink', 'theme-blue', 'theme-orange', 'theme-cyan'] %}
+    {% set theme = themes[loop.index0 % 6] %}
+    
+    <div class="job-card">
+        <!-- Card Header with vibrant background -->
+        <div class="card-header {{ theme }}">
+            <span class="domain-badge">{{ offer.domaine }}</span>
+            <div class="card-title-container">
+                <h2>{{ offer.titre|replace({' ': '<br>'})|raw }}</h2>
+            </div>
+        </div>
+
+        <!-- Card Body with Info -->
+        <div class="card-body">
+            <h3 class="body-title">{{ offer.titre }}</h3>
+            <div class="body-meta">
+                <p><i class="far fa-building" style="margin-right: 0.5rem;"></i> {{ offer.entreprise }}</p>
+                <p><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem;"></i> {{ offer.lieu }}</p>
+                <p><i class="far fa-calendar-alt" style="margin-right: 0.5rem;"></i> Publié le {{ offer.datePublication|date('d/m/Y') }}</p>
+                <p><i class="fas fa-history" style="margin-right: 0.5rem;"></i> Durée: {{ offer.duree }} mois</p>
+            </div>
+        </div>
+
+        <!-- Card Footer with Action -->
+        <div class="card-footer">
+            <div class="price-box">Ouverte</div>
+            <div class="rating-box">
+                <button class="btn-apply" onclick="window.location.href='{{ path('app_offre_stage_show', {'id': offer.id}) }}'">Voir Détails</button>
+            </div>
+        </div>
+    </div>
+{% else %}
+<div style="text-align: center; padding: 5rem; background: white; border-radius: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); grid-column: 1 / -1;">
+    <i class="fas fa-search" style="font-size: 4rem; color: #e2e8f0; margin-bottom: 1.5rem;"></i>
+    <h3 style="color: #1e293b; margin-bottom: 0.5rem;">Aucune offre trouvée</h3>
+    <p style="color: #64748b;">Essayez de modifier vos filtres ou de rechercher un autre terme.</p>
+</div>
+{% endfor %}

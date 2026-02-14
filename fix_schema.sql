@@ -1,0 +1,3 @@
+ALTER TABLE offrestage ADD id_recruteur INT DEFAULT NULL;
+ALTER TABLE offrestage ADD CONSTRAINT FK_D99EA427166D1F9C FOREIGN KEY (id_recruteur) REFERENCES user (id);
+CREATE INDEX IDX_D99EA427166D1F9C ON offrestage (id_recruteur);

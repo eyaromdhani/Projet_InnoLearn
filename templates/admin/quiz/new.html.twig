@@ -4,6 +4,7 @@
 
 {% block admin_content %}
 <div class="card animate-fade-in-up">
+<<<<<<< HEAD
     <div class="card-header" style="justify-content: space-between; display: flex; align-items: center;">
         <h3 class="card-title">Créer un nouveau quiz</h3>
         <a href="{{ path('admin_quiz_index') }}" class="btn-primary" style="text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; background-color: #64748b; border: none;">Retour à la liste</a>
@@ -42,4 +43,17 @@
         {{ form_end(form) }}
     </div>
 </div>
+=======
+    <div class="card-header">
+        <h3 class="card-title">Créer un nouveau quiz</h3>
+    </div>
+    <div class="card-body">
+        {{ include('admin/quiz/_form.html.twig', {'button_label': 'Créer'}) }}
+    </div>
+</div>
+
+<a href="{{ path('admin_quiz_index') }}" class="btn-secondary" style="display: inline-block; margin-top: 1rem; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px;">
+    Retour à la liste
+</a>
+>>>>>>> user
 {% endblock %}

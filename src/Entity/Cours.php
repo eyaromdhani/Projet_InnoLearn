@@ -5,9 +5,15 @@ namespace App\Entity;
 use App\Repository\CoursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 #[ORM\Table(name: 'cours')]
+=======
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: CoursRepository::class)]
+>>>>>>> user
 class Cours
 {
     #[ORM\Id]
@@ -16,6 +22,7 @@ class Cours
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+<<<<<<< HEAD
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -30,12 +37,58 @@ class Cours
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, name: 'categorie_id')]
     private ?CoursCategorie $categorie = null;
+=======
+    #[Assert\NotBlank(message: 'Le nom du cours est obligatoire')]
+    #[Assert\Length(min: 5, minMessage: 'Le nom doit faire au moins {{ limit }} caractères')]
+    private ?string $nom = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La description est obligatoire')]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le slug est obligatoire')]
+    private ?string $slug = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $typeMedia = null;
+
+    #[ORM\Column(length: 500)]
+    #[Assert\NotBlank(message: 'L\'URL du média est obligatoire')]
+    #[Assert\Url(message: 'Veuillez saisir une URL valide')]
+    private ?string $mediaUrl = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'La durée est obligatoire')]
+    #[Assert\Positive(message: 'La durée doit être un nombre positif')]
+    private ?int $duree = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $niveau = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateCreation = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom de l\'enseignant est obligatoire')]
+    private ?string $enseignant = null;
+
+    #[ORM\ManyToOne(inversedBy: 'cours')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CategorieCours $categorieCours = null;
+
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+    }
+>>>>>>> user
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+<<<<<<< HEAD
     public function getTitre(): ?string
     {
         return $this->titre;
@@ -44,6 +97,16 @@ class Cours
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
+=======
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+>>>>>>> user
 
         return $this;
     }
@@ -60,6 +123,57 @@ class Cours
         return $this;
     }
 
+<<<<<<< HEAD
+=======
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getTypeMedia(): ?string
+    {
+        return $this->typeMedia;
+    }
+
+    public function setTypeMedia(string $typeMedia): static
+    {
+        $this->typeMedia = $typeMedia;
+
+        return $this;
+    }
+
+    public function getMediaUrl(): ?string
+    {
+        return $this->mediaUrl;
+    }
+
+    public function setMediaUrl(string $mediaUrl): static
+    {
+        $this->mediaUrl = $mediaUrl;
+
+        return $this;
+    }
+
+    public function getDuree(): ?int
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(int $duree): static
+    {
+        $this->duree = $duree;
+
+        return $this;
+    }
+
+>>>>>>> user
     public function getNiveau(): ?string
     {
         return $this->niveau;
@@ -72,6 +186,7 @@ class Cours
         return $this;
     }
 
+<<<<<<< HEAD
     public function getDatepublication(): ?\DateTimeInterface
     {
         return $this->datepublication;
@@ -80,10 +195,21 @@ class Cours
     public function setDatepublication(\DateTimeInterface $datepublication): static
     {
         $this->datepublication = $datepublication;
+=======
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): static
+    {
+        $this->dateCreation = $dateCreation;
+>>>>>>> user
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getCategorie(): ?CoursCategorie
     {
         return $this->categorie;
@@ -92,6 +218,28 @@ class Cours
     public function setCategorie(?CoursCategorie $categorie): static
     {
         $this->categorie = $categorie;
+=======
+    public function getCategorieCours(): ?CategorieCours
+    {
+        return $this->categorieCours;
+    }
+
+    public function setCategorieCours(?CategorieCours $categorieCours): static
+    {
+        $this->categorieCours = $categorieCours;
+
+        return $this;
+    }
+
+    public function getEnseignant(): ?string
+    {
+        return $this->enseignant;
+    }
+
+    public function setEnseignant(string $enseignant): static
+    {
+        $this->enseignant = $enseignant;
+>>>>>>> user
 
         return $this;
     }

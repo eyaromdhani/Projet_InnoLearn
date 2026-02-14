@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\Formulaire;
+use App\Entity\Question;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class QuestionType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('questionText')
+            ->add('type', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                'choices' => [
+                    '📝 Choix Multiple' => 'multiple_choice',
+                    '✅ Vrai/Faux' => 'true_false',
+                    '🔢 Nombre' => 'number',
+                    '✍️ Texte' => 'text',
+                ],
+                'label' => 'Type de Question',
+            ])
+            ->add('correctAnswer')
+            ->add('points')
+            ->add('formulaire', EntityType::class, [
+                'class' => Formulaire::class,
+                'choice_label' => 'id',
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Question::class,
+        ]);
+    }
+}

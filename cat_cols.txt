@@ -1,0 +1,10 @@
+ ----------------- ----------- ------------- 
+  column_name       data_type   is_nullable  
+ ----------------- ----------- ------------- 
+  id                int         NO           
+  titre             varchar     NO           
+  description       longtext    NO           
+  niveau            varchar     NO           
+  datepublication   datetime    NO           
+ ----------------- ----------- ------------- 
+
