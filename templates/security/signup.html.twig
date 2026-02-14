@@ -6,7 +6,22 @@
 {% block footer_wave %}{% endblock %}
 
 {% block body %}
-<main class="auth-page" style="background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 2rem 0;">
+    {% set flash_errors = app.flashes('error') %}
+    {% set all_errors = errors ?? [] %}
+    {% for msg in flash_errors %}
+        {% set all_errors = all_errors|merge([msg]) %}
+    {% endfor %}
+
+    <style>
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+
+    <main class="auth-page" style="background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 2rem 0;">
     <!-- Organic Background Blobs -->
     <div style="position: absolute; top: -10%; right: -10%; width: 50%; height: 70%; background: var(--gradient-hero); border-radius: 50%; filter: blur(120px); opacity: 0.4;"></div>
     <div style="position: absolute; bottom: -10%; left: -10%; width: 40%; height: 60%; background: var(--secondary); border-radius: 50%; filter: blur(120px); opacity: 0.3;"></div>
@@ -18,7 +33,7 @@
     </a>
 
     <div class="auth-frame" style="position: relative; z-index: 1; max-width: 1100px; width: 90%; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px; overflow: hidden; display: flex; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);">
-        <!-- Left Side: Portal Animation -->
+        <!-- Left Side: Original Portal Animation -->
         <div class="lock-side" style="flex: 1; padding: 4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border-right: 1px solid rgba(255, 255, 255, 0.05); position: relative;">
             <div class="portal-scene" style="position: relative; width: 280px; height: 320px; display: flex; flex-direction: column; align-items: center;">
                 <svg id="portal-device" viewBox="0 0 200 240" style="width: 100%; height: 100%; overflow: visible;">
@@ -56,91 +71,95 @@
             </div>
         </div>
 
-        <!-- Right Side: Form -->
-        <div class="form-side" style="flex: 1.2; padding: 4rem;">
-            <div style="text-align: center; margin-bottom: 2.5rem;">
-                <h1 style="color: white; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem;">Create Account</h1>
-                <p style="color: rgba(255, 255, 255, 0.6);">Be part of our innovative community.</p>
+        <!-- Right Side: Signup Form on Book -->
+        <div class="form-side" style="flex: 1.5; position: relative; display: flex; align-items: center; justify-content: center; padding: 3rem;">
+            
+            <!-- THE BOOK BACKGROUND -->
+            <div class="signup-book-bg" style="position: absolute; inset: 1.5rem; background: #fff; border-radius: 5px 20px 20px 5px; box-shadow: -10px 10px 40px rgba(0,0,0,0.4); transform: rotateY(-3deg); transform-style: preserve-3d; transition: 0.5s;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to right, #f1f5f9 2%, #fff 6%); border-radius: inherit;"></div>
+                <div style="position: absolute; top: 0; left: 0; width: 40px; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent); border-radius: 5px 0 0 5px;"></div>
+                <div style="position: absolute; bottom: 30px; right: 40px; font-family: 'serif'; font-size: 12px; color: #94a3b8; letter-spacing: 2px;">PAGE 01</div>
             </div>
 
-            {% if errors is defined and errors|length > 0 %}
-                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                    <p style="margin: 0; font-weight: 500; margin-bottom: 0.5rem;">Please correct the following errors:</p>
-                    <ul style="margin: 0; padding-left: 1.5rem;">
-                        {% for field, message in errors %}
-                            <li><strong>{{ field }}:</strong> {{ message }}</li>
-                        {% endfor %}
-                    </ul>
+            <!-- Content -->
+            <div class="signup-content" style="position: relative; z-index: 10; width: 100%; max-width: 520px;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="color: #1e1b4b; font-size: 2.25rem; font-weight: 950; margin-bottom: 0.25rem; font-family: 'Georgia', serif;">Enrollment</h1>
+                    <p style="color: #64748b; font-family: 'Georgia', serif; font-style: italic;">Enter your details to begin.</p>
                 </div>
-            {% endif %}
 
-            <form method="post" class="auth-form" id="signup-form" data-turbo="false">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                    <div>
-                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Full Name</label>
-                        <input type="text" name="name" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="John Doe" required>
+                {% if all_errors|length > 0 %}
+                    <div class="error-shelf" style="background: #fee2e2; border: 2px solid #ef4444; padding: 1.25rem; margin-bottom: 2rem; border-radius: 12px; box-shadow: 0 10px 20px rgba(239,68,68,0.1); animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; position: relative; z-index: 100;">
+                        <div style="font-weight: 800; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 0.5rem; letter-spacing: 1px; color: #b91c1c;">Form Rejection</div>
+                        <ul style="margin: 0; padding-left: 1.25rem; color: #b91c1c; font-size: 0.9rem; font-weight: 600;">
+                            {% for message in all_errors %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    <div>
-                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Username</label>
-                        <input type="text" name="username" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="johndoe123" required>
+                {% endif %}
+
+                <form method="post" id="signup-form" data-turbo="false" class="auth-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <input type="text" name="name" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; font-family: 'Georgia', serif; text-align: center;" placeholder="Full Name" required>
+                        </div>
+                        <div>
+                            <input type="text" name="username" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; font-family: 'Georgia', serif; text-align: center;" placeholder="Username" required>
+                        </div>
                     </div>
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Email Address</label>
-                    <input type="email" name="email" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="john@example.com" required>
-                </div>
 
-                <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                    <div>
-                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Code</label>
-                        <input type="text" name="countryCode" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="+1">
+                    <div style="margin-bottom: 1rem;">
+                        <input type="email" name="email" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; font-family: 'Georgia', serif; text-align: center;" placeholder="scholar@innolearn.com" required>
                     </div>
-                    <div>
-                        <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Phone Number</label>
-                        <input type="text" name="phoneNumber" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="1234567890">
+
+                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <input type="text" name="countryCode" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; text-align: center;" placeholder="+33">
+                        </div>
+                        <div>
+                            <input type="text" name="phoneNumber" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; text-align: center;" placeholder="Phone Number">
+                        </div>
                     </div>
-                </div>
 
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">I want to be a...</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
-                        <label class="role-card" style="cursor: pointer; position: relative;">
-                            <input type="radio" name="role" value="student" style="display: none;" required checked>
-                            <div class="card-inner" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem; text-align: center; color: white; transition: all 0.3s;">
-                                <span style="display: block; font-size: 1.2rem; margin-bottom: 0.25rem;">🎓</span>
-                                <span style="font-weight: 500; font-size: 0.85rem;">Student</span>
-                            </div>
-                        </label>
-                        <label class="role-card" style="cursor: pointer; position: relative;">
-                            <input type="radio" name="role" value="instructor" style="display: none;">
-                            <div class="card-inner" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem; text-align: center; color: white; transition: all 0.3s;">
-                                <span style="display: block; font-size: 1.2rem; margin-bottom: 0.25rem;">👨‍🏫</span>
-                                <span style="font-weight: 500; font-size: 0.85rem;">Instructor</span>
-                            </div>
-                        </label>
-                        <label class="role-card" style="cursor: pointer; position: relative;">
-                            <input type="radio" name="role" value="recruiter" style="display: none;">
-                            <div class="card-inner" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem; text-align: center; color: white; transition: all 0.3s;">
-                                <span style="display: block; font-size: 1.2rem; margin-bottom: 0.25rem;">💼</span>
-                                <span style="font-weight: 500; font-size: 0.85rem;">Recruiter</span>
-                            </div>
-                        </label>
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+                            <label class="path-card" style="cursor: pointer;">
+                                <input type="radio" name="role" value="student" style="display: none;" checked required>
+                                <div class="p-inner" style="background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.6rem; text-align: center; color: #475569; transition: 0.3s;">
+                                    <span style="display: block; font-size: 1.1rem;">🎓</span>
+                                    <span style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Student</span>
+                                </div>
+                            </label>
+                            <label class="path-card" style="cursor: pointer;">
+                                <input type="radio" name="role" value="instructor" style="display: none;">
+                                <div class="p-inner" style="background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.6rem; text-align: center; color: #475569; transition: 0.3s;">
+                                    <span style="display: block; font-size: 1.1rem;">🏛️</span>
+                                    <span style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Teacher</span>
+                                </div>
+                            </label>
+                            <label class="path-card" style="cursor: pointer;">
+                                <input type="radio" name="role" value="recruiter" style="display: none;">
+                                <div class="p-inner" style="background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.6rem; text-align: center; color: #475569; transition: 0.3s;">
+                                    <span style="display: block; font-size: 1.1rem;">🤝</span>
+                                    <span style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Partner</span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="password" name="password" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; text-align: center;" placeholder="Password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="signup-btn" style="width: 100%; justify-content: center; padding: 1.1rem; font-size: 1.25rem; font-weight: 900; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.1em; background: var(--gradient-organic); border: none; cursor: pointer; transition: 0.4s;">
+                        Let's Go!
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <p style="color: #64748b; font-size: 0.9rem;">Already a member? <a href="{{ path('app_login') }}" style="color: var(--secondary); font-weight: 700; text-decoration: none; border-bottom: 2px solid rgba(116, 185, 255, 0.2);">Login here</a></p>
                 </div>
-
-                <div style="margin-bottom: 2rem;">
-                    <label style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Create Password</label>
-                    <input type="password" name="password" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; color: white; outline: none;" placeholder="••••••••" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary" id="signup-btn" style="width: 100%; justify-content: center; padding: 1.1rem; font-size: 1.1rem; margin-bottom: 1.5rem; transition: all 0.3s; position: relative; overflow: hidden; background: var(--gradient-organic); border: none; color: white; font-weight: 900; border-radius: 12px; cursor: pointer;">
-                    <span class="btn-text">Let's Go!</span>
-                </button>
-            </form>
-
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.95rem;">Already a member? <a href="{{ path('app_login') }}" style="color: white; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--secondary);">Login here</a></p>
             </div>
         </div>
     </div>
@@ -157,6 +176,7 @@
             const scanner = document.getElementById('scanner-beam');
             const portal = document.getElementById('portal-device');
             const scene = document.querySelector('.portal-scene');
+            const bookBg = document.querySelector('.signup-book-bg');
             
             const weights = { name: 0.15, username: 0.15, email: 0.15, countryCode: 0.05, phoneNumber: 0.1, role: 0.15, password: 0.25 };
             
@@ -173,48 +193,56 @@
 
                 gsap.to(card, { y: -100 + (totalProgress * 130), duration: 0.5, ease: "power2.out" });
                 gsap.to(slot, { strokeWidth: 1 + (totalProgress * 3), duration: 0.4 });
-                gsap.to(slotBlur, { attr: { stdDeviation: 2 + (totalProgress * 4) }, duration: 0.4 });
+                if(slotBlur) gsap.to(slotBlur, { attr: { stdDeviation: 2 + (totalProgress * 4) }, duration: 0.4 });
                 gsap.to('.energy-line', { opacity: 0.3 + (totalProgress * 0.7), duration: 0.4 });
+                // Subtle book tilt
+                gsap.to(bookBg, { rotationY: -3 + (totalProgress * 2), duration: 0.5 });
             };
 
             inputs.forEach(input => input.addEventListener('input', updateProgress));
             radioInputs.forEach(radio => radio.addEventListener('change', updateProgress));
 
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
+                const complete = Array.from(inputs).every(i => i.value.trim().length > 0);
+                if (!complete) {
+                    e.preventDefault();
+                    gsap.fromTo(".auth-form", { x: -6 }, { x: 6, duration: 0.05, repeat: 4, yoyo: true });
+                    return;
+                }
                 
-                const tl = gsap.timeline({ onComplete: () => { form.submit(); } });
-
-                tl.to(card, { y: 70, duration: 0.25, ease: "power4.in" })
-                  .to(scene, { y: 10, duration: 0.1, ease: "power2.in" }, "-=0.05")
-                  .to(scene, { y: 0, duration: 0.4, ease: "elastic.out(1, 0.3)" })
-                  .to(scanner, { opacity: 1, attr: { y1: 190, y2: 190 }, duration: 0.3, ease: "power2.inOut" }, "-=0.2")
-                  .to(slotBlur, { attr: { stdDeviation: 10 }, duration: 0.15 }, "-=0.1")
-                  .to(portal, { scale: 1.05, filter: "drop-shadow(0 0 30px var(--secondary-light))", duration: 0.4, ease: "back.out(2)" }, "-=0.1");
+                // Immediate feedback to prevent "frozen" feeling
+                const btn = document.getElementById('signup-btn');
+                btn.innerHTML = '<span class="loading-pulse">Preparing Journey...</span>';
+                btn.style.opacity = "0.7";
+                btn.style.pointerEvents = "none";
+                
+                gsap.to(btn, { scale: 0.98, duration: 0.1 });
+                gsap.to(".loading-pulse", { opacity: 0.5, repeat: -1, yoyo: true, duration: 0.5 });
             });
 
-            {% if errors is defined and errors|length > 0 %}
-            // Error Animation
+            {% if all_errors|length > 0 %}
+            // Error Animation: Rejection shake
+            console.log("Signup errors detected, playing rejection animation.");
             gsap.timeline()
                 .fromTo(scene, { x: -10 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true })
                 .to(scanner, { opacity: 1, stroke: "#ef4444", attr: { y1: 80, y2: 80 }, duration: 0.3 }, 0)
-                .to(card, { y: -120, duration: 0.5, ease: "back.out(2)" }, 0.5)
-                .to(portal, { filter: "drop-shadow(0 0 30px rgba(239, 68, 68, 0.5))", duration: 0.3 }, 0);
+                .fromTo(bookBg, { x: -5 }, { x: 5, duration: 0.1, repeat: 5, yoyo: true }, 0);
             {% endif %}
         });
     </script>
 </main>
 
 <style>
-    input[type="radio"]:checked + .card-inner {
-        background: rgba(255, 255, 255, 0.1) !important;
+    input[type="radio"]:checked + .p-inner {
+        background: white !important;
         border-color: var(--secondary) !important;
-        box-shadow: 0 0 20px rgba(116, 185, 255, 0.2);
+        color: #1e1b4b !important;
+        box-shadow: 0 5px 15px rgba(116, 185, 255, 0.2);
+        transform: scale(1.05);
     }
-    
-    .role-card:hover .card-inner {
-        background: rgba(255, 255, 255, 0.08) !important;
-        transform: translateY(-2px);
+    .path-card:hover .p-inner {
+        border-color: #cbd5e1;
     }
 </style>
 {% endblock %}
+

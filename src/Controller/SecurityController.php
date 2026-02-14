@@ -11,6 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 
 class SecurityController extends AbstractController
@@ -31,7 +32,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/signup', name: 'app_signup')]
-    public function signup( Request $request,UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ValidatorInterface $validator ): Response
+    public function signup( Request $request,UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ValidatorInterface $validator, Security $security ): Response
     {
         $errors = [];
         if ($request->isMethod('POST')) {
@@ -78,12 +79,14 @@ class SecurityController extends AbstractController
                 $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
 
-                // step 7
                  $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Step 5: role based redirection
-                $this->addFlash('success', 'User created successfully');
+                // Step 8: Auto-login the user
+                $security->login($user, 'form_login', 'main');
+
+                // Step 9: role based redirection
+                $this->addFlash('success', 'Welcome to InnoLearn! Your account is ready.');
                 
                 if ($systemRole === 'ROLE_INSTRUCTOR') {
                     return $this->redirectToRoute('app_enseignant_home');
@@ -107,4 +110,7 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('This should never be reached!');
     }
+
+
+
 }

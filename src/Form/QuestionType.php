@@ -15,7 +15,15 @@ class QuestionType extends AbstractType
     {
         $builder
             ->add('questionText')
-            ->add('type')
+            ->add('type', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                'choices' => [
+                    '📝 Choix Multiple' => 'multiple_choice',
+                    '✅ Vrai/Faux' => 'true_false',
+                    '🔢 Nombre' => 'number',
+                    '✍️ Texte' => 'text',
+                ],
+                'label' => 'Type de Question',
+            ])
             ->add('correctAnswer')
             ->add('points')
             ->add('formulaire', EntityType::class, [
