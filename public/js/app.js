@@ -89,33 +89,8 @@ if (passwordInput) {
     });
 }
 
-<<<<<<< HEAD
-// Form validation animations
-const forms = document.querySelectorAll('.auth-form');
-forms.forEach(form => {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        // Add loading state to submit button
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.style.opacity = '0.7';
-            submitBtn.style.pointerEvents = 'none';
-
-            // Simulate form submission
-            setTimeout(() => {
-                submitBtn.style.opacity = '1';
-                submitBtn.style.pointerEvents = 'auto';
-            }, 2000);
-        }
-    });
-
-    // Input focus animations
-    const inputs = form.querySelectorAll('input');
-=======
 // Input focus animations
     const inputs = document.querySelectorAll('.auth-form input');
->>>>>>> user
     inputs.forEach(input => {
         input.addEventListener('focus', function () {
             this.parentElement.classList.add('focused');
@@ -125,10 +100,6 @@ forms.forEach(form => {
             this.parentElement.classList.remove('focused');
         });
     });
-<<<<<<< HEAD
-});
-=======
->>>>>>> user
 
 // Animate stats on scroll
 const statsObserver = new IntersectionObserver((entries) => {
