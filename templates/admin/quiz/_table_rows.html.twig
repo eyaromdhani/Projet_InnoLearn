@@ -1,0 +1,27 @@
+{% for formulaire in formulaires %}
+    <tr>
+        <td class="text-center text-muted">#{{ formulaire.id }}</td>
+        <td>{{ formulaire.titre }}</td>
+        <td>{{ formulaire.description|u.truncate(50, '...') }}</td>
+        <td>{{ formulaire.tempsLimite ?: 'N/A' }}</td>
+        <td>{{ formulaire.category }}</td>
+        <td class="text-center">
+            <!-- Manage Questions button -->
+            <a href="{{ path('app_formulaire_questions', {'id': formulaire.id}) }}" class="btn btn-action btn-light" title="Gérer Questions" data-bs-toggle="tooltip">
+                <i class="bi bi-list-task text-success"></i>
+            </a>
+
+            <!-- Edit button -->
+            <a href="{{ path('admin_quiz_edit', {'id': formulaire.id}) }}" class="btn btn-action btn-light" title="Modifier" data-bs-toggle="tooltip">
+                <i class="bi bi-pencil-square text-warning"></i>
+            </a>
+
+            <!-- Delete button -->
+            {{ include('admin/quiz/_delete_form.html.twig', {'formulaire': formulaire}) }}
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6" class="text-center py-3">Aucun quiz trouvé.</td>
+    </tr>
+{% endfor %}

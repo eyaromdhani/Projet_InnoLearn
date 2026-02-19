@@ -1,60 +1,157 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block title %}Gestion des Quiz{% endblock %}
+{% block page_title %}Gestion des Quiz{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 8px;
+            margin: 0 2px;
+        }
+    </style>
+{% endblock %}
 
 {% block admin_content %}
-<div class="card animate-fade-in-up">
-    <div class="card-header" style="justify-content: space-between; display: flex; align-items: center;">
-        <h3 class="card-title">Liste des Quiz</h3>
-        <a href="{{ path('admin_quiz_new') }}" class="btn-primary" style="text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; display: inline-block;">Ajouter un Quiz</a>
+<div class="card shadow-sm animate-fade-in-up">
+
+    <!-- Header -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">Liste des Quiz</h3>
+        <a href="{{ path('admin_quiz_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Ajouter Nouveau
+        </a>
     </div>
-    <div class="table-responsive">
-        <table>
-            <thead>
+
+    <!-- Search by Category -->
+    <div class="p-3">
+        <input type="text" id="category-search" class="form-control form-control-sm"
+               placeholder="Rechercher par catégorie" value="{{ currentCategory|default('') }}">
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive p-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
-                    <th>Titre</th>
-                    <th>Difficulté</th>
-                    <th>Durée</th>
-                    <th>Créé le</th>
-                    <th>Actions</th>
+                    <th><a href="#" data-sort="id" class="text-white">ID</a></th>
+                    <th><a href="#" data-sort="titre" class="text-white">Titre</a></th>
+                    <th><a href="#" data-sort="description" class="text-white">Description</a></th>
+                    <th><a href="#" data-sort="tempsLimite" class="text-white">Temps Limite</a></th>
+                    <th><a href="#" data-sort="category" class="text-white">Catégorie</a></th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
-            <tbody>
-            {% for quiz in quizzes %}
-                <tr>
-                    <td>{{ quiz.id }}</td>
-                    <td>
-                        <div style="font-weight: 600;">{{ quiz.title }}</div>
-                        <small style="color: #64748b;">{{ quiz.description|u.truncate(50, '...') }}</small>
-                    </td>
-                    <td>
-                        <span class="badge {{ quiz.difficulty == 'Débutant' ? 'badge-success' : (quiz.difficulty == 'Intermédiaire' ? 'badge-warning' : 'badge-danger') }}">
-                            {{ quiz.difficulty }}
-                        </span>
-                    </td>
-                    <td>{{ quiz.duration }} min</td>
-                    <td>{{ quiz.createdAt|date('Y-m-d H:i') }}</td>
-                    <td>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <a href="{{ path('admin_quiz_edit', {'id': quiz.id}) }}" style="color: #4f46e5;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                </svg>
-                            </a>
-                            {{ include('admin/quiz/_delete_form.html.twig') }}
-                        </div>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 2rem; color: #64748b;">
-                        Aucun quiz trouvé
-                    </td>
-                </tr>
-            {% endfor %}
+            <tbody id="quiz-table-body">
+                {{ include('admin/quiz/_table_rows.html.twig') }}
             </tbody>
         </table>
     </div>
 </div>
+
+<!-- Statistics Section -->
+<div class="card shadow-sm mt-4 animate-fade-in-up">
+    <div class="card-header">
+        <h3 class="card-title">Statistiques des Durées</h3>
+    </div>
+    <div class="card-body">
+        <div id="quiz-duration-chart" style="min-height: 300px; display: flex; justify-content: center;"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var options = {
+        series: [{{ countBelow10|default(0) }}, {{ countAbove10|default(0) }}],
+        chart: {
+            width: 380,
+            type: 'donut',
+        },
+        labels: ['< 10 minutes', '>= 10 minutes'],
+        colors: ['#f43f5e', '#10b981'],
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: true
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#quiz-duration-chart"), options);
+    chart.render();
+});
+</script>
+
+<!-- Dynamic search & sorting JS -->
+<script>
+const tableBody = document.getElementById('quiz-table-body');
+const searchInput = document.getElementById('category-search');
+
+let currentSort = '{{ currentSort }}';
+let currentDirection = '{{ currentDirection }}';
+
+function fetchTable() {
+    const category = encodeURIComponent(searchInput.value);
+
+    fetch(`{{ path('admin_quiz_index') }}?category=${category}&sort=${currentSort}&direction=${currentDirection}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.text())
+    .then(html => {
+        tableBody.innerHTML = html;
+    });
+}
+
+searchInput.addEventListener('input', () => {
+    fetchTable();
+});
+
+document.querySelectorAll('thead th a').forEach(header => {
+    header.addEventListener('click', e => {
+        e.preventDefault();
+        const sortField = header.dataset.sort;
+
+        if (currentSort === sortField) {
+            currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort = sortField;
+            currentDirection = 'asc';
+        }
+
+        fetchTable();
+    });
+});
+</script>
 {% endblock %}
+
