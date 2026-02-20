@@ -152,6 +152,8 @@ class Project
         }
     }
 
+    // Getters et Setters
+
     public function getId(): ?int
     {
         return $this->id;
@@ -234,6 +236,8 @@ class Project
         return $this;
     }
 
+    // Méthodes pour la relation avec Depot
+
     /**
      * @return Collection<int, Depot>
      */
@@ -263,6 +267,8 @@ class Project
 
         return $this;
     }
+
+    // Méthodes utilitaires
 
     public function isActive(): bool
     {
