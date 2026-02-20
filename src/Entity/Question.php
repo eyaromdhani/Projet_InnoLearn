@@ -33,7 +33,7 @@ class Question
     private ?int $points = null;
 
     #[ORM\ManyToOne(targetEntity: Formulaire::class, inversedBy: "questions")]
-    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Formulaire $formulaire = null;
 
     public function getId(): ?int { return $this->id; }

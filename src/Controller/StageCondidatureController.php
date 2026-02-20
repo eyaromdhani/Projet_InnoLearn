@@ -68,12 +68,6 @@ final class StageCondidatureController extends AbstractController
         ]);
     }
 
-<<<<<<< HEAD
-    #[Route('/{id}', name: 'app_stage_condidature_delete', methods: ['POST'])]
-    public function delete(Request $request, StageCondidature $stageCondidature, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$stageCondidature->getId(), $request->getPayload()->getString('_token'))) {
-=======
     #[Route('/search', name: 'app_stage_condidature_search', methods: ['GET'])]
     public function search(Request $request, StageCondidatureRepository $repository): Response
     {
@@ -147,7 +141,6 @@ final class StageCondidatureController extends AbstractController
     public function delete(Request $request, StageCondidature $stageCondidature, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $stageCondidature->getId(), $request->getPayload()->getString('_token'))) {
->>>>>>> user
             $entityManager->remove($stageCondidature);
             $entityManager->flush();
         }

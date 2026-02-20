@@ -16,32 +16,6 @@ class StageCondidatureRepository extends ServiceEntityRepository
         parent::__construct($registry, StageCondidature::class);
     }
 
-<<<<<<< HEAD
-    //    /**
-    //     * @return StageCondidature[] Returns an array of StageCondidature objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?StageCondidature
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-=======
     public function searchAll(string $input, ?string $domaine = null, ?\DateTimeInterface $minDate = null, ?\DateTimeInterface $maxDate = null, string $sort = 'desc', ?string $typeRequest = null, ?int $idOffre = null, ?\App\Entity\User $etudiant = null, ?\App\Entity\User $recruteur = null): array
     {
         $qb = $this->createQueryBuilder('s')
@@ -145,5 +119,4 @@ class StageCondidatureRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
->>>>>>> user
 }

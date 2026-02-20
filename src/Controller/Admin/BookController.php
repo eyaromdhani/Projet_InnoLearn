@@ -7,9 +7,11 @@ use App\Form\BookType;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/books')]
 final class BookController extends AbstractController
@@ -23,13 +25,50 @@ final class BookController extends AbstractController
     }
 
     #[Route('/new', name: 'admin_book_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $book = new Book();
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pdfFile = $form->get('pdfFile')->getData();
+            $imageFile = $form->get('imageFile')->getData();
+
+            if ($pdfFile) {
+                $originalFilename = pathinfo($pdfFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$pdfFile->guessExtension();
+
+                try {
+                    $pdfFile->move(
+                        $this->getParameter('kernel.project_dir').'/public/uploads/books',
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $book->setPdfPath($newFilename);
+            }
+
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('kernel.project_dir').'/public/uploads/books/covers',
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $book->setCoverImage($newFilename);
+            }
+
             $entityManager->persist($book);
             $entityManager->flush();
 
@@ -43,12 +82,27 @@ final class BookController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'admin_book_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Book $book, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Book $book, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pdfFile = $form->get('pdfFile')->getData();
+            $imageFile = $form->get('imageFile')->getData();
+
+            if ($pdfFile) {
+                $newFilename = $slugger->slug(pathinfo($pdfFile->getClientOriginalName(), PATHINFO_FILENAME)).'-'.uniqid().'.'.$pdfFile->guessExtension();
+                $pdfFile->move($this->getParameter('kernel.project_dir').'/public/uploads/books', $newFilename);
+                $book->setPdfPath($newFilename);
+            }
+
+            if ($imageFile) {
+                $newFilename = $slugger->slug(pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME)).'-'.uniqid().'.'.$imageFile->guessExtension();
+                $imageFile->move($this->getParameter('kernel.project_dir').'/public/uploads/books/covers', $newFilename);
+                $book->setCoverImage($newFilename);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('admin_book_index', [], Response::HTTP_SEE_OTHER);

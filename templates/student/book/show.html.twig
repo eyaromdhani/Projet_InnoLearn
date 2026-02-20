@@ -1,0 +1,421 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}{{ book.titre }} - InnoLearn Reader{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+}
+
+/* Fix header nav crowding */
+.header-nav {
+    gap: 1rem !important;
+}
+.nav-item {
+    font-size: 0.85rem !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Reader Hero */
+.reader-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 400px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    padding-bottom: 200px; /* Space for waves and overlap */
+    overflow: hidden;
+    z-index: 1;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-text-content {
+    max-width: 700px;
+}
+
+.breadcrumb-premium {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-premium .breadcrumb-item, 
+.breadcrumb-premium .breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.breadcrumb-premium .breadcrumb-item.active {
+    color: white;
+}
+
+.hero-title-area h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.meta-item i {
+    color: #fbbf24;
+}
+
+/* Waves */
+.hero-waves {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 100px;
+}
+
+.hero-waves .wave-3 { 
+    fill: #f8fafc; 
+}
+
+/* Reader Layout Overlap */
+.dashboard-main { 
+    background: #f8fafc; 
+    min-height: 100vh;
+}
+
+.reader-container {
+    padding: 0 5% 5rem;
+    max-width: 1600px;
+    margin: -160px auto 0; /* Tight overlap */
+    position: relative;
+    z-index: 20;
+}
+
+.main-content-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+.pdf-viewer-area {
+    height: 70vh;
+    background: #f1f5f9;
+}
+
+.side-panel {
+    border-left: 1px solid #f1f5f9;
+    background: #fafbfc;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-floating-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 100;
+}
+
+.btn-ai-sparkle {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+    transition: all 0.3s;
+}
+
+.btn-ai-sparkle:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(249, 115, 22, 0.4);
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <section class="reader-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-premium">
+                        <li class="breadcrumb-item"><a href="{{ path('app_book_index') }}">Bibliothèque</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Lecteur</li>
+                    </ol>
+                </nav>
+                <div class="hero-title-area">
+                    <h1>{{ book.titre }}</h1>
+                    <div class="hero-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-user-edit"></i>
+                            <span>{{ book.author }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>{{ book.publier ? book.publier|date('Y') : 'N/A' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual d-none d-lg-block">
+                <i class="fas fa-book-reader fa-10x text-white opacity-10"></i>
+            </div>
+        </div>
+
+        <!-- Add consistency waves -->
+        <div class="hero-waves">
+            <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="reader-container">
+        <div class="main-content-card position-relative">
+            <!-- AI Trigger Button Overlay -->
+            <div class="ai-floating-btn">
+                <button id="btn-summarize" class="btn btn-ai-sparkle">
+                    <i class="fas fa-sparkles me-2"></i> Analyse IA & Lecture
+                </button>
+            </div>
+
+            <div class="row g-0">
+                <div class="col-lg-8">
+                    <div class="pdf-viewer-area">
+                        {% if book.pdfPath %}
+                            <iframe src="{{ asset('uploads/books/' ~ book.pdfPath) }}#toolbar=0&view=FitH" width="100%" height="100%" frameborder="0"></iframe>
+                        {% else %}
+                            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                                <i class="fas fa-file-pdf fa-5x text-muted opacity-10 mb-3"></i>
+                                <h4 class="text-muted">PDF non disponible</h4>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="side-panel">
+                        <!-- About Section -->
+                        <div class="p-4 border-bottom">
+                            <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>Description</h5>
+                            <p class="text-muted small mb-0" style="line-height: 1.6;">
+                                {{ book.description ?: "Découvrez ce livre passionnant et approfondissez vos connaissances avec l'aide de notre IA." }}
+                            </p>
+                        </div>
+
+                        <!-- AI Summary View (Hidden by default) -->
+                        <div id="ai-summary-card" class="p-4 flex-grow-1 overflow-auto d-none bg-white">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h6 class="fw-bold text-primary mb-0"><i class="fas fa-robot me-2"></i>Analyse de l'Assistant</h6>
+                                <div class="d-flex gap-2">
+                                    <div id="tts-controls" class="d-none">
+                                        <button id="btn-speak" class="btn btn-sm btn-outline-primary rounded-circle" title="Écouter">
+                                            <i class="fas fa-volume-up"></i>
+                                        </button>
+                                        <button id="btn-stop-speak" class="btn btn-sm btn-outline-danger rounded-circle d-none" title="Arrêter">
+                                            <i class="fas fa-stop"></i>
+                                        </button>
+                                    </div>
+                                    <button type="button" class="btn-close btn-sm" onclick="this.closest('#ai-summary-card').classList.add('d-none'); stopSpeaking();"></button>
+                                </div>
+                            </div>
+
+                            <div id="ai-loading" class="text-center py-5 d-none">
+                                <div class="spinner-grow text-primary spinner-grow-sm mb-3"></div>
+                                <p class="text-muted small">L'IA parcourt les pages...</p>
+                            </div>
+
+                            <div id="ai-content" class="small text-dark" style="line-height: 1.7;">
+                                <!-- AI result goes here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('turbo:load', function() {
+    const btnSummarize = document.getElementById('btn-summarize');
+    if (!btnSummarize) return;
+
+    const aiCard = document.getElementById('ai-summary-card');
+    const aiLoading = document.getElementById('ai-loading');
+    const aiContent = document.getElementById('ai-content');
+    const ttsControls = document.getElementById('tts-controls');
+    const btnSpeak = document.getElementById('btn-speak');
+    const btnStopSpeak = document.getElementById('btn-stop-speak');
+    
+    let currentUtterance = null;
+
+    btnSummarize.addEventListener('click', function() {
+        aiCard.classList.remove('d-none');
+        aiLoading.classList.remove('d-none');
+        aiContent.innerHTML = '';
+        ttsControls.classList.add('d-none');
+        
+        btnSummarize.disabled = true;
+        btnSummarize.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Analyse...';
+
+        fetch("{{ path('app_book_summarize', {'id': book.id}) }}", {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            aiLoading.classList.add('d-none');
+            if (data.summary) {
+                const formattedText = data.summary.split('\n\n').map(p => `<p class="mb-3">${p.replace(/\n/g, '<br>')}</p>`).join('');
+                aiContent.innerHTML = formattedText;
+                ttsControls.classList.remove('d-none');
+                
+                // Auto-read the summary
+                speakText(data.summary);
+            } else if (data.error) {
+                aiContent.innerHTML = `<div class="alert alert-danger mb-0">${data.error}</div>`;
+            }
+        })
+        .catch(error => {
+            aiLoading.classList.add('d-none');
+            aiContent.innerHTML = '<div class="alert alert-danger mb-0">Erreur technique.</div>';
+        })
+        .finally(() => {
+            btnSummarize.disabled = false;
+            btnSummarize.innerHTML = '<i class="fas fa-sparkles me-2"></i> Analyse IA & Lecture';
+        });
+    });
+
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            
+            utterance.onstart = () => {
+                btnSpeak.classList.add('d-none');
+                btnStopSpeak.classList.remove('d-none');
+            };
+            
+            utterance.onend = () => {
+                btnSpeak.classList.remove('d-none');
+                btnStopSpeak.classList.add('d-none');
+            };
+
+            currentUtterance = utterance;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    btnSpeak.addEventListener('click', () => {
+        const text = aiContent.innerText;
+        if (text) speakText(text);
+    });
+
+    window.stopSpeaking = function() {
+        window.speechSynthesis.cancel();
+        btnSpeak.classList.remove('d-none');
+        btnStopSpeak.classList.add('d-none');
+    };
+
+    btnStopSpeak.addEventListener('click', stopSpeaking);
+
+    document.addEventListener('turbo:before-visit', () => {
+        window.speechSynthesis.cancel();
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Turbo === 'undefined') {
+        document.dispatchEvent(new CustomEvent('turbo:load'));
+    }
+});
+</script>
+{% endblock %}

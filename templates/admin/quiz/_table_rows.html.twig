@@ -1,27 +1,34 @@
 {% for formulaire in formulaires %}
     <tr>
-        <td class="text-center text-muted">#{{ formulaire.id }}</td>
-        <td>{{ formulaire.titre }}</td>
-        <td>{{ formulaire.description|u.truncate(50, '...') }}</td>
-        <td>{{ formulaire.tempsLimite ?: 'N/A' }}</td>
-        <td>{{ formulaire.category }}</td>
-        <td class="text-center">
-            <!-- Manage Questions button -->
-            <a href="{{ path('app_formulaire_questions', {'id': formulaire.id}) }}" class="btn btn-action btn-light" title="Gérer Questions" data-bs-toggle="tooltip">
-                <i class="bi bi-list-task text-success"></i>
-            </a>
-
-            <!-- Edit button -->
-            <a href="{{ path('admin_quiz_edit', {'id': formulaire.id}) }}" class="btn btn-action btn-light" title="Modifier" data-bs-toggle="tooltip">
-                <i class="bi bi-pencil-square text-warning"></i>
-            </a>
-
-            <!-- Delete button -->
-            {{ include('admin/quiz/_delete_form.html.twig', {'formulaire': formulaire}) }}
+        <td style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle;" class="text-center text-muted">#{{ formulaire.id }}</td>
+        <td style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle;">
+            <strong style="font-size: 1.05rem; font-weight: 800; color: #1e293b; margin-bottom: 0.35rem; display: block;">{{ formulaire.titre }}</strong>
+            <span style="font-size: 0.875rem; color: #94a3b8; font-weight: 500; line-height: 1.5;">{{ formulaire.description|u.truncate(80, '...') }}</span>
+        </td>
+        <td style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle;">
+            <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.15rem; border-radius: 12px; font-size: 0.8rem; font-weight: 800; background: #fffbeb; color: #b45309;">
+                <i class="far fa-clock"></i> {{ formulaire.tempsLimite ?: 'N/A' }} min
+            </span>
+        </td>
+        <td style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle;">
+            <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.15rem; border-radius: 12px; font-size: 0.8rem; font-weight: 800; background: #f0fdf4; color: #15803d; text-transform: uppercase;">
+                <i class="fas fa-folder"></i> {{ formulaire.category }}
+            </span>
+        </td>
+        <td style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle;">
+            <div class="action-box" style="display: flex; gap: 0.75rem; justify-content: center;">
+                <a href="{{ path('app_formulaire_questions', {'id': formulaire.id}) }}" class="icon-btn-p" title="Gérer Questions" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; transition: all 0.2s; text-decoration: none;">
+                    <i class="fas fa-list-check"></i>
+                </a>
+                <a href="{{ path('admin_quiz_edit', {'id': formulaire.id}) }}" class="icon-btn-p edit" title="Modifier" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; transition: all 0.2s; text-decoration: none;">
+                    <i class="fas fa-edit"></i>
+                </a>
+                {{ include('admin/quiz/_delete_form.html.twig', {'formulaire': formulaire}) }}
+            </div>
         </td>
     </tr>
 {% else %}
     <tr>
-        <td colspan="6" class="text-center py-3">Aucun quiz trouvé.</td>
+        <td colspan="5" style="text-align: center; padding: 3rem; color: #64748b;">Aucun quiz trouvé.</td>
     </tr>
 {% endfor %}

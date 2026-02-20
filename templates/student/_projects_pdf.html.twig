@@ -131,12 +131,12 @@
         <h2>Résumé du Catalogue</h2>
         <table class="summary-grid">
             <tr>
-                <td style="border: none; padding: 5px;" class="summary-item">Total des projets: <span class="summary-value">{{ projects|length }}</span></td>
-                <td style="border: none; padding: 5px;" class="summary-item">Généré par: <span class="summary-value">Système InnoLearn</span></td>
+                <td style="border: none; padding: 5px;" class="summary-item">Généré pour: <span class="summary-value" style="color: #4f46e5;">{{ studentName|default('Étudiant InnoLearn') }}</span></td>
+                <td style="border: none; padding: 5px;" class="summary-item">Date: <span class="summary-value">{{ "now"|date("d/m/Y") }}</span></td>
             </tr>
             <tr>
-                <td style="border: none; padding: 5px;" class="summary-item">Période: <span class="summary-value">{{ "now"|date("Y") }}</span></td>
-                <td style="border: none; padding: 5px;" class="summary-item">Statut confidentiel: <span class="summary-value">Public / Étudiant</span></td>
+                <td style="border: none; padding: 5px;" class="summary-item">Total des projets: <span class="summary-value">{{ projects|length }}</span></td>
+                <td style="border: none; padding: 5px;" class="summary-item">Source: <span class="summary-value">InnoLearn</span></td>
             </tr>
         </table>
     </div>

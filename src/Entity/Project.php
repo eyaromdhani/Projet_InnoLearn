@@ -5,11 +5,6 @@ namespace App\Entity;
 use App\Repository\ProjectRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< HEAD
-
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[ORM\Table(name: 'project')]
-=======
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,7 +13,6 @@ use GuzzleHttp\Client; // En haut du fichier
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\HasLifecycleCallbacks]
->>>>>>> user
 class Project
 {
     #[ORM\Id]
@@ -27,27 +21,6 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-<<<<<<< HEAD
-    private ?string $title = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $start_date = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $end_date = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updated_at = null;
-=======
     #[Assert\NotBlank(message: "Le titre est obligatoire")]
     #[Assert\Length(
         min: 3,
@@ -191,7 +164,6 @@ class Project
     private ?string $generatedImage = null;
 
     // Getters et Setters
->>>>>>> user
 
     public function getId(): ?int
     {
@@ -206,10 +178,6 @@ class Project
     public function setTitle(string $title): static
     {
         $this->title = $title;
-<<<<<<< HEAD
-
-=======
->>>>>>> user
         return $this;
     }
 
@@ -221,10 +189,6 @@ class Project
     public function setDescription(string $description): static
     {
         $this->description = $description;
-<<<<<<< HEAD
-
-=======
->>>>>>> user
         return $this;
     }
 
@@ -236,90 +200,44 @@ class Project
     public function setStatus(string $status): static
     {
         $this->status = $status;
-<<<<<<< HEAD
-
-=======
->>>>>>> user
         return $this;
     }
 
     public function getStartDate(): ?\DateTimeInterface
     {
-<<<<<<< HEAD
-        return $this->start_date;
-    }
-
-    public function setStartDate(\DateTimeInterface $start_date): static
-    {
-        $this->start_date = $start_date;
-
-=======
         return $this->startDate;
     }
 
     public function setStartDate(\DateTimeInterface $startDate): static
     {
         $this->startDate = $startDate;
->>>>>>> user
         return $this;
     }
 
     public function getEndDate(): ?\DateTimeInterface
     {
-<<<<<<< HEAD
-        return $this->end_date;
-    }
-
-    public function setEndDate(?\DateTimeInterface $end_date): static
-    {
-        $this->end_date = $end_date;
-
-=======
         return $this->endDate;
     }
 
     public function setEndDate(?\DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
->>>>>>> user
         return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
-<<<<<<< HEAD
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): static
-    {
-        $this->created_at = $created_at;
-
-=======
         return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
->>>>>>> user
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
     {
-<<<<<<< HEAD
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-}
-=======
         return $this->updatedAt;
     }
 

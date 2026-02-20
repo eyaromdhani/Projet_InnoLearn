@@ -6,15 +6,17 @@
 <style>
 /* Same Premium Background as Other Student Pages */
 .dashboard-main {
-    background: #f8fafc;
+    background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
     min-height: 100vh;
-    padding-top: 5rem;
+    padding-top: 110px !important;
+    padding-bottom: 4rem;
 }
 
 .results-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
+    margin-top: 1rem;
 }
 
 .results-card {
@@ -153,77 +155,6 @@
 @keyframes fall {
     to { transform: translateY(600px) rotate(360deg); }
 }
-/* Decorative Frames/Shapes */
-.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
-.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
-.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
-.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
-
-@keyframes float-around {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -40px) scale(1.05); }
-    66% { transform: translate(-20px, 20px) scale(0.95); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-/* Decorative Bottom Section */
-.decorative-bottom-section {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
-    padding: 6rem 0 100px;
-    position: relative;
-    overflow: hidden;
-    margin-top: 4rem;
-}
-
-.bottom-content-wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    z-index: 10;
-}
-
-.bottom-visual { position: relative; }
-.bottom-illustration-wrapper {
-    width: 300px;
-    height: 300px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-    animation: float 6s ease-in-out infinite;
-}
-.bottom-illustration { width: 85%; height: 85%; object-fit: contain; }
-
-.bottom-waves {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    line-height: 0;
-    z-index: 20;
-}
-
-.bottom-waves svg {
-    display: block;
-    width: 100%;
-    height: 100px;
-    fill: #f8fafc;
-}
 </style>
 {% endblock %}
 
@@ -307,27 +238,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Decorative Bottom Section -->
-    <section class="decorative-bottom-section">
-        <div class="bottom-content-wrapper">
-            <div class="bottom-visual">
-                <div class="bottom-illustration-wrapper">
-                    <img src="{{ asset('images/student_hero.png') }}" class="bottom-illustration" alt="Student Illustration">
-                </div>
-                <div class="hero-frame frame-1"></div>
-                <div class="hero-frame frame-2"></div>
-                <div class="hero-frame frame-4"></div>
-            </div>
-        </div>
-        
-        <!-- Bottom Waves -->
-        <div class="bottom-waves">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-            </svg>
-        </div>
-    </section>
 </div>
 
 {% if percentage >= 50 %}

@@ -5,15 +5,9 @@ namespace App\Entity;
 use App\Repository\CoursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< HEAD
-
-#[ORM\Entity(repositoryClass: CoursRepository::class)]
-#[ORM\Table(name: 'cours')]
-=======
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
->>>>>>> user
 class Cours
 {
     #[ORM\Id]
@@ -22,22 +16,6 @@ class Cours
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-<<<<<<< HEAD
-    private ?string $titre = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $niveau = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datepublication = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, name: 'categorie_id')]
-    private ?CoursCategorie $categorie = null;
-=======
     #[Assert\NotBlank(message: 'Le nom du cours est obligatoire')]
     #[Assert\Length(min: 5, minMessage: 'Le nom doit faire au moins {{ limit }} caractères')]
     private ?string $nom = null;
@@ -81,23 +59,12 @@ class Cours
     {
         $this->dateCreation = new \DateTime();
     }
->>>>>>> user
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-<<<<<<< HEAD
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
-
-    public function setTitre(string $titre): static
-    {
-        $this->titre = $titre;
-=======
     public function getNom(): ?string
     {
         return $this->nom;
@@ -106,7 +73,6 @@ class Cours
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
->>>>>>> user
 
         return $this;
     }
@@ -123,8 +89,6 @@ class Cours
         return $this;
     }
 
-<<<<<<< HEAD
-=======
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -173,7 +137,6 @@ class Cours
         return $this;
     }
 
->>>>>>> user
     public function getNiveau(): ?string
     {
         return $this->niveau;
@@ -186,16 +149,6 @@ class Cours
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getDatepublication(): ?\DateTimeInterface
-    {
-        return $this->datepublication;
-    }
-
-    public function setDatepublication(\DateTimeInterface $datepublication): static
-    {
-        $this->datepublication = $datepublication;
-=======
     public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->dateCreation;
@@ -204,21 +157,10 @@ class Cours
     public function setDateCreation(\DateTimeInterface $dateCreation): static
     {
         $this->dateCreation = $dateCreation;
->>>>>>> user
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getCategorie(): ?CoursCategorie
-    {
-        return $this->categorie;
-    }
-
-    public function setCategorie(?CoursCategorie $categorie): static
-    {
-        $this->categorie = $categorie;
-=======
     public function getCategorieCours(): ?CategorieCours
     {
         return $this->categorieCours;
@@ -239,7 +181,6 @@ class Cours
     public function setEnseignant(string $enseignant): static
     {
         $this->enseignant = $enseignant;
->>>>>>> user
 
         return $this;
     }

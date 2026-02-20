@@ -27,6 +27,12 @@ class Book
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $publier = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pdfPath = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $coverImage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +82,30 @@ class Book
     public function setPublier(\DateTimeInterface $publier): static
     {
         $this->publier = $publier;
+
+        return $this;
+    }
+
+    public function getPdfPath(): ?string
+    {
+        return $this->pdfPath;
+    }
+
+    public function setPdfPath(?string $pdfPath): static
+    {
+        $this->pdfPath = $pdfPath;
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(?string $coverImage): static
+    {
+        $this->coverImage = $coverImage;
 
         return $this;
     }

@@ -22,29 +22,6 @@
     color: white !important;
 }
 
-.dashboard-header .nav-item:hover,
-.dashboard-header .nav-item.active {
-    color: rgba(255,255,255,0.8) !important;
-}
-
-.dashboard-header .nav-item.active::after {
-    background: white !important;
-    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
-}
-
-.dashboard-header .search-bar-compact {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-.dashboard-header .search-bar-compact input {
-    color: white !important;
-}
-
-.dashboard-header .search-bar-compact input::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important;
-}
-
 /* Hero Section */
 .courses-hero {
     width: 100vw;
@@ -181,151 +158,132 @@
     color: #1e293b;
 }
 
+.voice-btn {
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+}
+
+.voice-btn:hover {
+    background: #6366f1;
+    color: white;
+    transform: scale(1.1);
+}
+
+.voice-btn.recording {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    animation: pulse-red 1.5s infinite;
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.chart-container-mini {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+}
+
+.modal-analysis {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.ai-glow {
+    animation: ai-glow 2s infinite alternate;
+}
+
+@keyframes ai-glow {
+    from { color: #6366f1; text-shadow: 0 0 5px rgba(99, 102, 241, 0.4); }
+    to { color: #a855f7; text-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
+}
+
 /* Grid Adjustment */
 .dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
 .course-catalog-grid { padding: 0 10% 5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
 
-/* New Quiz Card Style */
+/* Quiz Card */
 .course-card-premium {
-    background: white;
-    border-radius: 30px;
-    padding: 2.2rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f1f5f9;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s; border: 1px solid #e2e8f0; display: flex; flex-direction: column;
+    position: relative;
+}
+.course-card-premium:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+.course-image-wrapper { position: relative; height: 140px; overflow: hidden; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); display: flex; align-items: center; justify-content: center; }
+.course-image-wrapper i { font-size: 4rem; color: white; opacity: 0.8; }
+.course-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 10px; font-size: 0.75rem; font-weight: 800; color: #1e293b; }
+.course-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+.course-content h3 { font-size: 1.25rem; margin-bottom: 0.5rem; color: #1e293b; font-weight: 700; }
+.course-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem; height: 40px; overflow: hidden; }
+
+.card-actions {
     display: flex;
-    flex-direction: column;
-    min-height: 420px;
-}
-
-.course-card-premium:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 60px rgba(99, 102, 241, 0.1);
-    border-color: rgba(99, 102, 241, 0.2);
-}
-
-.card-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 1.5rem;
-}
-
-.card-badge {
-    padding: 0.5rem 1.1rem;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-cat { background: #f1f5f9; color: #64748b; }
-.badge-status { background: #fff1f2; color: #e11d48; }
-
-.card-title {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: #1e293b;
-    margin-bottom: 0.6rem;
-    letter-spacing: -0.5px;
-}
-
-.card-subtitle {
-    font-size: 0.95rem;
-    color: #94a3b8;
-    margin-bottom: 2rem;
-    line-height: 1.5;
-}
-
-.card-lead {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 2.5rem;
-}
-
-.lead-icon {
-    width: 36px;
-    height: 36px;
-    background: #6366f1;
-    color: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 0.9rem;
-}
-
-.lead-text {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #64748b;
-}
-
-.card-footer-meta {
-    margin-top: auto;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid #f1f5f9;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #94a3b8;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
 }
 
-.card-btn-group {
+.card-stats-badges {
     display: flex;
     gap: 0.75rem;
+    margin-bottom: 1rem;
 }
 
-.btn-card {
-    padding: 0.9rem 1.25rem;
-    border-radius: 15px;
-    font-size: 0.9rem;
+.stat-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
     font-weight: 700;
-    transition: all 0.2s;
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.stat-pass { background: #dcfce7; color: #166534; }
+.stat-fail { background: #fee2e2; color: #991b1b; }
+.stat-total { background: #f1f5f9; color: #475569; }
+
+.btn-action {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-}
-
-.btn-details-light {
-    flex: 1;
-    background: #f8fafc;
-    color: #1e293b;
-}
-
-.btn-details-light:hover { background: #f1f5f9; }
-
-.btn-action-primary {
-    flex: 1.3;
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    color: white;
-    box-shadow: 0 8px 15px rgba(99, 102, 241, 0.2);
-}
-
-.btn-action-primary:hover {
-    transform: scale(1.02);
-    box-shadow: 0 12px 25px rgba(99, 102, 241, 0.3);
-}
-
-.btn-delete-small {
-    padding: 0.9rem;
-    border-radius: 15px;
-    background: #fff1f2;
-    color: #e11d48;
-    border: none;
-    cursor: pointer;
+    gap: 0.4rem;
     transition: all 0.2s;
+    text-decoration: none;
 }
 
-.btn-delete-small:hover { background: #ffe4e6; }
+.btn-edit { background: #fef3c7; color: #92400e; }
+.btn-edit:hover { background: #fde68a; }
+.btn-questions { background: #dbeafe; color: #1e40af; }
+.btn-questions:hover { background: #bfdbfe; }
+.btn-delete { background: #fee2e2; color: #b91c1c; border: none; cursor: pointer; }
+.btn-delete:hover { background: #fecaca; }
 
 .btn-primary-gradient {
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
@@ -339,81 +297,15 @@
     box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
 }
 
-/* Hero Visual Side */
-.hero-visual { position: relative; display: flex; justify-content: flex-end; align-items: center; }
-.hero-illustration-wrapper {
-    width: 420px;
-    height: 420px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-    animation: float 6s ease-in-out infinite;
-}
-.hero-illustration { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover;
-    border-radius: 50%;
-}
-
 .hero-waves {
     position: absolute;
-    bottom: -1px;
+    bottom: 0;
     left: 0;
     width: 100%;
     line-height: 0;
     z-index: 5;
-    overflow: hidden;
 }
-
-.hero-waves .wave {
-    position: relative;
-    display: block;
-    width: 200%;
-    height: 100px;
-}
-
-.hero-waves .wave-path {
-    animation: waveMove 20s cubic-bezier(.55,.5,.45,.5) infinite;
-}
-
-.hero-waves .wave-1 { background: transparent; opacity: 0.4; }
-.hero-waves .wave-2 { background: transparent; opacity: 0.6; margin-top: -80px; }
-.hero-waves .wave-3 { background: transparent; opacity: 1; margin-top: -80px; }
-
-@keyframes waveMove {
-    0% { transform: translate3d(-50%, 0, 0); }
-    50% { transform: translate3d(-15%, 0, 0); }
-    100% { transform: translate3d(-50%, 0, 0); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
-.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
-.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
-.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
-.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
-.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
-.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
-
-@keyframes float-around {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -40px) scale(1.05); }
-    66% { transform: translate(-20px, 20px) scale(0.95); }
-}
-
-
+.hero-waves svg { fill: #f8fafc; height: 60px; width: 100%; }
 </style>
 {% endblock %}
 
@@ -433,103 +325,129 @@
                     <!-- Category Dropdown -->
                     <div class="custom-dropdown" id="pageCategoryDropdown">
                         <div class="dropdown-toggle">
-                            <i class="fas fa-filter"></i>
+                            <i class="bi bi-funnel"></i>
                             <span class="selected-category">Toutes les catégories</span>
-                            <i class="fas fa-chevron-down arrow"></i>
+                            <i class="bi bi-chevron-down arrow"></i>
                         </div>
                         <div class="dropdown-options">
                             <div class="dropdown-opt active" data-value="all">
-                                <i class="fas fa-th-large"></i> Toutes les catégories
+                                <i class="bi bi-grid"></i> Toutes les catégories
                             </div>
                         </div>
                     </div>
                     
                     <!-- Search Wrapper -->
                     <div class="hero-search-wrapper">
-                        <i class="fas fa-search" style="color: #6366f1;"></i>
+                        <i class="bi bi-search" style="color: #6366f1;"></i>
                         <input type="text" id="localSearch" placeholder="Rechercher un quiz...">
+                        <button id="voiceSearchBtn" class="voice-btn" title="Recherche vocale" type="button">
+                            <i class="bi bi-mic"></i>
+                        </button>
                     </div>
 
                     <a href="{{ path('app_enseignant_quiz_new') }}" class="btn-primary-gradient" style="margin-top: 1rem; width: fit-content;">
-                        <i class="fas fa-plus"></i>
+                        <i class="bi bi-plus-lg"></i>
                         Créer un Quiz
                     </a>
                 </div>
             </div>
             
-            <div class="hero-visual">
-                <div class="hero-illustration-wrapper">
-                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Quiz illustration">
-                </div>
-                <div class="hero-frame frame-1"></div>
-                <div class="hero-frame frame-2"></div>
-                <div class="hero-frame frame-3"></div>
-                <div class="hero-frame frame-4"></div>
-                <div class="hero-frame frame-5"></div>
-                <div class="hero-frame frame-6"></div>
+            <div class="hero-visual text-center">
+                <i class="bi bi-cpu text-white opacity-10" style="font-size: 15rem;"></i>
             </div>
         </div>
 
-        <!-- Hero Transition Waves (Layered Design) -->
         <div class="hero-waves">
-            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.3;">
-                <path class="wave-path" fill="#4338ca" d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 15s;"></path>
-            </svg>
-            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="opacity: 0.5; margin-top: -90px;">
-                <path class="wave-path" fill="#6366f1" d="M0,32L80,37.3C160,43,320,53,480,64C640,75,800,85,960,80C1120,75,1280,53,1360,42.7L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 10s; animation-direction: reverse;"></path>
-            </svg>
-            <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" style="margin-top: -90px;">
-                <path class="wave-path" fill="#f8fafc" d="M0,96L80,85.3C160,75,320,53,480,42.7C640,32,800,32,960,42.7C1120,53,1280,75,1360,85.3L1440,96L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" style="animation-duration: 7s;"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
             </svg>
         </div>
     </section>
 
     <!-- Content Grid -->
     <div class="course-catalog-grid">
-        {% for formulaire in formulaires %}
-        <div class="course-card-premium">
-            <div class="card-badges">
-                <span class="card-badge badge-cat">{{ formulaire.category|upper }}</span>
-                <span class="card-badge badge-status">RECHERCHE MEMBRES</span>
+        {% for data in formulaires %}
+        {% set formulaire = data.entity %}
+        {% set stats = data.stats %}
+        <div class="course-card-premium" data-title="{{ formulaire.titre|lower }}">
+            <div class="course-image-wrapper">
+                <div class="course-badge">{{ formulaire.category }}</div>
+                <i class="bi bi-file-earmark-text"></i>
+                <div class="chart-container-mini">
+                    {{ render_chart(data.chart) }}
+                </div>
             </div>
-            
-            <h3 class="card-title">{{ formulaire.titre|lower }}</h3>
-            <p class="card-subtitle">{{ formulaire.description|u.truncate(60, '...') }}</p>
-            
-            <div class="card-lead">
-                <div class="lead-icon">ÉI</div>
-                <div class="lead-text">Lead: Équipe InnoLearn</div>
-            </div>
-            
-            <div class="card-footer-meta">
-                <span>1/{{ formulaire.questions|length }}</span>
-                <span>Créé: {{ "now"|date("d/m/Y") }}</span>
-                <span>{{ formulaire.tempsLimite }} min</span>
-            </div>
-
-            <div class="card-btn-group">
-                <a href="{{ path('app_enseignant_quiz_edit', {id: formulaire.id}) }}" class="btn-card btn-details-light">
-                    Détails
-                </a>
-                <a href="{{ path('app_enseignant_quiz_questions', {id: formulaire.id}) }}" class="btn-card btn-action-primary">
-                    Questions
-                </a>
-                <form method="post" action="{{ path('app_enseignant_quiz_delete', {id: formulaire.id}) }}" onsubmit="return confirm('Supprimer ce quiz ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formulaire.id) }}">
-                    <button class="btn-delete-small">
-                        <i class="fas fa-trash"></i>
+            <div class="course-content">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <h3>{{ formulaire.titre }}</h3>
+                    <button class="btn-action btn-questions btn-ai-analyze" 
+                            style="flex: 0 0 auto; background: rgba(99, 102, 241, 0.1); color: #6366f1; border-radius: 100px; padding: 4px 12px; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px;"
+                            onclick="openAnalysisModal({{ formulaire.id }}, '{{ formulaire.titre|escape('js') }}')"
+                            title="Analyse par l'IA">
+                        <i class="bi bi-robot ai-glow"></i> <span style="font-size: 0.75rem; font-weight: 700;">Analyse IA</span>
                     </button>
-                </form>
+                </div>
+                <p class="course-desc">{{ formulaire.description|u.truncate(100, '...') }}</p>
+                
+                <div class="card-stats-badges">
+                    <div class="stat-badge stat-pass" title="Étudiants ayant réussi (>50%)">
+                        <i class="bi bi-check-circle-fill"></i> {{ stats.pass }} Réussis
+                    </div>
+                    <div class="stat-badge stat-fail" title="Étudiants ayant échoué (<50%)">
+                        <i class="bi bi-x-circle-fill"></i> {{ stats.fail }} Échecs
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between text-muted small mb-3">
+                    <span><i class="bi bi-clock me-1"></i> {{ formulaire.tempsLimite }} min</span>
+                    <span><i class="bi bi-list-ol me-1"></i> {{ formulaire.questions|length }} questions</span>
+                </div>
+
+                <div class="card-actions">
+                    <a href="{{ path('app_enseignant_quiz_edit', {id: formulaire.id}) }}" class="btn-action btn-edit" title="Modifier">
+                        <i class="bi bi-pencil"></i> Modifier
+                    </a>
+                    <a href="{{ path('app_enseignant_quiz_questions', {id: formulaire.id}) }}" class="btn-action btn-questions" title="Questions">
+                        <i class="bi bi-list-check"></i> Questions
+                    </a>
+                    <form method="post" action="{{ path('app_enseignant_quiz_delete', {id: formulaire.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce quiz ?');" style="flex: 1;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formulaire.id) }}">
+                        <button type="submit" class="btn-action btn-delete w-100" style="border: none; cursor: pointer;">
+                            <i class="bi bi-trash"></i> Supprimer
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
-
 </div>
 
+<!-- AI Analysis Modal -->
+<div class="modal fade" id="analysisModal" tabindex="-1" aria-hidden="true" style="z-index: 2000;">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content p-2 border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <h4 class="modal-title fw-bold" id="analysisQuizTitle">Analyse du Quiz</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-0" id="analysisContent">
+                <!-- Data loaded via JS -->
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascripts %}
 <script>
+console.log("Teacher dashboard JS loading...");
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("Teacher dashboard DOM ready");
     const grid = document.querySelector('.course-catalog-grid');
     
     // Unified Dropdown Logic
@@ -541,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const options = dropdown.querySelectorAll('.dropdown-opt');
         const selectedSpan = dropdown.querySelector('.selected-category');
 
-        toggle.addEventListener('click', (e) => {
+        toggle?.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdown.classList.toggle('active');
         });
@@ -570,11 +488,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSearchQuery = '';
 
     function updateGrid() {
+        if (!grid) return;
         let cards = Array.from(grid.querySelectorAll('.course-card-premium'));
         
         cards.forEach(card => {
-            const title = card.querySelector('h3').textContent.toLowerCase();
-            const cat = card.querySelector('.course-badge').textContent.toLowerCase();
+            const title = (card.getAttribute('data-title') || '').toLowerCase();
+            const badge = card.querySelector('.course-badge');
+            const cat = badge ? badge.textContent.toLowerCase() : '';
             
             const matchesSearch = title.includes(currentSearchQuery.toLowerCase());
             const matchesCat = currentCategory === 'all' || cat.includes(currentCategory.toLowerCase());
@@ -588,10 +508,95 @@ document.addEventListener('DOMContentLoaded', function() {
         updateGrid();
     });
 
-    document.getElementById('localSearch').addEventListener('input', (e) => {
-        currentSearchQuery = e.target.value;
-        updateGrid();
-    });
+    const searchInput = document.getElementById('localSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            updateGrid();
+        });
+    }
+
+    // Voice Search
+    const voiceBtn = document.getElementById('voiceSearchBtn');
+    if (voiceBtn && searchInput) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'fr-FR';
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                searchInput.value = text;
+                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+            };
+            voiceBtn.addEventListener('click', () => {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    console.error("Speech recognition error:", e);
+                }
+            });
+        }
+    }
 });
+
+function openAnalysisModal(quizId, quizTitle) {
+    console.log("Opening analysis modal for quiz:", quizId);
+    const modalElement = document.getElementById('analysisModal');
+    if (!modalElement) {
+        console.error("Modal element not found!");
+        return;
+    }
+    
+    // Check for bootstrap
+    if (typeof bootstrap === 'undefined') {
+        alert("Erreur: Bibliothèque Bootstrap non chargée. Impossible d'ouvrir le modal.");
+        return;
+    }
+
+    const modal = new bootstrap.Modal(modalElement);
+    document.getElementById('analysisQuizTitle').textContent = quizTitle;
+    document.getElementById('analysisContent').innerHTML = `
+        <div class="text-center py-5">
+            <div class="ai-loader mb-4">
+                <i class="bi bi-cpu fs-1 ai-glow-pulse" style="color: #6366f1;"></i>
+            </div>
+            <p class="text-muted fw-bold">L'IA InnoLearn analyse les performances...</p>
+        </div>
+    `;
+    modal.show();
+
+    fetch(`/enseignant/quizzes/${quizId}/analysis`)
+        .then(response => {
+            if (!response.ok) throw new Error("Erreur réseau (HTTP " + response.status + ")");
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('analysisContent').innerHTML = `
+                <div class="p-4">
+                    <div class="d-flex align-items-center gap-4 mb-5 p-4 rounded-4" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.1);">
+                        <div class="bg-white p-3 rounded-circle shadow-sm" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-robot fs-1" style="color: #6366f1;"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1 fw-bold" style="color: #1e1b4b;">Analyse Pédagogique</h4>
+                            <span class="badge rounded-pill bg-primary px-3 py-2">InnoLearn AI</span>
+                        </div>
+                    </div>
+                    <div class="ai-analysis-text fs-5 lh-lg text-dark p-4 rounded-4" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                         ${data.analysis ? data.analysis.replace(/\n/g, '<br>') : "Aucune analyse disponible."}
+                    </div>
+                </div>
+            `;
+        })
+        .catch(err => {
+            console.error("Analysis fetch error:", err);
+            document.getElementById('analysisContent').innerHTML = `
+                <div class="alert alert-danger m-3">
+                    <strong>Erreur !</strong> Impossible de récupérer l'analyse.<br>
+                    Détail : ${err.message}
+                </div>
+            `;
+        });
+}
 </script>
 {% endblock %}

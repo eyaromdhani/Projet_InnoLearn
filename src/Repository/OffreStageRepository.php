@@ -16,9 +16,6 @@ class OffreStageRepository extends ServiceEntityRepository
         parent::__construct($registry, OffreStage::class);
     }
 
-<<<<<<< HEAD
-//    /**
-=======
     public function findByStatut(string $statut): array
     {
         return $this->createQueryBuilder('o')
@@ -189,7 +186,6 @@ class OffreStageRepository extends ServiceEntityRepository
 
 
     //    /**
->>>>>>> user
 //     * @return OffreStage[] Returns an array of OffreStage objects
 //     */
 //    public function findByExampleField($value): array
@@ -204,11 +200,7 @@ class OffreStageRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-<<<<<<< HEAD
-//    public function findOneBySomeField($value): ?OffreStage
-=======
     //    public function findOneBySomeField($value): ?OffreStage
->>>>>>> user
 //    {
 //        return $this->createQueryBuilder('o')
 //            ->andWhere('o.exampleField = :val')

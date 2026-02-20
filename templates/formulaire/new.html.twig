@@ -1,104 +1,156 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block title %}Nouveau Quiz{% endblock %}
-{% block page_title %}Ajouter un Quiz{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/formulaire.css') }}?v={{ 'now'|date('YmdHi') }}">
+    <style>
+        /* 2-column professional layout */
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .form-row label {
+            width: 180px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .form-row .form-control {
+            width: 100%;
+            max-width: 500px;
+            height: 48px;
+            border-radius: 8px;
+        }
+
+        textarea.form-control {
+            height: 130px !important;
+        }
+
+        .input-group {
+            max-width: 500px;
+        }
+
+        .input-group-text {
+            height: 48px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .action-buttons {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+    </style>
+{% endblock %}
 
 {% block admin_content %}
-<div class="card animate-fade-in-up" style="max-width: 800px; margin: 0 auto;">
-    <div class="card-header">
-        <h3 class="card-title">Détails du Quiz</h3>
-    </div>
-    <div class="p-10">
-        {{ form_start(form, {'attr': {'class': 'settings-form-vertical'}}) }}
-        
-        <!-- Titre -->
-        <div class="form-group-spaced">
-            {{ form_label(form.titre, 'Titre du Quiz', {'label_attr': {'class': 'form-label-spaced'}}) }}
-            {{ form_widget(form.titre, {'attr': {'class': 'form-control-spaced', 'placeholder': 'Ex: Introduction au Design UI'}}) }}
-            <div class="text-danger small">
-                {{ form_errors(form.titre) }}
-            </div>
-        </div>
-        
-        <!-- Description -->
-        <div class="form-group-spaced">
-            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label-spaced'}}) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control-spaced', 'rows': 5, 'placeholder': 'Décrivez les objectifs de ce quiz...'}}) }}
-            <div class="text-danger small">
-                {{ form_errors(form.description) }}
-            </div>
-        </div>
-        
-        <!-- Grid for side-by-side fields -->
-        <div class="grid-spaced">
-            <div class="form-group-spaced">
-                {{ form_label(form.tempsLimite, 'Temps Limite (minutes)', {'label_attr': {'class': 'form-label-spaced'}}) }}
-                {{ form_widget(form.tempsLimite, {'attr': {'class': 'form-control-spaced', 'placeholder': 'En minutes'}}) }}
-                <div class="text-danger small">
-                    {{ form_errors(form.tempsLimite) }}
-                </div>
-            </div>
-            
-            <div class="form-group-spaced">
-                {{ form_label(form.category, 'Catégorie', {'label_attr': {'class': 'form-label-spaced'}}) }}
-                {{ form_widget(form.category, {'attr': {'class': 'form-control-spaced', 'placeholder': 'Ex: UI/UX'}}) }}
-                <div class="text-danger small">
-                    {{ form_errors(form.category) }}
-                </div>
-            </div>
-        </div>
 
-        <!-- Buttons -->
-        <div class="form-actions-spaced">
-            <button class="btn-primary-spaced">Enregistrer</button>
-            <a href="{{ path('app_formulaire_index') }}" class="btn-secondary-spaced">Annuler</a>
-        </div>
+<div class="quiz-page-header animate-fade-in-up">
+    <h1 class="quiz-page-title">Créer un <span>Nouveau Quiz</span></h1>
+    <a href="{{ path('app_formulaire_index') }}" class="btn btn-light border-0 shadow-sm text-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Retour à la liste
+    </a>
+</div>
 
-        {{ form_end(form) }}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="quiz-card">
+            <div class="quiz-card-header">
+                <h3><i class="bi bi-pencil-square me-2"></i>Détails du Quiz</h3>
+            </div>
+
+            <div class="p-4">
+
+                {{ form_start(form) }}
+
+                    <!-- Titre -->
+                    <div class="form-row">
+                        <label>Titre du Quiz</label>
+                        <div class="flex-grow-1">
+                            {{ form_widget(form.titre, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Ex: Introduction à Symfony'
+                                }
+                            }) }}
+                            <div class="text-danger small mt-1">
+                                {{ form_errors(form.titre) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-row">
+                        <label>Description</label>
+                        <div class="flex-grow-1">
+                            {{ form_widget(form.description, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Brève description du quiz...'
+                                }
+                            }) }}
+                            <div class="text-danger small mt-1">
+                                {{ form_errors(form.description) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Temps limite -->
+                    <div class="form-row">
+                        <label>Temps Limite</label>
+                        <div class="flex-grow-1">
+                            <div class="input-group">
+                                {{ form_widget(form.tempsLimite, {
+                                    'attr': { 'class': 'form-control' }
+                                }) }}
+                                <span class="input-group-text bg-light text-muted">minutes</span>
+                            </div>
+                            <div class="text-danger small mt-1">
+                                {{ form_errors(form.tempsLimite) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="form-row">
+                        <label>Catégorie</label>
+                        <div class="flex-grow-1">
+                            {{ form_widget(form.category, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Ex: Développement Web'
+                                }
+                            }) }}
+                            <div class="text-danger small mt-1">
+                                {{ form_errors(form.category) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="action-buttons">
+                        <a href="{{ path('app_formulaire_index') }}" class="btn btn-light px-4">
+                            Annuler
+                        </a>
+
+                        <button type="submit" class="btn btn-primary px-4 fw-bold"
+                                style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none;">
+                            <i class="bi bi-save me-2"></i> Enregistrer le Quiz
+                        </button>
+                    </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
     </div>
 </div>
 
-<style>
-.form-group-spaced { margin-bottom: 2.5rem; }
-.form-label-spaced { display: block; font-weight: 600; margin-bottom: 1rem; color: #1e293b; font-size: 1rem; }
-.form-control-spaced { 
-    width: 100%; 
-    padding: 1rem 1.25rem; 
-    border: 1px solid #e2e8f0; 
-    border-radius: 12px; 
-    background-color: #f8fafc;
-    font-size: 1rem;
-    transition: all 0.3s;
-}
-.form-control-spaced:focus {
-    border-color: #3C50E0;
-    background-color: white;
-    box-shadow: 0 0 0 4px rgba(60, 80, 224, 0.05);
-    outline: none;
-}
-.grid-spaced { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 2rem; }
-.form-actions-spaced { margin-top: 3rem; display: flex; gap: 1.5rem; }
-.btn-primary-spaced {
-    background: #3C50E0;
-    color: white;
-    padding: 1rem 2.5rem;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.btn-primary-spaced:hover { background: #2d3bb1; transform: translateY(-2px); }
-.btn-secondary-spaced {
-    background: #f1f5f9;
-    color: #475569;
-    padding: 1rem 2.5rem;
-    border-radius: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-.btn-secondary-spaced:hover { background: #e2e8f0; }
-.text-danger.small { margin-top: 8px; font-weight: 600; color: #ef4444; font-size: 0.875rem; }
-</style>
 {% endblock %}

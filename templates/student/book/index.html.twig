@@ -1,0 +1,308 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Bibliothèque InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hero Section */
+.courses-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 480px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+/* Fix header nav crowding */
+.header-nav {
+    gap: 1rem !important;
+}
+.nav-item {
+    font-size: 0.85rem !important;
+}
+
+/* Catalog Grid */
+.dashboard-main { 
+    background: #f8fafc; 
+    min-height: 100vh; 
+    padding-bottom: 5rem;
+}
+
+.course-catalog-grid { 
+    padding: 0 5%; 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+    gap: 2.5rem; 
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Card Styling */
+.course-card-premium {
+    background: white; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+    border: 1px solid #e2e8f0; 
+    display: flex; 
+    flex-direction: column;
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.course-card-premium:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); 
+    border-color: #6366f1;
+}
+
+.course-image-wrapper { 
+    position: relative; 
+    height: 260px; 
+    overflow: hidden; 
+    background: #f8fafc; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 1.5rem;
+}
+
+.course-image-wrapper img { 
+    max-width: 100%; 
+    max-height: 100%; 
+    width: auto;
+    height: auto;
+    object-fit: contain; 
+    transition: transform 0.6s ease; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.course-card-premium:hover .course-image-wrapper img { 
+    transform: scale(1.08); 
+}
+
+.course-badge { 
+    position: absolute; 
+    top: 1rem; 
+    left: 1rem; 
+    padding: 0.4rem 0.8rem; 
+    background: rgba(255,255,255,0.9); 
+    backdrop-filter: blur(10px); 
+    border-radius: 8px; 
+    font-size: 0.7rem; 
+    font-weight: 800; 
+    color: #4f46e5; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    z-index: 2;
+}
+
+.course-content { 
+    padding: 1.5rem; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.course-content h3 { 
+    font-size: 1.15rem; 
+    margin-bottom: 0.5rem; 
+    color: #1e293b; 
+    font-weight: 700; 
+    line-height: 1.4;
+    transition: color 0.3s;
+}
+
+.course-card-premium:hover .course-content h3 {
+    color: #6366f1;
+}
+
+.course-teacher { 
+    font-size: 0.85rem; 
+    color: #64748b; 
+    margin-bottom: 1rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+}
+
+.course-meta { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: auto; 
+    padding-top: 1rem; 
+    border-top: 1px solid #f1f5f9; 
+}
+
+.course-year { 
+    font-size: 0.85rem; 
+    font-weight: 600; 
+    color: #94a3b8; 
+}
+
+.btn-details { 
+    color: #6366f1; 
+    font-weight: 700; 
+    font-size: 0.85rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.4rem; 
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="courses-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <span class="hero-label">Médiathèque</span>
+                <h1 class="hero-title">
+                    Bibliothèque<br>
+                    <span>Numérique</span>
+                </h1>
+                <p class="text-white opacity-75 lead mb-4">Accédez à des milliers de ressources pédagogiques pour approfondir vos connaissances.</p>
+            </div>
+            
+            <div class="hero-visual d-none d-lg-flex">
+                <i class="fas fa-book-reader fa-10x text-white opacity-10"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Grid -->
+    <div class="course-catalog-grid">
+        {% for book in books %}
+            <a href="{{ path('app_book_show', {'id': book.id}) }}" class="course-card-premium">
+                <div class="course-image-wrapper">
+                    {% if book.coverImage %}
+                        <img src="{{ asset('uploads/books/covers/' ~ book.coverImage) }}" alt="{{ book.titre }}">
+                    {% else %}
+                        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-light text-muted">
+                            <i class="fas fa-book fa-4x mb-2 opacity-25"></i>
+                            <span class="small fw-bold">No Cover</span>
+                        </div>
+                    {% endif %}
+                    <div class="course-badge text-uppercase">{{ book.author|u.truncate(15, '...') }}</div>
+                </div>
+                <div class="course-content">
+                    <h3>{{ book.titre }}</h3>
+                    <div class="course-teacher">
+                        <i class="fas fa-user-edit"></i>
+                        <span>{{ book.author }}</span>
+                    </div>
+                    <div class="course-meta">
+                        <span class="course-year">{{ book.publier ? book.publier|date('Y') : 'N/A' }}</span>
+                        <div class="btn-details">
+                            Détails <i class="fas fa-chevron-right small"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% else %}
+            <div class="col-12 text-center py-5" style="grid-column: 1/-1;">
+                <div class="empty-state">
+                    <i class="fas fa-books fa-4x text-muted mb-3 opacity-25"></i>
+                    <h3 class="text-muted">La bibliothèque est vide</h3>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

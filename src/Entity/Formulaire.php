@@ -60,15 +60,16 @@ class Formulaire
     )]
     private ?string $category = null;
 
-    /**
-     * @var Collection<int, Question>
-     */
-    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'formulaire', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'formulaire', cascade: ["remove"], orphanRemoval: true)]
     private Collection $questions;
+
+    #[ORM\OneToMany(targetEntity: QuizResult::class, mappedBy: 'formulaire', cascade: ["remove"], orphanRemoval: true)]
+    private Collection $quizResults;
 
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->quizResults = new ArrayCollection();
     }
 
     // ------------------------
@@ -148,6 +149,36 @@ class Formulaire
             // set the owning side to null (unless already changed)
             if ($question->getFormulaire() === $this) {
                 $question->setFormulaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, QuizResult>
+     */
+    public function getQuizResults(): Collection
+    {
+        return $this->quizResults;
+    }
+
+    public function addQuizResult(QuizResult $quizResult): static
+    {
+        if (!$this->quizResults->contains($quizResult)) {
+            $this->quizResults->add($quizResult);
+            $quizResult->setFormulaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuizResult(QuizResult $quizResult): static
+    {
+        if ($this->quizResults->removeElement($quizResult)) {
+            // set the owning side to null (unless already changed)
+            if ($quizResult->getFormulaire() === $this) {
+                $quizResult->setFormulaire(null);
             }
         }
 

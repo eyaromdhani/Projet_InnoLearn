@@ -63,13 +63,8 @@ footer {
 }
 
 .header-brand-wrapper {
-<<<<<<< HEAD
-    width: 200px;
-    /* Fixed width to balance the flex layout */
-=======
     width: 220px;
     flex-shrink: 0;
->>>>>>> user
 }
 
 .header-brand {
@@ -90,21 +85,12 @@ footer {
 
 /* Centered Navigation */
 .header-nav {
-<<<<<<< HEAD
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-=======
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1.5rem;
     min-width: 0;
->>>>>>> user
 }
 
 .nav-item {
@@ -115,10 +101,7 @@ footer {
     padding: 0.5rem 0;
     position: relative;
     transition: color 0.3s ease;
-<<<<<<< HEAD
-=======
     white-space: nowrap;
->>>>>>> user
 }
 
 .nav-item:hover {
@@ -143,19 +126,11 @@ footer {
 
 /* Header Actions */
 .header-actions {
-<<<<<<< HEAD
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    /* Removed fixed width to allow search bar expansion */
-    flex: 1;
-=======
     width: 350px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 1.25rem;
->>>>>>> user
     justify-content: flex-end;
 }
 
@@ -166,11 +141,7 @@ footer {
     padding: 0 1.25rem;
     border-radius: 50px;
     height: 46px;
-<<<<<<< HEAD
-    width: 350px;
-=======
     width: 250px;
->>>>>>> user
     border: 1px solid #e2e8f0;
     transition: all 0.3s ease;
 }
@@ -178,11 +149,7 @@ footer {
 .search-bar-compact:focus-within {
     background: white;
     border-color: var(--primary);
-<<<<<<< HEAD
-    width: 450px;
-=======
     width: 320px;
->>>>>>> user
     box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
 }
 

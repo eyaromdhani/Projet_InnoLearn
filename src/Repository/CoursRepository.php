@@ -8,14 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Cours>
-<<<<<<< HEAD
-=======
  *
  * @method Cours|null find($id, $lockMode = null, $lockVersion = null)
  * @method Cours|null findOneBy(array $criteria, array $orderBy = null)
  * @method Cours[]    findAll()
  * @method Cours[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
->>>>>>> user
  */
 class CoursRepository extends ServiceEntityRepository
 {
@@ -24,32 +21,6 @@ class CoursRepository extends ServiceEntityRepository
         parent::__construct($registry, Cours::class);
     }
 
-<<<<<<< HEAD
-    //    /**
-    //     * @return Cours[] Returns an array of Cours objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Cours
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-=======
     public function add(Cours $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -67,5 +38,4 @@ class CoursRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
->>>>>>> user
 }

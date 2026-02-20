@@ -1,0 +1,4 @@
+nucleos_dompdf:
+    defaults:
+        font_subsetting: true
+        font_dir: '%kernel.project_dir%/public/fonts'

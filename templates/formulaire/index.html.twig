@@ -5,36 +5,47 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/formulaire.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formulaire.css') }}?v={{ 'now'|date('YmdHi') }}">
 {% endblock %}
 
 {% block admin_content %}
-<div class="card shadow-sm animate-fade-in-up">
 
-    <!-- Header -->
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title mb-0">Liste des Quiz</h3>
-        <a href="{{ path('app_formulaire_new') }}" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i> Ajouter Nouveau
+<!-- Page Header -->
+<div class="quiz-page-header animate-fade-in-up">
+    <h1 class="quiz-page-title">Gestion des <span>Quiz</span></h1>
+</div>
+
+<!-- Main Table Card -->
+<div class="quiz-card animate-fade-in-up">
+
+    <!-- Card Header -->
+    <div class="quiz-card-header">
+        <h3><i class="bi bi-journals me-2"></i>Liste des Quiz</h3>
+        <a href="{{ path('app_formulaire_new') }}" class="btn-add-quiz">
+            <i class="bi bi-plus-circle-fill"></i> Ajouter Nouveau
         </a>
     </div>
 
-    <!-- Search by Category -->
-    <div class="p-3">
-        <input type="text" id="category-search" class="form-control form-control-sm"
-               placeholder="Rechercher par catégorie" value="{{ currentCategory|default('') }}">
+    <!-- Search Bar -->
+    <div class="quiz-search-bar">
+        <div class="search-input-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" id="category-search"
+                   placeholder="Rechercher par catégorie..."
+                   value="{{ currentCategory|default('') }}">
+        </div>
     </div>
 
     <!-- Table -->
-    <div class="table-responsive p-3">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-dark">
+    <div class="quiz-table-wrap">
+        <table class="quiz-table">
+            <thead>
                 <tr>
-                    <th><a href="#" data-sort="id" class="text-white">ID</a></th>
-                    <th><a href="#" data-sort="titre" class="text-white">Titre</a></th>
-                    <th><a href="#" data-sort="description" class="text-white">Description</a></th>
-                    <th><a href="#" data-sort="tempsLimite" class="text-white">Temps Limite</a></th>
-                    <th><a href="#" data-sort="category" class="text-white">Catégorie</a></th>
+                    <th><a href="#" data-sort="id">ID <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="titre">Titre <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="description">Description <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="tempsLimite">Temps Limite <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="category">Catégorie <i class="bi bi-chevron-expand"></i></a></th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -45,12 +56,13 @@
     </div>
 </div>
 
-<!-- Statistics Section -->
-<div class="card shadow-sm mt-4 animate-fade-in-up">
-    <div class="card-header">
-        <h3 class="card-title">Statistiques des Durées</h3>
+<!-- Statistics Card -->
+<div class="stats-card animate-fade-in-up">
+    <div class="stats-card-header">
+        <div class="stats-icon"><i class="bi bi-bar-chart-fill"></i></div>
+        <h3>Statistiques des Durées</h3>
     </div>
-    <div class="card-body">
+    <div class="stats-card-body">
         <div id="quiz-duration-chart" style="min-height: 300px; display: flex; justify-content: center;"></div>
     </div>
 </div>
@@ -62,17 +74,22 @@ document.addEventListener('DOMContentLoaded', function () {
         chart: {
             width: 380,
             type: 'donut',
+            fontFamily: 'Inter, sans-serif',
         },
         labels: ['< 10 minutes', '>= 10 minutes'],
-        colors: ['#f43f5e', '#10b981'], // Red/Pink for short, Green for long/standard
+        colors: ['#f43f5e', '#6366f1'],
         plotOptions: {
             pie: {
                 donut: {
+                    size: '65%',
                     labels: {
                         show: true,
                         total: {
                             show: true,
                             label: 'Total',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            color: '#1e293b',
                             formatter: function (w) {
                                 return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
                             }
@@ -81,22 +98,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         },
-        dataLabels: {
-            enabled: true
+        dataLabels: { enabled: true },
+        legend: {
+            position: 'bottom',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 600,
         },
         responsive: [{
             breakpoint: 480,
             options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
+                chart: { width: 200 },
+                legend: { position: 'bottom' }
             }
         }]
     };
-
     var chart = new ApexCharts(document.querySelector("#quiz-duration-chart"), options);
     chart.render();
 });
@@ -110,38 +125,27 @@ const searchInput = document.getElementById('category-search');
 let currentSort = 'id';
 let currentDirection = 'asc';
 
-// Fetch table rows dynamically
 function fetchTable() {
     const category = encodeURIComponent(searchInput.value);
-
     fetch(`{{ path('app_formulaire_index') }}?category=${category}&sort=${currentSort}&direction=${currentDirection}`, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
     .then(res => res.text())
-    .then(html => {
-        tableBody.innerHTML = html;
-    });
+    .then(html => { tableBody.innerHTML = html; });
 }
 
-// Dynamic search as you type
-searchInput.addEventListener('input', () => {
-    fetchTable();
-});
+searchInput.addEventListener('input', () => fetchTable());
 
-// Sorting on header click
 document.querySelectorAll('thead th a').forEach(header => {
     header.addEventListener('click', e => {
         e.preventDefault();
         const sortField = header.dataset.sort;
-
-        // Toggle direction if same column clicked
         if (currentSort === sortField) {
             currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
         } else {
             currentSort = sortField;
             currentDirection = 'asc';
         }
-
         fetchTable();
     });
 });

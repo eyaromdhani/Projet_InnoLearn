@@ -6,29 +6,16 @@ use App\Entity\Project;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-<<<<<<< HEAD
-=======
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
->>>>>>> user
 
 class ProjectType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-<<<<<<< HEAD
-            ->add('title')
-            ->add('description')
-            ->add('status')
-            ->add('start_date')
-            ->add('end_date')
-            ->add('created_at')
-            ->add('updated_at')
-        ;
-=======
             ->add('title', TextType::class, [
                 'label' => 'Titre du projet',
                 'attr' => [
@@ -67,7 +54,6 @@ class ProjectType extends AbstractType
                 'html5' => true,
                 'required' => false
             ]);
->>>>>>> user
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -76,8 +62,4 @@ class ProjectType extends AbstractType
             'data_class' => Project::class,
         ]);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> user

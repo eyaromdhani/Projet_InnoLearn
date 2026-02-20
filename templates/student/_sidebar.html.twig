@@ -13,8 +13,12 @@
             <span>Dashboard</span>
         </a>
         <a href="{{ path('app_student_courses') }}" class="sidebar-item {{ active_menu == 'courses' ? 'active' : '' }}">
-            <i class="fas fa-book"></i>
+            <i class="fas fa-chalkboard-teacher"></i>
             <span>Mes Cours</span>
+        </a>
+        <a href="{{ path('app_book_index') }}" class="sidebar-item {{ app.request.get('_route') starts with 'app_book' ? 'active' : '' }}" data-turbo="false">
+            <i class="fas fa-book-open"></i>
+            <span>Bibliothèque</span>
         </a>
         <a href="{{ path('app_student_projects') }}" class="sidebar-item {{ active_menu == 'projects' ? 'active' : '' }}">
             <i class="fas fa-project-diagram"></i>

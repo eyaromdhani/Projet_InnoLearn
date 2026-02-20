@@ -3,12 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\OffreStageRepository;
-<<<<<<< HEAD
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-
-#[ORM\Entity(repositoryClass: OffreStageRepository::class)]
-=======
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OffreStageRepository::class)]
 #[ORM\Table(name: 'offrestage')]
->>>>>>> user
 class OffreStage
 {
     #[ORM\Id]
@@ -28,31 +21,6 @@ class OffreStage
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-<<<<<<< HEAD
-    private ?string $titre = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $entreprise = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $lieu = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $domaine = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $competences = null;
-
-    #[ORM\Column]
-    private ?int $duree = null;
-
-    #[ORM\Column]
-    private ?\DateTime $datePublication = null;
-
-=======
     #[Assert\NotBlank(message: "Le titre est obligatoire.")]
     #[Assert\Length(min: 5, max: 255, minMessage: "Le titre doit faire au moins {{ limit }} caractères.")]
     private ?string $titre = null;
@@ -99,7 +67,6 @@ class OffreStage
         $this->datePublication = new \DateTime();
     }
 
->>>>>>> user
     public function getId(): ?int
     {
         return $this->id;
@@ -194,18 +161,12 @@ class OffreStage
         return $this->datePublication;
     }
 
-<<<<<<< HEAD
-    public function setDatePublication(\DateTime $datePublication): static
-=======
     public function setDatePublication(?\DateTime $datePublication): static
->>>>>>> user
     {
         $this->datePublication = $datePublication;
 
         return $this;
     }
-<<<<<<< HEAD
-=======
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "id_recruteur", referencedColumnName: "id", nullable: true)]
@@ -262,5 +223,4 @@ class OffreStage
 
         return $this;
     }
->>>>>>> user
 }
