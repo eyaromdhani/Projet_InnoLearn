@@ -7,24 +7,27 @@
 /* Hero Section */
 .project-detail-hero {
     background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
     color: white;
     position: relative;
     overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hero-background {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.1;
-    background-size: cover;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(124, 58, 237, 0.4) 0%, transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .hero-content {
-    max-width: 1400px;
+    max-width: 1300px;
     margin: 0 auto;
     position: relative;
     z-index: 10;
@@ -33,64 +36,74 @@
 .breadcrumb {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 0.8);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .breadcrumb a {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    transition: color 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .breadcrumb a:hover {
     color: white;
-    text-decoration: underline;
+    transform: translateX(-3px);
+}
+
+.breadcrumb span {
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .project-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 2rem;
+    align-items: flex-end;
+    gap: 2rem;
 }
 
 .project-title-section h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 1.25rem;
     color: white;
+    letter-spacing: -0.025em;
+    line-height: 1;
 }
 
 .project-meta-badges {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
 }
 
 .project-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
+    padding: 0.6rem 1.25rem;
+    border-radius: 12px;
     font-size: 0.85rem;
     font-weight: 700;
-    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s;
 }
 
 .badge-category {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     color: white;
-    backdrop-filter: blur(10px);
 }
 
 .badge-status {
-    background: #10b981;
-    color: white;
-}
-
-.badge-difficulty {
-    background: #f59e0b;
-    color: white;
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.2);
 }
 
 .project-actions-header {
@@ -98,290 +111,203 @@
     gap: 1rem;
 }
 
-.btn-back {
-    background: rgba(255, 255, 255, 0.1);
+.btn-back-hero {
+    background: rgba(255, 255, 255, 0.05);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.85rem 1.75rem;
+    border-radius: 14px;
+    font-weight: 600;
     transition: all 0.3s;
+    backdrop-filter: blur(10px);
 }
 
-.btn-back:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(-5px);
+.btn-back-hero:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: white;
 }
 
-.btn-join-large {
-    background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
-    color: white;
+.btn-join-hero {
+    background: white;
+    color: #4338ca;
     border: none;
-    padding: 0.75rem 2rem;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    transition: all 0.3s;
+    padding: 0.85rem 2rem;
+    border-radius: 14px;
+    font-weight: 800;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.btn-join-large:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+.btn-join-hero:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(67, 56, 202, 0.4);
 }
 
-/* Main Content */
+/* Page Layout */
 .project-detail-container {
-    max-width: 1400px;
-    margin: 2rem auto;
+    max-width: 1300px;
+    margin: -3rem auto 4rem;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 3rem;
-}
-
-/* Left Column - Project Details */
-.project-info-card {
-    background: white;
-    border-radius: 20px;
-    padding: 2.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.section-title i {
-    color: #6366f1;
-    font-size: 1.2rem;
-}
-
-.project-description {
-    color: #4b5563;
-    line-height: 1.7;
-    font-size: 1.05rem;
-    margin-bottom: 2rem;
-}
-
-/* Timeline */
-.timeline {
+    grid-template-columns: 1.8fr 1fr;
+    gap: 2.5rem;
     position: relative;
-    padding-left: 2rem;
+    z-index: 20;
 }
 
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #e5e7eb;
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 1.5rem;
-    padding-left: 1rem;
-}
-
-.timeline-item:last-child {
-    margin-bottom: 0;
-}
-
-.timeline-dot {
-    position: absolute;
-    left: -9px;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #6366f1;
-    border: 3px solid white;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.timeline-date {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: 0.25rem;
-    font-weight: 600;
-}
-
-.timeline-text {
-    font-size: 1rem;
-    color: #374151;
-    font-weight: 500;
-}
-
-/* Technologies */
-.technologies-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1rem;
-}
-
-.tech-tag {
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* Team Members */
-.team-members {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.member-card {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid #e5e7eb;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: all 0.3s;
-}
-
-.member-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.member-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.member-info h4 {
-    margin: 0 0 0.25rem 0;
-    color: #1f2937;
-}
-
-.member-role {
-    color: #6b7280;
-    font-size: 0.9rem;
-}
-
-.member-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    margin-top: 0.5rem;
-}
-
-.skill-tag {
-    background: #e5e7eb;
-    color: #4b5563;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-}
-
-/* Right Column - Sidebar */
-.project-sidebar {
+.card-stack {
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.sidebar-card {
+.project-info-card {
     background: white;
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s;
 }
 
-.info-grid {
-    display: grid;
-    gap: 1.5rem;
+.project-info-card:hover {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.07);
 }
 
-.info-item {
+.section-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 2rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+    gap: 0.85rem;
 }
 
-.info-item:last-child {
-    border-bottom: none;
-}
-
-.info-label {
+.section-title i {
+    width: 40px;
+    height: 40px;
+    background: #f1f5f9;
+    color: #4338ca;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.1rem;
+}
+
+.project-description {
+    color: #64748b;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Summary Card Special Style */
+.summary-card {
+    background: linear-gradient(to right, #f8fafc, #eff6ff);
+    border: 1px solid #dbeafe;
+}
+
+/* Timeline */
+.timeline-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.timeline-modern-item {
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.timeline-modern-item::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 35px;
+    bottom: -20px;
+    width: 2px;
+    background: #f1f5f9;
+}
+
+.timeline-modern-item:last-child::after {
+    display: none;
+}
+
+.timeline-icon {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    transition: all 0.3s;
+}
+
+.timeline-modern-item.active .timeline-icon {
+    border-color: #4338ca;
+    color: #4338ca;
+    box-shadow: 0 0 0 6px rgba(67, 56, 202, 0.05);
+}
+
+.timeline-content h4 {
+    margin: 0 0 0.5rem;
+    color: #334155;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.timeline-content p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+/* Technologies */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.tech-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    color: #6b7280;
-    font-weight: 500;
+    transition: all 0.3s;
 }
 
-.info-value {
-    font-weight: 700;
-    color: #1f2937;
-}
-
-.progress-container {
-    margin-top: 1.5rem;
-}
-
-.progress-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    color: #4b5563;
-}
-
-.progress-bar {
-    height: 8px;
-    background: #e5e7eb;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    border-radius: 4px;
-    transition: width 1s ease;
-}
-
-/* Dépôts Section */
-.depots-section {
+.tech-item:hover {
     background: white;
-    border-radius: 20px;
-    padding: 2.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    margin-top: 3rem;
+    border-color: #4338ca;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.tech-item i {
+    font-size: 1.5rem;
+    color: #4338ca;
+}
+
+.tech-item span {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1e293b;
+}
+
+/* Depot Section Redesign */
+.depots-section {
+    margin-top: 2rem;
 }
 
 .depots-header {
@@ -389,320 +315,294 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f1f5f9;
 }
 
 .btn-new-depot {
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
     color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8rem 1.75rem;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    transition: all 0.3s;
-    text-decoration: none;
+    gap: 0.6rem;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-new-depot:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-}
-
-/* Depot Table */
-.depot-table-container {
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-}
-
-.depot-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-}
-
-.depot-table thead {
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-}
-
-.depot-table th {
-    padding: 1.25rem;
-    text-align: left;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
     color: white;
-    font-weight: 700;
-    font-size: 0.95rem;
 }
 
-.depot-table tbody tr {
-    border-bottom: 1px solid #e5e7eb;
-    transition: background 0.2s;
+.depot-grid {
+    display: grid;
+    gap: 1.25rem;
 }
 
-.depot-table tbody tr:hover {
-    background: #f8fafc;
-}
-
-.depot-table td {
-    padding: 1.25rem;
-    font-size: 0.95rem;
-    color: #4b5563;
-}
-
-.depot-badge {
-    display: inline-block;
-    padding: 0.35rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-}
-
-.depot-status-valid {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.depot-status-pending {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.depot-status-correction {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.depot-status-rejected {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.btn-action {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-    text-decoration: none;
-}
-
-.btn-view {
-    background: #e5e7eb;
-    color: #4b5563;
-}
-
-.btn-view:hover {
-    background: #d1d5db;
-}
-
-.btn-download {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.btn-download:hover {
-    background: #bfdbfe;
-}
-
-.btn-edit {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.btn-edit:hover {
-    background: #fde68a;
-}
-
-.btn-delete {
-    background: #fee2e2;
-    color: #dc2626;
-    border: none;
-    font-size: 14px;
-}
-
-.btn-delete:hover {
-    background: #fecaca;
-}
-
-/* Commentaires */
-.comments-section {
-    margin-top: 3rem;
-}
-
-.comment-card {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid #6366f1;
-}
-
-.comment-header {
+.depot-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
+    background: white;
+    padding: 1.25rem;
+    border-radius: 20px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.comment-author {
-    font-weight: 600;
-    color: #374151;
+.depot-item:hover {
+    transform: translateX(10px);
+    border-color: #4338ca;
+    box-shadow: 0 10px 25px rgba(67, 56, 202, 0.08);
 }
 
-.comment-date {
-    color: #6b7280;
+.depot-info-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.depot-type-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.type-code { background: #eff6ff; color: #3b82f6; }
+.type-document { background: #fff1f2; color: #f43f5e; }
+.type-presentation { background: #fff7ed; color: #f97316; }
+.type-rapport { background: #f0fdf4; color: #22c55e; }
+
+.depot-details-text h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.depot-sub-info {
     font-size: 0.85rem;
+    color: #94a3b8;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
-.comment-text {
-    color: #4b5563;
-    line-height: 1.6;
+.depot-status-pill {
+    padding: 0.35rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Sidebar Styling */
+.sidebar-sticky {
+    position: sticky;
+    top: 2rem;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    border-radius: 24px;
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: 0 20px 40px rgba(67, 56, 202, 0.2);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 600;
+}
+
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.row-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.row-value {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.project-info-card {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.btn-action {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-download {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.btn-download:hover {
+    background: #3b82f6;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-edit {
+    background: #fff7ed;
+    color: #f97316;
+}
+
+.btn-edit:hover {
+    background: #f97316;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+}
+
+.btn-delete {
+    background: #fff1f2;
+    color: #f43f5e;
+}
+
+.btn-delete:hover {
+    background: #f43f5e;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
     .project-detail-container {
         grid-template-columns: 1fr;
+        margin-top: -2rem;
     }
-}
-
-@media (max-width: 768px) {
     .project-header {
         flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .project-title-section h1 {
-        font-size: 2rem;
-    }
-    
-    .project-actions-header {
-        width: 100%;
-        justify-content: space-between;
-    }
-    
-    .project-info-card {
-        padding: 1.5rem;
-    }
-    
-    .depots-header {
-        flex-direction: column;
-        gap: 1rem;
         align-items: flex-start;
     }
-    
-    .action-buttons {
-        flex-wrap: wrap;
+    .project-title-section h1 {
+        font-size: 2.5rem;
     }
 }
 
-/* Flash messages */
-.flash-messages {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    max-width: 400px;
-}
-
-.alert {
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    animation: slideIn 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.alert-success {
-    background: #10b981;
-    color: white;
-    border-left: 4px solid #059669;
-}
-
-.alert-error {
-    background: #ef4444;
-    color: white;
-    border-left: 4px solid #dc2626;
-}
-
-.alert-info {
-    background: #3b82f6;
-    color: white;
-    border-left: 4px solid #1d4ed8;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
+@media (max-width: 640px) {
+    .depot-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
     }
-    to {
-        transform: translateX(0);
-        opacity: 1;
+    .depot-actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
     }
 }
+
 </style>
 {% endblock %}
 
 {% block student_content %}
-<!-- Flash Messages -->
-{% for message in app.flashes('success') %}
-    <div class="flash-messages">
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i>
-            {{ message }}
-        </div>
-    </div>
-{% endfor %}
-
-{% for message in app.flashes('error') %}
-    <div class="flash-messages">
-        <div class="alert alert-error">
-            <i class="fas fa-exclamation-circle"></i>
-            {{ message }}
-        </div>
-    </div>
-{% endfor %}
-
 <!-- Hero Section -->
 <section class="project-detail-hero">
+    <div class="hero-background"></div>
     <div class="hero-content">
         <div class="breadcrumb">
-            <a href="{{ path('app_student_projects') }}"><i class="fas fa-arrow-left"></i> Retour aux projets</a>
+            <a href="{{ path('app_student_projects') }}"><i class="fas fa-chevron-left"></i> Retour</a>
+            <span>/</span>
+            <a href="{{ path('app_student_projects') }}">Projets</a>
             <span>/</span>
             <span>{{ project.title }}</span>
         </div>
         
         <div class="project-header">
+            <!-- AI Header Image -->
+            {% if project.generatedImage %}
+            <div style="margin-bottom: 2rem; border-radius: 24px; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                <img src="{{ project.generatedImage }}" id="projectLogoImg" style="width: 100%; height: 250px; object-fit: cover;" alt="Project Logo">
+            </div>
+            {% endif %}
+            
             <div class="project-title-section">
                 <h1>{{ project.title }}</h1>
                 <div class="project-meta-badges">
-                    <span class="project-badge badge-category">{{ project.category }}</span>
-                    <span class="project-badge badge-status">{{ project.status }}</span>
-                    <span class="project-badge badge-difficulty">{{ project.difficulty }}</span>
+                    <span class="project-badge badge-category">
+                        <i class="fas fa-folder-open"></i> {{ project.category }}
+                    </span>
+                    <span class="project-badge badge-status">
+                        <i class="fas fa-circle-check"></i> {{ project.status }}
+                    </span>
+                    <span class="project-badge" title="{{ project.difficulty }}" style="background: rgba{% if project.difficulty == 'Débutant' %}4, 120, 87, 0.15{% elseif project.difficulty == 'Intermédiaire' %}29, 78, 216, 0.15{% else %}124, 58, 237, 0.15{% endif %}); color: {% if project.difficulty == 'Débutant' %}#34d399{% elseif project.difficulty == 'Intermédiaire' %}#60a5fa{% else %}#a78bfa{% endif %}; border-color: rgba(255,255,255,0.1);">
+                        <i class="fas {% if project.difficulty == 'Débutant' %}fa-leaf{% elseif project.difficulty == 'Intermédiaire' %}fa-bolt{% else %}fa-trophy{% endif %}"></i>
+                        {{ project.difficulty }}
+                    </span>
                 </div>
             </div>
             
             <div class="project-actions-header">
-                <a href="{{ path('app_student_projects') }}" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Retour
-                </a>
-                <button class="btn-join-large" {{ project.status == 'Complet' ? 'disabled' : '' }} onclick="applyToProject()">
-                    <i class="fas fa-paper-plane"></i> Postuler au projet
+                <button class="btn-join-hero" {{ project.status == 'Complet' ? 'disabled' : '' }} onclick="applyToProject()">
+                    <i class="fas fa-paper-plane"></i> Rejoindre l'aventure
                 </button>
             </div>
         </div>
@@ -712,331 +612,187 @@
 <!-- Main Content -->
 <div class="project-detail-container">
     <!-- Left Column -->
-    <div class="project-details">
-        <!-- Description Section -->
+    <div class="card-stack">
+        <!-- Automatic Summary Section (Premium Gradient) -->
+        {% if project.summary or project.description %}
+        <div class="project-info-card summary-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 class="section-title" style="margin-bottom: 0;"><i class="fas fa-sparkles"></i> Essence du Projet</h2>
+                <button onclick="generateLogo({{ project.id }})" class="btn-new-depot" id="genLogoBtn" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); font-size: 0.85rem; padding: 0.6rem 1.2rem; border: none; cursor: pointer;">
+                    <i class="fas fa-paint-brush"></i> Générer Logo (IA)
+                </button>
+            </div>
+            <div class="project-description" id="ai-summary-container" style="color: #4338ca; font-weight: 500; font-style: italic;">
+                <div id="ai-summary-loading" style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-spinner fa-spin" style="color: #7c3aed;"></i>
+                    <span style="color: #64748b;">Génération du résumé intelligent en cours...</span>
+                </div>
+                <div id="ai-summary-text" style="display: none;"></div>
+            </div>
+        </div>
+        {% endif %}
+
         <div class="project-info-card">
-            <h2 class="section-title"><i class="fas fa-align-left"></i> Description du Projet</h2>
+            <h2 class="section-title"><i class="fas fa-align-left"></i> À propos du projet</h2>
             <div class="project-description">
                 {{ project.description }}
             </div>
         </div>
 
-        <!-- Objectifs & Technologies -->
+        <!-- Tech Stack -->
         <div class="project-info-card">
-            <h2 class="section-title"><i class="fas fa-bullseye"></i> Objectifs</h2>
-            <div class="project-description">
-                Ce projet vise à développer une application web complète utilisant Symfony pour le backend
-                et modernes pour le frontend. Les objectifs incluent:
-                <ul style="margin: 1rem 0; padding-left: 1.5rem; color: #4b5563;">
-                    <li>Création d'une architecture MVC robuste</li>
-                    <li>Implémentation d'un système d'authentification sécurisé</li>
-                    <li>Développement d'une API RESTful</li>
-                    <li>Intégration avec des services tiers</li>
-                    <li>Déploiement sur serveur de production</li>
-                </ul>
-            </div>
-
-            <h2 class="section-title" style="margin-top: 2rem;"><i class="fas fa-code"></i> Technologies</h2>
-            <div class="technologies-list">
+            <h2 class="section-title"><i class="fas fa-microchip"></i> Stack Technique</h2>
+            <div class="tech-grid">
                 {% for tech in project.technologies %}
-                <span class="tech-tag">
-                    <i class="fas fa-cube"></i> {{ tech }}
-                </span>
+                <div class="tech-item">
+                    <i class="fab fa-{{ tech|lower == 'php' ? 'php' : (tech|lower == 'symfony' ? 'symfony' : (tech|lower == 'js' or tech|lower == 'javascript' ? 'js' : 'terminal')) }}"></i>
+                    <span>{{ tech }}</span>
+                </div>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Timeline -->
+        <!-- Roadmap -->
         <div class="project-info-card">
-            <h2 class="section-title"><i class="fas fa-history"></i> Chronologie</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">{{ project.created_at }}</div>
-                    <div class="timeline-text">Début du projet</div>
+            <h2 class="section-title"><i class="fas fa-route"></i> Roadmap</h2>
+            <div class="timeline-modern">
+                <div class="timeline-modern-item">
+                    <div class="timeline-icon"><i class="fas fa-flag"></i></div>
+                    <div class="timeline-content">
+                        <h4>Lancement</h4>
+                        <p>Initié le {{ project.created_at }}</p>
+                    </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">{{ project.start_date }}</div>
-                    <div class="timeline-text">Phase de développement</div>
+                <div class="timeline-modern-item active">
+                    <div class="timeline-icon"><i class="fas fa-code"></i></div>
+                    <div class="timeline-content">
+                        <h4>Phase active</h4>
+                        <p>Débuté le {{ project.start_date }}</p>
+                    </div>
                 </div>
                 {% if project.end_date %}
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">{{ project.end_date }}</div>
-                    <div class="timeline-text">Date de fin prévue</div>
+                <div class="timeline-modern-item">
+                    <div class="timeline-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="timeline-content">
+                        <h4>Livraison finale</h4>
+                        <p>Prévue pour le {{ project.end_date }}</p>
+                    </div>
                 </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Team Members -->
-        <div class="project-info-card">
-            <h2 class="section-title"><i class="fas fa-users"></i> Équipe</h2>
-            <div class="team-members">
-                <!-- Team Lead -->
-                <div class="member-card">
-                    <img src="https://ui-avatars.com/api/?name={{ project.lead }}&background=6366f1&color=fff" 
-                         class="member-avatar" alt="{{ project.lead }}">
-                    <div class="member-info">
-                        <h4>{{ project.lead }}</h4>
-                        <span class="member-role">Chef de projet</span>
-                        <div class="member-skills">
-                            <span class="skill-tag">Symfony</span>
-                            <span class="skill-tag">PHP</span>
-                            <span class="skill-tag">Leadership</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Example Team Members -->
-                <div class="member-card">
-                    <img src="https://ui-avatars.com/api/?name=Marie+Dubois&background=10b981&color=fff" 
-                         class="member-avatar" alt="Marie Dubois">
-                    <div class="member-info">
-                        <h4>Marie Dubois</h4>
-                        <span class="member-role">Développeuse Frontend</span>
-                        <div class="member-skills">
-                            <span class="skill-tag">JavaScript</span>
-                            <span class="skill-tag">React</span>
-                            <span class="skill-tag">CSS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="member-card">
-                    <img src="https://ui-avatars.com/api/?name=Jean+Martin&background=0ea5e9&color=fff" 
-                         class="member-avatar" alt="Jean Martin">
-                    <div class="member-info">
-                        <h4>Jean Martin</h4>
-                        <span class="member-role">Développeur Backend</span>
-                        <div class="member-skills">
-                            <span class="skill-tag">Symfony</span>
-                            <span class="skill-tag">API</span>
-                            <span class="skill-tag">Database</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Right Column - Sidebar -->
-    <div class="project-sidebar">
-        <!-- Project Info -->
-        <div class="sidebar-card">
-            <h2 class="section-title"><i class="fas fa-info-circle"></i> Informations</h2>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-user-tie"></i> Chef de projet
-                    </span>
-                    <span class="info-value">{{ project.lead }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-users"></i> Équipe
-                    </span>
-                    <span class="info-value">{{ project.members }}/{{ project.max_members }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-calendar-plus"></i> Date de création
-                    </span>
-                    <span class="info-value">{{ project.created_at }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-hourglass-half"></i> Durée
-                    </span>
-                    <span class="info-value">{{ project.duration }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-signal"></i> Difficulté
-                    </span>
-                    <span class="info-value">{{ project.difficulty }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-rocket"></i> Statut
-                    </span>
-                    <span class="info-value">{{ project.status }}</span>
-                </div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>Progression</span>
-                    <span>65%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 65%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="sidebar-card">
-            <h2 class="section-title"><i class="fas fa-bolt"></i> Actions rapides</h2>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <a href="{{ path('app_student_depot_new', {'id': project.id}) }}" class="btn-new-depot">
-                    <i class="fas fa-plus"></i> Nouveau dépôt
-                </a>
-                <button class="btn-back" onclick="contactTeamLead()" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-envelope"></i> Contacter l'équipe
-                </button>
-                <button class="btn-back" onclick="shareProject()" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-share-alt"></i> Partager
-                </button>
-            </div>
-        </div>
-
-        <!-- Resources -->
-        <div class="sidebar-card">
-            <h2 class="section-title"><i class="fas fa-link"></i> Ressources</h2>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <a href="#" class="btn-back" style="justify-content: start;">
-                    <i class="fab fa-github"></i> Repository GitHub
-                </a>
-                <a href="#" class="btn-back" style="justify-content: start;">
-                    <i class="fas fa-file-contract"></i> Documentation
-                </a>
-                <a href="#" class="btn-back" style="justify-content: start;">
-                    <i class="fas fa-video"></i> Vidéo démo
-                </a>
-                <a href="#" class="btn-back" style="justify-content: start;">
-                    <i class="fas fa-tasks"></i> Tableau de bord
+        <!-- Dépôts Section -->
+        <div class="depots-section">
+            <div class="depots-header">
+                <h2 class="section-title" style="margin-bottom: 0;"><i class="fas fa-box-open"></i> Livrables & Dépôts</h2>
+                <a href="{{ path('app_student_depot_new', {id: project.id}) }}" class="btn-new-depot">
+                    <i class="fas fa-plus"></i> Nouveau Dépôt
                 </a>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Dépôts Section -->
-<div class="depots-section">
-    <div class="depots-header">
-        <h2 class="section-title"><i class="fas fa-upload"></i> Dépôts & Soumissions</h2>
-        <a href="{{ path('app_student_depot_new', {'id': project.id}) }}" class="btn-new-depot">
-            <i class="fas fa-plus"></i> Nouveau dépôt
-        </a>
-    </div>
-
-    <div class="depot-table-container">
-        <table class="depot-table">
-            <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Étudiant</th>
-                    <th>Type</th>
-                    <th>Date</th>
-                    <th>Taille</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+            
+            <div class="depot-grid" style="margin-top: 2rem;">
                 {% for depot in depots %}
-                <tr>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <i class="{{ depot.typeIcon }}" style="color: {{ depot.typeColor }};"></i>
-                            <div>
-                                <div style="font-weight: 600; color: #1f2937;">{{ depot.title }}</div>
-                                <div style="font-size: 0.85rem; color: #6b7280;">Dépôt {{ depot.type }}</div>
+                <div class="depot-item">
+                    <div class="depot-info-wrapper">
+                        <div class="depot-type-icon type-{{ depot.type }}">
+                            <i class="fas {{ depot.getTypeIcon() }}"></i>
+                        </div>
+                        <div class="depot-details-text">
+                            <h4>{{ depot.title }}</h4>
+                            <div class="depot-sub-info">
+                                <span><i class="far fa-calendar"></i> {{ depot.uploadedAt|date('d M Y') }}</span>
+                                <span><i class="far fa-user"></i> {{ depot.studentName }}</span>
+                                <span><i class="fas fa-file-invoice"></i> {{ depot.getFormattedFileSize() }}</span>
                             </div>
                         </div>
-                    </td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <img src="https://ui-avatars.com/api/?name={{ depot.studentName }}&background=6366f1&color=fff" 
-                                 style="width: 32px; height: 32px; border-radius: 50%;">
-                            <span style="font-weight: 600;">{{ depot.studentName }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="{{ depot.typeIcon }}" style="color: {{ depot.typeColor }};"></i>
+                    </div>
+                    <div class="depot-actions">
+                        <span class="depot-status-pill depot-status-{{ depot.type == 'rapport' ? 'valid' : 'pending' }}">
                             {{ depot.type|capitalize }}
-                        </div>
-                    </td>
-                    <td>{{ depot.uploadedAt|date('d/m/Y') }}</td>
-                    <td>{{ depot.formattedFileSize }}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="{{ path('app_student_depot_download', {'id': depot.id}) }}" 
-                               class="btn-action btn-download" title="Télécharger">
+                        </span>
+                        <div class="action-buttons" style="margin-left: 1.5rem;">
+                            <a href="{{ asset('uploads/depots/' ~ depot.filePath) }}" class="btn-action btn-download" title="Télécharger">
                                 <i class="fas fa-download"></i>
                             </a>
-                            <a href="{{ path('app_student_depot_edit', {'id': depot.id}) }}" 
-                               class="btn-action btn-edit" title="Modifier">
+                            <a href="{{ path('app_student_depot_edit', {'id': depot.id}) }}" class="btn-action btn-edit" title="Modifier">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form method="POST" action="{{ path('app_student_depot_delete', {'id': depot.id}) }}" 
-                                  style="display: inline;" 
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce dépôt ?');">
+                            <form method="POST" action="{{ path('app_student_depot_delete', {'id': depot.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ depot.id) }}">
                                 <button type="submit" class="btn-action btn-delete" title="Supprimer">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
                         </div>
-                    </td>
-                </tr>
+                    </div>
+                </div>
                 {% else %}
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                        <div>Aucun dépôt pour ce projet</div>
-                    </td>
-                </tr>
+                <div style="text-align: center; padding: 4rem; background: #fff; border-radius: 24px; border: 2px dashed #e2e8f0;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                    <p style="color: #94a3b8; font-weight: 600;">Aucun livrable déposé pour le moment.</p>
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Commentaires Section -->
-<div class="comments-section">
-    <div class="project-info-card">
-        <h2 class="section-title"><i class="fas fa-comments"></i> Commentaires & Feedback</h2>
-        
-        <!-- Add Comment Form -->
-        <div style="margin-bottom: 2rem;">
-            <form id="commentForm" style="display: flex; gap: 1rem;">
-                <div style="flex: 1;">
-                    <textarea placeholder="Ajouter un commentaire..." 
-                              style="width: 100%; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 12px; resize: vertical; min-height: 100px;"></textarea>
-                </div>
-                <div>
-                    <button type="submit" class="btn-new-depot" style="height: fit-content;">
-                        <i class="fas fa-paper-plane"></i> Publier
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
+    </div>
 
-        <!-- Comments List -->
-        <div class="comment-list">
-            <div class="comment-card">
-                <div class="comment-header">
-                    <span class="comment-author">{{ project.lead }}</span>
-                    <span class="comment-date">15/03/2024</span>
+    <!-- Right Column (Sidebar) -->
+    <div class="project-sidebar">
+        <div class="sidebar-sticky">
+            <div class="stat-box">
+                <span class="stat-number">{{ project.members }}/{{ project.max_members }}</span>
+                <span class="stat-label">Équipiers engagés</span>
+            </div>
+
+            <div class="project-info-card" style="padding: 2rem;">
+                <h3 class="section-title" style="font-size: 1.1rem; margin-bottom: 1.5rem;"><i class="fas fa-info-circle"></i> Spécifications</h3>
+                <div class="info-list">
+                    <div class="info-row">
+                        <div class="row-label"><i class="fas fa-user-tie"></i> Responsable</div>
+                        <div class="row-value">{{ project.lead }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="row-label"><i class="far fa-calendar-check"></i> Créé le</div>
+                        <div class="row-value">{{ project.created_at }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="row-label"><i class="far fa-clock"></i> Durée</div>
+                        <div class="row-value">{{ project.duration }}</div>
+                    </div>
                 </div>
-                <div class="comment-text">
-                    Excellent travail sur l'architecture du projet. Veuillez vous assurer de documenter 
-                    toutes les décisions techniques dans le wiki du projet.
+
+                <div style="margin-top: 2.5rem;">
+                    <h3 class="section-title" style="font-size: 1.1rem; margin-bottom: 1rem;"><i class="fas fa-tasks"></i> Progression</h3>
+                    <div style="height: 12px; background: #f1f5f9; border-radius: 6px; overflow: hidden; position: relative;">
+                        <div style="width: 45%; height: 100%; background: linear-gradient(to right, #4338ca, #6d28d9); border-radius: 6px;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.75rem; font-size: 0.85rem; font-weight: 700; color: #64748b;">
+                        <span>En cours</span>
+                        <span>45%</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="comment-card">
-                <div class="comment-header">
-                    <span class="comment-author">Marie Dubois</span>
-                    <span class="comment-date">10/03/2024</span>
-                </div>
-                <div class="comment-text">
-                    J'ai terminé le composant de navigation principale. Prochaine étape: 
-                    l'intégration avec le système d'authentification.
+            <!-- Team Section -->
+            <div class="project-info-card" style="margin-top: 2rem; padding: 2rem;">
+                <h3 class="section-title" style="font-size: 1.1rem; margin-bottom: 1.5rem;"><i class="fas fa-users-crown"></i> L'Équipe</h3>
+                <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <img src="https://ui-avatars.com/api/?name={{ project.lead }}&background=4338ca&color=fff&bold=true" style="width: 44px; height: 44px; border-radius: 12px;" alt="">
+                        <div>
+                            <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">{{ project.lead }}</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">Chef de projet</div>
+                        </div>
+                    </div>
+                    {% if project.members < project.max_members %}
+                    <div style="display: flex; align-items: center; gap: 1rem; opacity: 0.7; cursor: pointer;" onclick="applyToProject()">
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #cbd5e1;">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div style="font-style: italic; color: #94a3b8; font-size: 0.9rem;">Place disponible - Rejoindre ?</div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -1045,56 +801,288 @@
 
 <script>
 function applyToProject() {
-    const projectStatus = "{{ project.status }}";
-    if (projectStatus === 'Complet') {
-        alert('Ce projet est complet. Aucune candidature possible.');
-        return;
-    }
-    
-    if (confirm('Voulez-vous postuler à ce projet ?')) {
-        alert('Candidature envoyée ! Le chef de projet vous contactera bientôt.');
-        // Ici, vous pouvez ajouter un appel AJAX pour envoyer la candidature
-    }
-}
+    const btn = document.querySelector('.btn-join-hero');
+    if (btn && btn.disabled) return;
 
-function contactTeamLead() {
-    alert('Fonctionnalité de contact à implémenter.');
-}
-
-function shareProject() {
-    if (navigator.share) {
-        navigator.share({
-            title: "{{ project.title }}",
-            text: "Découvrez ce projet sur InnoLearn",
-            url: window.location.href
-        });
-    } else {
-        prompt('Partager ce lien:', window.location.href);
-    }
-}
-
-// Handle comment form submission
-document.getElementById('commentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const textarea = this.querySelector('textarea');
-    if (textarea.value.trim()) {
-        alert('Commentaire publié ! (Fonctionnalité de démonstration)');
-        textarea.value = '';
-    }
-});
-
-// Auto-hide flash messages after 5 seconds
-setTimeout(function() {
-    const flashMessages = document.querySelector('.flash-messages');
-    if (flashMessages) {
-        flashMessages.style.transition = 'opacity 0.5s';
-        flashMessages.style.opacity = '0';
-        setTimeout(function() {
-            if (flashMessages.parentNode) {
-                flashMessages.parentNode.removeChild(flashMessages);
+    if (confirm("Voulez-vous postuler pour rejoindre ce projet ?")) {
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi...';
+        }
+        
+        setTimeout(() => {
+            alert("Votre candidature a été envoyée !");
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Postulé';
+                btn.style.background = '#10b981';
+                btn.style.color = 'white';
             }
-        }, 500);
+        }, 1000);
     }
+}
+
+async function generateLogo(projectId) {
+    const btn = document.getElementById('genLogoBtn');
+    
+    if (!confirm('Voulez-vous générer un logo pour ce projet via l\'IA ?')) return;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+    
+    try {
+        const response = await fetch(`/student/project/${projectId}/generate-logo`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erreur: ' + (data.error || 'Une erreur inconnue est survenue'));
+        }
+    } catch (error) {
+        console.error('JS Error:', error);
+        alert('Erreur: ' + error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paint-brush"></i> Générer Logo (IA)';
+    }
+}
+
+// Flash messages auto-hide
+setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(alert => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    });
 }, 5000);
+
+// ============================================================
+// AI-POWERED INTELLIGENT SUMMARY GENERATOR
+// ============================================================
+(function() {
+    const projectData = {
+        title: {{ project.title|json_encode|raw }},
+        description: {{ project.description|json_encode|raw }},
+        category: {{ project.category|json_encode|raw }},
+        status: {{ project.status|json_encode|raw }},
+        difficulty: {{ (project.difficulty|default('Non spécifié'))|json_encode|raw }},
+        technologies: {{ project.technologies|json_encode|raw }},
+        lead: {{ project.lead|json_encode|raw }}
+    };
+
+    // Domain knowledge base for intelligent analysis
+    const domainKnowledge = {
+        'web': { label: 'Développement Web', icon: '🌐', skills: ['frontend', 'backend', 'responsive design', 'API REST'], goal: 'créer des applications web modernes et performantes' },
+        'mobile': { label: 'Développement Mobile', icon: '📱', skills: ['UI/UX mobile', 'notifications push', 'stockage local'], goal: 'développer des applications mobiles natives ou cross-platform' },
+        'data': { label: 'Data Science', icon: '📊', skills: ['analyse de données', 'visualisation', 'machine learning'], goal: 'extraire des insights à partir de données complexes' },
+        'ia': { label: 'Intelligence Artificielle', icon: '🤖', skills: ['deep learning', 'NLP', 'computer vision'], goal: 'concevoir des systèmes intelligents et autonomes' },
+        'iot': { label: 'Internet des Objets', icon: '🔌', skills: ['capteurs', 'protocoles IoT', 'systèmes embarqués'], goal: 'connecter le monde physique au numérique' },
+        'securite': { label: 'Cybersécurité', icon: '🔒', skills: ['audit de sécurité', 'cryptographie', 'tests de pénétration'], goal: 'protéger les systèmes et les données sensibles' },
+        'devops': { label: 'DevOps', icon: '⚙️', skills: ['CI/CD', 'conteneurisation', 'infrastructure as code'], goal: 'automatiser et optimiser les processus de déploiement' },
+        'jeux': { label: 'Développement de Jeux', icon: '🎮', skills: ['game design', 'moteur de jeu', 'physique 3D'], goal: 'créer des expériences ludiques immersives' },
+        'blockchain': { label: 'Blockchain', icon: '⛓️', skills: ['smart contracts', 'décentralisation', 'cryptomonnaies'], goal: 'développer des solutions décentralisées et sécurisées' },
+        'cloud': { label: 'Cloud Computing', icon: '☁️', skills: ['microservices', 'scalabilité', 'serverless'], goal: 'concevoir des architectures cloud évolutives' },
+        'design': { label: 'Design & UX', icon: '🎨', skills: ['prototypage', 'design system', 'accessibilité'], goal: 'créer des interfaces utilisateur intuitives et esthétiques' },
+        'education': { label: 'EdTech', icon: '📚', skills: ['e-learning', 'gamification', 'pédagogie numérique'], goal: 'révolutionner l\'apprentissage grâce à la technologie' }
+    };
+
+    // Technology insights
+    const techInsights = {
+        'php': 'un langage serveur robuste et éprouvé',
+        'symfony': 'un framework PHP professionnel avec une architecture MVC solide',
+        'laravel': 'un framework PHP élégant favorisant la productivité',
+        'python': 'un langage polyvalent idéal pour le prototypage rapide et l\'analyse de données',
+        'javascript': 'le langage incontournable du web moderne',
+        'typescript': 'JavaScript enrichi avec un typage statique pour plus de fiabilité',
+        'react': 'une bibliothèque UI performante basée sur les composants',
+        'angular': 'un framework frontend complet et structuré',
+        'vue': 'un framework progressif et accessible pour les interfaces web',
+        'node': 'un runtime JavaScript côté serveur pour des applications temps réel',
+        'nodejs': 'un runtime JavaScript côté serveur pour des applications temps réel',
+        'java': 'un langage d\'entreprise robuste et portable',
+        'spring': 'un écosystème Java complet pour les applications d\'entreprise',
+        'c++': 'un langage performant pour les systèmes critiques et les jeux',
+        'c#': 'un langage Microsoft polyvalent pour le web, les jeux et le desktop',
+        'swift': 'le langage moderne d\'Apple pour iOS et macOS',
+        'kotlin': 'un langage moderne et concis pour le développement Android',
+        'flutter': 'un framework cross-platform pour des apps mobiles natives',
+        'react native': 'un framework pour créer des apps mobiles avec React',
+        'docker': 'une plateforme de conteneurisation pour des déploiements reproductibles',
+        'kubernetes': 'un orchestrateur de conteneurs pour la scalabilité',
+        'mysql': 'un système de gestion de base de données relationnel populaire',
+        'postgresql': 'une base de données relationnelle avancée et extensible',
+        'mongodb': 'une base de données NoSQL flexible orientée documents',
+        'redis': 'un stockage en mémoire ultra-rapide pour le caching',
+        'tensorflow': 'une plateforme de machine learning de Google',
+        'pytorch': 'un framework de deep learning flexible et intuitif',
+        'django': 'un framework Python full-stack avec des fonctionnalités intégrées',
+        'flask': 'un micro-framework Python léger et flexible',
+        'git': 'un système de contrôle de version distribué',
+        'html': 'le langage de structuration du web',
+        'css': 'le langage de mise en forme et de design du web',
+        'sass': 'un préprocesseur CSS pour un code plus maintenable',
+        'bootstrap': 'un framework CSS pour un design responsive rapide',
+        'tailwind': 'un framework CSS utilitaire pour un design personnalisé',
+        'unity': 'un moteur de jeu polyvalent pour 2D et 3D',
+        'unreal': 'un moteur de jeu de qualité AAA',
+        'blender': 'un logiciel de modélisation 3D open source',
+        'figma': 'un outil de design collaboratif en ligne',
+        'arduino': 'une plateforme de prototypage électronique accessible',
+        'raspberry': 'un micro-ordinateur pour les projets IoT et embarqués',
+        'aws': 'la plateforme cloud leader avec 200+ services',
+        'azure': 'le cloud de Microsoft pour les applications d\'entreprise',
+        'firebase': 'une plateforme backend-as-a-service de Google',
+        'go': 'un langage performant et concurrent de Google',
+        'rust': 'un langage système alliant performance et sécurité mémoire',
+        'r': 'un langage dédié à l\'analyse statistique et la visualisation'
+    };
+
+    // Difficulty descriptions
+    const difficultyMap = {
+        'Débutant': { emoji: '🌱', desc: 'accessible aux débutants, ce projet offre une excellente opportunité d\'apprentissage avec un accompagnement structuré' },
+        'Intermédiaire': { emoji: '⚡', desc: 'conçu pour les développeurs ayant une base solide, ce projet permet d\'approfondir ses compétences techniques' },
+        'Avancé': { emoji: '🏆', desc: 'destiné aux profils expérimentés, ce projet présente des défis techniques stimulants et des problématiques complexes' },
+        'Expert': { emoji: '💎', desc: 'réservé aux experts, ce projet repousse les limites de l\'innovation avec des technologies de pointe' }
+    };
+
+    function detectDomain(title, desc, category) {
+        const text = (title + ' ' + desc + ' ' + category).toLowerCase();
+        const domainKeywords = {
+            'web': ['web', 'site', 'portail', 'html', 'css', 'frontend', 'backend', 'api', 'rest', 'crud', 'application web'],
+            'mobile': ['mobile', 'android', 'ios', 'smartphone', 'appli', 'application mobile', 'tablette'],
+            'data': ['data', 'données', 'analyse', 'dashboard', 'statistique', 'bi', 'reporting', 'visualisation'],
+            'ia': ['ia', 'intelligence artificielle', 'machine learning', 'deep learning', 'nlp', 'chatbot', 'prediction', 'neural'],
+            'iot': ['iot', 'capteur', 'embarqué', 'arduino', 'raspberry', 'connecté', 'domotique', 'sensor'],
+            'securite': ['sécurité', 'securite', 'cyber', 'cryptage', 'firewall', 'authentification', 'pentest'],
+            'devops': ['devops', 'ci/cd', 'docker', 'kubernetes', 'deploy', 'pipeline', 'automatisation'],
+            'jeux': ['jeu', 'game', 'unity', 'unreal', 'godot', '3d', '2d', 'joueur', 'gaming'],
+            'blockchain': ['blockchain', 'smart contract', 'crypto', 'decentralis', 'ethereum', 'solidity', 'nft'],
+            'cloud': ['cloud', 'aws', 'azure', 'gcp', 'serverless', 'microservice', 'saas'],
+            'design': ['design', 'ui', 'ux', 'maquette', 'figma', 'prototype', 'interface', 'graphisme'],
+            'education': ['education', 'éducatif', 'educatif', 'apprentissage', 'e-learning', 'formation', 'tutoriel', 'cours', 'pédagogique']
+        };
+
+        let bestDomain = null;
+        let bestScore = 0;
+        for (const [domain, keywords] of Object.entries(domainKeywords)) {
+            let score = 0;
+            keywords.forEach(kw => { if (text.includes(kw)) score++; });
+            if (score > bestScore) { bestScore = score; bestDomain = domain; }
+        }
+        return bestDomain || 'web';
+    }
+
+    function extractKeyActions(desc) {
+        const actionPatterns = [
+            { pattern: /crud/i, action: 'la gestion complète des données (CRUD)' },
+            { pattern: /authentification|login|connexion/i, action: 'un système d\'authentification sécurisé' },
+            { pattern: /api|rest|graphql/i, action: 'des services API modernes' },
+            { pattern: /dashboard|tableau de bord/i, action: 'un tableau de bord interactif' },
+            { pattern: /chat|messagerie|message/i, action: 'un système de messagerie en temps réel' },
+            { pattern: /recherche|search|filtre/i, action: 'un moteur de recherche intelligent' },
+            { pattern: /paiement|payment|stripe/i, action: 'l\'intégration de paiements en ligne' },
+            { pattern: /notification|alerte/i, action: 'un système de notifications' },
+            { pattern: /upload|fichier|import/i, action: 'la gestion de fichiers et uploads' },
+            { pattern: /rapport|report|pdf|export/i, action: 'la génération de rapports' },
+            { pattern: /carte|map|géolocalisation/i, action: 'l\'intégration cartographique' },
+            { pattern: /image|photo|galerie|média/i, action: 'la gestion multimédia' },
+            { pattern: /email|mail|newsletter/i, action: 'l\'envoi d\'emails automatisés' },
+            { pattern: /blog|article|contenu/i, action: 'un système de gestion de contenu' },
+            { pattern: /commentaire|avis|review/i, action: 'un système de commentaires et avis' },
+            { pattern: /reservation|booking|rendez/i, action: 'un système de réservation' },
+            { pattern: /stock|inventaire|produit/i, action: 'la gestion d\'inventaire' },
+            { pattern: /metier|métier/i, action: 'la modélisation de processus métier' }
+        ];
+        return actionPatterns.filter(p => p.pattern.test(desc)).map(p => p.action);
+    }
+
+    function generateSummary() {
+        const { title, description, category, status, difficulty, technologies, lead } = projectData;
+        const domain = detectDomain(title, description, category);
+        const domainInfo = domainKnowledge[domain];
+        const diffInfo = difficultyMap[difficulty] || difficultyMap['Intermédiaire'];
+        const keyActions = extractKeyActions(description);
+
+        // Build tech insights
+        let techParts = [];
+        if (technologies && technologies.length > 0) {
+            technologies.forEach(tech => {
+                const key = tech.toLowerCase().trim();
+                if (techInsights[key]) {
+                    techParts.push(`<strong>${tech}</strong> (${techInsights[key]})`);
+                } else {
+                    techParts.push(`<strong>${tech}</strong>`);
+                }
+            });
+        }
+
+        // Compose the summary paragraphs
+        let paragraphs = [];
+
+        // §1 — Opening: Domain + Goal
+        paragraphs.push(
+            `${domainInfo.icon} <strong>"${title}"</strong> est un projet de <strong>${domainInfo.label}</strong> ` +
+            `dans la catégorie <em>${category}</em>, piloté par <strong>${lead}</strong>. ` +
+            `Son objectif principal : ${domainInfo.goal}.`
+        );
+
+        // §2 — Difficulty + Pedagogical value
+        paragraphs.push(
+            `${diffInfo.emoji} <strong>Niveau ${difficulty}</strong> — ${diffInfo.desc}.`
+        );
+
+        // §3 — Tech stack analysis
+        if (techParts.length > 0) {
+            paragraphs.push(
+                `🛠️ <strong>Stack technique :</strong> Ce projet s'appuie sur ${techParts.join(', ')}, ` +
+                `offrant une expérience pratique avec des outils utilisés en production.`
+            );
+        }
+
+        // §4 — Key features detected
+        if (keyActions.length > 0) {
+            const featureList = keyActions.slice(0, 5).join(', ');
+            paragraphs.push(
+                `🎯 <strong>Fonctionnalités clés identifiées :</strong> ${featureList}. ` +
+                `Ces éléments constituent le cœur fonctionnel du projet.`
+            );
+        }
+
+        // §5 — Competencies gained
+        if (domainInfo.skills.length > 0) {
+            paragraphs.push(
+                `📈 <strong>Compétences développées :</strong> ${domainInfo.skills.join(', ')}. ` +
+                `Ce projet est une opportunité concrète pour enrichir son portfolio professionnel.`
+            );
+        }
+
+        return paragraphs.map(p => `<p style="margin-bottom: 0.85rem; line-height: 1.7;">${p}</p>`).join('');
+    }
+
+    // Simulate AI generation with typewriter-like reveal
+    setTimeout(() => {
+        const loading = document.getElementById('ai-summary-loading');
+        const textEl = document.getElementById('ai-summary-text');
+        if (!loading || !textEl) return;
+
+        const summary = generateSummary();
+        loading.style.display = 'none';
+        textEl.innerHTML = summary;
+        textEl.style.display = 'block';
+        textEl.style.opacity = '0';
+        textEl.style.transform = 'translateY(10px)';
+        textEl.style.transition = 'all 0.6s ease-out';
+        requestAnimationFrame(() => {
+            textEl.style.opacity = '1';
+            textEl.style.transform = 'translateY(0)';
+        });
+    }, 1200);
+})();
 </script>
 {% endblock %}

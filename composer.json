@@ -10,8 +10,13 @@
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^3.6",
+<<<<<<< HEAD
+=======
         "dompdf/dompdf": "^3.1",
+        "guzzlehttp/guzzle": "^7.10",
         "phpdocumentor/reflection-docblock": "5.2",
+        "phpoffice/phpspreadsheet": "^5.4",
+        "phpoffice/phpword": "^1.4",
         "phpstan/phpdoc-parser": "^2.3",
         "symfony/asset": "6.4.*",
         "symfony/asset-mapper": "6.4.*",
@@ -44,8 +49,7 @@
         "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/string-extra": "^3.23",
-        "twig/twig": "^2.12|^3.0",
-        "twilio/sdk": "^8.11"
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {

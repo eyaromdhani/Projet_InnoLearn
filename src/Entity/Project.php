@@ -5,13 +5,20 @@ namespace App\Entity;
 use App\Repository\ProjectRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
+
+#[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\Table(name: 'project')]
+=======
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use GuzzleHttp\Client; // En haut du fichier
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+>>>>>>> user
 class Project
 {
     #[ORM\Id]
@@ -20,6 +27,27 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+<<<<<<< HEAD
+    private ?string $title = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $status = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $start_date = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $end_date = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $created_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updated_at = null;
+=======
     #[Assert\NotBlank(message: "Le titre est obligatoire")]
     #[Assert\Length(
         min: 3,
@@ -60,12 +88,18 @@ class Project
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+
+
+
     /**
      * Relation OneToMany avec les dépôts
      * Un projet peut avoir plusieurs dépôts
      */
     #[ORM\OneToMany(targetEntity: Depot::class, mappedBy: 'project', orphanRemoval: true, cascade: ['persist'])]
     private Collection $depots;
+
+
+
 
     public function __construct()
     {
@@ -151,8 +185,13 @@ class Project
                 ->addViolation();
         }
     }
+    private ?string $summary = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $generatedImage = null;
 
     // Getters et Setters
+>>>>>>> user
 
     public function getId(): ?int
     {
@@ -167,6 +206,10 @@ class Project
     public function setTitle(string $title): static
     {
         $this->title = $title;
+<<<<<<< HEAD
+
+=======
+>>>>>>> user
         return $this;
     }
 
@@ -178,6 +221,10 @@ class Project
     public function setDescription(string $description): static
     {
         $this->description = $description;
+<<<<<<< HEAD
+
+=======
+>>>>>>> user
         return $this;
     }
 
@@ -189,44 +236,90 @@ class Project
     public function setStatus(string $status): static
     {
         $this->status = $status;
+<<<<<<< HEAD
+
+=======
+>>>>>>> user
         return $this;
     }
 
     public function getStartDate(): ?\DateTimeInterface
     {
+<<<<<<< HEAD
+        return $this->start_date;
+    }
+
+    public function setStartDate(\DateTimeInterface $start_date): static
+    {
+        $this->start_date = $start_date;
+
+=======
         return $this->startDate;
     }
 
     public function setStartDate(\DateTimeInterface $startDate): static
     {
         $this->startDate = $startDate;
+>>>>>>> user
         return $this;
     }
 
     public function getEndDate(): ?\DateTimeInterface
     {
+<<<<<<< HEAD
+        return $this->end_date;
+    }
+
+    public function setEndDate(?\DateTimeInterface $end_date): static
+    {
+        $this->end_date = $end_date;
+
+=======
         return $this->endDate;
     }
 
     public function setEndDate(?\DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
+>>>>>>> user
         return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
+<<<<<<< HEAD
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): static
+    {
+        $this->created_at = $created_at;
+
+=======
         return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+>>>>>>> user
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
     {
+<<<<<<< HEAD
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): static
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+}
+=======
         return $this->updatedAt;
     }
 
@@ -406,5 +499,185 @@ class Project
     {
         // Un dépôt peut être ajouté si le projet n'est pas annulé
         return $this->status !== 'cancelled';
+    }
+
+
+  /**
+     * Génère un résumé court du projet via l'IA.
+     * Le résultat est mis en cache dans l'instance pour la durée de la requête.
+     */
+    public function getSummary(): ?string
+    {
+        if ($this->summary !== null) {
+            return $this->summary;
+        }
+
+        // Ne pas générer si le projet est incomplet
+        if (!$this->title || !$this->description) {
+            return null;
+        }
+
+        // Clé API OpenAI (à définir dans .env)
+        $apiKey = $_ENV['OPENAI_API_KEY'] ?? null;
+        if (!$apiKey) {
+            // Fallback : first sentence or clean cut
+            $cleanDescription = strip_tags($this->description);
+            $dotPos = strpos($cleanDescription, '.');
+            if ($dotPos !== false && $dotPos < 150) {
+                 $this->summary = substr($cleanDescription, 0, $dotPos + 1);
+            } else {
+                 $cut = substr($cleanDescription, 0, 100);
+                 $lastSpace = strrpos($cut, ' ');
+                 $this->summary = ($lastSpace !== false ? substr($cut, 0, $lastSpace) : $cut) . '...';
+            }
+            return $this->summary;
+        }
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $prompt = "Tu es un expert en communication de projets web. Résume ce projet en une phrase courte, professionnelle et accrocheuse (maximum 25 mots). \n" .
+                      "Règles importantes :\n" .
+                      "1. Mets en avant la valeur principale du projet (ex: e-commerce, gestion, etc.).\n" .
+                      "2. Inclure les technologies clés mentionnées (ex: Symfony, React, Tailwind) si elles apparaissent dans la description.\n" .
+                      "3. Ton engageant.\n\n" .
+                      "Titre du projet: {$this->title}\n" .
+                      "Description complète: {$this->description}";
+
+            $response = $client->post('https://api.openai.com/v1/chat/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'gpt-3.5-turbo',
+                    'messages' => [
+                        ['role' => 'system', 'content' => 'Tu es un assistant utile qui génère des résumés de projets concis.'],
+                        ['role' => 'user', 'content' => $prompt]
+                    ],
+                    'max_tokens' => 100,
+                    'temperature' => 0.5,
+                ]
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+            $this->summary = trim($data['choices'][0]['message']['content'] ?? '');
+        } catch (\Exception $e) {
+            // En cas d'erreur, on garde un extrait
+            $this->summary = substr($this->description, 0, 100) . '...';
+
+
+        }
+
+        return $this->summary;
+    }
+
+    // Optionnel : setter si besoin
+    public function setSummary(?string $summary): self
+    {
+        $this->summary = $summary;
+        return $this;
+    }
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $difficulty = null;
+
+    public function getDifficulty(): ?string
+    {
+        return $this->difficulty;
+    }
+
+    public function setDifficulty(?string $difficulty): static
+    {
+        $this->difficulty = $difficulty;
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function computeDifficulty(): void
+    {
+        // Si déjà défini manuellement, on garde
+        if ($this->difficulty) {
+            return;
+        }
+
+        // Sinon, calcul automatique
+        if (!$this->description) {
+            $this->difficulty = 'Débutant';
+            return;
+        }
+
+        // 1. Tenter avec l'IA
+        $apiKey = $_ENV['OPENAI_API_KEY'] ?? null;
+        if ($apiKey) {
+            try {
+                $client = new Client();
+                $prompt = "Évalue la complexité technique de ce projet web en un seul mot (Débutant, Intermédiaire, ou Avancé) :\n" .
+                          "Titre: {$this->title}\n" .
+                          "Description: {$this->description}\n" .
+                          "Réponds uniquement par le mot.";
+
+                $response = $client->post('https://api.openai.com/v1/chat/completions', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $apiKey,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'json' => [
+                        'model' => 'gpt-3.5-turbo',
+                        'messages' => [
+                            ['role' => 'user', 'content' => $prompt]
+                        ],
+                        'max_tokens' => 10,
+                        'temperature' => 0.3,
+                    ]
+                ]);
+
+                $data = json_decode($response->getBody(), true);
+                $content = trim($data['choices'][0]['message']['content'] ?? '');
+                
+                // Validation de la réponse
+                $allowed = ['Débutant', 'Intermédiaire', 'Avancé'];
+                if (in_array($content, $allowed)) {
+                    $this->difficulty = $content;
+                    return;
+                }
+            } catch (\Exception $e) {
+                // Fallback silencieux
+            }
+        }
+
+        // 2. Fallback heuristique (mots-clés)
+        $text = strtolower($this->title . ' ' . $this->description);
+        $expertKeywords = ['intelligence artificielle', 'ai', 'machine learning', 'docker', 'kubernetes', 'microservices', 'architecture', 'complexe', 'sécurité', 'cryptographie'];
+        $intermediateKeywords = ['symfony', 'react', 'vue', 'api', 'statique', 'base de données', 'sql', 'php', 'javascript'];
+        
+        foreach ($expertKeywords as $kw) {
+            if (str_contains($text, $kw)) {
+                $this->difficulty = 'Avancé';
+                return;
+            }
+        }
+
+        foreach ($intermediateKeywords as $kw) {
+            if (str_contains($text, $kw)) {
+                $this->difficulty = 'Intermédiaire';
+                return;
+            }
+        }
+
+        $this->difficulty = 'Débutant';
+    }
+
+
+
+    public function getGeneratedImage(): ?string
+    {
+        return $this->generatedImage;
+    }
+
+    public function setGeneratedImage(?string $generatedImage): static
+    {
+        $this->generatedImage = $generatedImage;
+        return $this;
     }
 }

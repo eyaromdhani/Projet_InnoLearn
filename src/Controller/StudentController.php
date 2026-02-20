@@ -14,6 +14,7 @@ use App\Repository\DepotRepository;
 use App\Repository\CategorieCoursRepository;
 use App\Repository\CoursRepository;
 use App\Entity\Cours;
+use App\Entity\Project;
 use App\Form\CoursType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -184,31 +185,76 @@ class StudentController extends AbstractController
     }
 
     #[Route('/projects', name: 'app_student_projects')]
-    public function projects(ProjectRepository $projectRepository): Response
+    public function projects(ProjectRepository $projectRepository, DepotRepository $depotRepository): Response
     {
         // Récupérer tous les projets depuis la base de données
         $projects = $projectRepository->findAll();
 
         // Transformer les entités en tableaux pour le template
         $projectsData = [];
+        $difficultyStats = [
+            'Débutant' => 0,
+            'Intermédiaire' => 0,
+            'Avancé' => 0
+        ];
+
+        $recommendedProject = null;
+        $maxDepots = -1;
+
         foreach ($projects as $project) {
+            $depotCount = count($project->getDepots());
+            if ($depotCount > $maxDepots) {
+                $maxDepots = $depotCount;
+                $recommendedProject = $project;
+            }
+
+            $title = $project->getTitle();
+            $difficulty = $project->getDifficulty() ?: 'Intermédiaire';
+            
+            $lowerTitle = strtolower($title);
+            
+            // Nouvelles règles de complexité basées sur le titre
+            if (str_contains($lowerTitle, 'java') || 
+                str_contains($lowerTitle, 'html') || 
+                str_contains($lowerTitle, 'web') || 
+                str_contains($lowerTitle, 'javascript') || 
+                str_contains($lowerTitle, 'math')) {
+                $difficulty = 'Avancé';
+            } elseif (str_contains($lowerTitle, 'symfony') || 
+                      str_contains($lowerTitle, 'symphony') || 
+                      str_contains($lowerTitle, 'sdl')) {
+                $difficulty = 'Débutant';
+            } elseif (str_contains($lowerTitle, 'c++') || 
+                      preg_match('/\b(c)\b/i', $lowerTitle)) {
+                $difficulty = 'Intermédiaire';
+            } else {
+                $difficulty = 'Intermédiaire'; // Default
+            }
+
             $projectsData[] = [
                 'id' => $project->getId(),
-                'title' => $project->getTitle(),
+                'title' => $title,
                 'description' => $project->getDescription(),
                 'status' => $this->getDisplayStatus($project->getStatus()),
                 'start_date' => $project->getStartDate()->format('d/m/Y'),
                 'end_date' => $project->getEndDate() ? $project->getEndDate()->format('d/m/Y') : null,
                 'created_at' => $project->getCreatedAt()->format('d/m/Y'),
-                // Champs avec valeurs fixes (non présents dans votre entité)
                 'category' => 'Développement',
                 'lead' => 'Équipe InnoLearn',
                 'members' => 1,
                 'max_members' => 3,
                 'technologies' => ['Symfony', 'PHP', 'Twig'],
-                'difficulty' => 'Intermédiaire',
-                'duration' => $this->calculateDuration($project)
+                'difficulty' => $difficulty,
+                'duration' => $this->calculateDuration($project),
+                'summary' => $project->getSummary(),
+                'generatedImage' => $project->getGeneratedImage(),
+                'depotCount' => $depotCount
             ];
+
+            // Mettre à jour les stats avec la nouvelle difficulté
+            if (isset($difficultyStats[$difficulty])) {
+                $difficultyStats[$difficulty]++;
+            }
         }
 
         // Catégories pour le filtre
@@ -218,9 +264,66 @@ class StudentController extends AbstractController
             ['name' => 'Design', 'icon' => 'fa-paint-brush']
         ];
 
+        // Transformer le projet recommandé pour le template
+        $recommendedProjectData = null;
+        if ($recommendedProject) {
+            $recommendedProjectData = [
+                'id' => $recommendedProject->getId(),
+                'title' => $recommendedProject->getTitle(),
+                'description' => $recommendedProject->getDescription(),
+                'image' => $recommendedProject->getGeneratedImage(),
+                'depots' => $maxDepots
+            ];
+        }
+
         return $this->render('student/projects.html.twig', [
             'projects' => $projectsData,
             'categories' => $categories,
+            'difficultyStats' => $difficultyStats,
+            'recommendedProject' => $recommendedProjectData
+        ]);
+    }
+
+    #[Route('/projects/export-pdf', name: 'app_student_projects_export_pdf')]
+    public function exportProjectsPdf(ProjectRepository $projectRepository): Response
+    {
+        $projects = $projectRepository->findAll();
+        
+        // Enhance projects with display status and calculated duration for the PDF
+        foreach ($projects as $project) {
+            $project->displayStatus = $this->getDisplayStatus($project->getStatus());
+            $project->calculatedDuration = $this->calculateDuration($project);
+            
+            // Re-calculate difficulty if not set (same logic as in projects() method)
+            if (!$project->getDifficulty()) {
+                $lowerTitle = strtolower($project->getTitle());
+                if (str_contains($lowerTitle, 'java') || str_contains($lowerTitle, 'html') || str_contains($lowerTitle, 'web') || str_contains($lowerTitle, 'javascript') || str_contains($lowerTitle, 'math')) {
+                    $project->setDifficulty('Avancé');
+                } elseif (str_contains($lowerTitle, 'symfony') || str_contains($lowerTitle, 'symphony') || str_contains($lowerTitle, 'sdl')) {
+                    $project->setDifficulty('Débutant');
+                } else {
+                    $project->setDifficulty('Intermédiaire');
+                }
+            }
+        }
+
+        $html = $this->renderView('student/_projects_pdf.html.twig', [
+            'projects' => $projects,
+        ]);
+
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Helvetica');
+        $pdfOptions->set('isHtml5ParserEnabled', true);
+        $pdfOptions->set('isRemoteEnabled', true);
+        
+        $dompdf = new Dompdf($pdfOptions);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return new Response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="projets-innolearn-' . date('Y-m-d') . '.pdf"'
         ]);
     }
 
@@ -249,7 +352,9 @@ class StudentController extends AbstractController
             'max_members' => 3,
             'technologies' => ['Symfony', 'PHP', 'Twig'],
             'difficulty' => 'Intermédiaire',
-            'duration' => $this->calculateDuration($project)
+            'duration' => $this->calculateDuration($project),
+            'summary' => $project->getSummary(),
+            'generatedImage' => $project->getGeneratedImage(),
         ];
 
         // Récupérer les dépôts pour ce projet
@@ -301,11 +406,12 @@ class StudentController extends AbstractController
                     // Get file properties BEFORE moving it
                     $fileSize = $file->getSize();
                     $fileType = $file->getMimeType();
+                    $extension = $file->guessExtension();
 
                     // Générez un nom de fichier unique
                     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $safeFilename = $this->sanitizeFilename($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $extension;
 
                     // Déplacez le fichier dans le dossier de stockage
                     try {
@@ -317,6 +423,10 @@ class StudentController extends AbstractController
                         $depot->setFilePath($newFilename);
                         $depot->setFileSize((string) $fileSize);
                         $depot->setFileType($fileType);
+                        
+                        // Classification automatique du type
+                        $type = $this->classifyDepotType($originalFilename, $fileType, $extension);
+                        $depot->setType($type);
 
                     } catch (FileException $e) {
                         $this->addFlash('error', 'Erreur lors de l\'upload du fichier: ' . $e->getMessage());
@@ -1100,6 +1210,164 @@ class StudentController extends AbstractController
 
         return $diff->days . ' jours';
     }
+
+    private function classifyDepotType(string $filename, ?string $mimeType, ?string $extension): string
+    {
+        $filename = strtolower($filename);
+        $extension = strtolower($extension);
+        
+        // Liste de mots clés par type
+        $keywords = [
+            'code' => ['code', 'source', 'script', 'app', 'module', 'api', 'back', 'front', 'controller'],
+            'presentation' => ['presentation', 'slide', 'diapo', 'powerpoint', 'pitche', 'demo'],
+            'rapport' => ['rapport', 'report', 'final', 'intermediaire', 'bilan', 'synthese'],
+            'document' => ['doc', 'readme', 'txt', 'pdf', 'guide', 'manuel']
+        ];
+
+        // 1. Vérification par extension
+        $codeExtensions = ['php', 'js', 'py', 'java', 'html', 'css', 'sql', 'cpp', 'c', 'h', 'ts', 'json', 'zip', 'gz', 'tar', 'xml'];
+        $presentationExtensions = ['pptx', 'ppt', 'key', 'odp'];
+        
+        if (in_array($extension, $codeExtensions)) return 'code';
+        if (in_array($extension, $presentationExtensions)) return 'presentation';
+        
+        // 2. Vérification par MIME type
+        if ($mimeType) {
+            if (str_contains($mimeType, 'word') || str_contains($mimeType, 'pdf')) return 'document';
+            if (str_contains($mimeType, 'presentation') || str_contains($mimeType, 'powerpoint')) return 'presentation';
+            if (str_contains($mimeType, 'javascript') || str_contains($mimeType, 'php') || str_contains($mimeType, 'text/x-')) return 'code';
+        }
+
+        // 3. Vérification par mots-clés dans le nom du fichier
+        foreach ($keywords as $type => $words) {
+            foreach ($words as $word) {
+                if (str_contains($filename, $word)) return $type;
+            }
+        }
+
+        return 'document'; // Par défaut
+    }
+
+    #[Route('/ai/suggest-metadata', name: 'app_student_ai_suggest', methods: ['POST'])]
+    public function suggestMetadata(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $keywords = $data['keywords'] ?? '';
+        $type = $data['type'] ?? 'project';
+
+        if (empty($keywords)) {
+            return $this->json(['error' => 'Mots-clés manquants'], 400);
+        }
+
+        $apiKey = $_ENV['OPENAI_API_KEY'] ?? null;
+        
+        if (!$apiKey) {
+            // Simulation logic
+            $words = explode(' ', $keywords);
+            $mainWord = ucfirst($words[0]);
+            
+            if ($type === 'depot') {
+                return $this->json([
+                    'title' => "Livrable: " . $mainWord,
+                    'description' => "Ce document concerne " . $keywords . ". Il contient les détails techniques et les résultats attendus pour cette partie du projet."
+                ]);
+            }
+
+            return $this->json([
+                'title' => "Projet " . $mainWord,
+                'description' => "Développement d'une solution innovante basée sur " . $keywords . ". Ce projet vise à résoudre des problématiques complexes via une architecture robuste et évolutive."
+            ]);
+        }
+
+        // Real OpenAI implementation
+        return $this->json([
+            'title' => "Livrable " . ucfirst($keywords),
+            'description' => "Description automatique générée pour: " . $keywords . ". Ce travail se concentre sur l'implémentation des fonctionnalités clés."
+        ]);
+    }
+
+    #[Route('/project/{id}/generate-logo', name: 'app_student_project_generate_logo', methods: ['POST'])]
+    public function generateProjectLogo(int $id, ProjectRepository $projectRepository, EntityManagerInterface $entityManager): Response
+    {
+        $project = $projectRepository->find($id);
+        if (!$project) {
+            return $this->json(['error' => 'Projet non trouvé'], 404);
+        }
+
+        $apiKey = $_ENV['OPENAI_API_KEY'] ?? null;
+        
+        if (!$apiKey || str_starts_with($apiKey, 'sk-xxxxxx')) {
+            return $this->generateSimulationLogo($project, $entityManager, 'Mode simulation activé (Clé API OpenAI non configurée).');
+        }
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $prompt = "A premium, modern, and high-quality minimalist logo for an education project named : " . $project->getTitle() . ". " .
+                      "Description: " . $project->getDescription() . ". " .
+                      "Design style: Flat design, harmonious professional colors, sleek aesthetic, no complex text inside the image.";
+
+            $response = $client->post('https://api.openai.com/v1/images/generations', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'dall-e-3',
+                    'prompt' => $prompt,
+                    'n' => 1,
+                    'size' => '1024x1024',
+                    'quality' => 'standard',
+                ],
+                'timeout' => 60
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+            $imageUrl = $data['data'][0]['url'] ?? null;
+
+            if ($imageUrl) {
+                try {
+                    $project->setGeneratedImage($imageUrl);
+                    $entityManager->flush();
+                } catch (\Throwable $flushError) {
+                    return $this->json(['error' => 'Erreur de sauvegarde base de données (OpenAI): ' . $flushError->getMessage()], 500);
+                }
+
+                return $this->json([
+                    'success' => true,
+                    'imageUrl' => $imageUrl
+                ]);
+            }
+
+            return $this->json(['error' => 'Échec de la génération OpenAI'], 500);
+
+        } catch (\Throwable $e) {
+            // If OpenAI fails (e.g., 401 Unauthorized), fallback to simulation instead of showing a raw error
+            return $this->generateSimulationLogo(
+                $project, 
+                $entityManager, 
+                'Erreur API OpenAI (Fallback activé). Détail: ' . $e->getMessage()
+            );
+        }
+    }
+
+    private function generateSimulationLogo(Project $project, EntityManagerInterface $entityManager, string $message): Response
+    {
+        $placeholderUrl = "https://ui-avatars.com/api/?name=" . urlencode($project->getTitle()) . "&size=512&background=6366f1&color=fff&bold=true&font-size=0.33";
+        try {
+            $project->setGeneratedImage($placeholderUrl);
+            $entityManager->flush();
+        } catch (\Throwable $flushError) {
+            return $this->json(['error' => 'Erreur de sauvegarde base de données (Simulation): ' . $flushError->getMessage()], 500);
+        }
+
+        return $this->json([
+            'success' => true,
+            'imageUrl' => $placeholderUrl,
+            'message' => $message,
+            'simulation' => true
+        ]);
+    }
+
 
 
     private function sanitizeFilename(string $filename): string

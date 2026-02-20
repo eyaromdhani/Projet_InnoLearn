@@ -50,7 +50,7 @@
                 </tr>
             </thead>
             <tbody id="quiz-table-body">
-                {{ include('admin/quiz/_table_rows.html.twig', { formulaires: formulaires|default([]) }) }}
+                {{ include('admin/quiz/_table_rows.html.twig') }}
             </tbody>
         </table>
     </div>
@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
 const tableBody = document.getElementById('quiz-table-body');
 const searchInput = document.getElementById('category-search');
 
-let currentSort = "{{ currentSort|default('id')|e('js') }}";
-let currentDirection = "{{ currentDirection|default('asc')|e('js') }}";
+let currentSort = '{{ currentSort }}';
+let currentDirection = '{{ currentDirection }}';
 
 function fetchTable() {
     const category = encodeURIComponent(searchInput.value);

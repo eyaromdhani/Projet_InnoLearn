@@ -56,27 +56,6 @@ class DepotType extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '10M',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/msword',
-                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                            'application/vnd.ms-powerpoint',
-                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                            'application/vnd.ms-excel',
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            'text/plain',
-                            'text/x-python',
-                            'text/html',
-                            'application/javascript',
-                            'application/json',
-                            'application/xml',
-                            'image/jpeg',
-                            'image/png',
-                            'image/gif',
-                            'application/zip',
-                            'application/x-rar-compressed'
-                        ],
-                        'mimeTypesMessage' => 'Veuillez uploader un fichier valide (PDF, Word, Excel, PowerPoint, images, code source, etc.)',
                     ])
                 ],
                 'attr' => [

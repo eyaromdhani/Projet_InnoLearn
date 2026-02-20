@@ -110,6 +110,134 @@
     display: inline-block;
 }
 
+<<<<<<< HEAD
+/* Vertical Filter Bar */
+.hero-filter-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 350px;
+    position: relative;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.hero-filter-bar .dropdown-toggle, .hero-search-wrapper, .hero-sort-select-wrapper {
+    padding: 1rem 1.25rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hero-sort-select-wrapper {
+    position: relative;
+    padding-right: 2.5rem;
+}
+
+.hero-sort-select-wrapper span:first-child {
+    color: #64748b;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.hero-sort-select-wrapper .selected-sort {
+    color: #6366f1;
+    font-weight: 700;
+}
+
+.hero-sort-select-wrapper i.arrow {
+    position: absolute;
+    right: 1.25rem;
+    color: #94a3b8;
+    transition: transform 0.3s;
+}
+
+.custom-dropdown.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-options::-webkit-scrollbar { width: 6px; }
+.dropdown-options::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+.dropdown-options::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.dropdown-options::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+.custom-dropdown.active .dropdown-options {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    animation: dropdownAnim 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes dropdownAnim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-opt {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.dropdown-opt:hover {
+    background: #f8fafc;
+    color: #6366f1;
+}
+
+.dropdown-opt.active {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
+.hero-search-wrapper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+}
+
+.hero-search-wrapper input::placeholder { color: #94a3b8; }
+.hero-filter-bar i { color: #6366f1; }
+
+=======
 /* Design Element - Floating Icons */
 .hero-design-elements {
     display: flex;
@@ -184,6 +312,7 @@
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
 }
+>>>>>>> user
 
 /* Waves */
 .hero-waves {
@@ -272,6 +401,29 @@
 .dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
 .project-grid { padding: 0 10% 5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
 
+<<<<<<< HEAD
+/* Modal */
+.modal-overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; z-index: 2000;
+    opacity: 0; visibility: hidden; transition: all 0.3s;
+}
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal-container {
+    background: white; width: 100%; max-width: 550px; border-radius: 30px;
+    position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.form-group { margin-bottom: 1.5rem; padding: 0 2rem; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1e293b; }
+.form-control { width: 100%; padding: 0.85rem 1.25rem; border-radius: 14px; border: 1px solid #e2e8f0; outline: none; }
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 0.8rem 1.75rem; border-radius: 14px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+=======
 /* Toolbar - Updated design to match hero */
 .toolbar {
     display: flex;
@@ -1152,6 +1304,170 @@
     .modal-footer {
         flex-direction: column;
     }
+>>>>>>> user
+}
+
+/* Modern Depot Cards (from detail page) */
+.depot-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.depot-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    padding: 1.25rem;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.depot-item-card:hover {
+    transform: translateX(8px);
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
+}
+
+.depot-info-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.depot-type-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.type-code { background: #eff6ff; color: #3b82f6; }
+.type-document { background: #fff1f2; color: #f43f5e; }
+.type-presentation { background: #fff7ed; color: #f97316; }
+.type-rapport { background: #f0fdf4; color: #22c55e; }
+
+.depot-details-text h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.depot-sub-info {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.depot-status-pill {
+    padding: 0.35rem 0.85rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.btn-add-depot-premium {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-add-depot-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.modal-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+/* Recommended Project Section */
+.recommended-project-section {
+    margin-bottom: 4rem;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    padding: 2.5rem;
+    border-radius: 40px;
+    color: white;
+    box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.4);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recommended-project-section:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 35px 60px -15px rgba(99, 102, 241, 0.5);
+}
+
+.recommendation-badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    padding: 0.6rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.rec-btn-view {
+    background: white;
+    color: #4338ca;
+    padding: 1.25rem 2.75rem;
+    border-radius: 24px;
+    font-weight: 800;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    font-size: 1.1rem;
+}
+
+.rec-btn-view:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+    background: #f8fafc;
+}
+
+@media (max-width: 992px) {
+    .recommended-project-section .rec-content-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    .recommended-project-section .rec-visual-wrap {
+        margin: 0 auto;
+    }
 }
 </style>
 {% endblock %}
@@ -1168,6 +1484,50 @@
                     <span>L'Avenir Ensemble</span>
                 </h1>
                 
+<<<<<<< HEAD
+                <div class="hero-filter-bar">
+                    <!-- Category Dropdown -->
+                    <div class="custom-dropdown" id="pageCategoryDropdown">
+                        <div class="dropdown-toggle">
+                            <i class="fas fa-filter"></i>
+                            <span class="selected-category">Toutes les catégories</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="all">
+                                <i class="fas fa-th-large"></i> Toutes les catégories
+                            </div>
+                            <div class="dropdown-opt" data-value="web"><i class="fas fa-code"></i> Web</div>
+                            <div class="dropdown-opt" data-value="ai"><i class="fas fa-robot"></i> AI</div>
+                            <div class="dropdown-opt" data-value="design"><i class="fas fa-paint-brush"></i> Design</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Wrapper -->
+                    <div class="hero-search-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="localSearch" placeholder="Rechercher un projet...">
+                    </div>
+                    
+                    <!-- Sort Dropdown -->
+                    <div class="custom-dropdown" id="pageSortDropdown">
+                        <div class="dropdown-toggle hero-sort-select-wrapper">
+                            <i class="fas fa-sort-amount-down"></i>
+                            <span>Trier par:</span>
+                            <span class="selected-sort">Plus récents</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="newest">Plus récents</div>
+                            <div class="dropdown-opt" data-value="members">Membres</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary-gradient" id="openModalBtn" style="margin-top: 1rem; width: fit-content;">
+                        <i class="fas fa-plus"></i>
+                        Créer un Projet
+                    </button>
+=======
                 <!-- DESIGN ELEMENT - Floating Icons -->
                 <div class="hero-design-elements">
                     <div class="design-element">
@@ -1179,6 +1539,7 @@
                     <div class="design-element">
                         <i class="fas fa-rocket"></i>
                     </div>
+>>>>>>> user
                 </div>
             </div>
             
@@ -1199,7 +1560,11 @@
             <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
                 <path fill="rgba(255,255,255,0.3)" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
             </svg>
+<<<<<<< HEAD
+            <svg class="wave wave-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+=======
             <svg class="wave wave-2" xmlns="http://www.w3.org2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+>>>>>>> user
                 <path fill="rgba(255,255,255,0.5)" d="M0,32L48,37.3C96,43,192,53,288,64C384,75,480,85,576,80C672,75,768,53,864,48C960,43,1056,53,1152,58.7C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
             </svg>
             <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -1207,7 +1572,258 @@
             </svg>
         </div>
     </section>
+    
+    {% if recommendedProject %}
+    <div class="recommended-project-section">
+        <!-- Floating Design Decorative Elements -->
+        <div style="position: absolute; top: -30px; right: -30px; font-size: 15rem; color: rgba(255,255,255,0.07); transform: rotate(-15deg); pointer-events: none;">
+            <i class="fas fa-star"></i>
+        </div>
+        <div style="position: absolute; bottom: -20px; left: 10%; font-size: 10rem; color: rgba(255,255,255,0.05); transform: rotate(10deg); pointer-events: none;">
+            <i class="fas fa-trophy"></i>
+        </div>
 
+        <div class="rec-content-flex" style="position: relative; z-index: 2; display: flex; gap: 3.5rem; align-items: center;">
+            <div class="rec-visual-wrap" style="flex: 0 0 160px; height: 160px; background: white; border-radius: 35px; padding: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.5);">
+                {% if recommendedProject.image %}
+                    <img src="{{ recommendedProject.image }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 25px;" alt="Recommended">
+                {% else %}
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border-radius: 25px; display: flex; align-items: center; justify-content: center; color: #6366f1;">
+                        <i class="fas fa-rocket fa-3x"></i>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div style="flex: 1;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin-bottom: 1rem;">
+                    <span class="recommendation-badge">
+                        <i class="fas fa-crown" style="color: #fbbf24;"></i> Projet du Moment
+                    </span>
+                    <span style="color: rgba(255,255,255,0.95); font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 0.6rem;">
+                        <i class="fas fa-file-export" style="background: rgba(255,255,255,0.2); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;"></i>
+                        {{ recommendedProject.depots }} Contributions (Dépôts)
+                    </span>
+                </div>
+                
+                <h2 style="font-size: 2.8rem; font-weight: 900; margin: 0 0 0.75rem; text-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: -0.02em; line-height: 1.1;">
+                    {{ recommendedProject.title }}
+                </h2>
+                
+                <p style="margin: 0; color: rgba(255,255,255,0.9); line-height: 1.7; font-size: 1.2rem; max-width: 900px; font-weight: 500;">
+                    {{ recommendedProject.description|slice(0, 180) }}{% if recommendedProject.description|length > 180 %}...{% endif %}
+                </p>
+            </div>
+            
+            <div style="flex: 0 0 auto;">
+                <a href="{{ path('app_student_project_detail', {'id': recommendedProject.id}) }}" class="rec-btn-view">
+                    <span>Explorer le projet</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+<<<<<<< HEAD
+    <!-- Content Grid -->
+    <div class="project-grid" id="projectGrid">
+        {% for project in projects %}
+        <div class="project-card" data-category="{{ project.category|lower }}" data-title="{{ project.title|lower }}" data-members="{{ project.members }}">
+            <div class="card-badges">
+                <span class="project-badge badge-tech">{{ project.category }}</span>
+                <span class="project-badge badge-status {{ project.status == 'Recherche membres' ? 'status-recherche' : (project.status == 'Complet' ? 'status-complet' : '') }}">
+                    {{ project.status }}
+                </span>
+            </div>
+            <div class="project-info">
+                <h2>{{ project.title }}</h2>
+                <div class="project-lead">
+                    <img src="https://ui-avatars.com/api/?name={{ project.lead }}&background=random" class="lead-avatar" alt="Lead">
+                    <span>Lead: {{ project.lead }}</span>
+                </div>
+            </div>
+            <div class="project-progress">
+                <div class="progress-header">
+                    <span>Membres</span>
+                    <span>{{ project.members }}/{{ project.max_members }}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ (project.members / project.max_members) * 100 }}%"></div>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn-join" {{ project.status == 'Complet' ? 'disabled' : '' }}>
+                    {{ project.status == 'Complet' ? 'Équipe complète' : 'Postuler' }}
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal: Add Project -->
+<div class="modal-overlay" id="addProjectModal">
+    <div class="modal-container">
+        <button class="modal-close" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 style="margin: 2rem 0; font-size: 1.8rem; text-align: center;">Lancer un Projet</h2>
+        
+        <form id="addProjectForm" style="padding: 0 1rem 3rem;">
+            <div class="form-group">
+                <label>Nom du projet</label>
+                <input type="text" class="form-control" placeholder="ex: Application de Fitness AI" required>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 0 2rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1e293b;">Catégorie</label>
+                    <select class="form-control" required>
+                        <option value="Web">Web</option>
+                        <option value="AI">AI</option>
+                        <option value="Design">Design</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1e293b;">Membres max</label>
+                    <input type="number" class="form-control" value="4" min="2" max="10" required>
+                </div>
+            </div>
+            <div style="padding: 0 2rem;">
+                <button type="submit" class="btn-primary-gradient" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    Démarrer l'aventure
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Project Card Enhancements */
+.project-card {
+    background: white; border-radius: 24px; padding: 2rem; border: 1px solid #e2e8f0;
+    transition: all 0.3s; display: flex; flex-direction: column; gap: 1.5rem;
+}
+.project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
+.project-badge { display: inline-flex; align-items: center; padding: 0.5rem 0.8rem; border-radius: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
+.badge-tech { background: #f1f5f9; color: #475569; }
+.badge-status { background: #ecfdf5; color: #10b981; }
+.badge-indigo { background: #eef2ff; color: #6366f1; }
+.status-recherche { background: #fdf2f8; color: #db2777; }
+.status-complet { background: #f1f5f9; color: #94a3b8; }
+.project-info h2 { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
+.project-lead { display: flex; align-items: center; gap: 0.75rem; color: #64748b; font-size: 0.9rem; }
+.lead-avatar { width: 24px; height: 24px; border-radius: 50%; }
+.progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem; }
+.progress-bar { height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: #6366f1; border-radius: 4px; }
+.btn-join {
+    width: 100%; background: #f8fafc; color: #475569; border: 1px solid #f1f5f9;
+    padding: 0.85rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-join:hover:not(:disabled) { background: #6366f1; color: white; border-color: #6366f1; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addProjectModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const form = document.getElementById('addProjectForm');
+    const grid = document.getElementById('projectGrid');
+
+    // Unified Dropdown Logic (Reinforced)
+    function setupDropdown(dropdownId, onSelect) {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) return;
+        
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const options = dropdown.querySelectorAll('.dropdown-opt');
+        const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = dropdown.classList.contains('active');
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+            if (!isActive) dropdown.classList.add('active');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const val = opt.getAttribute('data-value');
+                selectedSpan.textContent = opt.textContent.trim();
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                dropdown.classList.remove('active');
+                onSelect(val);
+            });
+        });
+    }
+
+    // Modal logic
+    if(openBtn) openBtn.onclick = () => modal.classList.add('active');
+    if(closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
+    window.onclick = (e) => { 
+        if(e.target === modal) modal.classList.remove('active');
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+        }
+    };
+
+    // Unified Filtering & Sorting Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+    let currentSort = 'newest';
+
+    function updateGrid() {
+        if (!grid) return;
+        let cards = Array.from(grid.querySelectorAll('.project-card'));
+        
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title') || '';
+            const cat = card.getAttribute('data-category') || '';
+            const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+
+        if(currentSort === 'members') {
+            cards.sort((a, b) => parseInt(b.dataset.members || 0) - parseInt(a.dataset.members || 0));
+        }
+        
+        cards.forEach(card => grid.appendChild(card));
+    }
+
+    // Setup Dropdowns
+    setupDropdown('pageCategoryDropdown', (val) => {
+        currentCategory = val;
+        updateGrid();
+    });
+
+    setupDropdown('pageSortDropdown', (val) => {
+        currentSort = val;
+        updateGrid();
+    });
+
+    const searchInput = document.getElementById('localSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            updateGrid();
+        });
+    }
+
+    if (form) {
+        form.onsubmit = function(e) { 
+            e.preventDefault(); 
+            alert('Projet créé avec succès !'); 
+            modal.classList.remove('active'); 
+        };
+    }
+});
+</script>
+{% endblock %}
+=======
     <!-- Barre d'outils simplifiée -->
     <div class="toolbar">
         <!-- Recherche -->
@@ -1229,14 +1845,19 @@
         <!-- Statistiques -->
         <button class="btn-stats" id="showStatsBtn">
             <i class="fas fa-chart-bar"></i>
-            Graphiques
+            Projets
         </button>
 
-        <!-- Export PDF -->
-        <button class="btn-pdf" id="exportPdfBtn">
+        <button class="btn-stats" id="showDiffStatsBtn" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);">
+            <i class="fas fa-layer-group"></i>
+            Complexité
+        </button>
+
+        <!-- Export PDF (Serveur - Dompdf) -->
+        <a href="{{ path('app_student_projects_export_pdf') }}" class="btn-pdf" id="exportPdfBtn" style="text-decoration: none;">
             <i class="fas fa-file-pdf"></i>
             PDF
-        </button>
+        </a>
     </div>
 
     <!-- Statistiques Graphiques -->
@@ -1255,7 +1876,7 @@
                 </div>
                 <div class="graphique-legend" id="statusLegend"></div>
             </div>
-            
+
             <!-- Graphique 2: Évolution par date de création -->
             <div class="graphique-card">
                 <h3><i class="fas fa-chart-line"></i> Évolution des Créations</h3>
@@ -1294,6 +1915,22 @@
         </div>
     </div>
 
+    <!-- Statistiques de Complexité (Séparé) -->
+    <div class="stats-graphique-container" id="diffStatsContainer" style="display: none; background: linear-gradient(to bottom right, #ffffff, #f5f3ff);">
+        <div class="graphiques-header">
+            <h2 style="color: #7c3aed;"><i class="fas fa-layer-group"></i> Complexité Technique</h2>
+            <p>Niveau de difficulté des projets basés sur les exigences</p>
+        </div>
+        <div class="graphique-card" style="max-width: 600px; margin: 0 auto; background: white;">
+            <h3><i class="fas fa-chart-pie"></i> Répartition par Niveau</h3>
+            <div class="graphique-wrapper" style="height: 350px;">
+                <canvas id="difficultyChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Liste des projets -->
     <div class="project-grid" id="projectGrid">
         {% for project in projects %}
@@ -1303,11 +1940,23 @@
                 <span class="project-badge badge-status-{{ project.status|lower|replace({' ': ''}) }}">
                     {{ project.status == 'Recherche' ? 'RECHERCHE MEMBRES' : (project.status == 'En cours' ? 'PROJET EN COURS' : 'PROJET TERMINÉ') }}
                 </span>
+                <span class="project-badge ai-difficulty-badge" data-project-title="{{ project.title|lower }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem; background: #f1f5f9; color: #94a3b8;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 0.65rem;"></i>
+                    Analyse...
+                </span>
+            </div>
+
+            <div class="project-image" style="width: 100%; height: 160px; overflow: hidden; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid #f1f5f9;">
+                {% if project.generatedImage %}
+                    <img src="{{ project.generatedImage }}" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ project.title }}">
+                {% else %}
+                    <img src="{{ asset('images/project_illustration.png') }}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" alt="{{ project.title }}">
+                {% endif %}
             </div>
 
             <div class="project-info">
                 <h2>{{ project.title|lower }}</h2>
-                <p class="project-description">{{ project.description }}</p>
+                <p class="project-description">{{ project.summary|default(project.description|slice(0, 100) ~ '...') }}</p>
                 
                 <div class="project-lead">
                     <div class="lead-avatar-wrap">
@@ -1325,10 +1974,11 @@
 
             <div class="project-actions">
                 <a href="{{ path('app_student_project_detail', {'id': project.id}) }}" class="btn-card btn-details-light">
-                    Détails
+                    <i class="fas fa-info-circle"></i> Détails
                 </a>
-                <button class="btn-card btn-action-primary" {{ project.members >= project.max_members ? 'disabled' : '' }}>
-                    Postuler
+                <button class="btn-card btn-action-primary" {{ project.members >= project.max_members ? 'disabled' : '' }} 
+                        onclick="applyToProject({{ project.id }})">
+                    <i class="fas fa-paper-plane"></i> Postuler
                 </button>
             </div>
         </div>
@@ -1395,11 +2045,7 @@ let currentCategory = 'all';
 let currentSort = 'date-desc';
 let currentSearchQuery = '';
 
-// Initialisation
-document.addEventListener('DOMContentLoaded', function() {
-    renderProjects();
-    setupEventListeners();
-});
+// Initialisation (Removed duplicate, see end of script)
 
 // Écouteurs d'événements
 function setupEventListeners() {
@@ -1413,10 +2059,9 @@ function setupEventListeners() {
     document.getElementById('sortSelect').addEventListener('change', sortProjects);
     
     // Statistiques
-    document.getElementById('showStatsBtn').addEventListener('click', toggleStats);
+    document.getElementById('showStatsBtn').addEventListener('click', () => toggleStats('statsContainer'));
+    document.getElementById('showDiffStatsBtn').addEventListener('click', () => toggleStats('diffStatsContainer'));
     
-    // Export PDF
-    document.getElementById('exportPdfBtn').addEventListener('click', generatePDF);
     
     // Pagination
     document.getElementById('prevPage').addEventListener('click', prevPage);
@@ -1471,14 +2116,32 @@ function sortProjects() {
 }
 
 // Afficher/masquer les statistiques
-function toggleStats() {
-    const statsContainer = document.getElementById('statsContainer');
+function toggleStats(containerId) {
+    const statsContainer = document.getElementById(containerId);
+    if (!statsContainer) return;
+    
     const isVisible = statsContainer.style.display === 'block';
+    
+    // Masquer les autres conteneurs de stats si besoin
+    if (containerId === 'statsContainer') {
+        const other = document.getElementById('diffStatsContainer');
+        if (other) other.style.display = 'none';
+    } else {
+        const main = document.getElementById('statsContainer');
+        if (main) main.style.display = 'none';
+    }
+
     statsContainer.style.display = isVisible ? 'none' : 'block';
     
     // Mettre à jour les graphiques si on les affiche
     if (!isVisible) {
-        updateCharts();
+        if (containerId === 'statsContainer') {
+            createStatusChart();
+            createCreationChart();
+            updateStatusTable();
+        } else if (containerId === 'diffStatsContainer') {
+            createDifficultyChart();
+        }
     }
 }
 
@@ -1487,18 +2150,36 @@ function updateCharts() {
     destroyCharts(); // Détruire les anciens graphiques
     createStatusChart();
     createCreationChart();
+    createDifficultyChart();
     updateStatusTable();
 }
 
 // Détruire les anciens graphiques
 function destroyCharts() {
-    if (statusChart) statusChart.destroy();
-    if (creationChart) creationChart.destroy();
+    if (statusChart && typeof statusChart.destroy === 'function') statusChart.destroy();
+    if (creationChart && typeof creationChart.destroy === 'function') creationChart.destroy();
+    statusChart = null;
+    creationChart = null;
+}
+
+// Helper pour les classes de badges de statut
+function getStatusBadgeClass(status) {
+    if (!status) return 'status-brouillon';
+    switch (status.trim()) {
+        case 'Recherche membres': return 'status-recherche';
+        case 'Complet': return 'status-complet';
+        case 'En cours': return 'status-encours';
+        case 'Annulé': return 'status-annule';
+        case 'Brouillon': return 'status-brouillon';
+        default: return 'status-brouillon';
+    }
 }
 
 // 1. Graphique des statuts (Camembert)
 function createStatusChart() {
-    const ctx = document.getElementById('statusChart').getContext('2d');
+    const canvasElement = document.getElementById('statusChart');
+    if (!canvasElement) return;
+    const ctx = canvasElement.getContext('2d');
     
     // Compter les projets par statut
     const statusCounts = {};
@@ -1522,6 +2203,8 @@ function createStatusChart() {
     
     // Calculer les pourcentages
     const total = data.reduce((a, b) => a + b, 0);
+    
+    if (statusChart) statusChart.destroy();
     
     statusChart = new Chart(ctx, {
         type: 'doughnut',
@@ -1708,6 +2391,58 @@ function createCreationChart() {
     });
 }
 
+// 4. Graphique de difficulté (Nouveau)
+function createDifficultyChart() {
+    const ctx = document.getElementById('difficultyChart');
+    if (!ctx) return;
+    
+    // Données globales injectées depuis le controller
+    const difficultyData = {{ difficultyStats|json_encode|raw }};
+    
+    const labels = Object.keys(difficultyData);
+    const data = Object.values(difficultyData);
+    
+    const colors = {
+        'Débutant': '#10B981',
+        'Intermédiaire': '#3B82F6',
+        'Avancé': '#8B5CF6'
+    };
+    
+    const backgroundColors = labels.map(label => colors[label] || '#9ca3af');
+    
+    // Destroy previous instance if exists
+    const chartExist = Chart.getChart("difficultyChart");
+    if (chartExist) chartExist.destroy();
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors,
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: { family: "'Inter', sans-serif", size: 12 }
+                    }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+}
+
 // 3. Tableau récapitulatif par statut
 function updateStatusTable() {
     const tableBody = document.getElementById('statusTableBody');
@@ -1748,9 +2483,7 @@ function updateStatusTable() {
                     };
                 }
             }
-        } catch (e) {
-            // Ignorer les erreurs de date
-        }
+        } catch (e) {}
     });
     
     const total = filteredProjects.length;
@@ -1780,7 +2513,7 @@ function updateStatusTable() {
                         </div>
                     </div>
                 </td>
-                <td style="color: #6b7280; font-size: 0.85rem;">${lastProject}</td>
+                <td style="color: #6b7280; font-size: 0.85rem;">${data.lastDate?.title || 'Non spécifié'}</td>
             </tr>
         `;
     });
@@ -1828,10 +2561,22 @@ function renderProjects() {
                     <span class="project-badge ${getStatusBadgeClass(project.status)}">
                         ${project.status === 'Recherche membres' ? 'RECHERCHE MEMBRES' : (project.status === 'En cours' ? 'PROJET EN COURS' : 'PROJET TERMINÉ')}
                     </span>
+                    ${project.difficulty ? `
+                        <span class="project-badge" title="${project.difficulty}" style="background: ${project.difficulty === 'Débutant' ? '#ecfdf5; color: #047857' : (project.difficulty === 'Intermédiaire' ? '#eff6ff; color: #1d4ed8' : '#f5f3ff; color: #7c3aed')}; display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">
+                            <i class="fas ${project.difficulty === 'Débutant' ? 'fa-leaf' : (project.difficulty === 'Intermédiaire' ? 'fa-bolt' : 'fa-trophy')}"></i>
+                            ${project.difficulty}
+                        </span>
+                    ` : ''}
+                </div>
+                <div class="project-image" style="width: 100%; height: 160px; overflow: hidden; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid #f1f5f9;">
+                    ${project.generatedImage 
+                        ? `<img src="${project.generatedImage}" style="width: 100%; height: 100%; object-fit: cover;" alt="${project.title}">`
+                        : `<img src="/images/project_illustration.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" alt="${project.title}">`
+                    }
                 </div>
                 <div class="project-info">
                     <h2>${project.title.toLowerCase()}</h2>
-                    <p class="project-description">${project.description.substring(0, 120)}...</p>
+                    <p class="project-description">${project.summary || (project.description && project.description.length > 100 ? project.description.substring(0, 100) + '...' : (project.description || ''))}</p>
                     <div class="project-lead">
                         <div class="lead-avatar-wrap">
                             <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(project.lead)}&background=6366f1&color=fff" alt="Lead">
@@ -1846,11 +2591,11 @@ function renderProjects() {
                 </div>
                 <div class="project-actions">
                     <a href="/student/projects/${project.id}/detail" class="btn-card btn-details-light">
-                        Détails
+                        <i class="fas fa-info-circle"></i> Détails
                     </a>
                     <button class="btn-card btn-action-primary" ${project.members >= project.max_members ? 'disabled' : ''} 
-                            onclick="applyToProject(${project.id})">
-                        Postuler
+                            onclick="applyToProject(${project.id}, this)">
+                        <i class="fas fa-paper-plane"></i> Postuler
                     </button>
                 </div>
             </div>
@@ -2021,64 +2766,53 @@ function showDetails(projectId) {
             ` : ''}
             
             <div class="modal-section">
-                <h3 class="modal-section-title"><i class="fas fa-upload"></i> Dépôts & Soumissions</h3>
-                <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-                    <button class="btn-stats" onclick="openNewDepotModal(${project.id})" style="padding: 0.75rem 1.5rem;">
+                <div class="modal-section-header">
+                    <h3 class="modal-section-title" style="margin-bottom: 0; border-bottom: none;"><i class="fas fa-box-open"></i> Livrables & Dépôts</h3>
+                    <button class="btn-add-depot-premium" onclick="openNewDepotModal(${project.id})">
                         <i class="fas fa-plus"></i> Nouveau dépôt
                     </button>
-                    <div style="color: #6b7280; font-size: 0.9rem;">
-                        <i class="fas fa-info-circle"></i> ${depotData.length} dépôt(s) trouvé(s)
-                    </div>
                 </div>
                 
-                <div style="background: #f8fafc; border-radius: 12px; overflow: hidden;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);">
-                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Étudiant</th>
-                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Type</th>
-                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Date</th>
-                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Statut</th>
-                                <th style="padding: 1rem; text-align: left; color: white; font-weight: 700;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${depotData.map(depot => `
-                                <tr style="border-bottom: 1px solid #e5e7eb; transition: background 0.2s;">
-                                    <td style="padding: 1rem;">
-                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(depot.student)}&background=6366f1&color=fff" 
-                                                 style="width: 32px; height: 32px; border-radius: 50%;">
-                                            <span style="font-weight: 600;">${depot.student}</span>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 1rem;">${depot.type}</td>
-                                    <td style="padding: 1rem;">${depot.date}</td>
-                                    <td style="padding: 1rem;">
-                                        <span class="status-badge ${getDepotStatusClass(depot.status)}" style="display: inline-block; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
-                                            ${depot.status}
-                                        </span>
-                                    </td>
-                                    <td style="padding: 1rem;">
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <button onclick="viewDepot(${depot.id})" style="background: #e5e7eb; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                                                <i class="fas fa-eye" style="color: #4b5563;"></i>
-                                            </button>
-                                            <button onclick="downloadDepot(${depot.id})" style="background: #dbeafe; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                                                <i class="fas fa-download" style="color: #1d4ed8;"></i>
-                                            </button>
-                                            <button onclick="editDepot(${depot.id}, ${project.id})" style="background: #fef3c7; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                                                <i class="fas fa-edit" style="color: #92400e;"></i>
-                                            </button>
-                                            <button onclick="deleteDepot(${depot.id}, ${project.id})" style="background: #fee2e2; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                                                <i class="fas fa-trash" style="color: #dc2626;"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+                <div class="depot-grid">
+                    ${depotData.map(depot => `
+                        <div class="depot-item-card">
+                            <div class="depot-info-wrapper">
+                                <div class="depot-type-icon ${getDepotTypeClass(depot.type)}">
+                                    <i class="fas ${getDepotIcon(depot.type)}"></i>
+                                </div>
+                                <div class="depot-details-text">
+                                    <h4>${depot.type}</h4>
+                                    <div class="depot-sub-info">
+                                        <span><i class="far fa-calendar"></i> ${depot.date}</span>
+                                        <span><i class="far fa-user"></i> ${depot.student}</span>
+                                        <span><i class="fas fa-file-invoice"></i> 2.95 KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                <span class="depot-status-pill ${getDepotStatusClass(depot.status)}">
+                                    ${depot.status}
+                                </span>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button onclick="downloadDepot(${depot.id})" title="Télécharger" style="background: #eff6ff; border: none; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                        <i class="fas fa-download" style="color: #3b82f6;"></i>
+                                    </button>
+                                    <button onclick="editDepot(${depot.id}, ${project.id})" title="Modifier" style="background: #fff7ed; border: none; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                        <i class="fas fa-edit" style="color: #f97316;"></i>
+                                    </button>
+                                    <button onclick="deleteDepot(${depot.id}, ${project.id})" title="Supprimer" style="background: #fff1f2; border: none; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                        <i class="fas fa-trash-alt" style="color: #f43f5e;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                    ${depotData.length === 0 ? `
+                        <div style="text-align: center; padding: 3rem; background: #f8fafc; border-radius: 20px; border: 2px dashed #e2e8f0;">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                            <p style="color: #94a3b8; font-weight: 600;">Aucun livrable déposé pour le moment.</p>
+                        </div>
+                    ` : ''}
                 </div>
                 
                 ${depotData.some(d => d.comment) ? `
@@ -2130,7 +2864,7 @@ function showDetails(projectId) {
                 <i class="fas fa-times"></i> Fermer
             </button>
             <button class="btn-join" ${project.status === 'Complet' ? 'disabled' : ''} 
-                    onclick="applyToProject(${project.id}); closeDetails();">
+                    onclick="applyToProject(${project.id}, this); closeDetails();">
                 ${project.status === 'Complet' ? '<i class="fas fa-check-circle"></i> Équipe complète' : '<i class="fas fa-paper-plane"></i> Postuler maintenant'}
             </button>
         </div>
@@ -2151,11 +2885,23 @@ function getDepotStatusClass(status) {
     return statusClasses[status] || 'status-brouillon';
 }
 
-// =============================
-// DEPOT CRUD FUNCTIONS - CORRIGÉES
-// =============================
+function getDepotTypeClass(type) {
+    type = type.toLowerCase();
+    if (type.includes('code')) return 'type-code';
+    if (type.includes('rapport')) return 'type-rapport';
+    if (type.includes('présentation') || type.includes('presentation')) return 'type-presentation';
+    return 'type-document';
+}
 
-// Fonction principale pour ouvrir la modale de nouveau dépôt
+function getDepotIcon(type) {
+    type = type.toLowerCase();
+    if (type.includes('code')) return 'fa-code';
+    if (type.includes('rapport')) return 'fa-file-medical';
+    if (type.includes('présentation') || type.includes('presentation')) return 'fa-file-powerpoint';
+    return 'fa-file-alt';
+}
+
+// Modal Nouveau Dépôt
 function openNewDepotModal(projectId) {
     console.log('Ouverture de la modale pour projet:', projectId);
     
@@ -2164,36 +2910,56 @@ function openNewDepotModal(projectId) {
     // Créer la modale HTML
     const modalHTML = `
         <div class="modal-overlay active" id="newDepotModal" style="display: flex;">
-            <div class="modal-container" style="max-width: 600px;">
+            <div class="modal-container" style="max-width: 600px; border-radius: 30px;">
                 <button class="modal-close" onclick="closeDepotModal()">
                     <i class="fas fa-times"></i>
                 </button>
                 
-                <div class="modal-header">
-                    <h1 class="modal-title">Nouveau dépôt</h1>
-                    <p style="color: #6b7280; margin-top: 0.5rem;">Projet: ${project?.title || 'Projet #' + projectId}</p>
+                <div class="modal-header" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+                    <h1 class="modal-title" style="font-size: 1.75rem;">Nouveau dépôt</h1>
+                    <p style="color: #64748b; margin-top: 0.5rem; font-weight: 500;">
+                        <i class="fas fa-folder-open" style="margin-right: 0.5rem;"></i> Projet: ${project?.title || 'Projet #' + projectId}
+                    </p>
                 </div>
                 
-                <div class="modal-content">
-                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 2px dashed #e5e7eb;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="background: #6366f1; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-upload" style="color: white; font-size: 1.5rem;"></i>
-                            </div>
-                            <div>
-                                <h4 style="margin: 0; color: #1f2937;">Fonctionnalité de dépôt</h4>
-                                <p style="margin: 0.25rem 0 0; color: #6b7280; font-size: 0.9rem;">
-                                    Bientôt disponible ! Cette fonctionnalité est en cours de développement.
-                                </p>
-                            </div>
+                <div class="modal-content" style="padding: 2rem 2.5rem;">
+                    <!-- IA Assist Section -->
+                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f5f3ff; border-radius: 20px; border: 1px solid #ddd6fe; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: #8b5cf6; opacity: 0.05;">
+                            <i class="fas fa-wand-magic-sparkles"></i>
                         </div>
+                        <h4 style="margin: 0 0 1rem; color: #7c3aed; font-size: 1rem; display: flex; align-items: center; gap: 0.6rem;">
+                            <i class="fas fa-sparkles"></i> Aide à la rédaction (IA)
+                        </h4>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <input type="text" id="aiKeywords" placeholder="Mots-clés (ex: rapport final, js...)" 
+                                   style="flex: 1; padding: 0.85rem 1.25rem; border: 2px solid #ddd6fe; border-radius: 12px; font-size: 0.95rem; background: white; transition: all 0.3s;">
+                            <button onclick="suggestAI('depot')" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.6rem; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);">
+                                <i class="fas fa-magic"></i> Suggérer
+                            </button>
+                        </div>
+                        <p style="margin: 0.75rem 0 0; color: #8b5cf6; font-size: 0.85rem; font-weight: 500; font-style: italic;">
+                            L'IA générera un titre et une description professionnelle pour votre dépôt.
+                        </p>
+                    </div>
+
+                    <!-- Placeholder for real form -->
+                    <div style="margin-bottom: 2rem; padding: 2rem; background: #f8fafc; border-radius: 24px; border: 2px dashed #e2e8f0; text-align: center;">
+                        <div style="background: white; width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+                            <i class="fas fa-upload" style="color: #6366f1; font-size: 1.8rem;"></i>
+                        </div>
+                        <h4 style="margin: 0 0 0.5rem; color: #1e293b; font-size: 1.1rem; font-weight: 800;">Dépôt de fichiers</h4>
+                        <p style="margin: 0; color: #94a3b8; font-size: 0.95rem; line-height: 1.5;">
+                            La fonctionnalité de chargement réel est en cours d'intégration.<br>
+                            Préparez vos fichiers (ZIP, PDF, images).
+                        </p>
                     </div>
                     
-                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                        <button type="button" class="btn-details" onclick="closeDepotModal()" style="flex: 1;">
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button type="button" class="btn-details" onclick="closeDepotModal()" style="flex: 1; padding: 1rem; border-radius: 15px; font-weight: 700;">
                             <i class="fas fa-times"></i> Fermer
                         </button>
-                        <button type="button" class="btn-join" onclick="simulateDepotCreation(${projectId})" style="flex: 2;">
+                        <button type="button" class="btn-join" onclick="simulateDepotCreation(${projectId})" style="flex: 1.5; padding: 1rem; border-radius: 15px; font-weight: 800; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);">
                             <i class="fas fa-plus"></i> Simuler un dépôt
                         </button>
                     </div>
@@ -2219,6 +2985,48 @@ function closeDepotModal() {
     const modal = document.getElementById('newDepotModal');
     if (modal) {
         modal.remove();
+    }
+}
+
+// Fonction pour suggérer via l'IA
+async function suggestAI(type) {
+    const keywordsInput = document.getElementById('aiKeywords');
+    const keywords = keywordsInput.value.trim();
+    
+    if (!keywords) {
+        alert('Veuillez entrer quelques mots-clés pour aider l\'IA.');
+        return;
+    }
+    
+    const originalBtn = event.currentTarget;
+    const originalText = originalBtn.innerHTML;
+    originalBtn.disabled = true;
+    originalBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+
+    try {
+        const response = await fetch('/student/ai/suggest-metadata', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ keywords, type })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            alert('Erreur: ' + data.error);
+        } else {
+            // Dans cette version démo/statique, on montre le résultat
+            // Dans une vraie app, on remplirait les champs du formulaire réel
+            alert(`✨ Suggestions de l'IA :\n\nTitre suggéré: ${data.title}\n\nDescription suggérée: ${data.description}\n\nAppliqué à la simulation !`);
+        }
+    } catch (error) {
+        console.error('Erreur AI:', error);
+        alert('Erreur lors de la communication avec le service AI.');
+    } finally {
+        originalBtn.disabled = false;
+        originalBtn.innerHTML = originalText;
     }
 }
 
@@ -2258,231 +3066,535 @@ function deleteDepot(depotId, projectId) {
 
 // Fermer les détails
 function closeDetails() {
-    document.getElementById('detailsModal').classList.remove('active');
+    const modal = document.getElementById('detailsModal');
+    if (modal) modal.classList.remove('active');
 }
 
 // Postuler à un projet
-function applyToProject(projectId) {
-    const project = projects.find(p => p.id == projectId);
-    if (!project || project.status === 'Complet') return;
+function applyToProject(projectId, btn) {
+    const project = filteredProjects.find(p => p.id == projectId);
+    if (!project || project.members >= project.max_members) return;
     
-    if (confirm(`Voulez-vous postuler au projet "${project.title}" ?`)) {
+    // Add visual feedback
+    const originalContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi...';
+
+    setTimeout(() => {
         alert(`✅ Votre candidature pour "${project.title}" a été envoyée !\nLe chef de projet vous contactera bientôt.`);
-    }
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
+    }, 1000);
 }
 
-// =============================================
-// FONCTION PDF RÉELLE
-// =============================================
-async function generatePDF() {
-    // Afficher le modal de chargement
-    const loadingModal = document.getElementById('pdfLoadingModal');
-    loadingModal.style.display = 'flex';
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded, initializing projects page...');
+    // Initial data rendering
+    renderProjects();
+    setupEventListeners();
     
-    try {
-        // Charger les bibliothèques dynamiquement si elles ne sont pas déjà chargées
-        await loadPDFLibraries();
-        
-        const { jsPDF } = window.jspdf;
-        
-        // Créer un nouveau document PDF
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
+    // Ensure PDF button works as a normal link
+    const pdfBtn = document.getElementById('exportPdfBtn');
+    if (pdfBtn) {
+        pdfBtn.addEventListener('click', (e) => {
+            console.log('Exporting PDF via server-side...');
+            // Let the default link behavior happen
         });
-        
-        // Couleurs
-        const primaryColor = [99, 102, 241]; // #6366f1
-        const secondaryColor = [16, 185, 129]; // #10b981
-        const textColor = [31, 41, 55]; // #1f2937
-        const mutedColor = [107, 114, 128]; // #6b7280
-        
-        // En-tête
-        doc.setFillColor(...primaryColor);
-        doc.rect(0, 0, 210, 40, 'F');
-        
-        doc.setFontSize(24);
-        doc.setTextColor(255, 255, 255);
-        doc.setFont('helvetica', 'bold');
-        doc.text('InnoLearn - Projets Collaboratifs', 105, 20, { align: 'center' });
-        
-        doc.setFontSize(12);
-        doc.setTextColor(255, 255, 255, 0.9);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Rapport généré le ' + new Date().toLocaleDateString('fr-FR'), 105, 30, { align: 'center' });
-        
-        let yPosition = 50;
-        
-        // Statistiques résumées
-        doc.setFontSize(16);
-        doc.setTextColor(...textColor);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Statistiques Générales', 20, yPosition);
-        
-        yPosition += 10;
-        
-        // Compter les projets par statut
-        const statusCounts = {};
-        const totalMembers = filteredProjects.reduce((sum, p) => sum + p.members, 0);
-        const totalSpots = filteredProjects.reduce((sum, p) => sum + p.max_members, 0);
-        const availableSpots = totalSpots - totalMembers;
-        
-        filteredProjects.forEach(project => {
-            statusCounts[project.status] = (statusCounts[project.status] || 0) + 1;
-        });
-        
-        // Tableau des statistiques
-        doc.setFontSize(10);
-        doc.setTextColor(...mutedColor);
-        doc.setFont('helvetica', 'normal');
-        
-        // Ligne 1
-        doc.text(`Total projets: ${filteredProjects.length}`, 20, yPosition);
-        doc.text(`Membres actifs: ${totalMembers}`, 90, yPosition);
-        doc.text(`Places disponibles: ${availableSpots}`, 160, yPosition);
-        
-        yPosition += 7;
-        
-        // Ligne 2
-        const fillRate = totalSpots > 0 ? Math.round((totalMembers / totalSpots) * 100) : 0;
-        doc.text(`Taux de remplissage: ${fillRate}%`, 20, yPosition);
-        
-        yPosition += 15;
-        
-        // Tableau des projets
-        doc.setFontSize(16);
-        doc.setTextColor(...textColor);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Liste des Projets', 20, yPosition);
-        
-        yPosition += 10;
-        
-        // En-tête du tableau
-        doc.setFillColor(243, 244, 246);
-        doc.rect(20, yPosition - 5, 170, 8, 'F');
-        
-        doc.setFontSize(10);
-        doc.setTextColor(...textColor);
-        doc.setFont('helvetica', 'bold');
-        
-        doc.text('Projet', 22, yPosition);
-        doc.text('Statut', 80, yPosition);
-        doc.text('Membres', 120, yPosition);
-        doc.text('Date création', 150, yPosition);
-        
-        yPosition += 10;
-        
-        // Lignes des projets
-        doc.setFontSize(9);
-        doc.setTextColor(...mutedColor);
-        doc.setFont('helvetica', 'normal');
-        
-        let projectCount = 0;
-        for (let i = 0; i < filteredProjects.length && projectCount < 20; i++) {
-            const project = filteredProjects[i];
-            
-            // Vérifier si on dépasse la page
-            if (yPosition > 270) {
-                doc.addPage();
-                yPosition = 20;
-                
-                // Nouvel en-tête de page
-                doc.setFillColor(...primaryColor);
-                doc.rect(0, 0, 210, 40, 'F');
-                doc.setFontSize(24);
-                doc.setTextColor(255, 255, 255);
-                doc.setFont('helvetica', 'bold');
-                doc.text('InnoLearn - Projets Collaboratifs', 105, 20, { align: 'center' });
-                doc.setFontSize(12);
-                doc.setTextColor(255, 255, 255, 0.9);
-                doc.text('Suite de la liste des projets', 105, 30, { align: 'center' });
-                yPosition = 50;
-            }
-            
-            // Couleur du statut
-            let statusColor = mutedColor;
-            if (project.status === 'Recherche membres') statusColor = [239, 68, 68];
-            else if (project.status === 'Complet') statusColor = [16, 185, 129];
-            else if (project.status === 'En cours') statusColor = [59, 130, 246];
-            
-            doc.setTextColor(...statusColor);
-            doc.setFont('helvetica', 'bold');
-            doc.text(project.status.substring(0, 15), 80, yPosition);
-            
-            doc.setTextColor(...textColor);
-            doc.setFont('helvetica', 'normal');
-            doc.text(project.title.substring(0, 30), 22, yPosition);
-            
-            doc.setTextColor(...mutedColor);
-            doc.text(`${project.members}/${project.max_members}`, 120, yPosition);
-            doc.text(project.created_at, 150, yPosition);
-            
-            yPosition += 7;
-            projectCount++;
-            
-            // Ligne séparatrice
-            if (i < filteredProjects.length - 1 && projectCount < 20) {
-                doc.setDrawColor(229, 231, 235);
-                doc.line(20, yPosition - 2, 190, yPosition - 2);
-                yPosition += 3;
-            }
-        }
-        
-        // Pied de page
-        const pageCount = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFontSize(8);
-            doc.setTextColor(...mutedColor);
-            doc.setFont('helvetica', 'normal');
-            doc.text(`Page ${i}/${pageCount}`, 105, 290, { align: 'center' });
-            doc.text('© InnoLearn ' + new Date().getFullYear(), 105, 295, { align: 'center' });
-        }
-        
-        // Sauvegarder le PDF
-        doc.save(`projets-innolearn-${new Date().toISOString().slice(0,10)}.pdf`);
-        
-        // Cacher le modal de chargement
-        loadingModal.style.display = 'none';
-        
-        // Message de succès
-        alert(`✅ PDF généré avec succès !\nLe fichier a été téléchargé.`);
-        
-    } catch (error) {
-        // Cacher le modal de chargement en cas d'erreur
-        loadingModal.style.display = 'none';
-        
-        console.error('Erreur lors de la génération du PDF:', error);
-        alert(`❌ Erreur lors de la génération du PDF:\n${error.message}\n\nAssurez-vous que les bibliothèques jsPDF sont chargées.`);
     }
-}
+});
 
-// Charger dynamiquement les bibliothèques PDF
-function loadPDFLibraries() {
-    return new Promise((resolve, reject) => {
-        // Vérifier si jsPDF est déjà chargé
-        if (window.jspdf) {
-            resolve();
-            return;
+</script>
+
+<script>
+// ============================================================
+// AI COMPLEXITY LEVEL ANALYZER
+// Reads project titles and assigns difficulty based on knowledge
+// ============================================================
+(function() {
+    // Comprehensive technology difficulty mapping
+    // Scale: 1=Débutant, 2=Intermédiaire, 3=Avancé, 4=Expert
+    const techDifficulty = {
+        // --- Débutant (1) ---
+        'html': 1, 'css': 1, 'scratch': 1, 'wordpress': 1, 'wix': 1,
+        'canva': 1, 'excel': 1, 'powerpoint': 1, 'word': 1, 'google sheets': 1,
+        'blogger': 1, 'notion': 1, 'trello': 1, 'markdown': 1, 'json': 1,
+        'xml': 1, 'csv': 1, 'sass': 1, 'less': 1, 'bootstrap': 1,
+        'bulma': 1, 'thonny': 1, 'idle': 1, 'notepad': 1, 'paint': 1,
+        'gimp': 1, 'audacity': 1, 'obs': 1, 'sql': 1, 'sqlite': 1,
+
+        // --- Intermédiaire (2) ---
+        'javascript': 2, 'python': 2, 'java': 2, 'php': 2, 'ruby': 2,
+        'dart': 2, 'lua': 2, 'perl': 2, 'r': 2, 'matlab': 2,
+        'vba': 2, 'bash': 2, 'shell': 2, 'powershell': 2, 'batch': 2,
+        'typescript': 2, 'react': 2, 'vue': 2, 'angular': 2, 'svelte': 2,
+        'jquery': 2, 'express': 2, 'node': 2, 'nodejs': 2, 'flask': 2,
+        'django': 2, 'laravel': 2, 'symfony': 2, 'spring': 2, 'rails': 2,
+        'flutter': 2, 'react native': 2, 'ionic': 2, 'xamarin': 2,
+        'mysql': 2, 'postgresql': 2, 'mongodb': 2, 'firebase': 2,
+        'git': 2, 'github': 2, 'figma': 2, 'photoshop': 2, 'illustrator': 2,
+        'blender': 2, 'unity': 2, 'godot': 2, 'arduino': 2,
+        'vscode': 2, 'eclipse': 2, 'netbeans': 2, 'intellij': 2,
+        'android': 2, 'android studio': 2, 'swift': 2, 'swiftui': 2,
+        'next': 2, 'nextjs': 2, 'nuxt': 2, 'tailwind': 2, 'tailwindcss': 2,
+        'api': 2, 'rest': 2, 'graphql': 2, 'websocket': 2,
+        'redis': 2, 'memcached': 2, 'elasticsearch': 2,
+        'pycharm': 2, 'webstorm': 2, 'phpstorm': 2,
+        'conda': 2, 'anaconda': 2, 'jupyter': 2, 'spyder': 2,
+        'web': 2, 'site': 2, 'portail': 2, 'blog': 2, 'ecommerce': 2,
+        'codeblocks': 2, 'code blocks': 2, 'qt': 2, 'qtcreator': 2,
+
+        // --- Avancé (3) ---
+        'c': 3, 'c++': 3, 'cpp': 3, 'c#': 3, 'csharp': 3,
+        'go': 3, 'golang': 3, 'kotlin': 3, 'scala': 3,
+        'rust': 3, 'swift': 3, 'objective-c': 3,
+        'haskell': 3, 'elixir': 3, 'erlang': 3, 'clojure': 3, 'ocaml': 3,
+        'docker': 3, 'kubernetes': 3, 'k8s': 3, 'terraform': 3,
+        'ansible': 3, 'jenkins': 3, 'ci/cd': 3, 'devops': 3,
+        'aws': 3, 'azure': 3, 'gcp': 3, 'cloud': 3, 'microservices': 3,
+        'tensorflow': 3, 'pytorch': 3, 'keras': 3, 'scikit-learn': 3,
+        'machine learning': 3, 'deep learning': 3, 'data science': 3,
+        'opencv': 3, 'nlp': 3, 'computer vision': 3,
+        'blockchain': 3, 'solidity': 3, 'ethereum': 3, 'smart contract': 3,
+        'unreal': 3, 'unreal engine': 3, 'opengl': 3, 'vulkan': 3,
+        'cybersecurity': 3, 'sécurité': 3, 'pentest': 3,
+        'wireshark': 3, 'metasploit': 3, 'kali': 3,
+        'nginx': 3, 'apache': 3, 'linux': 3, 'ubuntu': 3,
+        'hadoop': 3, 'spark': 3, 'kafka': 3, 'rabbitmq': 3,
+        'microservice': 3, 'grpc': 3,
+
+        // --- Expert (4) ---
+        'assembly': 4, 'asm': 4, 'vhdl': 4, 'verilog': 4,
+        'fortran': 4, 'cobol': 4, 'lisp': 4, 'prolog': 4,
+        'fpga': 4, 'embedded': 4, 'rtos': 4, 'kernel': 4,
+        'compiler': 4, 'os': 4, 'operating system': 4,
+        'quantum': 4, 'quantique': 4, 'qiskit': 4,
+        'cuda': 4, 'gpu programming': 4, 'parallel computing': 4,
+        'reverse engineering': 4, 'exploit': 4, 'malware': 4,
+        'cryptography': 4, 'cryptographie': 4,
+        'neural network': 4, 'réseau de neurones': 4, 'gan': 4, 'transformer': 4,
+        'distributed system': 4, 'système distribué': 4
+    };
+
+    // Contextual keywords that boost difficulty
+    const contextBoost = [
+        { pattern: /syst[eè]me|architecture|compilateur|noyau/i, boost: 1 },
+        { pattern: /distribu[eé]|parall[eè]le|concurrent/i, boost: 1 },
+        { pattern: /intelligence artificielle|r[eé]seau.*(neuron|profond)/i, boost: 1 },
+        { pattern: /optimisation|performance|scalab/i, boost: 0.5 },
+        { pattern: /s[eé]curit[eé]|exploit|vuln[eé]rabilit/i, boost: 0.5 },
+        { pattern: /temps r[eé]el|real.?time|embarqu[eé]/i, boost: 0.5 },
+        { pattern: /big data|donn[eé]es massives/i, boost: 0.5 },
+        { pattern: /portfolio|d[eé]butant|apprendre|tutoriel|initiation/i, boost: -0.5 },
+        { pattern: /basique|simple|introduction|premier/i, boost: -0.5 }
+    ];
+
+    const levels = {
+        1: { label: 'Débutant', icon: 'fa-leaf', bg: '#ecfdf5', color: '#047857' },
+        2: { label: 'Intermédiaire', icon: 'fa-bolt', bg: '#eff6ff', color: '#1d4ed8' },
+        3: { label: 'Avancé', icon: 'fa-trophy', bg: '#f5f3ff', color: '#7c3aed' },
+        4: { label: 'Expert', icon: 'fa-gem', bg: '#fef2f2', color: '#dc2626' }
+    };
+
+    function analyzeComplexity(title) {
+        title = title.toLowerCase().trim();
+
+        // 1. Exact match — highest priority, return immediately
+        if (techDifficulty[title] !== undefined) {
+            return techDifficulty[title];
         }
+
+        let score = 0;
+        let matches = 0;
+
+        // 2. Partial matching with word-boundary safety
+        for (const [tech, diff] of Object.entries(techDifficulty)) {
+            if (tech.length <= 2) {
+                // Short names (c, r, go, v) — require word boundary match
+                const regex = new RegExp('(?:^|[\\s,;:/\\-_+.()\\[\\]])' + tech.replace(/[+]/g, '\\+') + '(?:$|[\\s,;:/\\-_+.()\\[\\]])', 'i');
+                if (regex.test(title)) {
+                    score += diff;
+                    matches++;
+                }
+            } else {
+                // Longer names — safe to use includes
+                if (title.includes(tech)) {
+                    score += diff;
+                    matches++;
+                }
+            }
+        }
+
+        // 3. Apply context boosts
+        let contextScore = 0;
+        contextBoost.forEach(({ pattern, boost }) => {
+            if (pattern.test(title)) contextScore += boost;
+        });
+
+        let finalScore;
+        if (matches > 0) {
+            finalScore = Math.round(score / matches + contextScore);
+        } else {
+            // Unknown title: default to Intermédiaire + context
+            finalScore = Math.round(2 + contextScore);
+        }
+
+        // Clamp between 1 and 4
+        return Math.max(1, Math.min(4, finalScore));
+    }
+
+    // Apply AI complexity to all badges after a brief delay (simulate AI)
+    setTimeout(() => {
+        document.querySelectorAll('.ai-difficulty-badge').forEach(badge => {
+            const title = badge.getAttribute('data-project-title');
+            if (!title) return;
+
+            const level = analyzeComplexity(title);
+            const info = levels[level];
+
+            badge.style.background = info.bg;
+            badge.style.color = info.color;
+            badge.innerHTML = `<i class="fas ${info.icon}"></i> ${info.label}`;
+            badge.title = `Complexité IA: ${info.label} (basé sur "${title}")`;
+
+            // Smooth reveal animation
+            badge.style.transition = 'all 0.4s ease-out';
+            badge.style.transform = 'scale(1.15)';
+            setTimeout(() => { badge.style.transform = 'scale(1)'; }, 300);
+        });
+    }, 800);
+})();
+</script>
+
+<!-- InnoBot Student AI Chatbot Interface -->
+<div id="innobot-container" class="innobot-container">
+    <div id="innobot-window" class="innobot-window">
+        <div class="innobot-header">
+            <div class="bot-info">
+                <div class="bot-avatar">
+                   <i class="fas fa-robot"></i>
+                   <span class="online-indicator"></span>
+                </div>
+                <div>
+                    <h4 class="bot-name">InnoBot</h4>
+                    <span class="bot-status">Assistant Intelligent</span>
+                </div>
+            </div>
+            <button id="close-bot" class="close-bot"><i class="fas fa-times"></i></button>
+        </div>
         
-        // Charger jsPDF depuis CDN
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        script.onload = resolve;
-        script.onerror = () => reject(new Error('Échec du chargement de jsPDF'));
-        document.head.appendChild(script);
-    });
+        <div id="bot-messages" class="bot-messages">
+            <div class="message bot-msg">
+                Salut ! Je suis **InnoBot**. Je suis là pour t'aider à choisir un projet ou à comprendre les technos. Comment puis-je t'assister aujourd'hui ?
+            </div>
+        </div>
+
+        <div id="bot-typing" class="bot-typing" style="display: none;">
+            <span></span><span></span><span></span>
+        </div>
+
+        <div class="bot-input-area">
+            <input type="text" id="bot-input" placeholder="Pose-moi une question..." autocomplete="off">
+            <button id="bot-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <button id="innobot-bubble" class="innobot-bubble">
+        <i class="fas fa-comment-dots"></i>
+        <span class="bubble-notification">1</span>
+    </button>
+</div>
+
+<style>
+/* InnoBot Premium Styles */
+.innobot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 10000;
+    font-family: 'Inter', sans-serif;
 }
 
-// Helper function
-function getStatusBadgeClass(status) {
-    if (status === 'Recherche membres') return 'badge-status-recherche';
-    if (status === 'Complet') return 'badge-status-complet';
-    if (status === 'En cours') return 'badge-status-encours';
-    return '';
+.innobot-bubble {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
+
+.innobot-bubble:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+}
+
+.bubble-notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+.innobot-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 360px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.innobot-window.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.innobot-header {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    padding: 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bot-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bot-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.bot-name { margin: 0; font-size: 16px; font-weight: 700; }
+.bot-status { font-size: 11px; opacity: 0.8; }
+
+.close-bot {
+    background: none;
+    border: none;
+    color: white;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.close-bot:hover { opacity: 1; transform: rotate(90deg); }
+
+.bot-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.message {
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.bot-msg {
+    align-self: flex-start;
+    background: #f1f5f9;
+    color: #1e293b;
+    border-bottom-left-radius: 4px;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background: #6366f1;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-typing {
+    padding: 0 20px 10px;
+    display: flex;
+    gap: 4px;
+}
+
+.bot-typing span {
+    width: 6px;
+    height: 6px;
+    background: #94a3b8;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.bot-typing span:nth-child(2) { animation-delay: 0.2s; }
+.bot-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(-4px); opacity: 1; }
+}
+
+.bot-input-area {
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #f1f5f9;
+}
+
+#bot-input {
+    flex: 1;
+    border: 1px solid #e2e8f0;
+    padding: 10px 15px;
+    border-radius: 12px;
+    outline: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+#bot-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+
+#bot-send {
+    width: 40px;
+    height: 40px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#bot-send:hover { background: #4f46e5; transform: translateY(-1px); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bubble = document.getElementById('innobot-bubble');
+    const window = document.getElementById('innobot-window');
+    const closeBtn = document.getElementById('close-bot');
+    const input = document.getElementById('bot-input');
+    const sendBtn = document.getElementById('bot-send');
+    const messagesContainer = document.getElementById('bot-messages');
+    const typingIndicator = document.getElementById('bot-typing');
+    const notification = bubble.querySelector('.bubble-notification');
+
+    // Toggle window
+    bubble.addEventListener('click', () => {
+        window.classList.toggle('active');
+        notification.style.display = 'none';
+        input.focus();
+    });
+
+    closeBtn.addEventListener('click', () => {
+        window.classList.remove('active');
+    });
+
+    // Send function
+    async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Add user message
+        addMessage(text, 'user');
+        input.value = '';
+        
+        // Show typing
+        typingIndicator.style.display = 'flex';
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        try {
+            const response = await fetch('/chatbot/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+
+            const data = await response.json();
+            
+            // Artificial delay for realism
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                addMessage(data.response, 'bot');
+            }, 600);
+
+        } catch (error) {
+            typingIndicator.style.display = 'none';
+            addMessage("Oups, j'ai eu une petite défaillance technique. Peux-tu réessayer ?", 'bot');
+        }
+    }
+
+    function addMessage(text, type) {
+        const div = document.createElement('div');
+        div.className = `message ${type === 'user' ? 'user-msg' : 'bot-msg'}`;
+        
+        // Simple Markdown-like bolding support
+        const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        div.innerHTML = formattedText.replace(/\n/g, '<br>');
+        
+        messagesContainer.appendChild(div);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+});
 </script>
 
 <!-- Chart.js Library -->
