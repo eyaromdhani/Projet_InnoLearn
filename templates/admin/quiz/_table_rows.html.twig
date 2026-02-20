@@ -1,4 +1,4 @@
-{% for formulaire in formulaires %}
+{% for formulaire in formulaires|default([]) %}
     <tr>
         <td class="text-center text-muted">#{{ formulaire.id }}</td>
         <td>{{ formulaire.titre }}</td>
@@ -7,13 +7,21 @@
         <td>{{ formulaire.category }}</td>
         <td class="text-center">
             <!-- Manage Questions button -->
-            <a href="{{ path('app_formulaire_questions', {'id': formulaire.id}) }}" class="btn btn-action btn-light" title="Gérer Questions" data-bs-toggle="tooltip">
-                <i class="bi bi-list-task text-success"></i>
+            <a href="{{ path('app_formulaire_questions', {'id': formulaire.id}) }}"
+               class="btn btn-action"
+               style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;"
+               title="Voir / Gérer Questions"
+               data-bs-toggle="tooltip">
+                <i class="fas fa-list-check"></i>
             </a>
 
             <!-- Edit button -->
-            <a href="{{ path('admin_quiz_edit', {'id': formulaire.id}) }}" class="btn btn-action btn-light" title="Modifier" data-bs-toggle="tooltip">
-                <i class="bi bi-pencil-square text-warning"></i>
+            <a href="{{ path('admin_quiz_edit', {'id': formulaire.id}) }}"
+               class="btn btn-action"
+               style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"
+               title="Modifier"
+               data-bs-toggle="tooltip">
+                <i class="fas fa-pen-to-square"></i>
             </a>
 
             <!-- Delete button -->

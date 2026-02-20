@@ -1,0 +1,2 @@
+ALTER TABLE user DROP COLUMN `key`;
+ALTER TABLE user ADD COLUMN verification_key VARCHAR(8) DEFAULT NULL AFTER avatar_url;

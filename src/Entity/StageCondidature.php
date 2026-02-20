@@ -6,11 +6,8 @@ use App\Repository\StageCondidatureRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-<<<<<<< HEAD
-=======
 use Symfony\Component\Validator\Constraints as Assert;
 
->>>>>>> user
 #[ORM\Entity(repositoryClass: StageCondidatureRepository::class)]
 #[ORM\Table(name: 'stagecondidature')]
 class StageCondidature
@@ -21,39 +18,6 @@ class StageCondidature
     private ?int $id = null;
 
     #[ORM\Column(length: 255)] // Using string for ENUM mapping simplification
-<<<<<<< HEAD
-    private ?string $type_request = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $titre = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $domaine = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $competences = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $cv = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $lettre_motivation = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_publication = null;
-
-    #[ORM\Column(length: 255)] // Using string for ENUM mapping simplification
-    private ?string $statut = null;
-
-    #[ORM\Column]
-    private ?int $id_etudiant = null;
-
-    #[ORM\Column]
-    private ?int $id_offre = null;
-=======
     #[Assert\NotBlank(message: "Le type de requête est obligatoire.")]
     private ?string $type_request = null;
 
@@ -99,7 +63,6 @@ class StageCondidature
     #[ORM\ManyToOne(targetEntity: OffreStage::class, inversedBy: 'stageCondidatures')]
     #[ORM\JoinColumn(name: "id_offre", referencedColumnName: "id", nullable: true)]
     private ?OffreStage $id_offre = null;
->>>>>>> user
 
     public function getId(): ?int
     {
@@ -195,11 +158,7 @@ class StageCondidature
         return $this->date_publication;
     }
 
-<<<<<<< HEAD
-    public function setDatePublication(\DateTimeInterface $date_publication): static
-=======
     public function setDatePublication(?\DateTimeInterface $date_publication): static
->>>>>>> user
     {
         $this->date_publication = $date_publication;
 
@@ -211,51 +170,31 @@ class StageCondidature
         return $this->statut;
     }
 
-<<<<<<< HEAD
-    public function setStatut(string $statut): static
-=======
     public function setStatut(?string $statut): static
->>>>>>> user
     {
         $this->statut = $statut;
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getIdEtudiant(): ?int
-=======
     public function getIdEtudiant(): ?User
->>>>>>> user
     {
         return $this->id_etudiant;
     }
 
-<<<<<<< HEAD
-    public function setIdEtudiant(int $id_etudiant): static
-=======
     public function setIdEtudiant(?User $id_etudiant): static
->>>>>>> user
     {
         $this->id_etudiant = $id_etudiant;
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getIdOffre(): ?int
-=======
     public function getIdOffre(): ?OffreStage
->>>>>>> user
     {
         return $this->id_offre;
     }
 
-<<<<<<< HEAD
-    public function setIdOffre(int $id_offre): static
-=======
     public function setIdOffre(?OffreStage $id_offre): static
->>>>>>> user
     {
         $this->id_offre = $id_offre;
 

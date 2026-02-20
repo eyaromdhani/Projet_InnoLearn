@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Validator\ValidName;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -24,6 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     #[Assert\NotBlank(message: 'Please enter your name')]
+    #[ValidName]
     private ?string $name = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -38,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: 'password_hash', length: 255)]
     #[Assert\NotBlank(message: 'Please enter a password')]
     #[Assert\Length(min: 6, minMessage: 'Your password should be at least {{ limit }} characters')]
     private ?string $password = null;
@@ -57,13 +59,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ["default" => true])]
     private bool $isActive = true;
 
-    #[ORM\OneToMany(mappedBy: 'id_etudiant', targetEntity: StageCondidature::class)]
-    private Collection $stageCondidatures;
+    #[ORM\Column(options: ["default" => false])]
+    private bool $isPhoneVerified = false;
 
-    public function __construct()
-    {
-        $this->stageCondidatures = new ArrayCollection();
-    }
+    #[ORM\Column(length: 180, nullable: true)]
+    #[Assert\Url(message: 'The avatar URL "{{ value }}" is not a valid URL.')]
+    private ?string $avatarUrl = null;
+    
+    #[ORM\Column(name: 'verification_key', length: 8, nullable: true)]
+    #[Assert\Length(min: 8, max: 8)]
+    private ?string $verificationKey = null;   // For SMS verification
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $keyExpiresAt = null;
+
 
     public function getId(): ?int
     {
@@ -78,6 +87,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+        return $this;
+    }
+
+    public function isPhoneVerified(): bool
+    {
+        return $this->isPhoneVerified;
+    }
+
+    public function setIsPhoneVerified(bool $isPhoneVerified): static
+    {
+        $this->isPhoneVerified = $isPhoneVerified;
         return $this;
     }
 
@@ -173,6 +193,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    public function getVerificationKey(): ?string
+    {
+        return $this->verificationKey;
+    }
+
+    public function setVerificationKey(string $verificationKey): static
+    {
+        $this->verificationKey = $verificationKey;
+
+        return $this;
+    }
+
+    public function getKeyExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->keyExpiresAt;
+    }
+
+    public function setKeyExpiresAt(\DateTimeInterface $keyExpiresAt): static
+    {
+        $this->keyExpiresAt = $keyExpiresAt;
+
+        return $this;
+    }
+
+    public function getAvatarUrl(): ?string
+    {
+        return $this->avatarUrl;
+    }
+
+    public function setAvatarUrl(string $avatarUrl): static
+    {
+        $this->avatarUrl = $avatarUrl;
+
+        return $this;
+    }
     /*public function getSalt(): ?string
     {
         return null;
@@ -181,6 +236,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
 
+    }
+
+
+// les jointures 
+
+
+    #[ORM\OneToMany(mappedBy: 'id_etudiant', targetEntity: StageCondidature::class)]
+    private Collection $stageCondidatures;
+
+    public function __construct()
+    {
+        $this->stageCondidatures = new ArrayCollection();
     }
 
     /**

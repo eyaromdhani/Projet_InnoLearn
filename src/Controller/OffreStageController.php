@@ -14,12 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/offre/stage')]
 final class OffreStageController extends AbstractController
 {
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> user
     #[Route(name: 'app_offre_stage_index', methods: ['GET'])]
     public function index(OffreStageRepository $offreStageRepository): Response
     {
@@ -28,8 +23,6 @@ final class OffreStageController extends AbstractController
         ]);
     }
 
-<<<<<<< HEAD
-=======
     #[Route('/open', name: 'app_offre_stage_show_open', methods: ['GET'])]
     public function show_open(OffreStageRepository $offreStageRepository): Response
     {
@@ -38,9 +31,6 @@ final class OffreStageController extends AbstractController
         ]);
     }
 
-
-
->>>>>>> user
     #[Route('/new', name: 'app_offre_stage_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -68,12 +58,6 @@ final class OffreStageController extends AbstractController
             'offre_stage' => $offreStage,
         ]);
     }
-
-<<<<<<< HEAD
-=======
-
-
-
 
     #[Route('/search', name: 'app_offre_stage_search', methods: ['GET'])]
     public function search(
@@ -213,9 +197,6 @@ final class OffreStageController extends AbstractController
 
         }
     }
-
-
->>>>>>> user
     #[Route('/{id}/edit', name: 'app_offre_stage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, OffreStage $offreStage, EntityManagerInterface $entityManager): Response
     {
@@ -237,11 +218,7 @@ final class OffreStageController extends AbstractController
     #[Route('/{id}', name: 'app_offre_stage_delete', methods: ['POST'])]
     public function delete(Request $request, OffreStage $offreStage, EntityManagerInterface $entityManager): Response
     {
-<<<<<<< HEAD
-        if ($this->isCsrfTokenValid('delete'.$offreStage->getId(), $request->getPayload()->getString('_token'))) {
-=======
         if ($this->isCsrfTokenValid('delete' . $offreStage->getId(), $request->getPayload()->getString('_token'))) {
->>>>>>> user
             $entityManager->remove($offreStage);
             $entityManager->flush();
         }

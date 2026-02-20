@@ -3,18 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Cours;
-<<<<<<< HEAD
-use App\Entity\CoursCategorie;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
-=======
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
->>>>>>> user
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,15 +17,6 @@ class CoursType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-<<<<<<< HEAD
-            ->add('titre')
-            ->add('description')
-            ->add('niveau')
-            ->add('datepublication')
-            ->add('categorie', EntityType::class, [
-                'class' => CoursCategorie::class,
-                'choice_label' => 'id',
-=======
             ->add('nom', TextType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'ex: Advanced Symfony Masterclass'],
                 'label' => 'Nom du cours'
@@ -73,7 +58,6 @@ class CoursType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Votre nom'],
                 'label' => 'Enseignant',
                 'data' => 'Vous' // Default value for teacher workflow
->>>>>>> user
             ])
         ;
     }

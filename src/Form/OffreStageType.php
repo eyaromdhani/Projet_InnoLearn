@@ -12,16 +12,6 @@ class OffreStageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-<<<<<<< HEAD
-            ->add('titre')
-            ->add('description')
-            ->add('entreprise')
-            ->add('lieu')
-            ->add('domaine')
-            ->add('competences')
-            ->add('duree')
-            ->add('datePublication')
-=======
             ->add('titre', null, ['label' => 'Titre'])
             ->add('description', null, ['label' => 'Description'])
             ->add('entreprise', null, ['label' => 'Entreprise'])
@@ -38,7 +28,6 @@ class OffreStageType extends AbstractType
                 'label' => 'Statut',
                 'required' => false,
             ])
->>>>>>> user
         ;
     }
 

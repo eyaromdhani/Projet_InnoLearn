@@ -3,7 +3,10 @@
 /* =========================================
    Universal & Utilities
    ========================================= */
-.fw-semibold { font-weight: 600; color: #1e293b; }
+.fw-semibold {
+    font-weight: 600;
+    color: #1e293b;
+}
 
 /* =========================================
    Card Styling
@@ -15,7 +18,8 @@
 }
 
 .card-header {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); /* The "Good Blue" */
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    /* The "Good Blue" */
     padding: 1.25rem 2rem;
 }
 
@@ -27,7 +31,7 @@
 /* =========================================
    Form Controls & Inputs
    ========================================= */
-.form-control, 
+.form-control,
 .form-select {
     border-color: #e2e8f0;
     padding: 0.75rem 1rem;
@@ -35,7 +39,7 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-control:focus, 
+.form-control:focus,
 .form-select:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
@@ -50,13 +54,13 @@
 /* =========================================
    Buttons
    ========================================= */
-.btn { 
-    font-weight: 500; 
-    border-radius: 0.5rem; 
+.btn {
+    font-weight: 500;
+    border-radius: 0.5rem;
 }
 
-.btn i { 
-    vertical-align: middle; 
+.btn i {
+    vertical-align: middle;
 }
 
 /* Pill Buttons (New/Edit Pages) */
@@ -80,12 +84,12 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: white;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .btn-action:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     border-color: transparent;
 }
 
@@ -122,6 +126,53 @@
 }
 
 /* Specific Action Icon Colors */
-.btn-action:hover .bi-eye { color: #3b82f6 !important; }
-.btn-action:hover .bi-pencil-square { color: #f59e0b !important; }
-.btn-action:hover .bi-trash { color: #ef4444 !important; }
+.btn-action:hover .bi-eye {
+    color: #3b82f6 !important;
+}
+
+.btn-action:hover .bi-pencil-square {
+    color: #f59e0b !important;
+}
+
+.btn-action:hover .bi-trash {
+    color: #ef4444 !important;
+}
+
+.mic-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    transition: 0.3s;
+    padding: 0;
+    z-index: 10;
+}
+
+.mic-btn:hover {
+    color: #6366f1;
+    transform: translateY(-50%) scale(1.2);
+}
+
+.mic-btn.recording {
+    color: #ef4444;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}

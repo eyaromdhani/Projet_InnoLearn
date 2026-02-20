@@ -190,21 +190,21 @@
                         </td>
                         <td>{{ project.createdAt|date('d/m/Y') }}</td>
                         <td>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <a href="{{ path('admin_projects_show', {id: project.id}) }}" class="icon-btn" style="width: 32px; height: 32px;" title="Voir">
+                            <div class="project-row-actions" style="display: flex; gap: 0.5rem;">
+                                <a href="{{ path('admin_projects_show', {id: project.id}) }}" class="icon-btn action-view" style="width: 32px; height: 32px;" title="Voir">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                 </a>
-                                <a href="{{ path('admin_projects_edit', {id: project.id}) }}" class="icon-btn" style="width: 32px; height: 32px;" title="Modifier">
+                                <a href="{{ path('admin_projects_edit', {id: project.id}) }}" class="icon-btn action-edit" style="width: 32px; height: 32px;" title="Modifier">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </a>
                                 <form method="POST" action="{{ path('admin_projects_delete', {id: project.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
-                                    <button type="submit" class="icon-btn" style="width: 32px; height: 32px; background: #fee2e2; border-color: #fecaca; color: #dc2626;" title="Supprimer">
+                                    <button type="submit" class="icon-btn action-delete" style="width: 32px; height: 32px;" title="Supprimer">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>
@@ -251,6 +251,36 @@
 }
 .badge-danger {
     background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+
+.project-row-actions .icon-btn {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+}
+
+.project-row-actions .icon-btn:hover {
+    transform: translateY(-1px);
+    background: #f1f5f9;
+}
+
+.project-row-actions .action-view {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.project-row-actions .action-edit {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #b45309;
+}
+
+.project-row-actions .action-delete {
+    background: #fee2e2;
+    border-color: #fecaca;
     color: #dc2626;
 }
 </style>

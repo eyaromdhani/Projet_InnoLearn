@@ -5,13 +5,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-<<<<<<< HEAD
-use App\Entity\Quiz;
-use App\Form\QuizType;
-use App\Repository\QuizRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-=======
 use App\Entity\Formulaire;
 use App\Entity\Question;
 use App\Entity\Cours;
@@ -22,23 +15,19 @@ use App\Repository\FormulaireRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\CategorieCoursRepository;
 use App\Repository\CoursRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use App\Repository\EventRepository;
 use App\Repository\InscritEventRepository;
 use App\Enum\StatutEvenementEnum;
 use App\Entity\InscritEvent;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
->>>>>>> user
 
 #[Route('/enseignant')]
 class EnseignantController extends AbstractController
 {
-<<<<<<< HEAD
-    #[Route('/dashboard', name: 'app_enseignant_dashboard')]
-=======
     #[Route('/home', name: 'app_enseignant_home')]
->>>>>>> user
     public function dashboard(): Response
     {
         // Mock data for the teacher dashboard
@@ -70,28 +59,6 @@ class EnseignantController extends AbstractController
     }
 
     #[Route('/courses', name: 'app_enseignant_courses')]
-<<<<<<< HEAD
-    public function courses(): Response
-    {
-        $categories = [
-            ['name' => 'Tout', 'icon' => 'fa-th-large', 'active' => true],
-            ['name' => 'Design', 'icon' => 'fa-bezier-curve', 'active' => false],
-            ['name' => 'Développement', 'icon' => 'fa-code', 'active' => false],
-            ['name' => 'Marketing', 'icon' => 'fa-bullhorn', 'active' => false],
-            ['name' => 'Management', 'icon' => 'fa-tasks', 'active' => false],
-            ['name' => 'IA', 'icon' => 'fa-robot', 'active' => false],
-        ];
-
-        $courses = [
-            ['id' => 1, 'title' => 'UI/UX Design Masterclass', 'teacher' => 'Vous', 'price' => 49.99, 'rating' => 4.8, 'students' => 1250, 'category' => 'Design', 'image' => 'https://placehold.co/600x400/6366f1/white?text=UI/UX+Design'],
-            ['id' => 2, 'title' => 'Full-Stack Web Dev with Symfony', 'teacher' => 'Vous', 'price' => 89.99, 'rating' => 4.9, 'students' => 850, 'category' => 'Développement', 'image' => 'https://placehold.co/600x400/a855f7/white?text=Symfony+Dev'],
-            ['id' => 3, 'title' => 'Introduction to Python for AI', 'teacher' => 'Vous', 'price' => 59.99, 'rating' => 4.7, 'students' => 2100, 'category' => 'IA', 'image' => 'https://placehold.co/600x400/f472b6/white?text=Python+AI'],
-        ];
-
-        return $this->render('enseignant/courses.html.twig', [
-            'categories' => $categories,
-            'courses' => $courses,
-=======
     public function courses(\App\Repository\CategorieCoursRepository $categorieCoursRepository): Response
     {
         // Fetch real categories from database
@@ -155,7 +122,6 @@ class EnseignantController extends AbstractController
             'category' => $category,
             'courses' => $category->getCours(),
             'form' => $form->createView(),
->>>>>>> user
         ]);
     }
 
@@ -181,21 +147,6 @@ class EnseignantController extends AbstractController
     }
 
     #[Route('/events', name: 'app_enseignant_events')]
-<<<<<<< HEAD
-    public function events(): Response
-    {
-        $categories = [
-            ['name' => 'Tout', 'icon' => 'fa-th-large'],
-            ['name' => 'Webinar', 'icon' => 'fa-video'],
-            ['name' => 'Workshop', 'icon' => 'fa-tools'],
-            ['name' => 'Networking', 'icon' => 'fa-users'],
-        ];
-
-        $events = [
-            ['id' => 1, 'title' => 'The Future of AI in SaaS', 'category' => 'Webinar', 'date' => '2026-02-15', 'time' => '18:00', 'speaker' => 'Vous'],
-            ['id' => 2, 'title' => 'Symfony Performance Workshop', 'category' => 'Workshop', 'date' => '2026-02-20', 'time' => '14:00', 'speaker' => 'Vous'],
-        ];
-=======
     public function events(EventRepository $eventRepository, InscritEventRepository $inscritEventRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $categories = [
@@ -260,16 +211,10 @@ class EnseignantController extends AbstractController
                 'capacity' => $event->getCapacite()
             ];
         }
->>>>>>> user
 
         return $this->render('enseignant/events.html.twig', [
             'categories' => $categories,
             'events' => $events,
-<<<<<<< HEAD
-        ]);
-    }
-
-=======
             'registrationStatuses' => $registrationStatuses,
             'eventCapacityStatus' => $eventCapacityStatus,
         ]);
@@ -318,8 +263,6 @@ class EnseignantController extends AbstractController
         $this->addFlash('success', 'Votre demande d\'inscription a été envoyée avec succès.');
         return $this->redirectToRoute('app_enseignant_events');
     }
-
->>>>>>> user
     #[Route('/stages', name: 'app_enseignant_stages')]
     public function stages(): Response
     {
@@ -357,24 +300,6 @@ class EnseignantController extends AbstractController
         ]);
     }
     #[Route('/quizzes', name: 'app_enseignant_quizzes')]
-<<<<<<< HEAD
-    public function quizzes(QuizRepository $quizRepository): Response
-    {
-        return $this->render('enseignant/quiz/index.html.twig', [
-            'quizzes' => $quizRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/quiz/new', name: 'app_enseignant_quiz_new', methods: ['GET', 'POST'])]
-    public function addQuiz(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $quiz = new Quiz();
-        $form = $this->createForm(QuizType::class, $quiz);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($quiz);
-=======
     public function quizzes(FormulaireRepository $formulaireRepository): Response
     {
         return $this->render('enseignant/formulaire/index.html.twig', [
@@ -391,23 +316,11 @@ class EnseignantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($formulaire);
->>>>>>> user
             $entityManager->flush();
 
             return $this->redirectToRoute('app_enseignant_quizzes', [], Response::HTTP_SEE_OTHER);
         }
 
-<<<<<<< HEAD
-        return $this->render('enseignant/quiz/new.html.twig', [
-            'quiz' => $quiz,
-            'form' => $form->createView(),
-        ]);
-    }
-=======
-        return $this->render('enseignant/formulaire/new.html.twig', [
-            'formulaire' => $formulaire,
-            'form' => $form->createView(),
-        ]);
     }
 
     #[Route('/quizzes/{id}/edit', name: 'app_enseignant_quiz_edit', methods: ['GET', 'POST'])]
@@ -504,5 +417,4 @@ class EnseignantController extends AbstractController
 
         return $this->redirectToRoute('app_enseignant_quiz_questions', ['id' => $formulaireId]);
     }
->>>>>>> user
 }

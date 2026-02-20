@@ -460,8 +460,7 @@
                         <div class="dropdown-options">
                             <div class="dropdown-opt active" data-value="newest">Plus récents</div>
                             <div class="dropdown-opt" data-value="rating">Mieux notés</div>
-<<<<<<< HEAD
-                            <div class="dropdown-opt" data-value="price">Prix</div>
+                            <div class="dropdown-opt" data-value="level">Niveau</div>
                         </div>
                     </div>
 
@@ -469,22 +468,14 @@
                         <i class="fas fa-plus"></i>
                         Ajouter un Cours
                     </button>
-=======
-                            <div class="dropdown-opt" data-value="level">Niveau</div>
-                        </div>
-                    </div>
 
->>>>>>> user
                 </div>
             </div>
             
             <div class="hero-visual">
                 <div class="hero-illustration-wrapper">
-<<<<<<< HEAD
-                    <img src="{{ asset('images/student_hero.png') }}" class="hero-illustration" alt="Courses illustration">
-=======
                     <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Courses illustration">
->>>>>>> user
+
                 </div>
                 <div class="hero-frame frame-1"></div>
                 <div class="hero-frame frame-2"></div>
@@ -511,32 +502,14 @@
     <!-- Content Grid -->
     <div class="course-catalog-grid" id="courseGrid">
         {% for course in courses %}
-<<<<<<< HEAD
-        <div class="course-card-premium" data-category="{{ course.category|lower }}" data-price="{{ course.price }}" data-rating="{{ course.rating }}" data-title="{{ course.title|lower }}">
-=======
         <a href="{{ path('app_enseignant_category_show', {'id': course.id}) }}" class="course-card-premium" data-category="{{ course.category|lower }}" data-title="{{ course.title|lower }}" data-level="{{ course.niveau }}" style="text-decoration: none;">
->>>>>>> user
+
             <div class="course-image-wrapper">
                 <img src="{{ course.image }}" alt="{{ course.title }}">
                 <div class="course-badge">{{ course.category }}</div>
             </div>
             <div class="course-content">
                 <h3>{{ course.title }}</h3>
-<<<<<<< HEAD
-                <div class="course-teacher">
-                    <i class="fas fa-user-circle"></i>
-                    <span>{{ course.teacher }}</span>
-                </div>
-                <div class="course-meta">
-                    <span class="course-price">{{ course.price }} €</span>
-                    <div class="course-rating">
-                        <i class="fas fa-star"></i>
-                        <span>{{ course.rating }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-=======
                 {% if course.description %}
                 <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;">
                     {{ course.description|length > 100 ? course.description|slice(0, 100) ~ '...' : course.description }}
@@ -552,12 +525,11 @@
                 </div>
             </div>
         </a>
->>>>>>> user
+
         {% endfor %}
     </div>
 </div>
 
-<<<<<<< HEAD
 <!-- Modal: Add Course -->
 <div class="modal-overlay" id="addCourseModal">
     <div class="modal-container">
@@ -610,13 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('closeModalBtn');
     const form = document.getElementById('addCourseForm');
     const grid = document.getElementById('courseGrid');
-=======
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const grid = document.getElementById('courseGrid');
-
->>>>>>> user
     // Unified Dropdown Logic (Reinforced)
     function setupDropdown(dropdownId, onSelect) {
         const dropdown = document.getElementById(dropdownId);
@@ -626,21 +592,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const toggle = dropdown.querySelector('.dropdown-toggle');
-<<<<<<< HEAD
-        const optionsList = dropdown.querySelector('.dropdown-options');
-        const options = dropdown.querySelectorAll('.dropdown-opt');
-        const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
-
-        toggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            console.log('Toggle clicked for:', dropdownId);
-=======
         const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
         const options = dropdown.querySelectorAll('.dropdown-opt');
 
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
->>>>>>> user
+
             const isActive = dropdown.classList.contains('active');
             
             // Close all other dropdowns
@@ -648,10 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!isActive) {
                 dropdown.classList.add('active');
-<<<<<<< HEAD
-                console.log('Dropdown opened:', dropdownId);
-=======
->>>>>>> user
+
             }
         });
 
@@ -659,10 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
             opt.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const val = opt.getAttribute('data-value');
-<<<<<<< HEAD
-                console.log('Option selected:', val);
-=======
->>>>>>> user
+
                 selectedSpan.textContent = opt.textContent.trim();
                 
                 options.forEach(o => o.classList.remove('active'));
@@ -674,16 +625,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-<<<<<<< HEAD
     // Modal logic
     if(openBtn) openBtn.onclick = () => modal.classList.add('active');
     if(closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
     window.onclick = (e) => { 
-        if(e.target === modal) modal.classList.remove('active');
-        // Close dropdowns on outside click
-=======
-    window.onclick = (e) => { 
->>>>>>> user
+
         if (!e.target.closest('.custom-dropdown')) {
             document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
         }
@@ -694,15 +640,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSearchQuery = '';
     let currentSort = 'newest';
 
-<<<<<<< HEAD
-=======
     const levelOrder = {
         'Débutant': 1,
         'Intermédiaire': 2,
         'Avancé': 3
     };
 
->>>>>>> user
     function updateGrid() {
         let cards = Array.from(grid.querySelectorAll('.course-card-premium'));
         
@@ -717,16 +660,6 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
         });
 
-<<<<<<< HEAD
-        // Sort (only visible cards if needed, but we sort the whole collection)
-        if(currentSort === 'rating') {
-            cards.sort((a, b) => parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0));
-        } else if(currentSort === 'price') {
-            cards.sort((a, b) => parseFloat(a.dataset.price || 0) - parseFloat(b.dataset.price || 0));
-        } else if(currentSort === 'newest') {
-            // Re-append in original order or add data-id if needed. For now, just reset if 'newest'
-            // We'll assume the initial order is 'newest'
-=======
         // Sort
         if(currentSort === 'rating') {
             cards.sort((a, b) => parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0));
@@ -736,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const levelB = b.dataset.level || '';
                 return (levelOrder[levelA] || 99) - (levelOrder[levelB] || 99);
             });
->>>>>>> user
+
         }
         
         cards.forEach(card => grid.appendChild(card));
@@ -757,16 +690,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('localSearch').addEventListener('input', (e) => {
         currentSearchQuery = e.target.value;
         updateGrid();
-    });
-
-<<<<<<< HEAD
-    form.onsubmit = function(e) {
-        e.preventDefault();
-        alert('Cours ajouté avec succès !');
-        modal.classList.remove('active');
-    };
-=======
->>>>>>> user
+    if (form) {
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            alert('Cours ajouté avec succès !');
+            modal.classList.remove('active');
+        };
+    }
 });
 </script>
 {% endblock %}
