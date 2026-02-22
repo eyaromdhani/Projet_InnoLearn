@@ -7,11 +7,7 @@
     </div>
 
     <nav class="header-nav">
-<<<<<<< HEAD
-        <a href="{{ path('app_student_dashboard') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_dashboard' ? 'active' : '' }}">
-=======
         <a href="{{ path('app_student_home') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_home' ? 'active' : '' }}">
->>>>>>> user
             Accueil
         </a>
         <a href="{{ path('app_student_courses') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_student_courses' ? 'active' : '' }}">
@@ -47,11 +43,7 @@
         
         <div class="user-profile-toggle" id="profileToggle">
             <div class="avatar-wrapper">
-<<<<<<< HEAD
-                <img src="https://ui-avatars.com/api/?name=Etudiant+User&background=6366f1&color=fff&bold=true" alt="User Avatar">
-=======
                 <img src="https://ui-avatars.com/api/?name={{ app.user.name|url_encode }}&background=6366f1&color=fff&bold=true" alt="User Avatar">
->>>>>>> user
                 <span class="status-indicator online"></span>
             </div>
         </div>

@@ -110,7 +110,4 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('This should never be reached!');
     }
-
-
-
 }

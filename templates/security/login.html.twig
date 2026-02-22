@@ -1,10 +1,6 @@
 {% extends 'base.html.twig' %}
 
-<<<<<<< HEAD
-{% block title %}Login - InnoLearn{% endblock %}
-=======
 {% block title %}Login{% endblock %}
->>>>>>> user
 
 {% block navbar %}{% endblock %}
 {% block footer_wave %}{% endblock %}
@@ -180,23 +176,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-    <script>
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const shackle = document.querySelector('.lock-shackle');
-            const container = document.querySelector('.lock-container');
-            
-            // Trigger animation
-            shackle.style.transform = 'translateY(-8px) rotate(-20deg)';
-            container.style.color = 'var(--secondary-light)';
-            container.style.filter = 'drop-shadow(0 0 40px rgba(168, 85, 247, 0.5))';
-
-            // Wait for animation before redirect (simulated for now)
-            setTimeout(() => {
-                alert('Success! Redirecting...');
-            }, 800);
-=======
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -224,7 +203,6 @@
                 .to(scene, { x: -10, duration: 0.1, repeat: 7, yoyo: true })
                 .to("#lock-assembly", { filter: "drop-shadow(0 0 25px rgba(239, 68, 68, 0.8))", duration: 0.3 }, 0);
             {% endif %}
->>>>>>> user
         });
     </script>
 </main>

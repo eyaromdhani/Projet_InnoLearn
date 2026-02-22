@@ -180,3 +180,39 @@ document.querySelectorAll('.btn').forEach(button => {
 });
 
 console.log('InnoLearn JavaScript loaded successfully! 🚀');
+
+// Voice Recognition Search for Quizzes
+const micBtn = document.getElementById('mic-btn');
+const searchInput = document.getElementById('search-input');
+
+if (micBtn && searchInput) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'fr-FR';
+        
+        micBtn.addEventListener('click', () => {
+            micBtn.classList.add('mic-active');
+            recognition.start();
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            searchInput.value = transcript;
+            micBtn.classList.remove('mic-active');
+            // Trigger search form submission if needed
+            const form = searchInput.closest('form');
+            if (form) form.submit();
+        };
+
+        recognition.onerror = () => {
+            micBtn.classList.remove('mic-active');
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('mic-active');
+        };
+    } else {
+        micBtn.style.display = 'none';
+    }
+}

@@ -1,37 +1,3 @@
-<<<<<<< HEAD
-<div class="top-bar">
-    <div class="top-bar-left">
-        <button class="mobile-menu-btn" id="mobile-menu-btn">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
-            </svg>
-        </button>
-        <div class="page-title">
-            <h1>{% block page_title %}Dashboard Overview{% endblock %}</h1>
-        </div>
-    </div>
-    <div class="top-bar-actions">
-        <div class="search-box">
-            <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <input type="text" placeholder="Rechercher...">
-        </div>
-        
-        <button class="icon-btn">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-            <span class="badge"></span>
-        </button>
-        
-        <div class="user-profile">
-            <div class="user-info">
-                <span class="user-name">{{ app.user.fullName|default('Admin User') }}</span>
-                <span class="user-role">Administrateur</span>
-            </div>
-            <div class="user-avatar">{{ app.user.fullName|default('Admin')|slice(0, 2)|upper }}</div>
-=======
 <div class="top-bar" style="background: white; box-shadow: 0 1px 0 rgba(0,0,0,0.05); padding: 1rem 2.5rem;">
     <div class="top-bar-left">
         <button class="mobile-menu-btn" id="mobile-menu-btn" style="color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0;">
@@ -58,7 +24,6 @@
                 <span class="user-role" style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">Administrateur</span>
             </div>
             <div class="user-avatar" style="background: #6366f1; color: white; width: 40px; height: 40px; border-radius: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{ app.user.name|default('Admin')|slice(0, 1)|upper }}</div>
->>>>>>> user
         </div>
     </div>
 </div>
