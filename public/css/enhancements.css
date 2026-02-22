@@ -84,3 +84,73 @@
     mix-blend-mode: difference;
     opacity: 0.3;
 } */
+
+/* Eye-Nav Toggle Premium Design */
+.eye-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 50px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: #6366f1;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.eye-nav-btn:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.1);
+}
+
+.eye-nav-btn.active {
+    background: #4F46E5;
+    color: white;
+    border-color: #4338CA;
+    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+}
+
+.eye-nav-btn i {
+    font-size: 0.95rem;
+}
+
+.eye-nav-btn .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6366f1;
+    display: inline-block;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.eye-nav-btn.active .status-dot {
+    background: #10b981;
+    animation: status-pulse 1.5s infinite;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes status-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

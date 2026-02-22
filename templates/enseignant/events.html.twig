@@ -1,6 +1,10 @@
 {% extends 'enseignant/layout.html.twig' %}
 
+<<<<<<< Updated upstream
 {% block title %}Sessions Live & Événements - InnoLearn{% endblock %}
+=======
+{% block title %}Événements - InnoLearn{% endblock %}
+>>>>>>> Stashed changes
 
 {% block page_stylesheets %}
 <style>
@@ -320,6 +324,7 @@
     66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 
+<<<<<<< Updated upstream
 /* Grid Adjustment */
 .dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
 .event-list { padding: 0 10% 5rem; display: flex; flex-direction: column; gap: 1.25rem; }
@@ -356,6 +361,354 @@
     color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px;
     font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
     transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+=======
+
+/* Grid Adjustment */
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+.event-list { 
+    padding: 0 10% 5rem; 
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+}
+
+/* Event Card Design - Vertical Cards */
+.event-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Full Event Styling */
+.event-card-full {
+    opacity: 0.5;
+    position: relative;
+    filter: grayscale(100%);
+    cursor: not-allowed !important;
+    background-color: #f8fafc !important;
+}
+
+.event-card-full:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #e2e8f0;
+}
+
+.event-card-full .event-card-header {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.complet-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(239, 68, 68, 0.95);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.complet-badge i, .terminer-badge i {
+    font-size: 0.875rem;
+}
+
+.terminer-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(71, 85, 105, 0.95);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(71, 85, 105, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Card Header with Gradients */
+.event-card-header {
+    position: relative;
+    height: 140px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.event-header-webinar { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+.event-header-workshop { background: linear-gradient(135deg, #e11d48 0%, #f97316 100%); }
+.event-header-networking { background: linear-gradient(135deg, #16a34a 0%, #65a30d 100%); }
+.event-header-default { background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%); }
+
+.event-date-badge {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-date-badge .date-day {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.event-date-badge .date-month {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+.event-type-badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Card Body */
+.event-card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.event-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.meta-item i {
+    color: #6366f1;
+    width: 16px;
+}
+
+.event-description {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Card Footer */
+.event-card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    background: #fafbfc;
+}
+
+.btn-event-action {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.btn-event-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-event-action.btn-registered {
+    background: #ecfdf5;
+    color: #10b981;
+    box-shadow: none;
+    cursor: default;
+}
+
+.btn-event-action.btn-registered:hover {
+    transform: none;
+}
+
+.btn-event-action.btn-full {
+    background: #fef2f2;
+    color: #ef4444;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.btn-event-action.btn-full:hover {
+    transform: none;
+}
+
+/* My Reservations Filter Button */
+.btn-reservations-filter {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #6366f1;
+    border-radius: 12px;
+    background: transparent;
+    color: #6366f1;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.btn-reservations-filter:hover {
+    background: rgba(99, 102, 241, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.15);
+}
+
+.btn-reservations-filter.active {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-reservations-filter i {
+    font-size: 1.1rem;
+}
+
+.btn-reservations-filter.active i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Premium Primary Button */
+.btn-primary-gradient {
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+    filter: brightness(1.1);
+}
+
+.btn-primary-gradient:active {
+    transform: translateY(1px);
+}
+
+.btn-primary-gradient i {
+    font-size: 1.1rem;
+}
+
+/* Legacy badge styles for compatibility */
+.event-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+}
+.badge-webinar { background: #eef2ff; color: #6366f1; }
+.badge-workshop { background: #fef2f2; color: #e11d48; }
+.badge-networking { background: #f0fdf4; color: #16a34a; }
+.badge-default { background: #f1f5f9; color: #64748b; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .event-list {
+        padding: 0 5% 3rem;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+>>>>>>> Stashed changes
 }
 </style>
 {% endblock %}
@@ -366,10 +719,17 @@
     <section class="events-hero">
         <div class="hero-content-wrapper">
             <div class="hero-text-content">
+<<<<<<< Updated upstream
                 <span class="hero-label">Mes Événements</span>
                 <h1 class="hero-title">
                     Gérez vos<br>
                     <span>Sessions en Direct</span>
+=======
+                <span class="hero-label">Apprentissage & Réseautage</span>
+                <h1 class="hero-title">
+                    Événements &<br>
+                    <span>Workshops Live</span>
+>>>>>>> Stashed changes
                 </h1>
                 
                 <div class="hero-filter-bar">
@@ -381,12 +741,20 @@
                             <i class="fas fa-chevron-down arrow"></i>
                         </div>
                         <div class="dropdown-options">
+<<<<<<< Updated upstream
                             <div class="dropdown-opt active" data-value="all">
                                 <i class="fas fa-th-large"></i> Toutes les catégories
                             </div>
                             <div class="dropdown-opt" data-value="webinar"><i class="fas fa-video"></i> Webinaires</div>
                             <div class="dropdown-opt" data-value="workshop"><i class="fas fa-tools"></i> Workshops</div>
                             <div class="dropdown-opt" data-value="networking"><i class="fas fa-handshake"></i> Networking</div>
+=======
+                            {% for cat in categories %}
+                            <div class="dropdown-opt {% if cat.value == 'all' %}active{% endif %}" data-value="{{ cat.value }}">
+                                <i class="fas {{ cat.icon }}"></i> {{ cat.name }}
+                            </div>
+                            {% endfor %}
+>>>>>>> Stashed changes
                         </div>
                     </div>
                     
@@ -410,16 +778,23 @@
                         </div>
                     </div>
 
+<<<<<<< Updated upstream
                     <button class="btn-primary-gradient" onclick="alert('Ouverture de votre agenda global...')" style="margin-top: 1rem; width: fit-content;">
                         <i class="fas fa-calendar-plus"></i>
                         Mes Réservations
                     </button>
+=======
+>>>>>>> Stashed changes
                 </div>
             </div>
             
             <div class="hero-visual">
                 <div class="hero-illustration-wrapper">
+<<<<<<< Updated upstream
                     <img src="{{ asset('images/student_hero.png') }}" class="hero-illustration" alt="Events illustration">
+=======
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Events illustration">
+>>>>>>> Stashed changes
                 </div>
                 <div class="hero-frame frame-1"></div>
                 <div class="hero-frame frame-2"></div>
@@ -443,6 +818,7 @@
         </div>
     </section>
 
+<<<<<<< Updated upstream
     <!-- Content List -->
     <div class="event-list" id="eventList">
         {% for event in events %}
@@ -464,6 +840,553 @@
         </div>
         {% endfor %}
     </div>
+=======
+    <!-- Content List Controls -->
+    <div class="event-list-controls" style="padding: 2rem 10% 0; display: flex; justify-content: flex-end; margin-bottom: -1rem; position: relative; z-index: 10;">
+        <button id="reservationsFilterBtn" class="btn-reservations-filter">
+            <i class="fas fa-calendar-check"></i>
+            Mes Réservations
+        </button>
+    </div>
+
+    <!-- Content List -->
+    <div class="event-list" id="eventList">
+        {% for event in events %}
+        {% set isFull = eventCapacityStatus[event.id].isFull %}
+        {% set isTerminated = event.statut and event.statut.value == 'termine' %}
+        <div class="event-card event-card-clickable {% if isFull or isTerminated %}event-card-full{% endif %}" 
+             data-category="{{ event.typeEvenement ? event.typeEvenement.value|lower : '' }}" 
+             data-title="{{ event.titre|lower }}"
+             data-event-id="{{ event.id }}"
+             data-event-title="{{ event.titre }}"
+             data-event-type="{{ event.typeEvenement ? event.typeEvenement.value : 'Événement' }}"
+             data-event-type-class="{{ event.typeEvenement ? event.typeEvenement.value|lower : 'default' }}"
+             data-event-date="{{ event.dateDebut|date('d') }}"
+             data-event-month="{{ event.dateDebut|date('M') }}"
+             data-event-time="{{ event.dateDebut|date('H:i') }}"
+             data-event-location="{{ event.lieu|default('En ligne') }}"
+             data-event-capacity="{{ event.capacite }}"
+             data-event-description="{{ event.description }}"
+             onclick="openEventDetail(this, event)"
+             data-has-status="{% if registrationStatuses[event.id] is defined %}yes{% else %}no{% endif %}"
+             data-status-text="{% if registrationStatuses[event.id] is defined %}{{ registrationStatuses[event.id].status }}{% endif %}"
+             data-registration-id="{% if registrationStatuses[event.id] is defined %}{{ registrationStatuses[event.id].id }}{% endif %}"
+             data-is-full="{% if isFull %}yes{% else %}no{% endif %}"
+             data-is-terminated="{% if isTerminated %}yes{% else %}no{% endif %}"
+        >
+            {% if isTerminated %}
+            <div class="terminer-badge">
+                <i class="fas fa-check-circle"></i> TERMINÉ
+            </div>
+            {% elseif isFull %}
+            <div class="complet-badge">
+                <i class="fas fa-users"></i> COMPLET
+            </div>
+            {% endif %}
+            
+            <div class="event-card-header event-header-{{ event.typeEvenement ? event.typeEvenement.value|lower : 'default' }}">
+                <div class="event-date-badge">
+                    <span class="date-day">{{ event.dateDebut|date('d') }}</span>
+                    <span class="date-month">{{ event.dateDebut|date('M') }}</span>
+                </div>
+                <span class="event-type-badge badge-{{ event.typeEvenement ? event.typeEvenement.value|lower : 'default' }}">
+                    {{ event.typeEvenement ? event.typeEvenement.value : 'Événement' }}
+                </span>
+            </div>
+            
+            <div class="event-card-body">
+                <h3 class="event-title">{{ event.titre }}</h3>
+                
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <i class="far fa-clock"></i>
+                        <span>{{ event.dateDebut|date('H:i') }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {% set location = event.lieu|default('En ligne') %}
+                        {% if location != 'En ligne' %}
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ location|url_encode }}" 
+                               target="_blank" 
+                               style="text-decoration: underline; color: inherit;"
+                               onclick="event.stopPropagation()">
+                                {{ location }}
+                            </a>
+                        {% else %}
+                            <span>{{ location }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <p class="event-description">{{ event.description }}</p>
+            </div>
+            
+            <div class="event-card-footer">
+                {% if isTerminated %}
+                    <button class="btn-event-action btn-full" disabled onclick="event.stopPropagation()">
+                        <i class="fas fa-check-circle"></i>
+                        Événement terminé
+                    </button>
+                {% elseif isFull %}
+                    <button class="btn-event-action btn-full" disabled onclick="event.stopPropagation()">
+                        <i class="fas fa-ban"></i>
+                        Événement complet
+                    </button>
+                {% elseif registrationStatuses[event.id] is defined %}
+                    {% if registrationStatuses[event.id].status == 'Confirmé' %}
+                        <a href="{{ path('app_enseignant_event_ticket', {'id': registrationStatuses[event.id].id}) }}" 
+                           class="btn-event-action btn-ticket" 
+                           onclick="event.stopPropagation()" 
+                           style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white;">
+                            <i class="fas fa-file-pdf"></i> Télécharger Ticket
+                        </a>
+                    {% else %}
+                        <button class="btn-event-action btn-registered" disabled onclick="event.stopPropagation()">
+                            <i class="fas fa-check-circle"></i>
+                            {{ registrationStatuses[event.id].status }}
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <button class="btn-event-action" onclick="event.stopPropagation(); openModal({{ event.id }})">
+                        <i class="fas fa-calendar-check"></i>
+                        Participer
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64748b;">
+                <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p style="font-size: 1.1rem; font-weight: 600;">Aucun événement trouvé pour le moment.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 3000; justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; padding: 2rem; border-radius: 20px; width: 100%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); animation: modalPop 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin: 0;">Inscription à l'événement</h3>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 1.25rem; color: #64748b; cursor: pointer;"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <form action="{{ path('enseignant_event_participate') }}" method="post" novalidate id="participationForm">
+                <input type="hidden" name="event_id" id="modalEventId">
+                
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #64748b; font-weight: 600;">Nom Complet</label>
+                    <input type="text" name="name" id="participantName" required 
+                           value="{{ app.user ? app.user.name : '' }}"
+                           style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+                    <div id="nameError" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">Le nom doit contenir au moins 2 caractères.</div>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #64748b; font-weight: 600;">Email</label>
+                    <input type="email" name="email" id="participantEmail" required 
+                           value="{{ app.user ? app.user.email : '' }}"
+                           style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+                    <div id="emailError" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">Veuillez saisir une adresse email valide.</div>
+                </div>
+
+                <button type="submit" class="btn-primary-gradient" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    <i class="fas fa-check-circle"></i> Confirmer l'inscription
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Detail Modal -->
+    <div id="eventDetailModal" class="modal-overlay" style="display: none;">
+        <div class="event-detail-modal-content">
+            <button onclick="closeEventDetail()" class="modal-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="event-detail-header" id="detailModalHeader">
+                <div class="event-date-badge-large">
+                    <span class="date-day" id="detailDate"></span>
+                    <span class="date-month" id="detailMonth"></span>
+                </div>
+                <span class="event-type-badge-large" id="detailType"></span>
+            </div>
+            
+            <div class="event-detail-body">
+                <h2 id="detailTitle"></h2>
+                
+                <div class="event-detail-meta">
+                    <div class="detail-meta-item">
+                        <i class="far fa-clock"></i>
+                        <span id="detailTime"></span>
+                    </div>
+                    <div class="detail-meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="detailLocation"></span>
+                    </div>
+                    <div class="detail-meta-item">
+                        <i class="fas fa-users"></i>
+                        <span id="detailCapacity"></span>
+                    </div>
+                </div>
+                
+                <div class="event-detail-description">
+                    <h3>Description</h3>
+                    <p id="detailDescription"></p>
+                </div>
+            </div>
+            
+            <div class="event-detail-footer" id="detailFooter">
+                <!-- Action button will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal-overlay.active { display: flex !important; }
+        
+        /* Event Detail Modal Styles */
+        .event-card-clickable {
+            cursor: pointer;
+        }
+        
+        .event-detail-modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            animation: modalPop 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+        }
+        
+        .modal-close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: #1e293b;
+            transition: all 0.2s;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .modal-close-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .event-detail-header {
+            height: 180px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .event-detail-header.event-header-webinar { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .event-detail-header.event-header-workshop { background: linear-gradient(135deg, #e11d48 0%, #f97316 100%); }
+        .event-detail-header.event-header-networking { background: linear-gradient(135deg, #16a34a 0%, #65a30d 100%); }
+        .event-detail-header.event-header-default { background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%); }
+        
+        .event-date-badge-large {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .event-date-badge-large .date-day {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+        }
+        
+        .event-date-badge-large .date-month {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.25rem;
+        }
+        
+        .event-type-badge-large {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .event-detail-body {
+            padding: 2rem;
+        }
+        
+        .event-detail-body h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.3;
+        }
+        
+        .event-detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .detail-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .detail-meta-item i {
+            color: #6366f1;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+        
+        .event-detail-description h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 0.75rem 0;
+        }
+        
+        .event-detail-description p {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        
+        .event-detail-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            background: #fafbfc;
+            border-radius: 0 0 24px 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .event-detail-modal-content {
+                max-width: 95%;
+                margin: 1rem;
+            }
+            
+            .event-detail-header {
+                height: 150px;
+                padding: 1.5rem;
+            }
+            
+            .event-detail-body {
+                padding: 1.5rem;
+            }
+            
+            .event-detail-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+
+    <script>
+        function openModal(eventId) {
+            document.getElementById('modalEventId').value = eventId;
+            document.getElementById('registrationModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('registrationModal').classList.remove('active');
+        }
+
+        // Close on click outside
+        document.getElementById('registrationModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        
+        // Event Detail Modal Functions
+        function openEventDetail(card, e) {
+            // Populate modal with event data from card's data attributes
+            const eventId = card.dataset.eventId;
+            const title = card.dataset.eventTitle;
+            const type = card.dataset.eventType;
+            const typeClass = card.dataset.eventTypeClass;
+            const date = card.dataset.eventDate;
+            const month = card.dataset.eventMonth;
+            const time = card.dataset.eventTime;
+            const location = card.dataset.eventLocation;
+            const capacity = card.dataset.eventCapacity;
+            const description = card.dataset.eventDescription;
+            const hasStatus = card.dataset.hasStatus === 'yes';
+            const statusText = card.dataset.statusText;
+            const registrationId = card.dataset.registrationId;
+            const isFull = card.dataset.isFull === 'yes';
+            const isTerminated = card.dataset.isTerminated === 'yes';
+            
+            // Set header gradient based on event type
+            const header = document.getElementById('detailModalHeader');
+            header.className = 'event-detail-header event-header-' + typeClass;
+            
+            // Set content
+            document.getElementById('detailDate').textContent = date;
+            document.getElementById('detailMonth').textContent = month;
+            document.getElementById('detailType').textContent = type;
+            document.getElementById('detailTitle').textContent = title;
+            document.getElementById('detailTime').textContent = time;
+            
+            // Set Location as Link if not "En ligne"
+            const locationSpan = document.getElementById('detailLocation');
+            if (location && location !== 'En ligne') {
+                locationSpan.innerHTML = `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}" target="_blank" style="text-decoration: underline; color: inherit;">${location}</a>`;
+            } else {
+                locationSpan.textContent = location || 'En ligne';
+            }
+            
+            document.getElementById('detailCapacity').textContent = capacity + ' personnes';
+            document.getElementById('detailDescription').textContent = description;
+            
+            // Set action button
+            const footer = document.getElementById('detailFooter');
+            if (isTerminated) {
+                footer.innerHTML = `
+                    <button class="btn-event-action btn-full" disabled style="width: 100%;">
+                        <i class="fas fa-check-circle"></i>
+                        Événement terminé
+                    </button>
+                `;
+            } else if (isFull && !hasStatus) {
+                footer.innerHTML = `
+                    <button class="btn-event-action btn-full" disabled style="width: 100%;">
+                        <i class="fas fa-ban"></i>
+                        Événement complet
+                    </button>
+                `;
+            } else if (hasStatus) {
+                if (statusText === 'Confirmé') {
+                    footer.innerHTML = `
+                        <a href="/enseignant/event/ticket/${registrationId}" class="btn-event-action btn-ticket" style="width: 100%; text-align: center; background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none;">
+                            <i class="fas fa-file-pdf"></i> Télécharger Ticket (PDF)
+                        </a>
+                    `;
+                } else {
+                    footer.innerHTML = `
+                        <button class="btn-event-action btn-registered" disabled style="width: 100%;">
+                            <i class="fas fa-check-circle"></i>
+                            ${statusText}
+                        </button>
+                    `;
+                }
+            } else {
+                footer.innerHTML = `
+                    <button class="btn-event-action" onclick="closeEventDetail(); openModal(${eventId})" style="width: 100%;">
+                        <i class="fas fa-calendar-check"></i>
+                        Participer
+                    </button>
+                `;
+            }
+            
+            // Show modal
+            document.getElementById('eventDetailModal').classList.add('active');
+        }
+        
+        function closeEventDetail() {
+            document.getElementById('eventDetailModal').classList.remove('active');
+        }
+        
+        // Close detail modal on click outside
+        document.getElementById('eventDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeEventDetail();
+        });
+        
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEventDetail();
+            }
+        });
+
+        // Real-time validation for participation form
+        const participationForm = document.getElementById('participationForm');
+        const nameInput = document.getElementById('participantName');
+        const emailInput = document.getElementById('participantEmail');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+
+        function validateName() {
+            if (nameInput.value.trim().length < 2) {
+                nameInput.style.borderColor = '#ef4444';
+                nameError.style.display = 'block';
+                return false;
+            } else {
+                nameInput.style.borderColor = '#e2e8f0';
+                nameError.style.display = 'none';
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!re.test(emailInput.value.trim())) {
+                emailInput.style.borderColor = '#ef4444';
+                emailError.style.display = 'block';
+                return false;
+            } else {
+                emailInput.style.borderColor = '#e2e8f0';
+                emailError.style.display = 'none';
+                return true;
+            }
+        }
+
+        if (nameInput) nameInput.addEventListener('input', validateName);
+        if (emailInput) emailInput.addEventListener('input', validateEmail);
+
+        if (participationForm) {
+            participationForm.addEventListener('submit', function(e) {
+                const isNameValid = validateName();
+                const isEmailValid = validateEmail();
+
+                if (!isNameValid || !isEmailValid) {
+                    e.preventDefault();
+                }
+            });
+        }
+    </script>
+>>>>>>> Stashed changes
 </div>
 
 <script>
@@ -510,6 +1433,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentCategory = 'all';
     let currentSearchQuery = '';
     let currentSort = 'newest';
+<<<<<<< Updated upstream
+=======
+    let showOnlyRegistered = false;
+>>>>>>> Stashed changes
 
     function updateGrid() {
         if (!list) return;
@@ -518,14 +1445,37 @@ document.addEventListener('DOMContentLoaded', function() {
         cards.forEach(card => {
             const title = card.getAttribute('data-title') || '';
             const cat = card.getAttribute('data-category') || '';
+<<<<<<< Updated upstream
             const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
             const matchesCat = currentCategory === 'all' || cat === currentCategory;
             card.style.display = (matchesSearch && matchesCat) ? 'grid' : 'none';
+=======
+            const hasStatus = card.getAttribute('data-has-status') === 'yes';
+            
+            const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            const matchesReservation = !showOnlyRegistered || hasStatus;
+            
+            card.style.display = (matchesSearch && matchesCat && matchesReservation) ? 'grid' : 'none';
+>>>>>>> Stashed changes
         });
 
         cards.forEach(card => list.appendChild(card));
     }
 
+<<<<<<< Updated upstream
+=======
+    // Reservation Filter Toggle
+    const resFilterBtn = document.getElementById('reservationsFilterBtn');
+    if (resFilterBtn) {
+        resFilterBtn.addEventListener('click', () => {
+            showOnlyRegistered = !showOnlyRegistered;
+            resFilterBtn.classList.toggle('active', showOnlyRegistered);
+            updateGrid();
+        });
+    }
+
+>>>>>>> Stashed changes
     // Setup Dropdowns
     setupDropdown('pageCategoryDropdown', (val) => {
         currentCategory = val;

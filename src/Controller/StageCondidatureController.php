@@ -68,10 +68,86 @@ final class StageCondidatureController extends AbstractController
         ]);
     }
 
+<<<<<<< Updated upstream
     #[Route('/{id}', name: 'app_stage_condidature_delete', methods: ['POST'])]
     public function delete(Request $request, StageCondidature $stageCondidature, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$stageCondidature->getId(), $request->getPayload()->getString('_token'))) {
+=======
+    #[Route('/search', name: 'app_stage_condidature_search', methods: ['GET'])]
+    public function search(Request $request, StageCondidatureRepository $repository): Response
+    {
+        $input = $request->query->get('searchbar');
+        $condidatures = $input ? $repository->searchAll($input) : $repository->findAll();
+
+        return $this->render('stage_condidature/index.html.twig', [
+            'stage_condidatures' => $condidatures,
+            'input' => $input,
+        ]);
+    }
+
+    #[Route('/search/statut', name: 'app_stage_condidature_search_statut', methods: ['GET'])]
+    public function searchStatut(Request $request, StageCondidatureRepository $repository): Response
+    {
+        $statut = $request->query->get('statut');
+        $condidatures = $statut ? $repository->searchByStatut($statut) : $repository->findAll();
+
+        return $this->render('stage_condidature/index.html.twig', [
+            'stage_condidatures' => $condidatures,
+        ]);
+    }
+
+    #[Route('/search/offre', name: 'app_stage_condidature_search_offre', methods: ['GET'])]
+    public function searchOffre(Request $request, StageCondidatureRepository $repository): Response
+    {
+        $idOffre = $request->query->get('id_offre');
+        $condidatures = $idOffre ? $repository->searchByOffre((int) $idOffre) : $repository->findAll();
+
+        return $this->render('stage_condidature/index.html.twig', [
+            'stage_condidatures' => $condidatures,
+        ]);
+    }
+
+    #[Route('/filter/date', name: 'app_stage_condidature_filter_date', methods: ['GET'])]
+    public function filterDate(Request $request, StageCondidatureRepository $repository): Response
+    {
+        $minDateStr = $request->query->get('min_date');
+        $maxDateStr = $request->query->get('max_date');
+
+        if ($minDateStr && $maxDateStr) {
+            $minDate = new \DateTime($minDateStr);
+            $maxDate = new \DateTime($maxDateStr);
+            $condidatures = $repository->filterByDatePublication($minDate, $maxDate);
+        } else {
+            $condidatures = $repository->findAll();
+        }
+
+        return $this->render('stage_condidature/index.html.twig', [
+            'stage_condidatures' => $condidatures,
+        ]);
+    }
+
+    #[Route('/tri/asc', name: 'app_stage_condidature_tri_asc', methods: ['GET'])]
+    public function triAsc(StageCondidatureRepository $repository): Response
+    {
+        return $this->render('stage_condidature/index.html.twig', [
+            'stage_condidatures' => $repository->sortByDateAsc(),
+        ]);
+    }
+
+    #[Route('/tri/desc', name: 'app_stage_condidature_tri_desc', methods: ['GET'])]
+    public function triDesc(StageCondidatureRepository $repository): Response
+    {
+        return $this->render('stage_condidature/index.html.twig', [
+            'stage_condidatures' => $repository->sortByDateDesc(),
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_stage_condidature_delete', methods: ['POST'])]
+    public function delete(Request $request, StageCondidature $stageCondidature, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $stageCondidature->getId(), $request->getPayload()->getString('_token'))) {
+>>>>>>> Stashed changes
             $entityManager->remove($stageCondidature);
             $entityManager->flush();
         }

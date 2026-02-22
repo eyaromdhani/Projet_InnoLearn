@@ -1,0 +1,101 @@
+<header class="dashboard-header">
+    <div class="header-brand-wrapper">
+        <a href="{{ path('app_home') }}" class="header-brand">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn">
+            <span>InnoLearn <small style="font-size: 0.6em; opacity: 0.8; vertical-align: middle; margin-left: 5px; padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px;">RECRUTEUR</small></span>
+        </a>
+    </div>
+
+    <nav class="header-nav">
+        <a href="{{ path('app_recruiter_home') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_recruiter_home' ? 'active' : '' }}">
+            Accueil
+        </a>
+        <a href="{{ path('app_recruteur_stages') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_recruteur_stages' ? 'active' : '' }}">
+            Stages
+        </a>
+    </nav>
+    
+    <div class="header-actions">
+        <div class="search-bar-compact">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher...">
+        </div>
+ 
+        <!-- Eye Tracking Toggle -->
+        <button id="eye-nav-toggle" class="eye-nav-btn" title="Activer la navigation par le regard">
+            <span class="status-dot"></span>
+            <i class="fas fa-eye"></i> Eye Nav
+        </button>
+
+        <div class="notification-dropdown-wrapper" style="position: relative;">
+            <button class="icon-btn" title="Notifications" id="notificationToggle">
+                <i class="fas fa-bell"></i>
+                {% if recent_candidatures|length > 0 %}
+                    <span class="badge-dot" style="position: absolute; top: 8px; right: 8px; width: 10px; height: 10px; background: #ef4444; border: 2px solid white; border-radius: 50%;"></span>
+                {% endif %}
+            </button>
+
+            <div id="notificationDropdown" style="display: none; position: absolute; top: calc(100% + 15px); right: 0; width: 320px; background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 1000; overflow: hidden; border: 1px solid #f1f5f9;">
+                <div style="padding: 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: #1e293b;">Notifications</h3>
+                    <span style="font-size: 0.75rem; font-weight: 600; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 20px;">
+                        {{ recent_candidatures|length }} nouvelles
+                    </span>
+                </div>
+                
+                <div style="max-height: 380px; overflow-y: auto;">
+                    {% if recent_candidatures|length > 0 %}
+                        {% for cond in recent_candidatures %}
+                            <div class="notification-item" style="padding: 1rem 1.25rem; border-bottom: 1px solid #f8fafc; transition: all 0.2s; cursor: pointer; display: flex; gap: 1rem;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(99,102,241,0.1); display: flex; align-items: center; justify-content: center; color: #6366f1; flex-shrink: 0;">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <p style="margin: 0; font-size: 0.875rem; color: #334155; line-height: 1.4;">
+                                        <strong style="color: #1e293b;">{{ cond.idEtudiant.name }}</strong> a postulé pour <br>
+                                        <span style="color: #6366f1; font-weight: 600;">{{ cond.idOffre.titre }}</span>
+                                    </p>
+                                    <span style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem; display: block;">{{ cond.datePublication|date('d M, H:i') }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="padding: 2.5rem 1.25rem; text-align: center; color: #94a3b8;">
+                            <i class="far fa-bell-slash" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p style="margin: 0; font-size: 0.875rem;">Aucune nouvelle candidature</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <a href="{{ path('app_recruiter_home') }}" style="display: block; padding: 1rem; text-align: center; background: #f8fafc; color: #6366f1; font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
+                    Voir toutes les candidatures
+                </a>
+            </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('notificationToggle');
+            const dropdown = document.getElementById('notificationDropdown');
+            
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target) && e.target !== toggle) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+        </script>
+        
+        <div class="user-profile-toggle" id="profileToggle">
+            <div class="avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name={{ app.user.name|url_encode }}&background=6366f1&color=fff&bold=true" alt="User Avatar" style="width: 100%; height: 100%; border-radius: 8px;">
+                <span class="status-indicator online"></span>
+            </div>
+        </div>
+    </div>
+</header>

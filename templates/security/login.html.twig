@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
+<<<<<<< Updated upstream
 {% block title %}Login - InnoLearn{% endblock %}
+=======
+{% block title %}Login{% endblock %}
+>>>>>>> Stashed changes
 
 {% block navbar %}{% endblock %}
 {% block footer_wave %}{% endblock %}
@@ -63,6 +67,7 @@
         </div>
     </div>
 
+<<<<<<< Updated upstream
     <script>
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -78,6 +83,35 @@
             setTimeout(() => {
                 alert('Success! Redirecting...');
             }, 800);
+=======
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const u = document.getElementById('p-identifier');
+            const p = document.getElementById('p-password');
+            const key = document.querySelector('.key-object');
+            const mechanism = document.querySelector('.lock-mechanism');
+            const scene = document.querySelector('.lock-scene');
+            const bookBg = document.querySelector('.form-book-bg');
+
+            gsap.set(key, { x: -10 });
+
+            const update = () => {
+                const combined = u.value.length + p.value.length;
+                const progress = Math.min(combined / 15, 1);
+                gsap.to(key, { x: -10 + (progress * 65), duration: 0.3 });
+                gsap.to(bookBg, { rotationY: -3 + (progress * 2), duration: 0.5 });
+            };
+
+            [u, p].forEach(i => i.addEventListener("input", update));
+
+            {% if all_errors|length > 0 %}
+            // Rejection Animation
+            gsap.timeline()
+                .to(scene, { x: -10, duration: 0.1, repeat: 7, yoyo: true })
+                .to("#lock-assembly", { filter: "drop-shadow(0 0 25px rgba(239, 68, 68, 0.8))", duration: 0.3 }, 0);
+            {% endif %}
+>>>>>>> Stashed changes
         });
     </script>
 </main>

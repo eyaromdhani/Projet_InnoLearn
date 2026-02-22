@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
+<<<<<<< Updated upstream
 {% block title %}Sign Up - InnoLearn{% endblock %}
+=======
+{% block title %}Sign Up{% endblock %}
+>>>>>>> Stashed changes
 
 {% block navbar %}{% endblock %}
 {% block footer_wave %}{% endblock %}
@@ -26,7 +30,11 @@
                     <path d="M22 2L15 22L11 13L2 9L22 2Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
+<<<<<<< Updated upstream
             <div style="margin-top: 2rem; text-align: center;">
+=======
+            <div style="margin-top: 1rem; text-align: center;">
+>>>>>>> Stashed changes
                 <h2 style="color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Join the Adventure</h2>
                 <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">Your journey to knowledge starts with one click.</p>
             </div>
@@ -70,6 +78,7 @@
         </div>
     </div>
 
+<<<<<<< Updated upstream
     <script>
         document.getElementById('signup-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -90,6 +99,72 @@
                 btn.innerText = 'Welcome aboard!';
                 alert('Account created! Ready to fly.');
             }, 1000);
+=======
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('signup-form');
+            const inputs = form.querySelectorAll('input:not([type="radio"])');
+            const radioInputs = form.querySelectorAll('input[type="radio"]');
+            const card = document.querySelector('.id-card');
+            const slot = document.getElementById('slot-highlight');
+            const slotBlur = document.getElementById('slotBlur');
+            const scanner = document.getElementById('scanner-beam');
+            const portal = document.getElementById('portal-device');
+            const scene = document.querySelector('.portal-scene');
+            const bookBg = document.querySelector('.signup-book-bg');
+            
+            const weights = { name: 0.15, username: 0.15, email: 0.15, countryCode: 0.05, phoneNumber: 0.1, role: 0.15, password: 0.25 };
+            
+            const updateProgress = () => {
+                let totalProgress = 0;
+                inputs.forEach(input => {
+                    const weight = weights[input.name] || 0.1;
+                    const valLength = input.value.length;
+                    const fieldProgress = Math.min(valLength / 8, 1); 
+                    totalProgress += fieldProgress * weight;
+                });
+
+                totalProgress += weights['role'];
+
+                gsap.to(card, { y: -100 + (totalProgress * 130), duration: 0.5, ease: "power2.out" });
+                gsap.to(slot, { strokeWidth: 1 + (totalProgress * 3), duration: 0.4 });
+                if(slotBlur) gsap.to(slotBlur, { attr: { stdDeviation: 2 + (totalProgress * 4) }, duration: 0.4 });
+                gsap.to('.energy-line', { opacity: 0.3 + (totalProgress * 0.7), duration: 0.4 });
+                // Subtle book tilt
+                gsap.to(bookBg, { rotationY: -3 + (totalProgress * 2), duration: 0.5 });
+            };
+
+            inputs.forEach(input => input.addEventListener('input', updateProgress));
+            radioInputs.forEach(radio => radio.addEventListener('change', updateProgress));
+
+            form.addEventListener('submit', function(e) {
+                const complete = Array.from(inputs).every(i => i.value.trim().length > 0);
+                if (!complete) {
+                    e.preventDefault();
+                    gsap.fromTo(".auth-form", { x: -6 }, { x: 6, duration: 0.05, repeat: 4, yoyo: true });
+                    return;
+                }
+                
+                // Immediate feedback to prevent "frozen" feeling
+                const btn = document.getElementById('signup-btn');
+                btn.innerHTML = '<span class="loading-pulse">Preparing Journey...</span>';
+                btn.style.opacity = "0.7";
+                btn.style.pointerEvents = "none";
+                
+                gsap.to(btn, { scale: 0.98, duration: 0.1 });
+                gsap.to(".loading-pulse", { opacity: 0.5, repeat: -1, yoyo: true, duration: 0.5 });
+            });
+
+            {% if all_errors|length > 0 %}
+            // Error Animation: Rejection shake
+            console.log("Signup errors detected, playing rejection animation.");
+            gsap.timeline()
+                .fromTo(scene, { x: -10 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true })
+                .to(scanner, { opacity: 1, stroke: "#ef4444", attr: { y1: 80, y2: 80 }, duration: 0.3 }, 0)
+                .fromTo(bookBg, { x: -5 }, { x: 5, duration: 0.1, repeat: 5, yoyo: true }, 0);
+            {% endif %}
+>>>>>>> Stashed changes
         });
     </script>
 </main>

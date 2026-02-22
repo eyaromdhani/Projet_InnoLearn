@@ -2,6 +2,10 @@
 
 namespace App\Controller\Admin;
 
+<<<<<<< Updated upstream
+=======
+use App\Repository\OffreStageRepository;
+>>>>>>> Stashed changes
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +25,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class AdminDashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'admin_dashboard')]
+<<<<<<< Updated upstream
     public function index(): Response
     {
         return $this->render('admin/dashboard/index.html.twig');
@@ -30,6 +35,15 @@ class AdminDashboardController extends AbstractController
     public function projects(): Response
     {
         return $this->render('admin/dashboard/static.html.twig', ['title' => 'Projets']);
+=======
+    public function index(OffreStageRepository $offreStageRepository, \App\Repository\UserRepository $userRepository): Response
+    {
+        return $this->render('admin/dashboard/index.html.twig', [
+            'recent_opportunities' => $offreStageRepository->findBy([], ['datePublication' => 'DESC'], 5),
+            'recent_users' => $userRepository->findBy([], ['id' => 'DESC'], 5),
+            'total_users' => $userRepository->count([])
+        ]);
+>>>>>>> Stashed changes
     }
 
     #[Route('/subscriptions', name: 'admin_subscriptions')]
@@ -38,6 +52,7 @@ class AdminDashboardController extends AbstractController
         return $this->render('admin/dashboard/static.html.twig', ['title' => 'Abonnements']);
     }
 
+<<<<<<< Updated upstream
     #[Route('/users', name: 'admin_users')]
     public function users(): Response
     {
@@ -149,6 +164,8 @@ class AdminDashboardController extends AbstractController
         return $this->render('admin/dashboard/static.html.twig', ['title' => 'Candidatures']);
     }
 
+=======
+>>>>>>> Stashed changes
     #[Route('/reports', name: 'admin_reports')]
     public function reports(): Response
     {

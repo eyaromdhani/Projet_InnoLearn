@@ -14,6 +14,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/offre/stage')]
 final class OffreStageController extends AbstractController
 {
+<<<<<<< Updated upstream
+=======
+
+
+
+>>>>>>> Stashed changes
     #[Route(name: 'app_offre_stage_index', methods: ['GET'])]
     public function index(OffreStageRepository $offreStageRepository): Response
     {
@@ -22,6 +28,19 @@ final class OffreStageController extends AbstractController
         ]);
     }
 
+<<<<<<< Updated upstream
+=======
+    #[Route('/open', name: 'app_offre_stage_show_open', methods: ['GET'])]
+    public function show_open(OffreStageRepository $offreStageRepository): Response
+    {
+        return $this->render('offre_stage/index.html.twig', [
+            'offre_stages' => $offreStageRepository->findByStatut('ouverte'),
+        ]);
+    }
+
+
+
+>>>>>>> Stashed changes
     #[Route('/new', name: 'app_offre_stage_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -50,6 +69,153 @@ final class OffreStageController extends AbstractController
         ]);
     }
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+    #[Route('/search', name: 'app_offre_stage_search', methods: ['GET'])]
+    public function search(
+        Request $request,
+        OffreStageRepository $offreStageRepository
+    ): Response {
+        $input = $request->query->get('searchbar');
+
+        $offres = [];
+
+        if ($input) {
+            $offres = $offreStageRepository->search($input);
+
+
+            return $this->render('offre_stage/index.html.twig', [
+                'offre_stages' => $offres,
+                'input' => $input,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_offre_stage_index', [], Response::HTTP_SEE_OTHER);
+
+        }
+    }
+
+    #[Route('/search_entreprise', name: 'app_offre_stage_search_entreprise', methods: ['GET'])]
+    public function searchEntreprise(
+        Request $request,
+        OffreStageRepository $offreStageRepository
+    ): Response {
+        $input = $request->query->get('searchbar');
+
+        $offres = [];
+
+        if ($input) {
+            $offres = $offreStageRepository->searchEntreprise($input);
+
+
+            return $this->render('offre_stage/index.html.twig', [
+                'offre_stages' => $offres,
+                'input' => $input,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_offre_stage_index', [], Response::HTTP_SEE_OTHER);
+
+        }
+    }
+
+    #[Route('/search_date', name: 'app_offre_stage_search_date', methods: ['GET'])]
+    public function searchDate(
+        Request $request,
+        OffreStageRepository $offreStageRepository
+    ): Response {
+        $input = $request->query->get('searchbar');
+
+        $offres = [];
+
+        if ($input) {
+            $offres = $offreStageRepository->searchDate($input);
+
+
+            return $this->render('offre_stage/index.html.twig', [
+                'offre_stages' => $offres,
+                'input' => $input,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_offre_stage_index', [], Response::HTTP_SEE_OTHER);
+
+        }
+    }
+
+    #[Route('/search_duree', name: 'app_offre_stage_search_duree', methods: ['GET'])]
+    public function searchDuree(
+        Request $request,
+        OffreStageRepository $offreStageRepository
+    ): Response {
+        $input = $request->query->get('searchbar');
+
+        $offres = [];
+
+        if ($input) {
+            $offres = $offreStageRepository->searchDuree((int) $input);
+
+
+            return $this->render('offre_stage/index.html.twig', [
+                'offre_stages' => $offres,
+                'input' => $input,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_offre_stage_index', [], Response::HTTP_SEE_OTHER);
+
+        }
+    }
+
+
+    #[Route('/tri_desc', name: 'app_offre_stage_tri_desc', methods: ['GET'])]
+    public function triDescendant(
+        Request $request,
+        OffreStageRepository $offreStageRepository
+    ): Response {
+        $input = $request->query->get('searchbar');
+
+        $offres = [];
+
+        if ($input) {
+            $offres = $offreStageRepository->TriDescendant();
+
+
+            return $this->render('offre_stage/index.html.twig', [
+                'offre_stages' => $offres,
+                'input' => $input,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_offre_stage_index', [], Response::HTTP_SEE_OTHER);
+
+        }
+    }
+
+    #[Route('/tri_asc', name: 'app_offre_stage_tri_asc', methods: ['GET'])]
+    public function triAscendant(
+        Request $request,
+        OffreStageRepository $offreStageRepository
+    ): Response {
+        $input = $request->query->get('searchbar');
+
+        $offres = [];
+
+        if ($input) {
+            $offres = $offreStageRepository->TriAscendant();
+
+
+            return $this->render('offre_stage/index.html.twig', [
+                'offre_stages' => $offres,
+                'input' => $input,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_offre_stage_index', [], Response::HTTP_SEE_OTHER);
+
+        }
+    }
+
+
+>>>>>>> Stashed changes
     #[Route('/{id}/edit', name: 'app_offre_stage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, OffreStage $offreStage, EntityManagerInterface $entityManager): Response
     {
@@ -71,7 +237,11 @@ final class OffreStageController extends AbstractController
     #[Route('/{id}', name: 'app_offre_stage_delete', methods: ['POST'])]
     public function delete(Request $request, OffreStage $offreStage, EntityManagerInterface $entityManager): Response
     {
+<<<<<<< Updated upstream
         if ($this->isCsrfTokenValid('delete'.$offreStage->getId(), $request->getPayload()->getString('_token'))) {
+=======
+        if ($this->isCsrfTokenValid('delete' . $offreStage->getId(), $request->getPayload()->getString('_token'))) {
+>>>>>>> Stashed changes
             $entityManager->remove($offreStage);
             $entityManager->flush();
         }

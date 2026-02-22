@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<InscritEvent>
- *
- * @method InscritEvent|null find($id, $lockMode = null, $lockVersion = null)
- * @method InscritEvent|null findOneBy(array $criteria, array $orderBy = null)
- * @method InscritEvent[]    findAll()
- * @method InscritEvent[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class InscritEventRepository extends ServiceEntityRepository
 {

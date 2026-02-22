@@ -606,12 +606,20 @@
                             <i class="fas fa-chevron-down arrow"></i>
                         </div>
                         <div class="dropdown-options">
+<<<<<<< Updated upstream
                             <div class="dropdown-opt active" data-value="all">
                                 <i class="fas fa-th-large"></i> Toutes les catégories
                             </div>
                             <div class="dropdown-opt" data-value="webinar"><i class="fas fa-video"></i> Webinaires</div>
                             <div class="dropdown-opt" data-value="workshop"><i class="fas fa-tools"></i> Workshops</div>
                             <div class="dropdown-opt" data-value="networking"><i class="fas fa-handshake"></i> Networking</div>
+=======
+                            {% for cat in categories %}
+                            <div class="dropdown-opt {% if cat.value == 'all' %}active{% endif %}" data-value="{{ cat.value }}">
+                                <i class="fas {{ cat.icon }}"></i> {{ cat.name }}
+                            </div>
+                            {% endfor %}
+>>>>>>> Stashed changes
                         </div>
                     </div>
                     
@@ -635,10 +643,13 @@
                         </div>
                     </div>
 
+<<<<<<< Updated upstream
                     <button class="btn-primary-gradient" onclick="alert('Ouverture de votre agenda global...')" style="margin-top: 1rem; width: fit-content;">
                         <i class="fas fa-calendar-plus"></i>
                         Mes Réservations
                     </button>
+=======
+>>>>>>> Stashed changes
                 </div>
             </div>
             
@@ -668,6 +679,17 @@
         </div>
     </section>
 
+<<<<<<< Updated upstream
+=======
+    <!-- Content List Controls -->
+    <div class="event-list-controls" style="padding: 2rem 10% 0; display: flex; justify-content: flex-end; margin-bottom: 2rem; position: relative; z-index: 10;">
+        <button id="reservationsFilterBtn" class="btn-reservations-filter">
+            <i class="fas fa-calendar-check"></i>
+            Mes Réservations
+        </button>
+    </div>
+
+>>>>>>> Stashed changes
     <!-- Content List -->
     <div class="event-list" id="eventList">
         {% for event in events %}
@@ -687,7 +709,8 @@
              data-event-description="{{ event.description }}"
              onclick="openEventDetail(this, event)"
              data-has-status="{% if registrationStatuses[event.id] is defined %}yes{% else %}no{% endif %}"
-             data-status-text="{% if registrationStatuses[event.id] is defined %}{{ registrationStatuses[event.id] }}{% endif %}"
+             data-status-text="{% if registrationStatuses[event.id] is defined %}{{ registrationStatuses[event.id].status }}{% endif %}"
+             data-registration-id="{% if registrationStatuses[event.id] is defined %}{{ registrationStatuses[event.id].id }}{% endif %}"
              data-is-full="{% if isFull %}yes{% else %}no{% endif %}"
         >
             {% if isFull %}
@@ -739,10 +762,19 @@
                         Événement complet
                     </button>
                 {% elseif registrationStatuses[event.id] is defined %}
-                    <button class="btn-event-action btn-registered" disabled onclick="event.stopPropagation()">
-                        <i class="fas fa-check-circle"></i>
-                        {{ registrationStatuses[event.id] }}
-                    </button>
+                    {% if registrationStatuses[event.id].status == 'Confirmé' %}
+                        <a href="{{ path('app_student_event_ticket', {'id': registrationStatuses[event.id].id}) }}" 
+                           class="btn-event-action btn-ticket" 
+                           onclick="event.stopPropagation()" 
+                           style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white;">
+                            <i class="fas fa-file-pdf"></i> Télécharger Ticket
+                        </a>
+                    {% else %}
+                        <button class="btn-event-action btn-registered" disabled onclick="event.stopPropagation()">
+                            <i class="fas fa-check-circle"></i>
+                            {{ registrationStatuses[event.id].status }}
+                        </button>
+                    {% endif %}
                 {% else %}
                     <button class="btn-event-action" onclick="event.stopPropagation(); openModal({{ event.id }})">
                         <i class="fas fa-calendar-check"></i>
@@ -772,12 +804,26 @@
                 
                 <div style="margin-bottom: 1.25rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: #64748b; font-weight: 600;">Nom Complet</label>
+<<<<<<< Updated upstream
                     <input type="text" name="name" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+=======
+                    <input type="text" name="name" id="participantName" required 
+                           value="{{ app.user ? app.user.name : '' }}"
+                           style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+                    <div id="nameError" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">Le nom doit contenir au moins 2 caractères.</div>
+>>>>>>> Stashed changes
                 </div>
 
                 <div style="margin-bottom: 1.25rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: #64748b; font-weight: 600;">Email</label>
+<<<<<<< Updated upstream
                     <input type="email" name="email" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+=======
+                    <input type="email" name="email" id="participantEmail" required 
+                           value="{{ app.user ? app.user.email : '' }}"
+                           style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
+                    <div id="emailError" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: none;">Veuillez saisir une adresse email valide.</div>
+>>>>>>> Stashed changes
                 </div>
 
                 <button type="submit" class="btn-primary-gradient" style="width: 100%; justify-content: center;">
@@ -1047,6 +1093,7 @@
             const description = card.dataset.eventDescription;
             const hasStatus = card.dataset.hasStatus === 'yes';
             const statusText = card.dataset.statusText;
+            const registrationId = card.dataset.registrationId;
             const isFull = card.dataset.isFull === 'yes';
             
             // Set header gradient based on event type
@@ -1085,12 +1132,20 @@
                     </button>
                 `;
             } else if (hasStatus) {
-                footer.innerHTML = `
-                    <button class="btn-event-action btn-registered" disabled style="width: 100%;">
-                        <i class="fas fa-check-circle"></i>
-                        ${statusText}
-                    </button>
-                `;
+                if (statusText === 'Confirmé') {
+                    footer.innerHTML = `
+                        <a href="/student/event/ticket/${registrationId}" class="btn-event-action btn-ticket" style="width: 100%; text-align: center; background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none;">
+                            <i class="fas fa-file-pdf"></i> Télécharger Ticket (PDF)
+                        </a>
+                    `;
+                } else {
+                    footer.innerHTML = `
+                        <button class="btn-event-action btn-registered" disabled style="width: 100%;">
+                            <i class="fas fa-check-circle"></i>
+                            ${statusText}
+                        </button>
+                    `;
+                }
             } else {
                 footer.innerHTML = `
                     <button class="btn-event-action" onclick="closeEventDetail(); openModal(${eventId})" style="width: 100%;">
@@ -1167,6 +1222,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentCategory = 'all';
     let currentSearchQuery = '';
     let currentSort = 'newest';
+<<<<<<< Updated upstream
+=======
+    let showOnlyRegistered = false;
+>>>>>>> Stashed changes
 
     function updateGrid() {
         if (!list) return;
@@ -1175,14 +1234,37 @@ document.addEventListener('DOMContentLoaded', function() {
         cards.forEach(card => {
             const title = card.getAttribute('data-title') || '';
             const cat = card.getAttribute('data-category') || '';
+<<<<<<< Updated upstream
             const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
             const matchesCat = currentCategory === 'all' || cat === currentCategory;
             card.style.display = (matchesSearch && matchesCat) ? 'grid' : 'none';
+=======
+            const hasStatus = card.getAttribute('data-has-status') === 'yes';
+            
+            const matchesSearch = title.toLowerCase().includes(currentSearchQuery.toLowerCase());
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            const matchesReservation = !showOnlyRegistered || hasStatus;
+            
+            card.style.display = (matchesSearch && matchesCat && matchesReservation) ? 'grid' : 'none';
+>>>>>>> Stashed changes
         });
 
         cards.forEach(card => list.appendChild(card));
     }
 
+<<<<<<< Updated upstream
+=======
+    // Reservation Filter Toggle
+    const resFilterBtn = document.getElementById('reservationsFilterBtn');
+    if (resFilterBtn) {
+        resFilterBtn.addEventListener('click', () => {
+            showOnlyRegistered = !showOnlyRegistered;
+            resFilterBtn.classList.toggle('active', showOnlyRegistered);
+            updateGrid();
+        });
+    }
+
+>>>>>>> Stashed changes
     // Setup Dropdowns
     setupDropdown('pageCategoryDropdown', (val) => {
         currentCategory = val;

@@ -45,7 +45,10 @@
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
+<<<<<<< Updated upstream
 /* User Profile Toggle Consistency */
+=======
+>>>>>>> Stashed changes
 .dashboard-header .user-profile-toggle:hover {
     background: rgba(255, 255, 255, 0.1) !important;
 }
@@ -61,7 +64,11 @@
     align-items: center;
     overflow: visible;
     padding-top: 100px;
+<<<<<<< Updated upstream
     margin-bottom: 4rem;
+=======
+    margin-bottom: 0;
+>>>>>>> Stashed changes
 }
 
 .hero-content-wrapper {
@@ -107,6 +114,7 @@
     display: inline-block;
 }
 
+<<<<<<< Updated upstream
 /* Vertical Filter Bar */
 .hero-filter-bar {
     display: flex;
@@ -233,6 +241,49 @@
 .hero-search-wrapper input::placeholder { color: #94a3b8; }
 .hero-filter-bar i { color: #6366f1; }
 
+=======
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem;
+    border-radius: 20px;
+    width: fit-content;
+    backdrop-filter: blur(10px);
+}
+
+.tab-btn {
+    padding: 0.85rem 1.75rem;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn.active {
+    background: white;
+    color: #6366f1;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tab-btn i {
+    font-size: 1rem;
+}
+>>>>>>> Stashed changes
 
 /* Waves */
 .hero-waves {
@@ -319,6 +370,7 @@
 
 /* Grid Adjustment */
 .dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+<<<<<<< Updated upstream
 .job-listings-section { padding: 0 10% 5rem; }
 
 /* Job Card Styling */
@@ -354,6 +406,753 @@
     font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
     transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
 }
+=======
+
+/* Content Sections */
+.content-section {
+    padding: 3rem 10% 5rem;
+    background: #f8fafc;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title i {
+    color: #6366f1;
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.filter-item:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.filter-item i {
+    color: #6366f1;
+}
+
+.filter-item input, .filter-item select {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-weight: 600;
+    color: #1e293b;
+    min-width: 150px;
+}
+
+.filter-item input::placeholder {
+    color: #94a3b8;
+}
+
+/* Custom Dropdown */
+.custom-dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.75rem 1.25rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-weight: 600;
+    color: #1e293b;
+    transition: all 0.2s;
+}
+
+.dropdown-toggle:hover {
+    border-color: #6366f1;
+}
+
+.dropdown-toggle i.arrow {
+    margin-left: auto;
+    color: #94a3b8;
+    transition: transform 0.3s;
+}
+
+.custom-dropdown.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    min-width: 200px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.custom-dropdown.active .dropdown-options {
+    display: block;
+    animation: dropdownAnim 0.3s ease;
+}
+
+@keyframes dropdownAnim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-opt {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.dropdown-opt:hover {
+    background: #f8fafc;
+    color: #6366f1;
+}
+
+.dropdown-opt.active {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
+/* Job Card Styling */
+.job-listings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.job-card, .candidature-card {
+    background: white; 
+    border-radius: 24px; 
+    padding: 2rem; 
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: grid; 
+    grid-template-columns: 80px 1fr auto; 
+    gap: 2rem;
+    min-width: 0;
+    align-items: center;
+}
+
+.job-card:hover, .candidature-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05); 
+    border-color: #6366f1; 
+}
+
+.job-company-logo, .candidature-icon { 
+    width: 80px; 
+    height: 80px; 
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); 
+    border-radius: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 1.5rem; 
+    color: white;
+}
+
+.candidature-icon {
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+}
+
+.job-info h2, .candidature-info h2 { 
+    font-size: 1.25rem; 
+    font-weight: 700; 
+    color: #1e293b; 
+    margin-bottom: 0.5rem; 
+}
+
+.job-meta, .candidature-meta { 
+    display: flex; 
+    gap: 1.5rem; 
+    color: #64748b; 
+    font-size: 0.9rem; 
+    font-weight: 500; 
+    flex-wrap: wrap;
+}
+
+.job-meta span, .candidature-meta span { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+}
+
+.job-tags { 
+    display: flex; 
+    gap: 0.75rem; 
+    margin-top: 1rem;
+}
+
+.job-tag { 
+    padding: 0.5rem 1rem; 
+    border-radius: 50px; 
+    font-size: 0.75rem; 
+    font-weight: 700; 
+    background: #eef2ff; 
+    color: #6366f1;
+}
+
+.tag-domain {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.candidature-desc {
+    margin-top: 0.75rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.status-badge i {
+    font-size: 0.5rem;
+}
+
+.status-en_attente {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.status-acceptee, .status-accepté {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.status-refusee, .status-refusé {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.btn-apply, .btn-view {
+    background: #f1f5f9; 
+    color: #1e293b; 
+    border: none; 
+    padding: 0.85rem 1.5rem;
+    border-radius: 12px; 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.btn-apply:hover, .btn-view:hover { 
+    background: #6366f1; 
+    color: white; 
+}
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white !important;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    text-decoration: none;
+    border: none !important;
+    outline: none !important;
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.35);
+    filter: brightness(1.1);
+}
+
+.btn-primary-gradient:active {
+    transform: translateY(0);
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #e2e8f0;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: #64748b;
+    font-weight: 700;
+}
+
+.empty-state p {
+    color: #94a3b8;
+}
+
+/* Create Candidature Modal */
+.create-modal {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.create-modal-content {
+    background-color: #fff;
+    margin: 3% auto;
+    padding: 2.5rem;
+    border-radius: 30px;
+    width: 60%;
+    max-width: 700px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    animation: slideIn 0.4s ease-out;
+}
+
+.create-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.create-modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.create-modal-header h2 i {
+    color: #6366f1;
+}
+
+.close-btn {
+    background: #f1f5f9;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 0.85rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: all 0.2s;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.form-group textarea {
+    min-height: 100px;
+}
+
+.form-group textarea.large {
+    min-height: 150px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+    border: none;
+    padding: 0.85rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    border: none;
+    padding: 0.85rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.35);
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-error {
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+/* File Upload Styling */
+.file-upload-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.file-upload-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.file-upload-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: #f8fafc;
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.file-upload-box:hover {
+    border-color: #6366f1;
+    background: #f1f5f9;
+}
+
+.file-upload-box.has-file {
+    border-style: solid;
+    border-color: #10b981;
+    background: #ecfdf5;
+}
+
+.file-upload-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+}
+
+.file-upload-box.has-file .file-upload-icon {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.file-upload-text {
+    flex: 1;
+}
+
+.file-upload-title {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 0.9rem;
+}
+
+.file-upload-subtitle {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.15rem;
+}
+
+.file-upload-box.has-file .file-upload-title {
+    color: #10b981;
+}
+
+.file-remove-btn {
+    background: #fee2e2;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    color: #ef4444;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 15;
+    position: relative;
+}
+
+.file-remove-btn:hover {
+    background: #fecaca;
+}
+
+.file-upload-box.has-file .file-remove-btn {
+    display: flex;
+}
+
+/* Range Slider Styling */
+.date-filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    min-width: 280px;
+}
+
+.date-slider-wrapper {
+    position: relative;
+    height: 20px;
+    margin-top: 5px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    outline: none;
+    background: transparent;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #6366f1;
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    z-index: 10;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: #4f46e5;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #6366f1;
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.slider-track {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.slider-track-fill {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 6px;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    border-radius: 10px;
+    z-index: 2;
+    transition: all 0.1s ease;
+}
+
+.date-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+}
+
+.date-label-box {
+    background: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6366f1;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.date-filter-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+@keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+>>>>>>> Stashed changes
 </style>
 {% endblock %}
 
@@ -369,6 +1168,7 @@
                     <span>Stage de Rêve</span>
                 </h1>
                 
+<<<<<<< Updated upstream
                 <div class="hero-filter-bar">
                     <!-- Category Dropdown -->
                     <div class="custom-dropdown" id="pageCategoryDropdown">
@@ -410,6 +1210,17 @@
                     <button class="btn-primary-gradient" onclick="alert('Ouverture de votre profil talent...')" style="margin-top: 1rem; width: fit-content;">
                         <i class="fas fa-user-tie"></i>
                         Mon Profil Talent
+=======
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button class="tab-btn {{ current_filters.tab == 'offres' or current_filters.tab is empty ? 'active' : '' }}" data-tab="offres">
+                        <i class="fas fa-briefcase"></i>
+                        Les offres
+                    </button>
+                    <button class="tab-btn {{ current_filters.tab == 'candidatures' ? 'active' : '' }}" data-tab="candidatures">
+                        <i class="fas fa-file-alt"></i>
+                        Les demandes
+>>>>>>> Stashed changes
                     </button>
                 </div>
             </div>
@@ -440,6 +1251,7 @@
         </div>
     </section>
 
+<<<<<<< Updated upstream
     <!-- Job Listings -->
     <section class="job-listings-section" id="jobGrid">
         {% for job in jobs %}
@@ -463,20 +1275,314 @@
             </div>
         </div>
         {% endfor %}
+=======
+    <!-- OFFRES Tab Content -->
+    <section class="content-section tab-content {{ current_filters.tab == 'offres' or current_filters.tab is empty ? 'active' : '' }}" id="offres-content">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-briefcase"></i> Offres de Stage</h2>
+        </div>
+        
+        <!-- Filters for Offres -->
+        <div class="filter-bar">
+            <div class="filter-item">
+                <i class="fas fa-search"></i>
+                <input type="text" id="offreSearch" placeholder="Rechercher une offre..." value="{{ current_filters.search }}">
+            </div>
+            
+            <div class="custom-dropdown" id="entrepriseDropdown">
+                <div class="dropdown-toggle">
+                    <i class="fas fa-building"></i>
+                    <span class="selected-value">{{ current_filters.entreprise != 'all' ? current_filters.entreprise : 'Toutes les entreprises' }}</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="dropdown-options">
+                    <div class="dropdown-opt {{ current_filters.entreprise == 'all' or current_filters.entreprise is empty ? 'active' : '' }}" data-value="all">Toutes les entreprises</div>
+                    {% for company in companies %}
+                        <div class="dropdown-opt {{ current_filters.entreprise == company.entreprise ? 'active' : '' }}" data-value="{{ company.entreprise }}">{{ company.entreprise }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Duration Filter -->
+            <div class="custom-dropdown" id="dureeDropdown">
+                <div class="dropdown-toggle">
+                    <i class="far fa-clock"></i>
+                    <span class="selected-value">
+                        {% if current_filters.duree == 'all' or current_filters.duree is empty %}
+                            Durées
+                        {% else %}
+                            {{ current_filters.duree }} mois
+                        {% endif %}
+                    </span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="dropdown-options">
+                    <div class="dropdown-opt {{ current_filters.duree == 'all' ? 'active' : '' }}" data-value="all">Toutes les durées</div>
+                    {% for d in durations %}
+                        <div class="dropdown-opt {{ current_filters.duree == d.duree ? 'active' : '' }}" data-value="{{ d.duree }}">{{ d.duree }} mois</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="custom-dropdown" id="offreSortDropdown">
+                <div class="dropdown-toggle">
+                    <i class="fas fa-sort-amount-down"></i>
+                    <span class="selected-value">{{ current_filters.sort == 'asc' ? 'Plus anciens' : 'Plus récents' }}</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="dropdown-options">
+                    <div class="dropdown-opt {{ current_filters.sort == 'desc' or current_filters.sort is empty ? 'active' : '' }}" data-value="desc">Plus récents</div>
+                    <div class="dropdown-opt {{ current_filters.sort == 'asc' ? 'active' : '' }}" data-value="asc">Plus anciens</div>
+                </div>
+            </div>
+
+            <!-- Offre Date Filter -->
+            <div class="date-filter-container">
+                <div class="date-filter-label">Date de publication</div>
+                <div class="date-slider-wrapper">
+                    <input type="range" id="minDateSliderOffre" 
+                           min="{{ offerDateRange.min }}" 
+                           max="{{ offerDateRange.max }}" 
+                           value="{{ current_filters.min_date ?: offerDateRange.min }}" 
+                           oninput="updateSliderLabels('Offre')">
+                    <input type="range" id="maxDateSliderOffre" 
+                           min="{{ offerDateRange.min }}" 
+                           max="{{ offerDateRange.max }}" 
+                           value="{{ current_filters.max_date ?: offerDateRange.max }}" 
+                           oninput="updateSliderLabels('Offre')">
+                    <div class="slider-track"></div>
+                    <div class="slider-track-fill" id="sliderTrackFillOffre"></div>
+                </div>
+                <div class="date-labels">
+                    <div class="date-label-box" id="minDateLabelOffre">{{ (current_filters.min_date ?: offerDateRange.min)|date('d/m/Y') }}</div>
+                    <div class="date-label-box" id="maxDateLabelOffre">{{ (current_filters.max_date ?: offerDateRange.max)|date('d/m/Y') }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Offres List -->
+        <div class="job-listings-section" id="offresGrid">
+            {{ include('student/_offer_cards_student.html.twig') }}
+        </div>
+    </section>
+
+    <!-- Details Modal (Offers) -->
+    <div id="offerDetailsModal" style="display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);">
+        <div class="modal-content" style="background-color: #fff; margin: 5% auto; padding: 2.5rem; border-radius: 30px; width: 70%; max-width: 1000px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; animation: slideIn 0.4s ease-out;">
+            <div id="offerDetailsBody">
+                <!-- Loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal (Candidatures) -->
+    <div id="candidatureDetailsModal" style="display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);">
+        <div class="modal-content" style="background-color: #fff; margin: 5% auto; padding: 2.5rem; border-radius: 30px; width: 70%; max-width: 1000px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; animation: slideIn 0.4s ease-out;">
+            <div id="candidatureDetailsBody">
+                <!-- Loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Candidature Modal -->
+    <div id="createCandidatureModal" class="create-modal">
+        <div class="create-modal-content">
+            <div class="create-modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Créer une Demande</h2>
+                <button class="close-btn" onclick="closeCreateCandidatureModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="createCandidatureForm">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="candidature_titre">Titre de la demande *</label>
+                        <input type="text" id="candidature_titre" name="titre" placeholder="Ex: Stage en développement web" required>
+                        <span class="form-error" id="error_titre"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="candidature_domaine">Domaine *</label>
+                        <input type="text" id="candidature_domaine" name="domaine" placeholder="Ex: Informatique, Marketing..." required>
+                        <span class="form-error" id="error_domaine"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>CV (fichier PDF) *</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="candidature_cv" name="cv" accept=".pdf,application/pdf" class="file-upload-input" required>
+                            <div class="file-upload-box" id="cvUploadBox">
+                                <div class="file-upload-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="file-upload-text">
+                                    <div class="file-upload-title" id="cvFileName">Choisir un fichier PDF</div>
+                                    <div class="file-upload-subtitle">Taille max: 5 Mo</div>
+                                </div>
+                                <button type="button" class="file-remove-btn" id="cvRemoveBtn" onclick="removeCvFile(event)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span class="form-error" id="error_cv"></span>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="candidature_competences">Compétences *</label>
+                        <textarea id="candidature_competences" name="competences" placeholder="Listez vos compétences clés séparées par des virgules..." required></textarea>
+                        <span class="form-error" id="error_competences"></span>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="candidature_description">Description de votre profil *</label>
+                        <textarea id="candidature_description" name="description" class="large" placeholder="Décrivez votre profil, vos motivations et ce que vous recherchez (min 20 caractères)..." required></textarea>
+                        <span class="form-error" id="error_description"></span>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="candidature_lettre">Lettre de motivation *</label>
+                        <textarea id="candidature_lettre" name="lettre_motivation" class="large" placeholder="Rédigez votre lettre de motivation (min 50 caractères)..." required></textarea>
+                        <span class="form-error" id="error_lettre"></span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCreateCandidatureModal()">Annuler</button>
+                    <button type="submit" class="btn-submit" id="submitCandidatureBtn">
+                        <i class="fas fa-paper-plane"></i> Soumettre la demande
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CANDIDATURES Tab Content -->
+    <section class="content-section tab-content {{ current_filters.tab == 'candidatures' ? 'active' : '' }}" id="candidatures-content">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-file-alt"></i> Les Demandes</h2>
+            <button class="btn-primary-gradient" onclick="openCreateCandidatureModal()">
+                <i class="fas fa-plus"></i> Créer une demande
+            </button>
+        </div>
+        
+        <!-- Filters for Candidatures -->
+        <div class="filter-bar">
+            <!-- Ownership Filter -->
+            <div class="filter-item" style="gap: 1rem; padding: 0.5rem 1rem;">
+                <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: 600; color: #64748b;">
+                    <input type="radio" name="ownership" value="all" {{ current_filters.ownership == 'all' or current_filters.ownership is empty ? 'checked' : '' }} onchange="applyCandidatureFilters()">
+                    Toutes
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: 600; color: #6366f1;">
+                    <input type="radio" name="ownership" value="mine" {{ current_filters.ownership == 'mine' ? 'checked' : '' }} onchange="applyCandidatureFilters()">
+                    Mes demandes
+                </label>
+            </div>
+            <div class="filter-item">
+                <i class="fas fa-search"></i>
+                <input type="text" id="candidatureSearch" placeholder="Rechercher une candidature..." value="{{ current_filters.search }}">
+            </div>
+            
+            <div class="custom-dropdown" id="domaineDropdown">
+                <div class="dropdown-toggle">
+                    <i class="fas fa-folder"></i>
+                    <span class="selected-value">{{ current_filters.domaine != 'all' ? current_filters.domaine : 'Tous les domaines' }}</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="dropdown-options">
+                    <div class="dropdown-opt {{ current_filters.domaine == 'all' or current_filters.domaine is empty ? 'active' : '' }}" data-value="all">Tous les domaines</div>
+                    {% for domain in domains %}
+                        <div class="dropdown-opt {{ current_filters.domaine == domain.domaine ? 'active' : '' }}" data-value="{{ domain.domaine }}">{{ domain.domaine }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="custom-dropdown" id="candidatureSortDropdown">
+                <div class="dropdown-toggle">
+                    <i class="fas fa-sort-amount-down"></i>
+                    <span class="selected-value">{{ current_filters.sort == 'asc' ? 'Plus anciens' : 'Plus récents' }}</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="dropdown-options">
+                    <div class="dropdown-opt {{ current_filters.sort == 'desc' or current_filters.sort is empty ? 'active' : '' }}" data-value="desc">Plus récents</div>
+                    <div class="dropdown-opt {{ current_filters.sort == 'asc' ? 'active' : '' }}" data-value="asc">Plus anciens</div>
+                </div>
+            </div>
+
+            <!-- Candidature Date Filter -->
+            <div class="date-filter-container">
+                <div class="date-filter-label">Date de publication</div>
+                <div class="date-slider-wrapper">
+                    <input type="range" id="minDateSliderCandidature" 
+                           min="{{ candidatureDateRange.min }}" 
+                           max="{{ candidatureDateRange.max }}" 
+                           value="{{ current_filters.min_date ?: candidatureDateRange.min }}" 
+                           oninput="updateSliderLabels('Candidature')">
+                    <input type="range" id="maxDateSliderCandidature" 
+                           min="{{ candidatureDateRange.min }}" 
+                           max="{{ candidatureDateRange.max }}" 
+                           value="{{ current_filters.max_date ?: candidatureDateRange.max }}" 
+                           oninput="updateSliderLabels('Candidature')">
+                    <div class="slider-track"></div>
+                    <div class="slider-track-fill" id="sliderTrackFillCandidature"></div>
+                </div>
+                <div class="date-labels">
+                    <div class="date-label-box" id="minDateLabelCandidature">{{ (current_filters.min_date ?: candidatureDateRange.min)|date('d/m/Y') }}</div>
+                    <div class="date-label-box" id="maxDateLabelCandidature">{{ (current_filters.max_date ?: candidatureDateRange.max)|date('d/m/Y') }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Candidatures List -->
+        <div class="job-listings-section" id="candidaturesGrid">
+            {{ include('student/_candidature_cards.html.twig') }}
+        </div>
+>>>>>>> Stashed changes
     </section>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+<<<<<<< Updated upstream
     const grid = document.getElementById('jobGrid');
 
     // Unified Dropdown Logic (Reinforced)
+=======
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    let currentTab = '{{ current_filters.tab|default("offres") }}';
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            currentTab = tab;
+            
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tab + '-content') {
+                    content.classList.add('active');
+                }
+            });
+            
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tab);
+            window.history.pushState({}, '', url);
+        });
+    });
+    
+    // Dropdown logic
+>>>>>>> Stashed changes
     function setupDropdown(dropdownId, onSelect) {
         const dropdown = document.getElementById(dropdownId);
         if (!dropdown) return;
         
         const toggle = dropdown.querySelector('.dropdown-toggle');
         const options = dropdown.querySelectorAll('.dropdown-opt');
+<<<<<<< Updated upstream
         const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
 
         toggle.addEventListener('click', (e) => {
@@ -489,6 +1595,20 @@ document.addEventListener('DOMContentLoaded', function() {
         options.forEach(opt => {
             opt.addEventListener('click', (e) => {
                 e.stopPropagation();
+=======
+        const selectedSpan = toggle.querySelector('.selected-value');
+        
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('active');
+            });
+            dropdown.classList.toggle('active');
+        });
+        
+        options.forEach(opt => {
+            opt.addEventListener('click', () => {
+>>>>>>> Stashed changes
                 const val = opt.getAttribute('data-value');
                 selectedSpan.textContent = opt.textContent.trim();
                 options.forEach(o => o.classList.remove('active'));
@@ -498,6 +1618,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+<<<<<<< Updated upstream
 
     // Window clicks to close dropdowns
     window.onclick = (e) => { 
@@ -544,6 +1665,627 @@ document.addEventListener('DOMContentLoaded', function() {
             updateGrid();
         });
     }
+=======
+    
+    window.addEventListener('click', () => {
+        document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+    });
+    
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+    
+    // Format date for labels
+    function formatDate(timestamp) {
+        const d = new Date(timestamp * 1000);
+        return d.toLocaleDateString('fr-FR');
+    }
+
+    // Apply filters for offers
+    window.applyOffreFilters = function() {
+        const search = document.getElementById('offreSearch').value;
+        const entreprise = document.querySelector('#entrepriseDropdown .active')?.getAttribute('data-value') || 'all';
+        const duree = document.querySelector('#dureeDropdown .active')?.getAttribute('data-value') || 'all';
+        const sort = document.querySelector('#offreSortDropdown .active')?.getAttribute('data-value') || 'desc';
+        const minDate = document.getElementById('minDateSliderOffre').value;
+        const maxDate = document.getElementById('maxDateSliderOffre').value;
+        
+        const params = new URLSearchParams();
+        params.set('tab', 'offres');
+        if (search) params.set('searchbar', search);
+        if (entreprise !== 'all') params.set('entreprise', entreprise);
+        if (duree !== 'all') params.set('duree', duree);
+        if (sort !== 'desc') params.set('sort', sort);
+        params.set('min_date', minDate);
+        params.set('max_date', maxDate);
+        
+        const url = `${window.location.pathname}?${params.toString()}`;
+        window.history.pushState({}, '', url);
+        
+        const grid = document.getElementById('offresGrid');
+        if (grid) grid.style.opacity = '0.5';
+        
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(response => response.text())
+            .then(html => {
+                if (grid) {
+                    grid.innerHTML = html;
+                    grid.style.opacity = '1';
+                }
+            });
+    }
+    
+    // Apply filters for candidatures
+    window.applyCandidatureFilters = function() {
+        const search = document.getElementById('candidatureSearch').value;
+        const domaine = document.querySelector('#domaineDropdown .active')?.getAttribute('data-value') || 'all';
+        const sort = document.querySelector('#candidatureSortDropdown .active')?.getAttribute('data-value') || 'desc';
+        const ownership = document.querySelector('input[name="ownership"]:checked')?.value || 'all';
+        const minDate = document.getElementById('minDateSliderCandidature').value;
+        const maxDate = document.getElementById('maxDateSliderCandidature').value;
+        
+        const params = new URLSearchParams();
+        params.set('tab', 'candidatures');
+        if (search) params.set('searchbar', search);
+        if (domaine !== 'all') params.set('domaine', domaine);
+        if (sort !== 'desc') params.set('sort', sort);
+        if (ownership !== 'all') params.set('ownership', ownership);
+        params.set('min_date', minDate);
+        params.set('max_date', maxDate);
+        
+        const url = `${window.location.pathname}?${params.toString()}`;
+        window.history.pushState({}, '', url);
+        
+        const grid = document.getElementById('candidaturesGrid');
+        if (grid) grid.style.opacity = '0.5';
+        
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(response => response.text())
+            .then(html => {
+                if (grid) {
+                    grid.innerHTML = html;
+                    grid.style.opacity = '1';
+                }
+            });
+    }
+
+    const debouncedOffreFilter = debounce(applyOffreFilters, 300);
+    const debouncedCandidatureFilter = debounce(applyCandidatureFilters, 300);
+
+    // Update Slider Labels
+    window.updateSliderLabels = function(type) {
+        const minSlider = document.getElementById('minDateSlider' + type);
+        const maxSlider = document.getElementById('maxDateSlider' + type);
+        const minLabel = document.getElementById('minDateLabel' + type);
+        const maxLabel = document.getElementById('maxDateLabel' + type);
+        const trackFill = document.getElementById('sliderTrackFill' + type);
+
+        if (!minSlider || !maxSlider) return;
+
+        const valMin = parseInt(minSlider.value);
+        const valMax = parseInt(maxSlider.value);
+        const minLimit = parseInt(minSlider.min);
+        const maxLimit = parseInt(minSlider.max);
+
+        if (valMin > valMax) {
+            minSlider.value = valMax;
+        }
+
+        // Calculate percentage for track fill
+        const range = maxLimit - minLimit;
+        if (trackFill) {
+            if (range <= 0) {
+                // If range is 0 or negative (shouldn't happen with min/max),
+                // set track to a small point or full width depending on context.
+                // Here, we'll make it a small point in the middle if min/max are the same.
+                // Or full width if min/max are effectively the same and values are at limits.
+                if (minLimit === maxLimit) { // Single day range
+                    trackFill.style.left = '0%';
+                    trackFill.style.width = '100%';
+                } else { // Should not happen, but as a fallback
+                    trackFill.style.left = '50%';
+                    trackFill.style.width = '0px';
+                }
+            } else {
+                const leftPercent = ((valMin - minLimit) / range) * 100;
+                const widthPercent = ((valMax - valMin) / range) * 100;
+                trackFill.style.left = leftPercent + '%';
+                trackFill.style.width = widthPercent + '%';
+            }
+        }
+
+        if (minLabel) minLabel.textContent = formatDate(minSlider.value);
+        if (maxLabel) maxLabel.textContent = formatDate(maxSlider.value);
+        
+        if (type === 'Offre') {
+            debouncedOffreFilter();
+        } else {
+            debouncedCandidatureFilter();
+        }
+    };
+
+    // Slider specific constraints (overlap prevention)
+    function setupSliders(type) {
+        const minSlider = document.getElementById('minDateSlider' + type);
+        const maxSlider = document.getElementById('maxDateSlider' + type);
+        
+        if (!minSlider || !maxSlider) return;
+
+        minSlider.oninput = () => {
+            if (parseInt(minSlider.value) > parseInt(maxSlider.value)) minSlider.value = maxSlider.value;
+            updateSliderLabels(type);
+        };
+
+        maxSlider.oninput = () => {
+            if (parseInt(maxSlider.value) < parseInt(minSlider.value)) maxSlider.value = minSlider.value;
+            updateSliderLabels(type);
+        };
+    }
+
+    setupSliders('Offre');
+    setupSliders('Candidature');
+
+    // Initial track fill update (using direct call to avoid initial fetch if unwanted, 
+    // but here we want to sync labels and track)
+    updateSliderLabels('Offre');
+    updateSliderLabels('Candidature');
+    
+    // Setup offre filters
+    const offreSearch = document.getElementById('offreSearch');
+    if (offreSearch) offreSearch.addEventListener('input', debouncedOffreFilter);
+    setupDropdown('entrepriseDropdown', applyOffreFilters);
+    setupDropdown('dureeDropdown', applyOffreFilters);
+    setupDropdown('offreSortDropdown', applyOffreFilters);
+    
+    // Setup candidature filters
+    const candidatureSearch = document.getElementById('candidatureSearch');
+    if (candidatureSearch) candidatureSearch.addEventListener('input', debouncedCandidatureFilter);
+    setupDropdown('domaineDropdown', applyCandidatureFilters);
+    setupDropdown('candidatureSortDropdown', applyCandidatureFilters);
+
+    // Offer Details & Application Logic
+    window.showOfferDetails = function(id) {
+        const modal = document.getElementById('offerDetailsModal');
+        const body = document.getElementById('offerDetailsBody');
+        if (modal) modal.style.display = 'block';
+        
+        fetch(`/student/offer/${id}/details`)
+            .then(response => response.text())
+            .then(html => {
+                if (body) {
+                    body.innerHTML = html;
+                    
+                    // Add listener for CV file input in the loaded content
+                    const cvInput = document.getElementById('applicationCvFile');
+                    if (cvInput) {
+                        cvInput.addEventListener('change', function() {
+                            const file = this.files[0];
+                            const box = document.getElementById('applicationCvBox');
+                            const nameEl = document.getElementById('applicationCvFileName');
+                            
+                            if (file) {
+                                if (file.type !== 'application/pdf') {
+                                    alert('Veuillez sélectionner un fichier PDF.');
+                                    this.value = '';
+                                    return;
+                                }
+                                if (file.size > 5 * 1024 * 1024) {
+                                    alert('Le fichier est trop volumineux. Taille max: 5 Mo.');
+                                    this.value = '';
+                                    return;
+                                }
+                                
+                                if (box) {
+                                    box.style.borderStyle = 'solid';
+                                    box.style.borderColor = '#10b981';
+                                    box.style.background = '#ecfdf5';
+                                    const icon = box.querySelector('.fas.fa-file-pdf');
+                                    if (icon) icon.parentNode.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                                }
+                                if (nameEl) {
+                                    nameEl.textContent = file.name;
+                                    nameEl.style.color = '#10b981';
+                                }
+                            }
+                        });
+                    }
+                }
+            })
+            .catch(err => {
+                if (body) body.innerHTML = '<p style="color: red; padding: 2rem; text-align: center;">Erreur lors du chargement des détails.</p>';
+            });
+    };
+
+    window.closeOfferDetailsModal = function() {
+        const modal = document.getElementById('offerDetailsModal');
+        if (modal) modal.style.display = 'none';
+    };
+
+    window.showCandidatureDetails = function(id) {
+        const modal = document.getElementById('candidatureDetailsModal');
+        const body = document.getElementById('candidatureDetailsBody');
+        if (modal) modal.style.display = 'block';
+        
+        fetch(`/student/candidature/${id}`)
+            .then(response => response.text())
+            .then(html => {
+                if (body) body.innerHTML = html;
+            })
+            .catch(err => {
+                if (body) body.innerHTML = '<p style="color: red; padding: 2rem; text-align: center;">Erreur lors du chargement des détails.</p>';
+            });
+    };
+
+    window.closeCandidatureDetailsModal = function() {
+        const modal = document.getElementById('candidatureDetailsModal');
+        if (modal) modal.style.display = 'none';
+    };
+
+    window.submitApplication = function(id) {
+        const titreInput = document.getElementById('applicationTitre');
+        const domaineInput = document.getElementById('applicationDomaine');
+        const competencesInput = document.getElementById('applicationCompetences');
+        const descriptionInput = document.getElementById('applicationDescription');
+        const motivationInput = document.getElementById('motivationLetter');
+        const cvInput = document.getElementById('applicationCvFile');
+        
+        const titreError = document.getElementById('titreError');
+        const domaineError = document.getElementById('domaineError');
+        const competencesError = document.getElementById('competencesError');
+        const descriptionError = document.getElementById('descriptionError');
+        const motivationError = document.getElementById('motivationError');
+        const cvError = document.getElementById('cvError');
+        
+        let isValid = true;
+        
+        // Reset errors
+        [titreError, domaineError, competencesError, descriptionError, motivationError, cvError].forEach(el => {
+            if (el) {
+                el.style.display = 'none';
+                el.textContent = '';
+            }
+        });
+        [titreInput, domaineInput, competencesInput, descriptionInput, motivationInput].forEach(el => {
+            if (el) el.style.borderColor = '#e2e8f0';
+        });
+
+        // Validation
+        if (!titreInput || titreInput.value.trim().length < 5) {
+            if (titreError) {
+                titreError.textContent = "Le titre doit faire au moins 5 caractères.";
+                titreError.style.display = 'block';
+            }
+            if (titreInput) titreInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        if (!domaineInput || !domaineInput.value.trim()) {
+            if (domaineError) {
+                domaineError.textContent = "Le domaine est obligatoire.";
+                domaineError.style.display = 'block';
+            }
+            if (domaineInput) domaineInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        if (!competencesInput || !competencesInput.value.trim()) {
+            if (competencesError) {
+                competencesError.textContent = "Les compétences sont obligatoires.";
+                competencesError.style.display = 'block';
+            }
+            if (competencesInput) competencesInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        if (!descriptionInput || descriptionInput.value.trim().length < 20) {
+            if (descriptionError) {
+                descriptionError.textContent = "La description doit faire au moins 20 caractères.";
+                descriptionError.style.display = 'block';
+            }
+            if (descriptionInput) descriptionInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+
+        const cvFile = cvInput ? cvInput.files[0] : null;
+        if (!cvFile) {
+            if (cvError) {
+                cvError.textContent = "Le CV est obligatoire.";
+                cvError.style.display = 'block';
+            }
+            isValid = false;
+        } else if (cvFile.type !== 'application/pdf') {
+            if (cvError) {
+                cvError.textContent = "Le fichier doit être au format PDF.";
+                cvError.style.display = 'block';
+            }
+            isValid = false;
+        } else if (cvFile.size > 5 * 1024 * 1024) {
+            if (cvError) {
+                cvError.textContent = "Le fichier est trop volumineux (max 5 Mo).";
+                cvError.style.display = 'block';
+            }
+            isValid = false;
+        }
+        
+        const motivationValue = motivationInput ? motivationInput.value.trim() : '';
+        if (motivationValue.length < 50) {
+            if (motivationInput) motivationInput.style.borderColor = '#ef4444';
+            if (motivationError) {
+                motivationError.textContent = "Votre lettre de motivation doit faire au moins 50 caractères.";
+                motivationError.style.display = 'block';
+            }
+            isValid = false;
+        }
+        
+        if (!isValid) return;
+
+        if (!confirm('Voulez-vous vraiment envoyer cette candidature ?')) return;
+
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('titre', titreInput.value.trim());
+        formData.append('domaine', domaineInput.value.trim());
+        formData.append('competences', competencesInput.value.trim());
+        formData.append('description', descriptionInput.value.trim());
+        formData.append('cv', cvFile);
+        formData.append('motivation', motivationValue);
+
+        fetch(`/student/offer/${id}/apply`, {
+            method: 'POST',
+            headers: { 
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                closeOfferDetailsModal();
+                if (window.applyCandidatureFilters) window.applyCandidatureFilters();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(err => {
+            alert('Une erreur est survenue lors de l\'envoi de votre candidature.');
+        });
+    };
+
+    window.applyToOffer = function(id) {
+        // Rediriger vers les détails pour que l'étudiant puisse remplir sa lettre
+        showOfferDetails(id);
+    };
+
+    // Create Candidature Modal Functions
+    window.openCreateCandidatureModal = function() {
+        const modal = document.getElementById('createCandidatureModal');
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    window.closeCreateCandidatureModal = function() {
+        const modal = document.getElementById('createCandidatureModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            // Reset form
+            const form = document.getElementById('createCandidatureForm');
+            if (form) form.reset();
+            // Hide all errors
+            document.querySelectorAll('.form-error').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+            // Reset input borders
+            document.querySelectorAll('#createCandidatureForm input, #createCandidatureForm textarea').forEach(el => {
+                el.style.borderColor = '#e2e8f0';
+            });
+        }
+    };
+
+    // Form validation helper
+    function showFieldError(fieldId, message) {
+        const errorEl = document.getElementById('error_' + fieldId);
+        const inputEl = document.getElementById('candidature_' + fieldId);
+        if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+        if (inputEl) {
+            inputEl.style.borderColor = '#ef4444';
+        }
+    }
+
+    function clearFieldError(fieldId) {
+        const errorEl = document.getElementById('error_' + fieldId);
+        const inputEl = document.getElementById('candidature_' + fieldId);
+        if (errorEl) {
+            errorEl.textContent = '';
+            errorEl.style.display = 'none';
+        }
+        if (inputEl) {
+            inputEl.style.borderColor = '#e2e8f0';
+        }
+    }
+
+    // File input change handler
+    const cvInput = document.getElementById('candidature_cv');
+    if (cvInput) {
+        cvInput.addEventListener('change', function() {
+            const file = this.files[0];
+            const box = document.getElementById('cvUploadBox');
+            const nameEl = document.getElementById('cvFileName');
+            
+            if (file) {
+                // Validate file type
+                if (file.type !== 'application/pdf') {
+                    alert('Veuillez sélectionner un fichier PDF.');
+                    this.value = '';
+                    return;
+                }
+                
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Le fichier est trop volumineux. Taille max: 5 Mo.');
+                    this.value = '';
+                    return;
+                }
+                
+                box.classList.add('has-file');
+                nameEl.textContent = file.name;
+            } else {
+                box.classList.remove('has-file');
+                nameEl.textContent = 'Choisir un fichier PDF';
+            }
+        });
+    }
+    
+    // Remove CV file
+    window.removeCvFile = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const input = document.getElementById('candidature_cv');
+        const box = document.getElementById('cvUploadBox');
+        const nameEl = document.getElementById('cvFileName');
+        
+        if (input) input.value = '';
+        if (box) box.classList.remove('has-file');
+        if (nameEl) nameEl.textContent = 'Choisir un fichier PDF';
+    };
+
+    // Handle form submission
+    const createForm = document.getElementById('createCandidatureForm');
+    if (createForm) {
+        createForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear all previous errors
+            ['titre', 'domaine', 'cv', 'competences', 'description', 'lettre'].forEach(clearFieldError);
+            
+            // Gather form data
+            const titre = document.getElementById('candidature_titre').value.trim();
+            const domaine = document.getElementById('candidature_domaine').value.trim();
+            const cvFile = document.getElementById('candidature_cv').files[0];
+            const competences = document.getElementById('candidature_competences').value.trim();
+            const description = document.getElementById('candidature_description').value.trim();
+            const lettreMotivation = document.getElementById('candidature_lettre').value.trim();
+            
+            // Validation
+            let isValid = true;
+            
+            if (titre.length < 5) {
+                showFieldError('titre', 'Le titre doit faire au moins 5 caractères.');
+                isValid = false;
+            }
+            
+            if (!domaine) {
+                showFieldError('domaine', 'Le domaine est obligatoire.');
+                isValid = false;
+            }
+            
+            if (!cvFile) {
+                showFieldError('cv', 'Le CV (fichier PDF) est obligatoire.');
+                isValid = false;
+            } else if (cvFile.type !== 'application/pdf') {
+                showFieldError('cv', 'Le fichier doit être au format PDF.');
+                isValid = false;
+            } else if (cvFile.size > 5 * 1024 * 1024) {
+                showFieldError('cv', 'Le fichier est trop volumineux (max 5 Mo).');
+                isValid = false;
+            }
+            
+            if (!competences) {
+                showFieldError('competences', 'Les compétences sont obligatoires.');
+                isValid = false;
+            }
+            
+            if (description.length < 20) {
+                showFieldError('description', 'La description doit faire au moins 20 caractères.');
+                isValid = false;
+            }
+            
+            if (lettreMotivation.length < 50) {
+                showFieldError('lettre', 'La lettre de motivation doit faire au moins 50 caractères.');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('submitCandidatureBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+            }
+            
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('titre', titre);
+            formData.append('domaine', domaine);
+            formData.append('cv', cvFile);
+            formData.append('competences', competences);
+            formData.append('description', description);
+            formData.append('lettre_motivation', lettreMotivation);
+            
+            // Send request with FormData
+            fetch('/student/career/create-candidature', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeCreateCandidatureModal();
+                    alert('Votre demande a été créée avec succès !');
+                    // Refresh candidatures list
+                    if (window.applyCandidatureFilters) {
+                        applyCandidatureFilters();
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    alert(data.message || 'Une erreur est survenue.');
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Une erreur est survenue lors de la création de votre demande.');
+            })
+            .finally(() => {
+                // Re-enable submit button
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Soumettre la demande';
+                }
+            });
+        });
+    }
+
+    // Close on click outside
+    window.onclick = function(event) {
+        const offerModal = document.getElementById('offerDetailsModal');
+        const candModal = document.getElementById('candidatureDetailsModal');
+        const createModal = document.getElementById('createCandidatureModal');
+        if (event.target == offerModal) {
+            closeOfferDetailsModal();
+        } else if (event.target == candModal) {
+            closeCandidatureDetailsModal();
+        } else if (event.target == createModal) {
+            closeCreateCandidatureModal();
+        }
+    };
+>>>>>>> Stashed changes
 });
 </script>
 {% endblock %}

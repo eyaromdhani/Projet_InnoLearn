@@ -460,6 +460,7 @@
                         <div class="dropdown-options">
                             <div class="dropdown-opt active" data-value="newest">Plus récents</div>
                             <div class="dropdown-opt" data-value="rating">Mieux notés</div>
+<<<<<<< Updated upstream
                             <div class="dropdown-opt" data-value="price">Prix</div>
                         </div>
                     </div>
@@ -468,12 +469,22 @@
                         <i class="fas fa-plus"></i>
                         Ajouter un Cours
                     </button>
+=======
+                            <div class="dropdown-opt" data-value="level">Niveau</div>
+                        </div>
+                    </div>
+
+>>>>>>> Stashed changes
                 </div>
             </div>
             
             <div class="hero-visual">
                 <div class="hero-illustration-wrapper">
+<<<<<<< Updated upstream
                     <img src="{{ asset('images/student_hero.png') }}" class="hero-illustration" alt="Courses illustration">
+=======
+                    <img src="{{ asset('images/teacher_hero.png') }}?v=2" class="hero-illustration" alt="Courses illustration">
+>>>>>>> Stashed changes
                 </div>
                 <div class="hero-frame frame-1"></div>
                 <div class="hero-frame frame-2"></div>
@@ -500,13 +511,18 @@
     <!-- Content Grid -->
     <div class="course-catalog-grid" id="courseGrid">
         {% for course in courses %}
+<<<<<<< Updated upstream
         <div class="course-card-premium" data-category="{{ course.category|lower }}" data-price="{{ course.price }}" data-rating="{{ course.rating }}" data-title="{{ course.title|lower }}">
+=======
+        <a href="{{ path('app_enseignant_category_show', {'id': course.id}) }}" class="course-card-premium" data-category="{{ course.category|lower }}" data-title="{{ course.title|lower }}" data-level="{{ course.niveau }}" style="text-decoration: none;">
+>>>>>>> Stashed changes
             <div class="course-image-wrapper">
                 <img src="{{ course.image }}" alt="{{ course.title }}">
                 <div class="course-badge">{{ course.category }}</div>
             </div>
             <div class="course-content">
                 <h3>{{ course.title }}</h3>
+<<<<<<< Updated upstream
                 <div class="course-teacher">
                     <i class="fas fa-user-circle"></i>
                     <span>{{ course.teacher }}</span>
@@ -520,10 +536,28 @@
                 </div>
             </div>
         </div>
+=======
+                {% if course.description %}
+                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;">
+                    {{ course.description|length > 100 ? course.description|slice(0, 100) ~ '...' : course.description }}
+                </p>
+                {% endif %}
+                <div class="course-meta" style="border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-top: auto;">
+                    {% if course.niveau %}
+                    <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                        <i class="fas fa-layer-group"></i>
+                        {{ course.niveau }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+>>>>>>> Stashed changes
         {% endfor %}
     </div>
 </div>
 
+<<<<<<< Updated upstream
 <!-- Modal: Add Course -->
 <div class="modal-overlay" id="addCourseModal">
     <div class="modal-container">
@@ -576,6 +610,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('closeModalBtn');
     const form = document.getElementById('addCourseForm');
     const grid = document.getElementById('courseGrid');
+=======
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('courseGrid');
+
+>>>>>>> Stashed changes
     // Unified Dropdown Logic (Reinforced)
     function setupDropdown(dropdownId, onSelect) {
         const dropdown = document.getElementById(dropdownId);
@@ -585,6 +626,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const toggle = dropdown.querySelector('.dropdown-toggle');
+<<<<<<< Updated upstream
         const optionsList = dropdown.querySelector('.dropdown-options');
         const options = dropdown.querySelectorAll('.dropdown-opt');
         const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
@@ -592,6 +634,13 @@ document.addEventListener('DOMContentLoaded', function() {
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
             console.log('Toggle clicked for:', dropdownId);
+=======
+        const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
+        const options = dropdown.querySelectorAll('.dropdown-opt');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+>>>>>>> Stashed changes
             const isActive = dropdown.classList.contains('active');
             
             // Close all other dropdowns
@@ -599,7 +648,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!isActive) {
                 dropdown.classList.add('active');
+<<<<<<< Updated upstream
                 console.log('Dropdown opened:', dropdownId);
+=======
+>>>>>>> Stashed changes
             }
         });
 
@@ -607,7 +659,10 @@ document.addEventListener('DOMContentLoaded', function() {
             opt.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const val = opt.getAttribute('data-value');
+<<<<<<< Updated upstream
                 console.log('Option selected:', val);
+=======
+>>>>>>> Stashed changes
                 selectedSpan.textContent = opt.textContent.trim();
                 
                 options.forEach(o => o.classList.remove('active'));
@@ -619,12 +674,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+<<<<<<< Updated upstream
     // Modal logic
     if(openBtn) openBtn.onclick = () => modal.classList.add('active');
     if(closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
     window.onclick = (e) => { 
         if(e.target === modal) modal.classList.remove('active');
         // Close dropdowns on outside click
+=======
+    window.onclick = (e) => { 
+>>>>>>> Stashed changes
         if (!e.target.closest('.custom-dropdown')) {
             document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
         }
@@ -635,6 +694,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSearchQuery = '';
     let currentSort = 'newest';
 
+<<<<<<< Updated upstream
+=======
+    const levelOrder = {
+        'Débutant': 1,
+        'Intermédiaire': 2,
+        'Avancé': 3
+    };
+
+>>>>>>> Stashed changes
     function updateGrid() {
         let cards = Array.from(grid.querySelectorAll('.course-card-premium'));
         
@@ -649,6 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
         });
 
+<<<<<<< Updated upstream
         // Sort (only visible cards if needed, but we sort the whole collection)
         if(currentSort === 'rating') {
             cards.sort((a, b) => parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0));
@@ -657,6 +726,17 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if(currentSort === 'newest') {
             // Re-append in original order or add data-id if needed. For now, just reset if 'newest'
             // We'll assume the initial order is 'newest'
+=======
+        // Sort
+        if(currentSort === 'rating') {
+            cards.sort((a, b) => parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0));
+        } else if(currentSort === 'level') {
+            cards.sort((a, b) => {
+                const levelA = a.dataset.level || '';
+                const levelB = b.dataset.level || '';
+                return (levelOrder[levelA] || 99) - (levelOrder[levelB] || 99);
+            });
+>>>>>>> Stashed changes
         }
         
         cards.forEach(card => grid.appendChild(card));
@@ -679,11 +759,14 @@ document.addEventListener('DOMContentLoaded', function() {
         updateGrid();
     });
 
+<<<<<<< Updated upstream
     form.onsubmit = function(e) {
         e.preventDefault();
         alert('Cours ajouté avec succès !');
         modal.classList.remove('active');
     };
+=======
+>>>>>>> Stashed changes
 });
 </script>
 {% endblock %}

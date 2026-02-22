@@ -6,6 +6,11 @@ use App\Repository\StageCondidatureRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+<<<<<<< Updated upstream
+=======
+use Symfony\Component\Validator\Constraints as Assert;
+
+>>>>>>> Stashed changes
 #[ORM\Entity(repositoryClass: StageCondidatureRepository::class)]
 #[ORM\Table(name: 'stagecondidature')]
 class StageCondidature
@@ -16,6 +21,7 @@ class StageCondidature
     private ?int $id = null;
 
     #[ORM\Column(length: 255)] // Using string for ENUM mapping simplification
+<<<<<<< Updated upstream
     private ?string $type_request = null;
 
     #[ORM\Column(length: 255)]
@@ -47,6 +53,53 @@ class StageCondidature
 
     #[ORM\Column]
     private ?int $id_offre = null;
+=======
+    #[Assert\NotBlank(message: "Le type de requête est obligatoire.")]
+    private ?string $type_request = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le titre est obligatoire.")]
+    #[Assert\Length(min: 5, max: 255, minMessage: "Le titre doit faire au moins {{ limit }} caractères.")]
+    private ?string $titre = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "La description est obligatoire.")]
+    #[Assert\Length(min: 20, minMessage: "La description doit faire au moins {{ limit }} caractères.")]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le domaine est obligatoire.")]
+    private ?string $domaine = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Les compétences sont obligatoires.")]
+    private ?string $competences = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le CV est obligatoire.")]
+    private ?string $cv = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "La lettre de motivation est obligatoire.")]
+    #[Assert\Length(min: 50, minMessage: "La lettre de motivation doit faire au moins {{ limit }} caractères.")]
+    private ?string $lettre_motivation = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Type("\DateTimeInterface")]
+    private ?\DateTimeInterface $date_publication = null;
+
+    #[ORM\Column(length: 255)] // Using string for ENUM mapping simplification
+    #[Assert\NotBlank(message: "Le statut est obligatoire.")]
+    private ?string $statut = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'stageCondidatures')]
+    #[ORM\JoinColumn(name: "id_etudiant", referencedColumnName: "id")]
+    private ?User $id_etudiant = null;
+
+    #[ORM\ManyToOne(targetEntity: OffreStage::class, inversedBy: 'stageCondidatures')]
+    #[ORM\JoinColumn(name: "id_offre", referencedColumnName: "id", nullable: true)]
+    private ?OffreStage $id_offre = null;
+>>>>>>> Stashed changes
 
     public function getId(): ?int
     {
@@ -142,7 +195,11 @@ class StageCondidature
         return $this->date_publication;
     }
 
+<<<<<<< Updated upstream
     public function setDatePublication(\DateTimeInterface $date_publication): static
+=======
+    public function setDatePublication(?\DateTimeInterface $date_publication): static
+>>>>>>> Stashed changes
     {
         $this->date_publication = $date_publication;
 
@@ -154,31 +211,51 @@ class StageCondidature
         return $this->statut;
     }
 
+<<<<<<< Updated upstream
     public function setStatut(string $statut): static
+=======
+    public function setStatut(?string $statut): static
+>>>>>>> Stashed changes
     {
         $this->statut = $statut;
 
         return $this;
     }
 
+<<<<<<< Updated upstream
     public function getIdEtudiant(): ?int
+=======
+    public function getIdEtudiant(): ?User
+>>>>>>> Stashed changes
     {
         return $this->id_etudiant;
     }
 
+<<<<<<< Updated upstream
     public function setIdEtudiant(int $id_etudiant): static
+=======
+    public function setIdEtudiant(?User $id_etudiant): static
+>>>>>>> Stashed changes
     {
         $this->id_etudiant = $id_etudiant;
 
         return $this;
     }
 
+<<<<<<< Updated upstream
     public function getIdOffre(): ?int
+=======
+    public function getIdOffre(): ?OffreStage
+>>>>>>> Stashed changes
     {
         return $this->id_offre;
     }
 
+<<<<<<< Updated upstream
     public function setIdOffre(int $id_offre): static
+=======
+    public function setIdOffre(?OffreStage $id_offre): static
+>>>>>>> Stashed changes
     {
         $this->id_offre = $id_offre;
 
