@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StageCondidature index{% endblock %}
+
+{% block body %}
+    <h1>StageCondidature index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type_request</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Domaine</th>
+                <th>Competences</th>
+                <th>Cv</th>
+                <th>Lettre_motivation</th>
+                <th>Date_publication</th>
+                <th>Statut</th>
+                <th>Id_etudiant</th>
+                <th>Id_offre</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for stage_condidature in stage_condidatures %}
+            <tr>
+                <td>{{ stage_condidature.id }}</td>
+                <td>{{ stage_condidature.typeRequest }}</td>
+                <td>{{ stage_condidature.titre }}</td>
+                <td>{{ stage_condidature.description }}</td>
+                <td>{{ stage_condidature.domaine }}</td>
+                <td>{{ stage_condidature.competences }}</td>
+                <td>{{ stage_condidature.cv }}</td>
+                <td>{{ stage_condidature.lettreMotivation }}</td>
+                <td>{{ stage_condidature.datePublication ? stage_condidature.datePublication|date('Y-m-d') : '' }}</td>
+                <td>{{ stage_condidature.statut }}</td>
+                <td>{{ stage_condidature.idEtudiant }}</td>
+                <td>{{ stage_condidature.idOffre }}</td>
+                <td>
+                    <a href="{{ path('app_stage_condidature_show', {'id': stage_condidature.id}) }}">show</a>
+                    <a href="{{ path('app_stage_condidature_edit', {'id': stage_condidature.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_stage_condidature_new') }}">Create new</a>
+{% endblock %}

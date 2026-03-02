@@ -1,0 +1,403 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer_wave %}{% endblock %}
+
+{% block body %}
+    {% set flash_errors = app.flashes('error') %}
+    {% set all_errors = errors ?? [] %}
+    {% for msg in flash_errors %}
+        {% set all_errors = all_errors|merge([msg]) %}
+    {% endfor %}
+
+    <style>
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .signup-mic-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .signup-mic-btn:hover {
+            color: #6366f1;
+        }
+
+        .signup-mic-btn.recording i {
+            color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        .field-case-row {
+            margin-bottom: 0.35rem;
+        }
+
+        .field-case-select {
+            width: 100%;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 9999px;
+            padding: 0.38rem 0.65rem;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .voice-lang-select {
+            width: 100%;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 9999px;
+            padding: 0.5rem 0.8rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+    </style>
+
+    <main class="auth-page" style="background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 2rem 0;">
+    <!-- Organic Background Blobs -->
+    <div style="position: absolute; top: -10%; right: -10%; width: 50%; height: 70%; background: var(--gradient-hero); border-radius: 50%; filter: blur(120px); opacity: 0.4;"></div>
+    <div style="position: absolute; bottom: -10%; left: -10%; width: 40%; height: 60%; background: var(--secondary); border-radius: 50%; filter: blur(120px); opacity: 0.3;"></div>
+
+    <!-- Back to Home Button -->
+    <a href="{{ path('app_home') }}" style="position: absolute; top: 2rem; left: 2rem; z-index: 100; display: flex; align-items: center; gap: 0.5rem; color: white; text-decoration: none; font-weight: 500; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 0.75rem 1.25rem; border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Home
+    </a>
+
+    <div class="auth-frame" style="position: relative; z-index: 1; max-width: 1100px; width: 90%; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px; overflow: hidden; display: flex; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);">
+        <!-- Left Side: Original Portal Animation -->
+        <div class="lock-side" style="flex: 1; padding: 4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border-right: 1px solid rgba(255, 255, 255, 0.05); position: relative;">
+            <div class="portal-scene" style="position: relative; width: 280px; height: 320px; display: flex; flex-direction: column; align-items: center;">
+                <svg id="portal-device" viewBox="0 0 200 240" style="width: 100%; height: 100%; overflow: visible;">
+                    <defs>
+                        <filter id="portalGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur id="slotBlur" stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        <linearGradient id="portalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--secondary-light);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:var(--secondary);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <rect x="30" y="20" width="140" height="200" rx="20" fill="var(--bg-dark)" stroke="url(#portalGrad)" stroke-width="4" />
+                    <rect id="slot-highlight" x="60" y="40" width="80" height="150" rx="4" fill="rgba(255,255,255,0.03)" stroke="url(#portalGrad)" stroke-width="1" filter="url(#portalGlow)"/>
+                    <path class="energy-line" d="M60 60 H140 M60 100 H140 M60 140 H140" stroke="url(#portalGrad)" stroke-width="0.5" stroke-dasharray="2 4" opacity="0.3"/>
+                    
+                    <g class="id-card" style="transform: translateY(-100px);">
+                        <rect x="65" y="45" width="70" height="90" rx="8" fill="rgba(255,255,255,0.1)" stroke="url(#portalGrad)" stroke-width="2"/>
+                        <rect x="75" y="55" width="30" height="30" rx="4" fill="url(#portalGrad)" opacity="0.6"/>
+                        <rect x="75" y="95" width="50" height="4" rx="2" fill="white" opacity="0.4"/>
+                        <rect x="75" y="105" width="40" height="4" rx="2" fill="white" opacity="0.4"/>
+                    </g>
+                    
+                    <line id="scanner-beam" x1="60" y1="40" x2="140" y2="40" stroke="var(--secondary-light)" stroke-width="2" opacity="0" filter="url(#portalGlow)"/>
+                </svg>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <h2 style="color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Join the Adventure</h2>
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">Your journey to knowledge starts with one click.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Signup Form on Book -->
+        <div class="form-side" style="flex: 1.5; position: relative; display: flex; align-items: center; justify-content: center; padding: 3rem;">
+            
+            <!-- THE BOOK BACKGROUND -->
+            <div class="signup-book-bg" style="position: absolute; inset: 1.5rem; background: #fff; border-radius: 5px 20px 20px 5px; box-shadow: -10px 10px 40px rgba(0,0,0,0.4); transform: rotateY(-3deg); transform-style: preserve-3d; transition: 0.5s;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to right, #f1f5f9 2%, #fff 6%); border-radius: inherit;"></div>
+                <div style="position: absolute; top: 0; left: 0; width: 40px; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent); border-radius: 5px 0 0 5px;"></div>
+                <div style="position: absolute; bottom: 30px; right: 40px; font-family: 'serif'; font-size: 12px; color: #94a3b8; letter-spacing: 2px;">PAGE 01</div>
+            </div>
+
+            <!-- Content -->
+            <div class="signup-content" style="position: relative; z-index: 10; width: 100%; max-width: 520px;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="color: #1e1b4b; font-size: 2.25rem; font-weight: 950; margin-bottom: 0.25rem; font-family: 'Georgia', serif;">Enrollment</h1>
+                    <p style="color: #64748b; font-family: 'Georgia', serif; font-style: italic;">Enter your details to begin.</p>
+                </div>
+
+                {% if all_errors|length > 0 %}
+                    <div class="error-shelf" style="background: #fee2e2; border: 2px solid #ef4444; padding: 1.25rem; margin-bottom: 2rem; border-radius: 12px; box-shadow: 0 10px 20px rgba(239,68,68,0.1); animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; position: relative; z-index: 100;">
+                        <div style="font-weight: 800; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 0.5rem; letter-spacing: 1px; color: #b91c1c;">Form Rejection</div>
+                        <ul style="margin: 0; padding-left: 1.25rem; color: #b91c1c; font-size: 0.9rem; font-weight: 600;">
+                            {% for message in all_errors %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" id="signup-form" data-turbo="false" class="auth-form">
+                    <div style="margin-bottom:0.9rem;">
+                        <label for="signup-voice-lang" style="display:block; color:#64748b; font-size:0.72rem; font-weight:700; margin-bottom:0.3rem; text-transform:uppercase; letter-spacing:0.05em;">Voice Language</label>
+                        <select id="signup-voice-lang" class="voice-lang-select">
+                            <option value="en-US" selected>English</option>
+                            <option value="fr-FR">French</option>
+                            <option value="ar-SA">Arabic</option>
+                            <option value="ar-TN">Tunisian Arabic</option>
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="position: relative; display: inline-block; width: 100%;">
+                            <div class="field-case-row">
+                                <select id="signup-case-name" class="field-case-select">
+                                    <option value="lower" selected>Lowercase</option>
+                                    <option value="upper">Uppercase</option>
+                                    <option value="capitalize">First Upper + Rest Lower</option>
+                                </select>
+                            </div>
+                            <input type="text" id="signup-name" name="name" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem 3rem 0.9rem 0.9rem; color: #1e293b; outline: none; transition: 0.3s; font-family: 'Georgia', serif; text-align: center; box-sizing: border-box;" placeholder="Full Name" required>
+                            <button type="button" class="signup-mic-btn" data-voice-target="signup-name" data-voice-capitalize="lower" data-voice-type="text" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 0; z-index: 10; transition: 0.3s;">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                        <div style="position: relative; display: inline-block; width: 100%;">
+                            <div class="field-case-row">
+                                <select id="signup-case-username" class="field-case-select">
+                                    <option value="lower" selected>Lowercase</option>
+                                    <option value="upper">Uppercase</option>
+                                    <option value="capitalize">First Upper + Rest Lower</option>
+                                </select>
+                            </div>
+                            <input type="text" id="signup-username" name="username" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem 3rem 0.9rem 0.9rem; color: #1e293b; outline: none; transition: 0.3s; font-family: 'Georgia', serif; text-align: center; box-sizing: border-box;" placeholder="Username" required>
+                            <button type="button" class="signup-mic-btn" data-voice-target="signup-username" data-voice-capitalize="lower" data-voice-type="text" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 0; z-index: 10; transition: 0.3s;">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1rem; position: relative; display: inline-block; width: 100%;">
+                        <div class="field-case-row">
+                            <select id="signup-case-email" class="field-case-select">
+                                <option value="lower" selected>Lowercase</option>
+                                <option value="upper">Uppercase</option>
+                                <option value="capitalize">First Upper + Rest Lower</option>
+                            </select>
+                        </div>
+                        <input type="email" id="signup-email" name="email" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem 3rem 0.9rem 0.9rem; color: #1e293b; outline: none; transition: 0.3s; font-family: 'Georgia', serif; text-align: center; box-sizing: border-box;" placeholder="scholar@innolearn.com" required>
+                        <button type="button" class="signup-mic-btn" data-voice-target="signup-email" data-voice-capitalize="lower" data-voice-type="email" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 0; z-index: 10; transition: 0.3s;">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <input type="text" name="countryCode" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem; color: #1e293b; outline: none; transition: 0.3s; text-align: center;" placeholder="+33">
+                        </div>
+                        <div style="position: relative; display: inline-block; width: 100%;">
+                            <div class="field-case-row">
+                                <select id="signup-case-phone" class="field-case-select">
+                                    <option value="lower" selected>Lowercase</option>
+                                    <option value="upper">Uppercase</option>
+                                    <option value="capitalize">First Upper + Rest Lower</option>
+                                </select>
+                            </div>
+                            <input type="text" id="signup-phone" name="phoneNumber" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem 3rem 0.9rem 0.9rem; color: #1e293b; outline: none; transition: 0.3s; text-align: center; box-sizing: border-box;" placeholder="Phone Number">
+                            <button type="button" class="signup-mic-btn" data-voice-target="signup-phone" data-voice-capitalize="lower" data-voice-type="phone" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 0; z-index: 10; transition: 0.3s;">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+                            <label class="path-card" style="cursor: pointer;">
+                                <input type="radio" name="role" value="student" style="display: none;" checked required>
+                                <div class="p-inner" style="background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.6rem; text-align: center; color: #475569; transition: 0.3s;">
+                                    <span style="display: block; font-size: 1.1rem;">🎓</span>
+                                    <span style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Student</span>
+                                </div>
+                            </label>
+                            <label class="path-card" style="cursor: pointer;">
+                                <input type="radio" name="role" value="instructor" style="display: none;">
+                                <div class="p-inner" style="background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.6rem; text-align: center; color: #475569; transition: 0.3s;">
+                                    <span style="display: block; font-size: 1.1rem;">🏛️</span>
+                                    <span style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Teacher</span>
+                                </div>
+                            </label>
+                            <label class="path-card" style="cursor: pointer;">
+                                <input type="radio" name="role" value="recruiter" style="display: none;">
+                                <div class="p-inner" style="background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.6rem; text-align: center; color: #475569; transition: 0.3s;">
+                                    <span style="display: block; font-size: 1.1rem;">🤝</span>
+                                    <span style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Partner</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem; position: relative; display: inline-block; width: 100%;">
+                        <div class="field-case-row">
+                            <select id="signup-case-password" class="field-case-select">
+                                <option value="lower" selected>Lowercase</option>
+                                <option value="upper">Uppercase</option>
+                                <option value="capitalize">First Upper + Rest Lower</option>
+                            </select>
+                        </div>
+                        <input type="password" id="signup-password" name="password" style="width: 100%; background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 9999px; padding: 0.9rem 3rem 0.9rem 0.9rem; color: #1e293b; outline: none; transition: 0.3s; text-align: center; box-sizing: border-box;" placeholder="Password" required>
+                        <button type="button" class="signup-mic-btn" data-voice-target="signup-password" data-voice-capitalize="lower" data-voice-type="text" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 0; z-index: 10; transition: 0.3s;">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="signup-btn" style="width: 100%; justify-content: center; padding: 1.1rem; font-size: 1.25rem; font-weight: 900; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.1em; background: var(--gradient-organic); border: none; cursor: pointer; transition: 0.4s;">
+                        Let's Go!
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <p style="color: #64748b; font-size: 0.9rem;">Already a member? <a href="{{ path('app_login') }}" style="color: var(--secondary); font-weight: 700; text-decoration: none; border-bottom: 2px solid rgba(116, 185, 255, 0.2);">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('signup-form');
+            const inputs = form.querySelectorAll('input:not([type="radio"])');
+            const radioInputs = form.querySelectorAll('input[type="radio"]');
+            const card = document.querySelector('.id-card');
+            const slot = document.getElementById('slot-highlight');
+            const slotBlur = document.getElementById('slotBlur');
+            const scanner = document.getElementById('scanner-beam');
+            const portal = document.getElementById('portal-device');
+            const scene = document.querySelector('.portal-scene');
+            const bookBg = document.querySelector('.signup-book-bg');
+            const voiceLangSelect = document.getElementById('signup-voice-lang');
+            const voiceCaseName = document.getElementById('signup-case-name');
+            const voiceCaseUsername = document.getElementById('signup-case-username');
+            const voiceCaseEmail = document.getElementById('signup-case-email');
+            const voiceCasePhone = document.getElementById('signup-case-phone');
+            const voiceCasePassword = document.getElementById('signup-case-password');
+            
+            const weights = { name: 0.15, username: 0.15, email: 0.15, countryCode: 0.05, phoneNumber: 0.1, role: 0.15, password: 0.25 };
+            
+            const updateProgress = () => {
+                let totalProgress = 0;
+                inputs.forEach(input => {
+                    const weight = weights[input.name] || 0.1;
+                    const valLength = input.value.length;
+                    const fieldProgress = Math.min(valLength / 8, 1); 
+                    totalProgress += fieldProgress * weight;
+                });
+
+                totalProgress += weights['role'];
+
+                gsap.to(card, { y: -100 + (totalProgress * 130), duration: 0.5, ease: "power2.out" });
+                gsap.to(slot, { strokeWidth: 1 + (totalProgress * 3), duration: 0.4 });
+                if(slotBlur) gsap.to(slotBlur, { attr: { stdDeviation: 2 + (totalProgress * 4) }, duration: 0.4 });
+                gsap.to('.energy-line', { opacity: 0.3 + (totalProgress * 0.7), duration: 0.4 });
+                // Subtle book tilt
+                gsap.to(bookBg, { rotationY: -3 + (totalProgress * 2), duration: 0.5 });
+            };
+
+            inputs.forEach(input => input.addEventListener('input', updateProgress));
+            radioInputs.forEach(radio => radio.addEventListener('change', updateProgress));
+
+            const syncSignupVoiceOptions = () => {
+                const selectedLang = voiceLangSelect ? voiceLangSelect.value : 'en-US';
+                const caseMap = {
+                    'signup-name': voiceCaseName ? voiceCaseName.value : 'lower',
+                    'signup-username': voiceCaseUsername ? voiceCaseUsername.value : 'lower',
+                    'signup-email': voiceCaseEmail ? voiceCaseEmail.value : 'lower',
+                    'signup-phone': voiceCasePhone ? voiceCasePhone.value : 'lower',
+                    'signup-password': voiceCasePassword ? voiceCasePassword.value : 'lower',
+                };
+
+                document.querySelectorAll('.signup-mic-btn').forEach((button) => {
+                    const target = button.dataset.voiceTarget;
+                    button.dataset.voiceLang = selectedLang;
+                    button.dataset.voiceCapitalize = caseMap[target] || 'lower';
+                });
+            };
+
+            [voiceLangSelect, voiceCaseName, voiceCaseUsername, voiceCaseEmail, voiceCasePhone, voiceCasePassword]
+                .forEach((el) => {
+                    if (el) {
+                        el.addEventListener('change', syncSignupVoiceOptions);
+                    }
+                });
+
+            syncSignupVoiceOptions();
+
+            document.querySelectorAll('.signup-mic-btn').forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+
+                    if (typeof window.startVoiceAPI !== 'function') {
+                        alert('Voice helper is not loaded yet. Please refresh the page and try again.');
+                        return;
+                    }
+
+                    window.startVoiceAPI(button);
+                });
+            });
+
+            form.addEventListener('submit', function(e) {
+                const complete = Array.from(inputs).every(i => i.value.trim().length > 0);
+                if (!complete) {
+                    e.preventDefault();
+                    gsap.fromTo(".auth-form", { x: -6 }, { x: 6, duration: 0.05, repeat: 4, yoyo: true });
+                    return;
+                }
+                
+                // Immediate feedback to prevent "frozen" feeling
+                const btn = document.getElementById('signup-btn');
+                btn.innerHTML = '<span class="loading-pulse">Preparing Journey...</span>';
+                btn.style.opacity = "0.7";
+                btn.style.pointerEvents = "none";
+                
+                gsap.to(btn, { scale: 0.98, duration: 0.1 });
+                gsap.to(".loading-pulse", { opacity: 0.5, repeat: -1, yoyo: true, duration: 0.5 });
+            });
+
+            {% if all_errors|length > 0 %}
+            // Error Animation: Rejection shake
+            console.log("Signup errors detected, playing rejection animation.");
+            gsap.timeline()
+                .fromTo(scene, { x: -10 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true })
+                .to(scanner, { opacity: 1, stroke: "#ef4444", attr: { y1: 80, y2: 80 }, duration: 0.3 }, 0)
+                .fromTo(bookBg, { x: -5 }, { x: 5, duration: 0.1, repeat: 5, yoyo: true }, 0);
+            {% endif %}
+        });
+    </script>
+</main>
+
+<style>
+    input[type="radio"]:checked + .p-inner {
+        background: white !important;
+        border-color: var(--secondary) !important;
+        color: #1e1b4b !important;
+        box-shadow: 0 5px 15px rgba(116, 185, 255, 0.2);
+        transform: scale(1.05);
+    }
+    .path-card:hover .p-inner {
+        border-color: #cbd5e1;
+    }
+</style>
+{% endblock %}

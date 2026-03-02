@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}3D Chatbot Help | InnoLearn{% endblock %}
+
+{% block body %}
+<section style="max-width: 980px; margin: 2rem auto; padding: 0 1rem; font-family: Inter, sans-serif;">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; border-radius: 18px; padding: 1.5rem; margin-bottom: 1rem;">
+        <h1 style="margin: 0 0 .5rem; font-size: 1.5rem;">3D Chatbot Help & Ask</h1>
+        <p style="margin: 0; opacity: .9;">Use this page to ask InnoLearn assistant questions and launch the full 3D Avatar Studio.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1rem;">
+            <h2 style="margin: 0 0 .5rem; font-size: 1.05rem;">Quick Actions</h2>
+            <ul style="margin: 0; padding-left: 1rem; color: #475569;">
+                <li>Open Avatar Studio for full 3D assistant.</li>
+                <li>Use chat for guidance about courses/projects.</li>
+                <li>Use AI synth to generate avatar parameters.</li>
+            </ul>
+            <div style="margin-top: 1rem; display: flex; gap: .75rem; flex-wrap: wrap;">
+                <a href="{{ path('app_avatar_studio') }}" style="background: #0ea5e9; color: #fff; padding: .6rem .9rem; border-radius: 10px; text-decoration: none; font-weight: 600;">Open 3D Avatar Studio</a>
+                <a href="{{ path('app_home') }}" style="background: #f1f5f9; color: #0f172a; padding: .6rem .9rem; border-radius: 10px; text-decoration: none; font-weight: 600;">Back Home</a>
+            </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1rem;">
+            <h2 style="margin: 0 0 .5rem; font-size: 1.05rem;">Ask InnoLearn AI</h2>
+            {% if app.user %}
+                <textarea id="help-chat-msg" rows="4" placeholder="Ask about your learning path, assignments, or platform usage..."
+                          style="width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: .75rem; outline: none;"></textarea>
+                <button id="help-chat-send" style="margin-top: .75rem; background: #1e293b; color: #fff; border: 0; border-radius: 10px; padding: .55rem .9rem; font-weight: 600; cursor: pointer;">Send</button>
+                <div id="help-chat-response" style="margin-top: .75rem; color: #334155; min-height: 1.5rem;"></div>
+            {% else %}
+                <p style="color: #64748b; margin: 0;">Login required to use AI chat.</p>
+                <a href="{{ path('app_login') }}" style="display: inline-block; margin-top: .6rem; text-decoration: none; font-weight: 600;">Go to Login</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% if app.user %}
+<script>
+document.getElementById('help-chat-send')?.addEventListener('click', async () => {
+    const msgEl = document.getElementById('help-chat-msg');
+    const outEl = document.getElementById('help-chat-response');
+    const message = (msgEl?.value || '').trim();
+    if (!message) return;
+
+    outEl.textContent = 'Thinking...';
+
+    try {
+        const fd = new FormData();
+        fd.append('message', message);
+        const res = await fetch('/api/avatar/chat', { method: 'POST', body: fd });
+        const data = await res.json();
+        outEl.textContent = data.message || 'No response.';
+    } catch (e) {
+        outEl.textContent = 'Unable to reach chatbot right now.';
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

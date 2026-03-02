@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile Your Learning Style{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white p-4">
+                    <h2 class="h4 mb-0">Discover Your Learning DNA</h2>
+                    <p class="mb-0 opacity-75">Tell us about yourself to personalize your experience.</p>
+                </div>
+                <div class="card-body p-4" id="quiz-container">
+                    <div id="question-wrapper">
+                        <!-- Questions will be injected here by JS for an adaptive feel -->
+                    </div>
+                    
+                    <div class="progress mt-4" style="height: 10px;">
+                        <div id="quiz-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <button id="prev-btn" class="btn btn-outline-secondary px-4 d-none">Previous</button>
+                        <button id="next-btn" class="btn btn-primary px-4">Next</button>
+                    </div>
+                </div>
+                
+                <div id="loading-overlay" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-none flex-column align-items-center justify-content-center" style="z-index: 10;">
+                    <div class="spinner-border text-primary mb-3" role="status"></div>
+                    <p class="fw-bold">Analyzing your profile...</p>
+                </div>
+                
+                <div id="result-view" class="card-body p-5 d-none text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-magic fa-4x text-success"></i>
+                    </div>
+                    <h3 class="mb-3">Profiling Complete!</h3>
+                    <p class="lead mb-4">We've identified your primary learning style as <strong id="res-style" class="text-primary text-capitalize"></strong>.</p>
+                    <div class="alert alert-info border-0 rounded-3">
+                        <p class="mb-0">Your course content will now be adapted to your style. Get ready for a game-driven learning journey!</p>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="btn btn-primary btn-lg mt-4 px-5">Enter InnoLearn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const questions = {{ questions|json_encode|raw }};
+    let currentIndex = 0;
+    const responses = {};
+    
+    const wrapper = document.getElementById('question-wrapper');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const progressBar = document.getElementById('quiz-progress');
+    const quizContainer = document.getElementById('quiz-container');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const resultView = document.getElementById('result-view');
+    
+    function renderQuestion(index) {
+        const q = questions[index];
+        const progress = ((index) / questions.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        let html = `
+            <h4 class="mb-4 fw-bold">${index + 1}. ${q.text}</h4>
+            <div class="options-list">
+        `;
+        
+        q.options.forEach(opt => {
+            const isChecked = responses[q.id] === opt.value;
+            html += `
+                <div class="form-check custom-option mb-3 p-3 border rounded-3 transition-all cursor-pointer ${isChecked ? 'bg-primary bg-opacity-10 border-primary' : ''}" onclick="selectOption(${q.id}, '${opt.value}')">
+                    <input class="form-check-input d-none" type="radio" name="q${q.id}" id="opt-${opt.value}" value="${opt.value}" ${isChecked ? 'checked' : ''}>
+                    <label class="form-check-label w-100 cursor-pointer" for="opt-${opt.value}">
+                        ${opt.text}
+                    </label>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        wrapper.innerHTML = html;
+        
+        prevBtn.classList.toggle('d-none', index === 0);
+        nextBtn.textContent = index === questions.length - 1 ? 'Finish' : 'Next';
+        nextBtn.disabled = !responses[q.id];
+    }
+    
+    window.selectOption = (qId, value) => {
+        responses[qId] = value;
+        renderQuestion(currentIndex);
+    };
+    
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        } else {
+            submitQuiz();
+        }
+    });
+    
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion(currentIndex);
+        }
+    });
+    
+    function submitQuiz() {
+        loadingOverlay.classList.remove('d-none');
+        loadingOverlay.classList.add('d-flex');
+        
+        fetch('{{ path('app_test_profiling_submit') }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ responses })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Submission failed');
+            return res.json();
+        })
+        .then(data => {
+            loadingOverlay.classList.add('d-none');
+            loadingOverlay.classList.remove('d-flex');
+            quizContainer.classList.add('d-none');
+            resultView.classList.remove('d-none');
+            // Fixed variable name and ensured capitalization
+            const target = document.getElementById('res-style');
+            if (target) {
+                target.textContent = data.learning_style || 'Discovering...';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Profiling failed: ' + err.message);
+            loadingOverlay.classList.add('d-none');
+        });
+    }
+    
+    renderQuestion(currentIndex);
+});
+</script>
+
+<style>
+.custom-option {
+    transition: all 0.2s ease;
+}
+.custom-option:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+    border-color: var(--bs-primary);
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.transition-all {
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Nouvelle Catégorie de Cours{% endblock %}
+
+{% block page_title %}Ajouter une Nouvelle Catégorie de Cours{% endblock %}
+
+{% block admin_content %}
+<div class="glass-card animate-fade-in-up" style="background: white; border-radius: 20px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02); overflow: hidden;">
+    <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h3 class="card-title" style="font-size: 1.25rem; font-weight: 700; color: #1e1b4b; margin: 0;">Ajouter une Nouvelle Catégorie</h3>
+            <p style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; margin-top: 0.25rem;">Remplissez les informations ci-dessous</p>
+        </div>
+        <a href="{{ path('admin_categorie_cours_index') }}" style="color: #64748b; background: white; border: 1px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+            <i class="fas fa-arrow-left"></i>
+            Retour
+        </a>
+    </div>
+    <div style="padding: 2.5rem;">
+        {{ include('admin/categorie_cours/_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

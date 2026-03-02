@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('admin_quiz_delete', {'id': formulaire.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce quiz ?');" style="display: inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formulaire.id) }}">
+    <button type="submit" class="icon-btn-p delete" title="Supprimer" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: #fff5f5; color: #ff5a5a; border: 1px solid #fecaca; transition: all 0.2s; cursor: pointer;">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+</form>

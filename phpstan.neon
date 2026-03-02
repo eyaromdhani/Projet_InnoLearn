@@ -1,0 +1,16 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+        - tests
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Property .*::\$id \(int\|null\) is never assigned int#'
+        - '#Property .* is never assigned null so it can be removed from the property type#'
+        -
+            message: '#Property .* is never read, only written#'
+            reportUnmatched: false
+        -
+            message: '#Method .* is unused#'
+            reportUnmatched: false

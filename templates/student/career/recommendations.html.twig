@@ -1,0 +1,252 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Mes Recommandations de Carrière - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+    .rec-nav {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 0.5rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 16px;
+        width: fit-content;
+    }
+
+    .rec-nav-item {
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .rec-nav-item.active {
+        background: white;
+        color: #6366f1;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+    }
+
+    .rec-grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 2rem;
+    }
+
+    .standing-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 32px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    }
+
+    .standing-circle {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .standing-circle svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .standing-circle circle {
+        fill: none;
+        stroke-width: 12;
+        stroke-linecap: round;
+    }
+
+    .standing-circle .bg { stroke: #f1f5f9; }
+    .standing-circle .progress {
+        stroke: #6366f1;
+        transition: stroke-dashoffset 1s ease-out;
+    }
+
+    .standing-value {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #1e293b;
+    }
+
+    .advice-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .advice-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 32px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    }
+
+    .advice-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .advice-title i {
+        width: 40px;
+        height: 40px;
+        background: rgba(99, 102, 241, 0.1);
+        color: #6366f1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .tag {
+        padding: 0.6rem 1.2rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 50px;
+        color: #475569;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .step-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .step-item {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .step-item:hover {
+        transform: translateX(10px);
+    }
+
+    .step-num {
+        width: 32px;
+        height: 32px;
+        background: #6366f1;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-weight: 700;
+    }
+
+    .step-text {
+        color: #1e293b;
+        font-weight: 500;
+        line-height: 1.6;
+    }
+
+    .error-card {
+        grid-column: 1 / -1;
+        background: #fff1f2;
+        border: 1px solid #fecdd3;
+        padding: 2rem;
+        border-radius: 24px;
+        color: #e11d48;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="container py-4">
+    <div class="header-section mb-5">
+        <h1 class="display-5 fw-bold mb-2">Recommandations IA</h1>
+        <p class="text-muted fs-5">Analyse prédictive de votre profil par rapport au marché de l'emploi.</p>
+    </div>
+
+    <div class="rec-nav">
+        <a href="{{ path('app_student_career') }}" class="rec-nav-item">Offres</a>
+        <a href="{{ path('app_student_career_recommendations') }}" class="rec-nav-item active">Insights IA</a>
+    </div>
+
+    {% if recommendations.error is defined %}
+        <div class="error-card">
+            <i class="fas fa-exclamation-circle fa-2x"></i>
+            <div>
+                <h4 class="mb-1">Action requise</h4>
+                <p class="mb-0">{{ recommendations.error }}</p>
+                <a href="{{ path('app_student_career') }}#profile-edit" class="btn btn-sm btn-danger mt-2">Compléter mon profil</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="rec-grid">
+            <div class="standing-section">
+                <div class="standing-card">
+                    <h3 class="mb-4 fs-5 text-muted fw-semibold">Force de Profil</h3>
+                    <div class="standing-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="44"></circle>
+                            <circle class="progress" cx="50" cy="50" r="44" 
+                                    style="stroke-dasharray: 276.46; stroke-dashoffset: {{ 276.46 * (1 - recommendations.standing / 100) }}"></circle>
+                        </svg>
+                        <div class="standing-value">{{ recommendations.standing }}%</div>
+                    </div>
+                    <p class="text-muted">Votre positionnement actuel par rapport aux attentes des recruteurs dans votre domaine.</p>
+                </div>
+            </div>
+
+            <div class="advice-section">
+                <div class="advice-card">
+                    <div class="advice-title">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Compétences à consolider</span>
+                    </div>
+                    <div class="tag-list">
+                        {% for gap in recommendations.skillGaps %}
+                            <span class="tag">{{ gap }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="advice-card">
+                    <div class="advice-title">
+                        <i class="fas fa-map-signs"></i>
+                        <span>Votre plan d'action personnalisé</span>
+                    </div>
+                    <div class="step-list">
+                        {% for step in recommendations.actionPlan %}
+                            <div class="step-item">
+                                <span class="step-num">{{ loop.index }}</span>
+                                <span class="step-text">{{ step }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

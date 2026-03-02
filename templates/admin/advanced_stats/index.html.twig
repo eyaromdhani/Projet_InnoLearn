@@ -1,0 +1,347 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Intelligence Dashboard - InnoLearn{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --accent-purple: #6366f1;
+            --accent-pink: #ec4899;
+            --deep-indigo: #1e1b4b;
+        }
+
+        .stats-wrapper {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 2rem;
+            margin-top: -20px;
+        }
+
+        .premium-header {
+            background: linear-gradient(135deg, var(--deep-indigo) 0%, #312e81 100%);
+            padding: 4rem 3rem;
+            border-radius: 40px;
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(30, 27, 75, 0.3);
+        }
+
+        .premium-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .ai-banner {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-top: -5rem;
+            margin-bottom: 3rem;
+            z-index: 10;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .glass-card {
+            background: white;
+            border-radius: 32px;
+            padding: 2.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 30px -10px rgba(0, 0, 0, 0.07);
+        }
+
+        .chart-mini-container {
+            height: 300px;
+            width: 100%;
+        }
+
+        .luxury-list-item {
+            padding: 1.5rem;
+            border-radius: 20px;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+
+        .luxury-list-item:hover {
+            background: white;
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .dropout-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ef4444;
+        }
+
+        .progress-slim {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-indigo {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+        }
+
+        .floating-emoji {
+            font-size: 3.5rem;
+            animation: bounce 3s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .table-premium th {
+            background: #f8fafc;
+            color: #64748b;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 1.5rem;
+            border: none;
+        }
+
+        .table-premium td {
+            padding: 1.5rem;
+            border-color: #f1f5f9;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="stats-wrapper">
+    <!-- Premium Header Area -->
+    <div class="premium-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h6 class="text-white-50 fw-bold mb-3" style="letter-spacing: 3px; font-size: 0.8rem;">INNOLEARN INTELLIGENCE</h6>
+                <h1 class="display-3 fw-black mb-3 text-white" style="letter-spacing: -2px;">Insights Analytiques</h1>
+                <p class="lead text-white-50 mb-0">Pilotez votre plateforme avec des données précises et l'aide de l'IA.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                <div class="d-inline-flex flex-column align-items-center p-4 rounded-5" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="h1 fw-black text-white mb-0">{{ totalViews }}</div>
+                    <div class="small text-white-50 fw-bold">PORTÉE GLOBALE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Insights Banner -->
+    <div class="ai-banner">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="ai-status-pill">
+                <i class="fas fa-sparkles"></i>
+                Pedagogical Insight Ready
+            </div>
+            <a href="{{ path('app_admin_advanced_stats') }}" class="btn btn-sm btn-link text-muted text-decoration-none">
+                <i class="fas fa-sync-alt me-1"></i> Actualiser l'analyse
+            </a>
+        </div>
+        <div class="row g-4 align-items-center">
+            <div class="col-auto">
+                <div class="floating-emoji">🦄</div>
+            </div>
+            <div class="col">
+                <h3 class="fw-black text-dark mb-3">L'IA InnoLearn Analyse...</h3>
+                <div class="text-muted" style="font-size: 1.1rem; line-height: 1.8;">
+                    {{ aiAnalysis|default("Nous analysons les schémas d'apprentissage de vos utilisateurs pour extraire des conseils exploitables. Cela prend généralement quelques secondes à la première charge.")|nl2br }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid Layout -->
+    <div class="row g-4 mb-5">
+        <!-- Main Chart Card -->
+        <div class="col-xl-8">
+            <div class="glass-card">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div>
+                        <h3 class="fw-black text-dark mb-1">Engagement vs Succès</h3>
+                        <p class="text-muted small mb-0">Comparaison des consultations et des certifications par cours.</p>
+                    </div>
+                </div>
+                <div class="chart-mini-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problematic Areas -->
+        <div class="col-xl-4">
+            <div class="glass-card" style="border-left: 8px solid #ef4444;">
+                <h3 class="fw-black text-dark mb-4"><i class="fas fa-biohazard text-danger me-2"></i>Zones d'Alerte</h3>
+                <p class="text-muted small mb-4">Ces cours ont le taux de décrochage le plus élevé sur la plateforme.</p>
+
+                {% for item in highDropout %}
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-dark text-truncate" style="max-width: 60%;">
+                            {{ item.course.nom }}
+                        </span>
+                        <span class="dropout-value">{{ item.dropoutRate }}%</span>
+                    </div>
+                    <div class="progress-slim mb-2">
+                        <div class="progress-bar bg-danger" style="width: {{ item.dropoutRate }}%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between x-small text-muted" style="font-size: 0.7rem;">
+                        <span>{{ item.views }} vues</span>
+                        <span>{{ item.completions }} complétés</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Table Card -->
+    <div class="glass-card mb-5">
+        <h3 class="fw-black text-dark mb-5">Performances Détaillées</h3>
+        <div class="table-responsive">
+            <table class="table table-premium align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Cours</th>
+                        <th>Vues</th>
+                        <th>Rétention</th>
+                        <th>Certifications</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in allStats %}
+                    <tr>
+                        <td>
+                            <div class="fw-bold text-dark">{{ stat.course.nom }}</div>
+                            <small class="text-muted">{{ stat.course.slug }}</small>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="fw-bold">{{ stat.views }}</span>
+                                <div class="progress-slim flex-grow-1" style="width: 60px;">
+                                    <div class="progress-bar progress-bar-indigo" style="width: {{ totalViews > 0 ? (stat.views / totalViews * 100) : 0 }}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {% set retention = 100 - stat.dropoutRate %}
+                            <span class="badge rounded-pill {% if retention > 70 %}bg-success-subtle text-success{% else %}bg-warning-subtle text-warning{% endif %} px-3 py-2">
+                                {{ retention }}% Rétention
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fw-black">{{ stat.successRate }}%</span>
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: {% if stat.successRate > 70 %}#22c55e{% elseif stat.successRate > 40 %}#eab308{% else %}#ef4444{% endif %};"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('impactChart').getContext('2d');
+    
+    // Prepare data from Twig
+    const labels = [
+        {% for course in topViewed %}
+            "{{ course.nom|slice(0, 15) }}...",
+        {% endfor %}
+    ];
+    
+    const viewData = [
+        {% for course in topViewed %}
+            {{ course.viewsCount }},
+        {% endfor %}
+    ];
+
+    const compData = [
+        {% for course in topViewed %}
+            {{ course.completionsCount }},
+        {% endfor %}
+    ];
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vues',
+                data: viewData,
+                backgroundColor: '#6366f1',
+                borderRadius: 12,
+                hoverBackgroundColor: '#4f46e5'
+            }, {
+                label: 'Certifications',
+                data: compData,
+                backgroundColor: '#10b981',
+                borderRadius: 12,
+                hoverBackgroundColor: '#059669'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top', align: 'end', labels: { usePointStyle: true, font: { family: 'Outfit', weight: '700' } } }
+            },
+            scales: {
+                y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Outfit' } } },
+                x: { grid: { display: false }, ticks: { font: { family: 'Outfit', weight: '600' } } }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

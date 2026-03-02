@@ -1,0 +1,563 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Gérer Questions - {{ formulaire.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+.quiz-header-premium {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    color: white;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(67, 56, 202, 0.2);
+}
+
+.quiz-header-premium::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.add-question-section {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title i { color: #6366f1; }
+
+.form-label { font-weight: 700; color: #475569; margin-bottom: 0.5rem; font-size: 0.9rem; }
+
+.form-control, .form-select {
+    border-radius: 12px;
+    border: 2px solid #f1f5f9;
+    padding: 0.8rem 1rem;
+    background: #f8fafc;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 0.8rem 2rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    cursor: pointer;
+}
+
+.question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.question-card:hover { border-color: #6366f1; transform: translateX(5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+.q-number {
+    width: 40px; height: 40px; background: #f1f5f9; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #6366f1;
+}
+
+.q-text { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; }
+
+.q-badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+.q-badge {
+    padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; gap: 0.4rem;
+}
+
+.badge-type { background: #e0e7ff; color: #4338ca; }
+.badge-points { background: #fef3c7; color: #92400e; }
+.badge-answer { background: #dcfce7; color: #166534; }
+
+.q-actions { display: flex; gap: 0.5rem; }
+.btn-icon {
+    width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; transition: all 0.2s; border: none; cursor: pointer;
+}
+.btn-edit { background: #fef3c7; color: #92400e; }
+.btn-delete { background: #fee2e2; color: #b91c1c; }
+
+.btn-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.75rem;
+    background: white;
+    color: #4338ca;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    font-size: 0.95rem;
+}
+
+.btn-back-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(67, 56, 202, 0.1);
+    border-color: #4338ca;
+    color: #4338ca;
+}
+
+.btn-back-link i {
+    transition: transform 0.3s;
+}
+
+.btn-back-link:hover i {
+    transform: translateX(-3px);
+}
+/* AI Button Premium Styling */
+.btn-ai-magic {
+    background: white;
+    color: #6366f1;
+    border: 2px solid #6366f1;
+    padding: 0.8rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(99, 102, 241, 0.1);
+}
+
+.btn-ai-magic:hover {
+    background: #6366f1;
+    color: white;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.5)); }
+    50% { opacity: 0.8; transform: scale(1.3) rotate(15deg); filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)); }
+}
+
+.btn-ai-magic i {
+    font-size: 1.2rem;
+    animation: sparkle 2.5s infinite ease-in-out;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Modal Premium Overrides */
+.ai-modal-content {
+    border-radius: 28px !important;
+    border: none !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.ai-modal-header {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+    padding: 2rem !important;
+    border: none !important;
+}
+
+.ai-modal-body {
+    padding: 2.5rem !important;
+}
+
+.ai-textarea {
+    border-radius: 16px !important;
+    border: 2px solid #f1f5f9 !important;
+    background: #f8fafc !important;
+    padding: 1.25rem !important;
+    transition: all 0.3s !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+}
+
+.ai-textarea:focus {
+    border-color: #6366f1 !important;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Generated Question Cards */
+.ai-question-suggestion {
+    background: white;
+    border-radius: 18px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-question-suggestion:hover {
+    border-color: #6366f1;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.ai-suggestion-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #6366f1;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.75rem;
+    border-bottom-left-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.loading-dots:after {
+    content: ' .';
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: ' .'; }
+    40% { content: ' ..'; }
+    60% { content: ' ...'; }
+    80%, 100% { content: ''; }
+}
+
+/* Base Animations */
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="container py-5" style="max-width: 1000px;">
+    <!-- Back Button -->
+    <div class="mb-5">
+        <a href="{{ path('app_enseignant_quizzes') }}" class="btn-back-link">
+            <i class="fas fa-arrow-left"></i> Retour à la liste des Quiz
+        </a>
+    </div>
+
+    <!-- Quiz Header -->
+    <div class="quiz-header-premium">
+        <div class="mb-5">
+            <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill font-weight-bold">{{ formulaire.category }}</span>
+            <h1 class="display-5 font-weight-bold mb-3">{{ formulaire.titre }}</h1>
+            <p class="opacity-75 lead mb-0">{{ formulaire.description }}</p>
+        </div>
+        
+        <div class="d-flex gap-5">
+            <div class="d-flex align-items-center gap-3">
+                <i class="far fa-clock fa-lg"></i>
+                <span class="font-weight-bold">{{ formulaire.tempsLimite }} minutes</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <i class="fas fa-question-circle fa-lg"></i>
+                <span class="font-weight-bold">{{ questions|length }} questions</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Question -->
+    <div class="add-question-section">
+        <h2 class="section-title">
+            <i class="fas fa-plus-circle"></i>
+            Ajouter une Question
+        </h2>
+
+        <form method="post" action="{{ path('app_enseignant_quiz_questions', {id: formulaire.id}) }}">
+            <div class="mb-4">
+                <label class="form-label">Texte de la Question</label>
+                <textarea name="question_text" class="form-control" rows="3" required placeholder="Saisissez votre question ici..."></textarea>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label">Type de Question</label>
+                    <select name="type" class="form-select" required>
+                        <option value="multiple_choice">Choix Multiple</option>
+                        <option value="true_false">Vrai / Faux</option>
+                        <option value="number">Nombre</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Points</label>
+                    <input type="number" name="points" class="form-control" value="1" min="1" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Réponse Correcte</label>
+                <input type="text" name="correct_answer" class="form-control" required placeholder="La réponse attendue...">
+                <small class="text-muted mt-1 d-block">Pour Vrai/Faux, utilisez "Vrai" ou "Faux".</small>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn-primary-gradient">
+                    <i class="fas fa-save"></i> Enregistrer la Question
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- AI Generator Section -->
+    <div id="ai-generator" class="mb-5">
+        <h2 class="section-title">
+            <i class="fas fa-brain"></i>
+            Générateur Intelligent
+            <span class="badge bg-soft-primary text-primary ms-2" style="font-size: 0.65rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2);">TECH AI v2.0</span>
+        </h2>
+        <p class="text-muted mb-4" style="margin-left: 2.25rem;">Transformez vos cours en questions en un clic</p>
+
+        <div class="add-question-section">
+            <div id="aiInputView" class="animate-fade-in">
+                <div class="mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <label class="form-label mb-0" style="font-weight: 700; color: #1e293b;">
+                            <i class="fas fa-file-alt text-primary mr-2"></i> Contenu de référence
+                        </label>
+                        <span class="text-muted small font-weight-bold" id="charCounter">0 caractères</span>
+                    </div>
+                    <textarea id="aiSourceText" class="form-control ai-textarea" rows="6" placeholder="Collez ici le texte de votre cours pour générer des questions automatiquement..."></textarea>
+                    <p class="mt-3 mb-0 text-muted small">
+                        <i class="fas fa-info-circle mr-1"></i> Plus votre contenu est détaillé, plus les questions seront précises.
+                    </p>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <button id="btnAiGenerate" class="btn-primary-gradient">
+                        <i class="fas fa-wand-magic-sparkles"></i> Analyser et Générer les Questions
+                    </button>
+                </div>
+            </div>
+
+            <div id="aiLoadingView" class="d-none animate-fade-in py-4">
+                <div class="ai-loading-container text-center">
+                    <div class="spinner-premium"></div>
+                    <h4 class="font-weight-bold mb-2 text-dark">L'IA réfléchit<span class="loading-dots"></span></h4>
+                    <p class="text-muted mb-0">Analyse du contenu et création des questions...</p>
+                </div>
+            </div>
+
+            <div id="aiResultsView" class="d-none animate-fade-in mt-4">
+                <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom" style="border-color: #f1f5f9 !important;">
+                    <h5 class="font-weight-bold mb-0" style="color: #1e293b;">✨ Questions Suggérées</h5>
+                    <span class="badge px-3 py-2 rounded-pill" style="background: rgba(16, 185, 129, 0.1); color: #10b981; font-weight: 800; font-size: 0.7rem;">
+                        <i class="fas fa-check-circle mr-1"></i> PRÊT À IMPORTER
+                    </span>
+                </div>
+                <div id="aiQuestionsList"></div>
+                <div class="d-flex justify-content-start mt-4">
+                    <button type="button" class="btn-secondary-premium" id="btnAiBack">
+                        <i class="fas fa-undo"></i> Changer le texte
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions List -->
+    <h2 class="section-title">
+        <i class="fas fa-list-ul"></i>
+        Liste des Questions
+    </h2>
+
+    {% if questions|length > 0 %}
+        {% for question in questions %}
+        <div class="question-card">
+            <div class="q-number">{{ loop.index }}</div>
+            <div class="q-content">
+                <div class="q-text">{{ question.questionText }}</div>
+                <div class="q-badges">
+                    <span class="q-badge badge-type">
+                        <i class="fas fa-tag"></i> {{ question.type|replace({'_': ' '})|title }}
+                    </span>
+                    <span class="q-badge badge-points">
+                        <i class="fas fa-star"></i> {{ question.points }} Points
+                    </span>
+                    <span class="q-badge badge-answer">
+                        <i class="fas fa-check-circle"></i> {{ question.correctAnswer }}
+                    </span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <a href="{{ path('app_enseignant_question_edit', {id: question.id}) }}" class="btn-icon btn-edit" title="Modifier">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <form method="post" action="{{ path('app_enseignant_question_delete', {id: question.id}) }}" onsubmit="return confirm('Supprimer cette question ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                    <button class="btn-icon btn-delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5 bg-white rounded-24 border border-dashed">
+            <i class="fas fa-ghost fa-3x text-muted mb-3 opacity-25"></i>
+            <h4 class="text-muted">Aucune question pour le moment</h4>
+            <p class="text-muted mb-0">Commencez par en ajouter une via le formulaire ci-dessus.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnAiGenerate = document.getElementById('btnAiGenerate');
+    const aiSourceText = document.getElementById('aiSourceText');
+    const aiInputView = document.getElementById('aiInputView');
+    const aiLoadingView = document.getElementById('aiLoadingView');
+    const aiResultsView = document.getElementById('aiResultsView');
+    const aiQuestionsList = document.getElementById('aiQuestionsList');
+    const btnAiBack = document.getElementById('btnAiBack');
+
+    const charCounter = document.getElementById('charCounter');
+    
+    aiSourceText.addEventListener('input', () => {
+        const length = aiSourceText.value.length;
+        charCounter.textContent = `${length} caractère${length !== 1 ? 's' : ''}`;
+    });
+
+    btnAiGenerate.addEventListener('click', async () => {
+        const text = aiSourceText.value.trim();
+        if (!text) {
+            alert('Veuillez saisir un texte');
+            return;
+        }
+
+        aiInputView.classList.add('d-none');
+        aiLoadingView.classList.remove('d-none');
+
+        try {
+            const response = await fetch('{{ path("app_ai_generate_questions") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Erreur lors de la génération');
+            }
+
+            const questions = await response.json();
+            renderAiQuestions(questions);
+
+            aiLoadingView.classList.add('d-none');
+            aiResultsView.classList.remove('d-none');
+        } catch (error) {
+            alert(error.message);
+            aiLoadingView.classList.add('d-none');
+            aiInputView.classList.remove('d-none');
+        }
+    });
+
+    btnAiBack.addEventListener('click', () => {
+        aiResultsView.classList.add('d-none');
+        aiInputView.classList.remove('d-none');
+    });
+
+    function renderAiQuestions(questions) {
+        aiQuestionsList.innerHTML = '';
+        questions.forEach((q, index) => {
+            const div = document.createElement('div');
+            div.className = 'ai-question-suggestion animate-fade-in-up';
+            div.style.animationDelay = `${index * 0.1}s`;
+            div.innerHTML = `
+                <div class="ai-suggestion-badge">IA Suggestion</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge rounded-pill bg-soft-primary text-primary px-3 py-2" style="background: #eef2ff;">
+                        <i class="fas fa-star text-warning mr-1"></i> ${q.points} Points
+                    </span>
+                    <span class="small text-muted font-weight-bold">#${index + 1}</span>
+                </div>
+                <h6 class="font-weight-bold text-dark mb-3" style="line-height: 1.5; font-size: 1.05rem;">${q.question_text}</h6>
+                <div class="d-flex justify-content-between align-items-end pt-3 border-top" style="border-color: #f1f5f9 !important;">
+                    <div>
+                        <small class="text-muted d-block mb-1">Réponse correcte :</small>
+                        <span class="font-weight-bold text-success">${q.correct_answer}</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm btn-add-ai px-4" data-index="${index}" style="border-radius: 10px; font-weight: 700;">
+                        Utiliser cette question
+                    </button>
+                </div>
+            `;
+            
+            div.querySelector('.btn-add-ai').addEventListener('click', () => {
+                // Pre-fill the standard form
+                document.querySelector('textarea[name="question_text"]').value = q.question_text;
+                document.querySelector('input[name="correct_answer"]').value = q.correct_answer;
+                document.querySelector('input[name="points"]').value = q.points;
+                
+                // Scroll to the main form
+                window.scrollTo({ top: document.querySelector('.add-question-section').offsetTop - 50, behavior: 'smooth' });
+            });
+
+            aiQuestionsList.appendChild(div);
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1114 @@
+{% extends 'recruteur/layout.html.twig' %}
+
+{% block title %}Gestion des Offres de Stage - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Header customizations - Transparent Over Hero */
+.dashboard-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+/* Remove default padding to allow Hero to touch top */
+.dashboard-content {
+    padding: 0 !important;
+    position: relative; /* Ensure context */
+}
+
+.dashboard-main {
+    padding: 0 !important;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+    bottom: -5px;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dashboard-header .search-bar-compact input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white !important;
+    width: 200px;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dashboard-header .icon-btn:hover,
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Avatar Styling (Re-adding styles removed from inline) */
+.dashboard-header .avatar-wrapper {
+    background: #a855f7;
+    width: 45px; height: 45px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 1.1rem;
+    position: relative;
+}
+.dashboard-header .status-indicator {
+    position: absolute; bottom: -2px; right: -2px;
+    border: 2px solid #1e1b4b; /* Match dark bg */
+    width: 12px; height: 12px; border-radius: 50%; background: #22c55e;
+}
+
+
+/* Hero Section */
+.career-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 550px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.career-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.3) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+/* Vertical Filters */
+.hero-filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 2rem;
+}
+
+.hero-filter-item {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.hero-filter-item:hover {
+    transform: translateY(-2px);
+}
+
+.hero-filter-item input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    color: #475569;
+    font-weight: 500;
+    background: transparent;
+}
+
+.hero-filter-item input::placeholder {
+    color: #94a3b8;
+}
+
+.custom-dropdown {
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-weight: 600;
+    color: #475569;
+    gap: 1rem;
+}
+
+.dropdown-toggle span:first-child {
+    flex: 1;
+}
+
+.dropdown-toggle i {
+    color: #94a3b8;
+}
+
+/* Illustration - Copied EXACTLY from Teacher Interface */
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Verification */
+    position: relative;
+}
+
+.illustration-circle {
+    width: 450px; /* Matched teacher size */
+    height: 450px; /* Matched teacher size */
+    background: #3b3898; /* Matched teacher bg */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Matched border */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Critical for roundness */
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: float 6s ease-in-out infinite; /* Added float animation */
+}
+
+.illustration-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Changed to cover to fill circle */
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
+.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
+.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* Primary Gradient Button (Replacing Floating Button) */
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+    font-weight: 700; display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    margin-top: 1rem;
+    width: fit-content;
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+}
+
+/* Waves */
+.hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 70px;
+    animation: waveMove 15s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.hero-waves .wave-1 {
+    height: 90px;
+    margin-bottom: -70px;
+    opacity: 0.3;
+    animation-duration: 7s;
+    animation-direction: reverse;
+}
+
+.hero-waves .wave-2 {
+    height: 80px;
+    margin-bottom: -50px;
+    opacity: 0.5;
+    animation-duration: 10s;
+}
+
+.hero-waves .wave-3 { 
+    fill: #f8fafc; 
+    height: 60px;
+    animation-duration: 13s;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-25%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Job Cards */
+.job-listings-section {
+    padding: 6rem 10% 4rem;
+    background: #f8fafc;
+}
+
+/* Main Job Grid Layout - Vertical Cards */
+.job-listings-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+    transition: opacity 0.3s ease;
+}
+
+.job-card {
+    background: white;
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    height: 100%;
+}
+
+.job-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Header (Colored Banner) */
+.card-header {
+    height: 180px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+    z-index: 1;
+}
+
+.domain-badge {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e293b;
+    padding: 0.4rem 1rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    z-index: 2;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.card-title-container {
+    margin-top: auto;
+    z-index: 2;
+    text-align: center;
+}
+
+.card-title-container h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Card Body */
+.card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.body-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.body-meta {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Card Footer */
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fcfdfe;
+}
+
+.price-box {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.rating-box {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #f59e0b;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Color Themes */
+.theme-purple { background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); }
+.theme-violet { background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%); }
+.theme-pink { background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); }
+.theme-blue { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); }
+.theme-orange { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+.theme-cyan { background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%); }
+
+.btn-apply {
+    background: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-apply:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+/* Dropdown common styles */
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000;
+}
+
+.custom-dropdown.active .dropdown-options { display: block; }
+.dropdown-opt { padding: 0.8rem 1rem; border-radius: 12px; cursor: pointer; color: #64748b; transition: all 0.2s; }
+.dropdown-opt:hover { background: #f8fafc; color: #6366f1; }
+
+/* Range Slider Styling */
+/* Range Slider Styling */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    outline: none;
+    background: transparent;
+    pointer-events: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #6366f1;
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    margin-top: -8px; /* Offset to center on track */
+}
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #6366f1;
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+/* Stats Cards Premium */
+.stats-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.stat-card-p {
+    position: relative;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+.stat-card-p:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.card-glow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.stat-card-p:hover .card-glow { opacity: 1; }
+.stat-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+.stat-info { display: flex; flex-direction: column; }
+.stat-title { font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.stat-value { font-size: 1.75rem; font-weight: 800; color: #1e293b; line-height: 1; }
+.stat-icon-wrap {
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px;
+    font-size: 1.25rem;
+}
+.stat-card-p.total .stat-icon-wrap { background: #eef2ff; color: #4f46e5; }
+.stat-card-p.accepted .stat-icon-wrap { background: #dcfce7; color: #15803d; }
+.stat-card-p.pending .stat-icon-wrap { background: #fef9c3; color: #a16207; }
+.stat-card-p.rejected .stat-icon-wrap { background: #fee2e2; color: #b91c1c; }
+.stat-progress {
+    margin-top: 1.25rem;
+    height: 4px;
+    background: #f1f5f9;
+    border-radius: 99px;
+    overflow: hidden;
+}
+.progress-bar-p { height: 100%; border-radius: 99px; transition: width 1s ease-in-out; }
+.stat-card-p.total .progress-bar-p { background: #4f46e5; }
+.stat-card-p.accepted .progress-bar-p { background: #22c55e; }
+.stat-card-p.pending .progress-bar-p { background: #eab308; }
+.stat-card-p.rejected .progress-bar-p { background: #ef4444; }
+
+/* Details Modal Specific */
+#detailsModal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); }
+.details-modal-content { background-color: #fff; margin: 5% auto; padding: 2.5rem; border-radius: 30px; width: 60%; max-width: 900px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; animation: slideIn 0.4s ease-out; }
+@keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+</style>
+{% endblock %}
+
+{% block recruiter_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="career-hero">
+        <div class="hero-content-wrapper">
+            <!-- Left Side: Text & Filters -->
+            <div class="hero-text-content">
+                <span class="hero-label">ESPACE RECRUTEUR</span>
+                <h1 class="hero-title">
+                    Gérez vos<br>
+                    <span>Offres de Stage</span>
+                </h1>
+                
+                <div class="hero-filter-container">
+                    <!-- Row 1: Search Input -->
+                    <div class="hero-filter-item">
+                        <i class="fas fa-search" style="color: #6366f1; margin-right: 0.5rem;"></i>
+                        <input type="text" id="backendSearch" placeholder="Rechercher une offre (titre, entreprise...)" value="{{ current_filters.search }}">
+                    </div>
+
+                    <!-- Row 2: Ownership (Radio) -->
+                    <div class="hero-filter-item" style="height: auto; padding: 0.8rem 1.5rem; justify-content: space-between; background: rgba(255,255,255,0.85);">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Affichage:</span>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.85rem; color: #475569; font-weight: 600;">
+                                <input type="radio" name="ownership" value="all" {{ current_filters.ownership == 'all' or current_filters.ownership is empty ? 'checked' : '' }} onchange="applyFilters()">
+                                Tous
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.85rem; color: #475569; font-weight: 600;">
+                                <input type="radio" name="ownership" value="mine" {{ current_filters.ownership == 'mine' ? 'checked' : '' }} onchange="applyFilters()">
+                                Mes offres
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Company and Duration -->
+                    <div style="display: flex; gap: 1rem;">
+                        <!-- Company Filter -->
+                        <div class="hero-filter-item custom-dropdown" id="pageCompanyDropdown" style="flex: 1;">
+                            <div class="dropdown-toggle">
+                                <i class="far fa-building" style="color: #6366f1; margin-right: 0.5rem;"></i>
+                                <span class="selected-company" style="font-size: 0.9rem;">{{ current_filters.entreprise != 'all' ? current_filters.entreprise : 'Entreprises' }}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="dropdown-options">
+                                <div class="dropdown-opt {{ current_filters.entreprise == 'all' ? 'active' : '' }}" data-value="all">Toutes les entreprises</div>
+                                {% for company in companies %}
+                                    <div class="dropdown-opt {{ current_filters.entreprise == company.entreprise ? 'active' : '' }}" data-value="{{ company.entreprise }}">{{ company.entreprise }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Duration Filter -->
+                        <div class="hero-filter-item custom-dropdown" id="pageDurationDropdown" style="flex: 1;">
+                            <div class="dropdown-toggle">
+                                <i class="far fa-clock" style="color: #6366f1; margin-right: 0.5rem;"></i>
+                                <span class="selected-duration" style="font-size: 0.9rem;">
+                                    {% if current_filters.duree == 'all' or current_filters.duree is empty %}
+                                        Durées
+                                    {% else %}
+                                        {{ current_filters.duree }} mois
+                                    {% endif %}
+                                </span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="dropdown-options">
+                                <div class="dropdown-opt {{ current_filters.duree == 'all' ? 'active' : '' }}" data-value="all">Toutes les durées</div>
+                                {% for d in durations %}
+                                    <div class="dropdown-opt {{ current_filters.duree == d.duree ? 'active' : '' }}" data-value="{{ d.duree }}">{{ d.duree }} mois</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Sort Filter -->
+                    <div class="hero-filter-item custom-dropdown" id="pageSortDropdown" style="width: 100%;">
+                        <div class="dropdown-toggle">
+                            <i class="fas fa-sort-amount-down" style="color: #6366f1; margin-right: 0.5rem;"></i>
+                            <span class="selected-sort" style="font-size: 0.9rem;">{{ current_filters.sort == 'asc' ? 'Anciens' : 'Récents' }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt {{ current_filters.sort == 'desc' or current_filters.sort is empty ? 'active' : '' }}" data-value="desc">Plus récents</div>
+                            <div class="dropdown-opt {{ current_filters.sort == 'asc' ? 'active' : '' }}" data-value="asc">Plus anciens</div>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Date Range Slider -->
+                    <div class="hero-filter-item" style="height: auto; padding: 1rem 1.5rem; flex-direction: column; align-items: stretch; gap: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; font-weight: 600;">
+                            <span>Date de publication</span>
+                        </div>
+                        <div class="date-slider-container" style="position: relative; height: 30px; margin-top: 5px;">
+                            <input type="range" id="minDateSlider" 
+                                   min="{{ dateRange.min }}" 
+                                   max="{{ dateRange.max }}" 
+                                   value="{{ current_filters.min_date ?: dateRange.min }}" 
+                                   oninput="updateSliderLabels()"
+                                   style="position: absolute; width: 100%; pointer-events: none; -webkit-appearance: none; background: transparent; z-index: 2;">
+                            <input type="range" id="maxDateSlider" 
+                                   min="{{ dateRange.min }}" 
+                                   max="{{ dateRange.max }}" 
+                                   value="{{ current_filters.max_date ?: dateRange.max }}" 
+                                   oninput="updateSliderLabels()"
+                                   style="position: absolute; width: 100%; pointer-events: none; -webkit-appearance: none; background: transparent; z-index: 2;">
+                            <div class="slider-track" style="position: absolute; top: 50%; transform: translateY(-50%); width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #6366f1; font-weight: 700;">
+                            <span id="minDateLabel">{{ (current_filters.min_date ?: dateRange.min)|date('d/m/Y') }}</span>
+                            <span id="maxDateLabel">{{ (current_filters.max_date ?: dateRange.max)|date('d/m/Y') }}</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="flex: 1;"></div> <!-- Spacer -->
+                        <button class="btn-primary-gradient" onclick="showPublishModal()" style="margin-top: 0;">
+                            <i class="fas fa-plus"></i> Publier un stage
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side: Illustration -->
+            <div class="hero-visual">
+                <div class="illustration-circle">
+                    <img src="{{ asset('images/recruiter_hero.png') }}?v=2" alt="Recruiter Illustration">
+                </div>
+                <!-- Decorative Frames -->
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-3"></div>
+                <div class="hero-frame frame-4"></div>
+                <div class="hero-frame frame-5"></div>
+                <div class="hero-frame frame-6"></div>
+            </div>
+        </div>
+
+        <div class="hero-waves">
+            <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.3)" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.5)" d="M0,32L48,37.3C96,43,192,53,288,64C384,75,480,85,576,80C672,75,768,53,864,48C960,43,1056,53,1152,58.7C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Premium Stats Section -->
+    <div style="padding: 2rem 10% 0;">
+        <div class="stats-grid-premium">
+            <!-- My Offers -->
+            <div class="stat-card-p total">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Mes Offres</span>
+                        <div class="stat-value">{{ recruiterStats.myOffersCount }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar-p" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- Total Applications -->
+            <div class="stat-card-p total">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Candidatures Reçues</span>
+                        <div class="stat-value">{{ recruiterStats.totalApplications }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar-p" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- Accepted -->
+            <div class="stat-card-p accepted">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Acceptées</span>
+                        <div class="stat-value">{{ recruiterStats.accepted }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar-p" style="width: {{ recruiterStats.totalApplications > 0 ? (recruiterStats.accepted / recruiterStats.totalApplications * 100) : 0 }}%"></div>
+                </div>
+            </div>
+
+            <!-- Pending -->
+            <div class="stat-card-p pending">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">En Attente</span>
+                        <div class="stat-value">{{ recruiterStats.pending }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar-p" style="width: {{ recruiterStats.totalApplications > 0 ? (recruiterStats.pending / recruiterStats.totalApplications * 100) : 0 }}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listings -->
+    <section class="job-listings-section" id="jobGrid">
+        {{ include('recruteur/_offer_cards.html.twig') }}
+    </section>
+</div>
+
+</div>
+
+<!-- Modal logic shared -->
+{% include 'recruteur/_publish_modal.html.twig' ignore missing %}
+
+<!-- Details Modal -->
+<div id="detailsModal">
+    <div class="details-modal-content">
+        <div id="detailsModalBody">
+            <!-- Content loaded via AJAX -->
+            <div style="text-align: center; padding: 3rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #6366f1;"></i>
+                <p style="margin-top: 1rem; color: #64748b;">Chargement des détails...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascripts %}
+<script>
+window.applyFilters = function() {
+    const search = document.getElementById('backendSearch').value;
+    const entreprise = document.querySelector('#pageCompanyDropdown .active')?.getAttribute('data-value') || 'all';
+    const duree = document.querySelector('#pageDurationDropdown .active')?.getAttribute('data-value') || 'all';
+    const sort = document.querySelector('#pageSortDropdown .active')?.getAttribute('data-value') || 'desc';
+    const ownership = document.querySelector('input[name="ownership"]:checked')?.value || 'all';
+    
+    const params = new URLSearchParams();
+    if (search) params.set('searchbar', search);
+    if (entreprise !== 'all') params.set('entreprise', entreprise);
+    if (duree !== 'all') params.set('duree', duree);
+    if (sort !== 'desc') params.set('sort', sort);
+    if (ownership !== 'all') params.set('ownership', ownership);
+    
+    const minDate = document.getElementById('minDateSlider').value;
+    const maxDate = document.getElementById('maxDateSlider').value;
+    params.set('min_date', minDate);
+    params.set('max_date', maxDate);
+    
+    const url = `${window.location.pathname}?${params.toString()}`;
+    
+    // Update URL without refresh
+    window.history.pushState({path: url}, '', url);
+    
+    // Smooth transition
+    const grid = document.getElementById('jobGrid');
+    if (grid) grid.style.opacity = '0.5';
+
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        if (grid) {
+            grid.innerHTML = html;
+            grid.style.opacity = '1';
+        }
+    });
+};
+
+// Debounce function
+window.debounce = function(func, wait) {
+    let timeout;
+    return function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, arguments), wait);
+    };
+};
+
+window.debouncedFilter = window.debounce(window.applyFilters, 300);
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add dynamic listeners
+    const searchInput = document.getElementById('backendSearch');
+    if (searchInput) searchInput.addEventListener('input', window.debouncedFilter);
+    
+    // Dropdown Logic
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const parent = toggle.closest('.custom-dropdown');
+            document.querySelectorAll('.custom-dropdown').forEach(d => { if(d !== parent) d.classList.remove('active'); });
+            parent.classList.toggle('active');
+        });
+    });
+
+    document.querySelectorAll('.dropdown-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+            const parent = opt.closest('.custom-dropdown');
+            parent.querySelectorAll('.dropdown-opt').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            
+            // Find the specific span (company, sort, or duration)
+            const span = parent.querySelector('.selected-company') 
+                      || parent.querySelector('.selected-sort') 
+                      || parent.querySelector('.selected-duration');
+            if (span) span.textContent = opt.textContent;
+            
+            parent.classList.remove('active');
+            window.applyFilters();
+        });
+    });
+
+    document.addEventListener('click', () => { 
+        document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active')); 
+    });
+
+    // Slider Logic
+    const minSlider = document.getElementById('minDateSlider');
+    const maxSlider = document.getElementById('maxDateSlider');
+    const minLabel = document.getElementById('minDateLabel');
+    const maxLabel = document.getElementById('maxDateLabel');
+
+    function formatDate(timestamp) {
+        const d = new Date(timestamp * 1000);
+        return d.toLocaleDateString('fr-FR');
+    }
+
+    if (minSlider && maxSlider) {
+        minSlider.oninput = () => {
+            if (parseInt(minSlider.value) > parseInt(maxSlider.value)) minSlider.value = maxSlider.value;
+            if (minLabel) minLabel.textContent = formatDate(minSlider.value);
+            minSlider.style.zIndex = "3";
+            maxSlider.style.zIndex = "2";
+            window.debouncedFilter();
+        };
+
+        maxSlider.oninput = () => {
+            if (parseInt(maxSlider.value) < parseInt(minSlider.value)) maxSlider.value = minSlider.value;
+            if (maxLabel) maxLabel.textContent = formatDate(maxSlider.value);
+            maxSlider.style.zIndex = "3";
+            minSlider.style.zIndex = "2";
+            window.debouncedFilter();
+        };
+    }
+});
+
+function showDetails(id) {
+    const modal = document.getElementById('detailsModal');
+    const body = document.getElementById('detailsModalBody');
+    if (modal) modal.style.display = 'block';
+    
+    fetch(`/recruteur/candidature/${id}/details`)
+        .then(response => response.text())
+        .then(html => {
+            if (body) body.innerHTML = html;
+        })
+        .catch(err => {
+            if (body) body.innerHTML = '<p style="color: red; padding: 2rem; text-align: center;">Erreur lors du chargement des détails.</p>';
+        });
+}
+
+function closeDetailsModal() {
+    const modal = document.getElementById('detailsModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Close on click outside
+window.onclick = function(event) {
+    const modal = document.getElementById('detailsModal');
+    if (event.target == modal) {
+        closeDetailsModal();
+    }
+}
+
+function updateCandidatureStatus(id, status) {
+    if (!confirm(`Voulez-vous vraiment marquer cette candidature comme ${status} ?`)) return;
+
+    fetch(`/recruteur/candidature/${id}/status/${status}`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            closeDetailsModal();
+            window.applyFilters(); // Refresh the grid
+        } else {
+            alert('Erreur: ' + data.message);
+        }
+    })
+    .catch(err => {
+        alert('Une erreur est survenue lors de la mise à jour du statut.');
+    });
+}
+
+function associateToOffer(id) {
+    const offerId = document.getElementById('associateOfferSelect').value;
+    if (!offerId) {
+        alert('Veuillez sélectionner une offre.');
+        return;
+    }
+
+    if (!confirm('Voulez-vous associer cette demande à l\'offre sélectionnée ?')) return;
+
+    fetch(`/recruteur/candidature/${id}/associate/${offerId}`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            showDetails(id);
+            window.applyFilters(); // Refresh the grid
+        } else {
+            alert('Erreur: ' + data.message);
+        }
+    })
+    .catch(err => {
+        alert('Une erreur est survenue lors de l\'association.');
+    });
+}
+
+window.runAiMatch = function(candidatureId) {
+    const initial = document.getElementById('aiMatchInitial');
+    const loading = document.getElementById('aiMatchLoading');
+    const result = document.getElementById('aiMatchResult');
+    
+    initial.style.display = 'none';
+    loading.style.display = 'block';
+    result.style.display = 'none';
+    
+    fetch(`/recruteur/candidature/${candidatureId}/ai-match`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.score !== undefined) {
+                const score = data.score;
+                document.getElementById('matchScoreValue').textContent = score + '%';
+                document.getElementById('matchCircle').setAttribute('stroke-dasharray', `${score}, 100`);
+                
+                let color = '#ef4444';
+                if (score >= 80) color = '#10b981';
+                else if (score >= 50) color = '#6366f1';
+                else if (score >= 30) color = '#f59e0b';
+                
+                document.getElementById('matchCircle').setAttribute('stroke', color);
+                
+                document.getElementById('matchTitle').textContent = 
+                    score >= 80 ? 'Excellente correspondance' : 
+                    score >= 60 ? 'Bonne correspondance' : 
+                    score >= 40 ? 'Correspondance moyenne' : 'Faible correspondance';
+                
+                document.getElementById('matchExplanation').textContent = data.explanation;
+                
+                const strengthsList = document.getElementById('matchStrengths');
+                const weaknessesList = document.getElementById('matchWeaknesses');
+                
+                strengthsList.innerHTML = '';
+                data.strengths.forEach(s => {
+                    strengthsList.innerHTML += `<li>${s}</li>`;
+                });
+                
+                weaknessesList.innerHTML = '';
+                data.weaknesses.forEach(w => {
+                    weaknessesList.innerHTML += `<li>${w}</li>`;
+                });
+                
+                result.style.display = 'block';
+            } else {
+                alert('Erreur: ' + (data.message || 'Calcul impossible'));
+                initial.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Une erreur est survenue lors de l\'analyse IA.');
+            initial.style.display = 'block';
+        })
+        .finally(() => {
+            loading.style.display = 'none';
+        });
+};
+</script>
+{% endblock %}

@@ -1,0 +1,363 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ user.id ? 'Modifier' : 'Nouvel' }} Utilisateur - Admin{% endblock %}
+{% block page_title %}{{ user.id ? 'Modification' : 'Création' }} d'utilisateur{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header" style="padding: 1.5rem; border-bottom: 1px solid #f1f5f9;">
+        <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600; color: #1e293b;">Informations de l'utilisateur</h3>
+    </div>
+
+    {% for message in app.flashes('danger') %}
+        <div style="margin: 1rem 2rem 0 2rem; padding: 0.85rem 1rem; border-radius: 8px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-weight: 600;">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div style="margin: 1rem 2rem 0 2rem; padding: 0.85rem 1rem; border-radius: 8px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; font-weight: 600;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <form method="post" enctype="multipart/form-data" style="padding: 2rem;">
+        <input type="hidden" name="_token" value="{{ csrf_token('user-form') }}">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Nom Complet</label>
+                <input type="text" name="name" value="{{ user.name }}" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Nom d'utilisateur</label>
+                <input type="text" name="username" value="{{ user.username }}" required
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Email</label>
+            <input type="email" name="email" value="{{ user.email }}" required
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Code</label>
+                <input type="text" name="countryCode" value="{{ user.countryCode ?: '+212' }}" 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Téléphone</label>
+                <input type="text" name="phoneNumber" value="{{ user.phoneNumber }}" 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Rôle</label>
+                <select name="role" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; background: white;">
+                    <option value="ROLE_USER" {{ 'ROLE_USER' in user.roles ? 'selected' : '' }}>Utilisateur</option>
+                    <option value="ROLE_ENSEIGNANT" {{ 'ROLE_ENSEIGNANT' in user.roles ? 'selected' : '' }}>Enseignant</option>
+                    <option value="ROLE_RECRUTEUR" {{ 'ROLE_RECRUTEUR' in user.roles ? 'selected' : '' }}>Recruteur</option>
+                    <option value="ROLE_ADMIN" {{ 'ROLE_ADMIN' in user.roles ? 'selected' : '' }}>Administrateur</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Mot de passe {{ user.id ? '(laisser vide pour ne pas changer)' : '' }}</label>
+                <input type="password" name="password" {{ user.id ? '' : 'required' }}
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 2rem; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 1rem; background: #f8fafc;">
+            <h4 style="margin: 0 0 .75rem; color: #0f172a; font-size: 0.95rem;">
+                <i class="fas fa-shield-alt"></i> Admin Strong Verification Enrollment
+            </h4>
+            <p style="margin: 0 0 .75rem; color: #475569; font-size: 0.82rem;">
+                Required when role is <strong>Administrateur</strong>. Complete 3 steps for secure enrollment.
+            </p>
+
+            <!-- Step Indicators -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center; justify-content: center;">
+                <div class="step-indicator" data-step="1" style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 8px; background: #e0e7ff; color: #4338ca; font-weight: 700; font-size: 0.75rem;">
+                    <i class="fas fa-usb"></i> 1. USB Key
+                </div>
+                <div class="step-indicator" data-step="2" style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 8px; background: #e2e8f0; color: #64748b; font-weight: 700; font-size: 0.75rem;">
+                    <i class="fas fa-camera"></i> 2. Face Capture
+                </div>
+                <div class="step-indicator" data-step="3" style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 8px; background: #e2e8f0; color: #64748b; font-weight: 700; font-size: 0.75rem;">
+                    <i class="fas fa-check-circle"></i> 3. Confirm
+                </div>
+            </div>
+
+            <!-- Step 1: USB Hardware Key -->
+            <div id="step-1" class="enrollment-step" style="display: block;">
+                <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+                    <h5 style="color: #1e293b; font-size: 0.85rem; margin: 0 0 0.75rem; font-weight: 600;">
+                        <i class="fas fa-usb me-2"></i>Step 1: Insert USB Security Key
+                    </h5>
+                    <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem;">
+                        Insert your USB drive and click "Detect USB Key" to generate the hardware signature.
+                    </p>
+                    <button type="button" id="btn-detect-usb" style="width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 0.75rem;">
+                        <i class="fas fa-search me-2"></i>Detect USB Key
+                    </button>
+                    <input type="text" id="hardware-key-input" name="hardware_key_plain" placeholder="Hardware key will appear here..." readonly
+                           style="width: 100%; padding: 0.7rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; font-family: monospace; font-size: 0.75rem;">
+                    <button type="button" id="btn-next-step-2" disabled style="width: 100%; padding: 0.75rem; background: #cbd5e1; color: #94a3b8; border: none; border-radius: 8px; font-weight: 600; cursor: not-allowed; margin-top: 0.75rem;">
+                        Next: Capture Face <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Face Capture -->
+            <div id="step-2" class="enrollment-step" style="display: none;">
+                <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+                    <h5 style="color: #1e293b; font-size: 0.85rem; margin: 0 0 0.75rem; font-weight: 600;">
+                        <i class="fas fa-camera me-2"></i>Step 2: Capture Face Reference
+                    </h5>
+                    <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem;">
+                        Position your face in the camera frame and click "Capture" when ready.
+                    </p>
+                    
+                    <!-- Live Camera Feed -->
+                    <div style="position: relative; width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 0.75rem;">
+                        <video id="face-video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                        <canvas id="face-canvas" style="display: none;"></canvas>
+                        <div id="face-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 250px; border: 2px dashed #4facfe; border-radius: 50%; pointer-events: none;"></div>
+                        <div id="face-status" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600;">
+                            <i class="fas fa-video me-1"></i>Camera Ready
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <button type="button" id="btn-start-camera" style="padding: 0.75rem; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-play me-2"></i>Start Camera
+                        </button>
+                        <button type="button" id="btn-capture-face" disabled style="padding: 0.75rem; background: #cbd5e1; color: #94a3b8; border: none; border-radius: 8px; font-weight: 600; cursor: not-allowed;">
+                            <i class="fas fa-camera me-2"></i>Capture
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="face-reference-data" name="face_reference_data">
+                    <div id="captured-preview" style="display: none; margin-bottom: 0.75rem;">
+                        <p style="font-size: 0.75rem; color: #10b981; margin-bottom: 0.5rem;">
+                            <i class="fas fa-check-circle me-1"></i>Face captured successfully!
+                        </p>
+                        <img id="preview-img" style="width: 100%; border-radius: 8px; border: 2px solid #10b981;">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <button type="button" id="btn-back-step-1" style="padding: 0.75rem; background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                        </button>
+                        <button type="button" id="btn-next-step-3" disabled style="padding: 0.75rem; background: #cbd5e1; color: #94a3b8; border: none; border-radius: 8px; font-weight: 600; cursor: not-allowed;">
+                            Next: Confirm <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div id="step-3" class="enrollment-step" style="display: none;">
+                <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+                    <h5 style="color: #1e293b; font-size: 0.85rem; margin: 0 0 0.75rem; font-weight: 600;">
+                        <i class="fas fa-check-circle me-2"></i>Step 3: Confirm Enrollment
+                    </h5>
+                    <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem;">
+                        <p style="font-size: 0.8rem; color: #166534; margin: 0 0 0.5rem; font-weight: 600;">
+                            <i class="fas fa-info-circle me-1"></i>Enrollment Data Ready
+                        </p>
+                        <div style="font-size: 0.7rem; color: #15803d;">
+                            <div style="display: flex; align-items: center; margin-bottom: 0.25rem;">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span>USB Hardware Key: <span id="confirm-key-preview" style="font-family: monospace;">●●●●●●●●</span></span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span>Face Reference: Captured</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem;">
+                        Click "Complete Enrollment" to save the admin verification credentials, or go back to make changes.
+                    </p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <button type="button" id="btn-back-step-2" style="padding: 0.75rem; background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                        </button>
+                        <button type="button" id="btn-complete-enrollment" style="padding: 0.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-check-double me-2"></i>Complete Enrollment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        // Admin Enrollment Workflow
+        (function() {
+            let currentStep = 1;
+            let cameraStream = null;
+            let hardwareKey = '';
+            let faceCaptured = false;
+
+            const updateStep = (step) => {
+                currentStep = step;
+                document.querySelectorAll('.enrollment-step').forEach(el => el.style.display = 'none');
+                document.getElementById(`step-${step}`).style.display = 'block';
+                
+                document.querySelectorAll('.step-indicator').forEach((el, idx) => {
+                    if (idx + 1 < step) {
+                        el.style.background = '#dcfce7';
+                        el.style.color = '#166534';
+                    } else if (idx + 1 === step) {
+                        el.style.background = '#e0e7ff';
+                        el.style.color = '#4338ca';
+                    } else {
+                        el.style.background = '#e2e8f0';
+                        el.style.color = '#64748b';
+                    }
+                });
+            };
+
+            // Step 1: USB Key Detection
+            document.getElementById('btn-detect-usb').addEventListener('click', async () => {
+                const btn = document.getElementById('btn-detect-usb');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Detecting...';
+
+                try {
+                        const response = await fetch('{{ path('admin_user_detect_usb') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+
+                        const contentType = response.headers.get('content-type') || '';
+                        let data;
+
+                        if (contentType.includes('application/json')) {
+                            data = await response.json();
+                        } else {
+                            const rawText = await response.text();
+                            throw new Error(`Unexpected non-JSON response (HTTP ${response.status}): ${rawText.slice(0, 120)}`);
+                        }
+
+                        if (!response.ok) {
+                            throw new Error(data.error || `HTTP ${response.status}`);
+                        }
+                    
+                    if (data.success && data.hardware_key) {
+                        hardwareKey = data.hardware_key;
+                        document.getElementById('hardware-key-input').value = hardwareKey;
+                        document.getElementById('btn-next-step-2').disabled = false;
+                        document.getElementById('btn-next-step-2').style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                        document.getElementById('btn-next-step-2').style.color = 'white';
+                        document.getElementById('btn-next-step-2').style.cursor = 'pointer';
+                        btn.innerHTML = '<i class="fas fa-check me-2"></i>USB Key Detected';
+                        btn.style.background = '#10b981';
+                    } else {
+                        throw new Error(data.error || 'USB key not detected');
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message + '\\n\\nPlease insert a USB drive and try again.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-search me-2"></i>Detect USB Key';
+                }
+            });
+
+            document.getElementById('btn-next-step-2').addEventListener('click', () => {
+                if (hardwareKey) updateStep(2);
+            });
+
+            // Step 2: Camera Controls
+            document.getElementById('btn-start-camera').addEventListener('click', async () => {
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { width: 640, height: 480, facingMode: 'user' } 
+                    });
+                    document.getElementById('face-video').srcObject = cameraStream;
+                    document.getElementById('btn-capture-face').disabled = false;
+                    document.getElementById('btn-capture-face').style.background = '#3b82f6';
+                    document.getElementById('btn-capture-face').style.color = 'white';
+                    document.getElementById('btn-capture-face').style.cursor = 'pointer';
+                    document.getElementById('face-status').innerHTML = '<i class="fas fa-check-circle me-1"></i>Camera Active';
+                    document.getElementById('face-status').style.background = 'rgba(16, 185, 129, 0.8)';
+                } catch (error) {
+                    alert('Camera access denied: ' + error.message);
+                }
+            });
+
+            document.getElementById('btn-capture-face').addEventListener('click', () => {
+                const video = document.getElementById('face-video');
+                const canvas = document.getElementById('face-canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                
+                canvas.toBlob((blob) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        document.getElementById('face-reference-data').value = reader.result;
+                        document.getElementById('preview-img').src = reader.result;
+                        document.getElementById('captured-preview').style.display = 'block';
+                        faceCaptured = true;
+                        
+                        if (cameraStream) {
+                            cameraStream.getTracks().forEach(track => track.stop());
+                            cameraStream = null;
+                        }
+                        
+                        document.getElementById('btn-next-step-3').disabled = false;
+                        document.getElementById('btn-next-step-3').style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                        document.getElementById('btn-next-step-3').style.color = 'white';
+                        document.getElementById('btn-next-step-3').style.cursor = 'pointer';
+                    };
+                    reader.readAsDataURL(blob);
+                }, 'image/jpeg', 0.95);
+            });
+
+            document.getElementById('btn-next-step-3').addEventListener('click', () => {
+                if (faceCaptured) {
+                    document.getElementById('confirm-key-preview').textContent = hardwareKey.substring(0, 12) + '...';
+                    updateStep(3);
+                }
+            });
+
+            // Navigation
+            document.getElementById('btn-back-step-1').addEventListener('click', () => {
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    cameraStream = null;
+                }
+                updateStep(1);
+            });
+
+            document.getElementById('btn-back-step-2').addEventListener('click', () => updateStep(2));
+
+            document.getElementById('btn-complete-enrollment').addEventListener('click', () => {
+                if (hardwareKey && faceCaptured) {
+                    alert('Enrollment completed! Click "Créer l\'utilisateur" to save.');
+                }
+            });
+
+            // Initialize
+            updateStep(1);
+        })();
+        </script>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+            <a href="{{ path('admin_user_index') }}" style="padding: 0.75rem 1.5rem; border: 1px solid #e2e8f0; border-radius: 8px; color: #64748b; text-decoration: none; font-weight: 600; font-size: 0.875rem;">Annuler</a>
+            <button type="submit" class="btn-primary" style="padding: 0.75rem 2rem; border-radius: 8px; border: none; font-weight: 600; font-size: 0.875rem; cursor: pointer;">
+                {{ user.id ? 'Mettre à jour' : 'Créer l\'utilisateur' }}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

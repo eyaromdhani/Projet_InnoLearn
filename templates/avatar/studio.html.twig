@@ -1,0 +1,580 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avatar Studio V3 | InnoLearn{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-purple: #bc13fe;
+            --glass-bg: rgba(15, 15, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --nav-height: 72px;
+        }
+
+        body { background: #05050a; font-family: 'Inter', sans-serif; margin: 0; }
+
+        /* ── Main 3-Column Layout ── */
+        .studio-frame {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 0;
+            width: 100vw;
+            height: calc(100vh - var(--nav-height));
+            margin-top: var(--nav-height);
+            background: #05050a;
+            overflow: hidden;
+        }
+
+        /* ── Glass Panels (Left & Right) ── */
+        .glass-panel {
+            background: rgba(10, 10, 25, 0.85);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid var(--glass-border);
+            padding: 1.2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
+        }
+        .glass-panel:last-child {
+            border-right: none;
+            border-left: 1px solid var(--glass-border);
+        }
+        .glass-panel::-webkit-scrollbar { width: 4px; }
+        .glass-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+        /* ── Center Viewport ── */
+        .viewer-box {
+            position: relative;
+            margin: 0.5rem;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 242, 255, 0.08);
+            background: radial-gradient(ellipse at 50% 60%, #1b1b2f 0%, #08080f 100%);
+        }
+        #studio-canvas { width: 100%; height: 100%; display: block; outline: none; }
+
+        /* ── Typography ── */
+        h5 {
+            color: var(--neon-blue);
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid rgba(0, 242, 255, 0.15);
+        }
+        .label-small {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.6rem;
+        }
+
+        /* ── Controls ── */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .action-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.7rem 0.5rem;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.7);
+            transition: all 0.2s;
+        }
+        .action-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-2px); }
+        .action-card.active { border-color: var(--neon-purple); background: rgba(188, 19, 254, 0.1); box-shadow: 0 0 12px rgba(188, 19, 254, 0.2); color: white; }
+
+        .color-dot {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.15);
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        .color-dot:hover { transform: scale(1.15); border-color: white; }
+
+        /* ── AI Panel Buttons ── */
+        .ai-hub-btn {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border: none; padding: 0.65rem; border-radius: 10px; color: white;
+            font-weight: 700; font-size: 0.8rem; width: 100%; margin-top: 0.8rem; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.25); transition: filter 0.2s;
+        }
+        .ai-hub-btn:hover { filter: brightness(1.15); }
+
+        .sub-tab-btn {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+        }
+
+        /* ── Chat Area ── */
+        .chat-input-area {
+            background: rgba(0,0,0,0.3); border-radius: 12px; padding: 0.8rem; margin-top: 0.8rem;
+            border: 1px solid var(--glass-border);
+        }
+        #chat-log { max-height: 100px; overflow-y: auto; margin-bottom: 0.6rem; font-size: 0.75rem; color: #ccc; }
+
+        /* ── Morph Sliders ── */
+        .morph-slider { width: 100%; }
+        .form-range::-webkit-slider-thumb { background: var(--neon-blue); }
+
+        /* ── UI Overlays ── */
+        #ai-bubble {
+            position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.88); border: 1px solid var(--neon-blue);
+            color: white; padding: 1rem 1.8rem; border-radius: 24px;
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.15); opacity: 0;
+            transition: all 0.5s; pointer-events: none; z-index: 100; font-size: 0.95rem;
+            max-width: 80%;
+        }
+        #ai-bubble.active { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+        .version-tag { position: absolute; bottom: 12px; right: 14px; font-size: 0.55rem; color: rgba(255,255,255,0.2); letter-spacing: 1px; }
+
+        /* ── Toast ── */
+        #studio-toast {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+            background: var(--neon-purple); color: white; padding: 0.45rem 1.2rem;
+            border-radius: 50px; font-size: 0.75rem; font-weight: 700;
+            opacity: 0; transition: all 0.3s; z-index: 1000;
+            white-space: nowrap;
+        }
+
+        /* ── AI Status Spinner ── */
+        #ai-status { padding: 0.5rem 0; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1200px) {
+            .studio-frame { grid-template-columns: 240px 1fr 260px; }
+        }
+        @media (max-width: 900px) {
+            .studio-frame {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 50vh auto;
+                height: auto;
+                overflow-y: auto;
+                margin-top: 60px;
+            }
+            .glass-panel {
+                border: none;
+                border-bottom: 1px solid var(--glass-border);
+                max-height: 45vh;
+            }
+            .viewer-box { min-height: 50vh; }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="studio-frame">
+    <!-- Left: Core customization -->
+    <div class="glass-panel">
+        <h5><i class="fas fa-fingerprint me-2"></i> Identity</h5>
+        
+        <div class="mb-4">
+            <div class="label-small">Biological Profile</div>
+            <div class="grid-2">
+                <div class="action-card active" data-part="body_type" data-value="male">
+                    <i class="fas fa-mars mb-2"></i><br>Male
+                </div>
+                <div class="action-card" data-part="body_type" data-value="female">
+                    <i class="fas fa-venus mb-2"></i><br>Female
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="label-small">Dermal Pigment</div>
+            <div class="d-flex gap-3 justify-content-center py-2">
+                {% for tone in ['light', 'medium', 'tan', 'dark', 'deep'] %}
+                    <div class="color-dot" data-part="skin_tone" data-value="{{ tone }}" 
+                         style="background: {{ {'light': '#FFE0BD', 'medium': '#D4A574', 'tan': '#C68642', 'dark': '#8D5524', 'deep': '#4A2912'}[tone] }};"></div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="label-small">Optical Pattern</div>
+            <div class="grid-2">
+                <div class="action-card" data-part="eye_color" data-value="blue"><i class="fas fa-eye me-1" style="color: #4A90D9;"></i>Blue</div>
+                <div class="action-card" data-part="eye_color" data-value="brown"><i class="fas fa-eye me-1" style="color: #6B3A2A;"></i>Brown</div>
+                <div class="action-card" data-part="eye_color" data-value="green"><i class="fas fa-eye me-1" style="color: #3D8B37;"></i>Green</div>
+                <div class="action-card" data-part="eye_color" data-value="hazel"><i class="fas fa-eye me-1" style="color: #8B7332;"></i>Hazel</div>
+                <div class="action-card" data-part="eye_color" data-value="grey"><i class="fas fa-eye me-1" style="color: #7A7A7A;"></i>Grey</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="label-small">Hair Style</div>
+            <div id="hair-grid" class="grid-2">
+                <div class="action-card active" data-part="hair_style" data-value="short"><i class="fas fa-user me-1"></i>Short</div>
+                <div class="action-card" data-part="hair_style" data-value="long"><i class="fas fa-user-alt me-1"></i>Long</div>
+                <div class="action-card" data-part="hair_style" data-value="curly"><i class="fas fa-cloud me-1"></i>Curly</div>
+                <div class="action-card" data-part="hair_style" data-value="undercut"><i class="fas fa-cut me-1"></i>Undercut</div>
+                <div class="action-card" data-part="hair_style" data-value="side-part"><i class="fas fa-align-left me-1"></i>Side Part</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="label-small">Hair Color</div>
+            <div class="d-flex gap-3 flex-wrap justify-content-center py-2">
+                <div class="color-dot" data-part="hair_color" data-value="black" style="background: #1a1a1a;" title="Black"></div>
+                <div class="color-dot" data-part="hair_color" data-value="brown" style="background: #5C3A2E;" title="Brown"></div>
+                <div class="color-dot" data-part="hair_color" data-value="blonde" style="background: #D4A76A;" title="Blonde"></div>
+                <div class="color-dot" data-part="hair_color" data-value="red" style="background: #8B3A3A;" title="Red"></div>
+                <div class="color-dot" data-part="hair_color" data-value="white" style="background: #D0D0D0;" title="White"></div>
+                <div class="color-dot" data-part="hair_color" data-value="auburn" style="background: #7B3F2E;" title="Auburn"></div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="label-small">Apparel Configuration</div>
+            <div id="outfit-grid" class="grid-2">
+                <!-- Dynamically populated -->
+                <div class="action-card active" data-part="outfit" data-value="casual">Casual</div>
+                <div class="action-card" data-part="outfit" data-value="formal">Formal</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="label-small">Craniofacial Calibration</div>
+            <div class="px-2">
+                <div class="mb-3">
+                    <label class="small text-white-50 d-block mb-1">Eye Scale</label>
+                    <input type="range" class="form-range morph-slider" data-morph="eyeWide" min="0" max="1" step="0.1" value="0">
+                </div>
+                <div class="mb-3">
+                    <label class="small text-white-50 d-block mb-1">Nose Scale</label>
+                    <input type="range" class="form-range morph-slider" data-morph="noseWidth" min="0" max="1" step="0.1" value="0">
+                </div>
+                <div class="mb-3">
+                    <label class="small text-white-50 d-block mb-1">Mouth Scale</label>
+                    <input type="range" class="form-range morph-slider" data-morph="mouthSmile" min="0" max="1" step="0.1" value="0">
+                </div>
+                <div class="mb-3">
+                    <label class="small text-white-50 d-block mb-1">Ear Size</label>
+                    <input type="range" class="form-range morph-slider" data-morph="earSize" min="0" max="1" step="0.1" value="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-auto">
+            <button id="btn-save" class="ai-hub-btn" style="background: rgba(255,255,255,0.05); border: 1px solid var(--neon-blue); box-shadow: none;">
+                <i class="fas fa-sync me-2"></i> Sync Digital Twin
+            </button>
+        </div>
+    </div>
+
+    <!-- Center: Viewport -->
+    <div class="viewer-box">
+        <canvas id="studio-canvas"></canvas>
+        <div id="ai-bubble">Greetings, Scholar. I am initializing your neural link.</div>
+        <div class="version-tag">ENGINE_V3.1_DEV // STABLE_READY</div>
+    </div>
+
+    <!-- Right: AI interaction -->
+    <div class="glass-panel">
+        <h5><i class="fas fa-brain me-2"></i> AI Neural Link</h5>
+        
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-sm btn-outline-info flex-grow-1 sub-tab-btn active" data-mode="synth">Synth</button>
+            <button class="btn btn-sm btn-outline-info flex-grow-1 sub-tab-btn" data-mode="chat">Coach</button>
+        </div>
+
+        <div id="mode-synth-ui">
+            <div class="label-small">Feature Extraction</div>
+            <p class="small text-white-50 mb-3">Describe your likeness or provide a visual reference for the AI to process.</p>
+            
+            <textarea id="ai-input" class="form-control bg-dark text-white border-0 mb-3" rows="3" placeholder="e.g. A futuristic student with neon accents..."></textarea>
+            
+            <div class="d-flex gap-2">
+                <button id="btn-synth-text" class="btn btn-primary flex-grow-1"><i class="fas fa-magic me-2"></i>Synth</button>
+                <button id="btn-synth-mic" class="btn btn-secondary"><i class="fas fa-microphone"></i></button>
+                <button class="btn btn-secondary" onclick="document.getElementById('file-in').click()"><i class="fas fa-camera"></i></button>
+            </div>
+            <input type="file" id="file-in" class="d-none" style="display: none;" accept="image/*">
+        </div>
+
+        <div id="mode-chat-ui" class="d-none">
+            <div class="label-small">Active Conversation</div>
+            <div id="chat-log"></div>
+            <div class="chat-input-area mb-3">
+                <textarea id="chat-msg" class="form-control bg-transparent text-white border-0" rows="2" placeholder="Send transmission..."></textarea>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <button id="btn-chat-mic" class="btn btn-sm btn-secondary rounded-circle"><i class="fas fa-microphone"></i></button>
+                <button id="btn-chat-send" class="btn btn-sm btn-primary px-4 rounded-pill">Transmit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ai-status" class="mt-4 text-center d-none">
+        <div class="spinner-grow text-info spinner-grow-sm" role="status"></div>
+        <div id="ai-status-text" class="small mt-2 text-white-50">Synchronizing...</div>
+    </div>
+</div>
+
+<div id="studio-toast">Neural Link Active</div>
+
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<script src="{{ asset('js/avatar-builder.js') }}?v={{ random() }}"></script>
+
+<script>
+window.onerror = function(msg, url, line) {
+    console.error(`[STUDIO_CRASH] ${msg} @ ${line}`);
+    showToast("CRITICAL_FAULT: Check Telemetry Console", true);
+};
+
+function showToast(text, isError = false) {
+    const t = document.getElementById('studio-toast');
+    t.innerText = text;
+    t.style.background = isError ? '#ff3232' : '#bc13fe';
+    t.style.opacity = 1;
+    setTimeout(() => t.style.opacity = 0, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log(">>> INITIALIZING ENGINE_V3.1 <<<");
+    showToast("INITIALIZING NEURAL LINK...");
+    
+    const builder = new AvatarBuilder('studio-canvas');
+    if (!builder) {
+        showToast("ENGINE_INIT_FAILED", true);
+        return;
+    }
+
+    // Force base load
+    try {
+        await builder.applyParams({}, true);
+        showToast("LINK ESTABLISHED");
+        setTimeout(() => {
+            builder.speak({ message: "Neural link established. Welcome back to the Studio Scholar. How can I assist you today?", emotion: "happy" });
+        }, 1000);
+    } catch (err) {
+        console.error("Asset Load Error:", err);
+        showToast("ASSET_LOAD_ERROR: " + err.message + "\n" + err.stack, true);
+    }
+
+    // --- Tab Handling ---
+    document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const mode = btn.dataset.mode;
+            document.getElementById('mode-synth-ui').className = mode === 'synth' ? '' : 'd-none';
+            document.getElementById('mode-chat-ui').className = mode === 'chat' ? '' : 'd-none';
+        });
+    });
+
+    // --- Feature Controls ---
+    document.querySelectorAll('.action-card, .color-dot').forEach(el => {
+        el.addEventListener('click', async () => {
+            const part = el.dataset.part;
+            const val = el.dataset.value;
+            
+            if (el.classList.contains('action-card')) {
+                el.parentElement.querySelectorAll('.action-card').forEach(c => c.classList.remove('active'));
+                el.classList.add('active');
+            }
+
+            await builder.applyParams({ [part]: val });
+            showToast(`${part.toUpperCase()}_MODIFIED`);
+        });
+    });
+
+    // --- Morph Sliders ---
+    document.querySelectorAll('.morph-slider').forEach(slider => {
+        slider.addEventListener('input', (e) => {
+            const morph = e.target.dataset.morph;
+            const val = parseFloat(e.target.value);
+            builder.setMorphInfluence('body', morph, val);
+        });
+    });
+
+    // --- Load Outfits ---
+    async function loadOutfits() {
+        try {
+            const res = await fetch('/api/avatar/outfits');
+            const outfits = await res.json();
+            const grid = document.getElementById('outfit-grid');
+            if (outfits.length > 0) {
+                grid.innerHTML = '';
+                outfits.forEach(o => {
+                    const card = document.createElement('div');
+                    card.className = `action-card ${builder.params.outfit === o.id ? 'active' : ''}`;
+                    card.dataset.part = 'outfit';
+                    card.dataset.value = o.id;
+                    card.dataset.path = o.path;
+                    card.innerText = o.name;
+                    card.addEventListener('click', async () => {
+                        grid.querySelectorAll('.action-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        await builder.applyParams({ outfit: o.id, outfit_path: o.path });
+                        showToast("OUTFIT_SYNCED");
+                    });
+                    grid.appendChild(card);
+                });
+
+                // Ensure first available outfit is loaded from real file path
+                const active = outfits.find(o => o.id === builder.params.outfit) || outfits[0];
+                if (active) {
+                    await builder.applyParams({ outfit: active.id, outfit_path: active.path });
+                }
+            }
+        } catch (e) {
+            console.error("Failed to load outfits", e);
+        }
+    }
+
+    // --- Load Hairs ---
+    async function loadHairs() {
+        try {
+            const res = await fetch('/api/avatar/hairs');
+            const hairs = await res.json();
+            const grid = document.getElementById('hair-grid');
+            if (Array.isArray(hairs) && hairs.length > 0 && grid) {
+                grid.innerHTML = '';
+                hairs.slice(0, 12).forEach(h => {
+                    const card = document.createElement('div');
+                    card.className = `action-card ${builder.params.hair_style === h.id ? 'active' : ''}`;
+                    card.dataset.part = 'hair_style';
+                    card.dataset.value = h.id;
+                    card.dataset.path = h.path;
+                    card.innerText = h.name;
+                    card.addEventListener('click', async () => {
+                        grid.querySelectorAll('.action-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        await builder.applyParams({ hair_style: h.id, hair_path: h.path });
+                        showToast("HAIR_SYNCED");
+                    });
+                    grid.appendChild(card);
+                });
+
+                const active = hairs.find(h => h.id === builder.params.hair_style) || hairs.find(h => h.path.includes('hair_short.glb')) || hairs[0];
+                if (active) {
+                    await builder.applyParams({ hair_style: active.id, hair_path: active.path });
+                }
+            }
+        } catch (e) {
+            console.error("Failed to load hairs", e);
+        }
+    }
+    loadOutfits();
+    loadHairs();
+
+    // --- AI Synthesis ---
+    async function performSynthesis(mode, data) {
+        setAiLoading(true);
+        try {
+            const fd = new FormData();
+            if (mode === 'text') fd.append('text', data);
+            else fd.append('file', data);
+
+            const res = await fetch(`/api/avatar/extract/${mode}`, { 
+                method: 'POST', 
+                body: mode === 'text' ? JSON.stringify({text: data}) : fd,
+                headers: mode === 'text' ? {'Content-Type': 'application/json'} : {}
+            });
+            const params = await res.json();
+            await builder.applyParams(params, true);
+            showToast("GEOMETRY_OPTIMIZED");
+        } catch (e) {
+            showToast("SYNTH_FAILURE", true);
+        } finally {
+            setAiLoading(false);
+        }
+    }
+
+    document.getElementById('btn-synth-text').addEventListener('click', () => {
+        const val = document.getElementById('ai-input').value;
+        if (val) performSynthesis('text', val);
+    });
+
+    document.getElementById('file-in').addEventListener('change', (e) => {
+        if (e.target.files[0]) performSynthesis('image', e.target.files[0]);
+    });
+
+    // --- AI Chat ---
+    async function transmitChat(voice = null) {
+        const msg = document.getElementById('chat-msg').value;
+        if (!msg && !voice) return;
+        setAiLoading(true);
+        try {
+            const fd = new FormData();
+            if (msg) fd.append('message', msg);
+            if (voice) fd.append('voice', voice);
+
+            const res = await fetch('/api/avatar/chat', { method: 'POST', body: fd });
+            const data = await res.json();
+            
+            // Render to mini log
+            const log = document.getElementById('chat-log');
+            log.innerHTML += `<div class='mb-1 text-info'>> ${data.message}</div>`;
+            log.scrollTop = log.scrollHeight;
+            
+            builder.speak(data);
+            document.getElementById('chat-msg').value = '';
+        } catch (e) {
+            showToast("TRANS_LOST", true);
+        } finally {
+            setAiLoading(false);
+        }
+    }
+
+    document.getElementById('btn-chat-send').addEventListener('click', () => transmitChat());
+
+    // --- Audio Logic ---
+    let mediaRec;
+    let chunks = [];
+    async function startRecording(btn, callback) {
+        if (!mediaRec || mediaRec.state === 'inactive') {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRec = new MediaRecorder(stream);
+            chunks = [];
+            mediaRec.ondataavailable = (e) => chunks.push(e.data);
+            mediaRec.onstop = () => {
+                const blob = new Blob(chunks, { type: 'audio/wav' });
+                callback(blob);
+            };
+            mediaRec.start();
+            btn.classList.add('recording-active');
+            showToast("RECORDING_DATA...");
+        } else {
+            mediaRec.stop();
+            btn.classList.remove('recording-active');
+        }
+    }
+
+    document.getElementById('btn-synth-mic').addEventListener('click', (e) => startRecording(e.currentTarget, (b) => performSynthesis('voice', b)));
+    document.getElementById('btn-chat-mic').addEventListener('click', (e) => startRecording(e.currentTarget, (b) => transmitChat(b)));
+
+    // --- Overlays ---
+    window.addEventListener('avatar-speak', (e) => {
+        const bubble = document.getElementById('ai-bubble');
+        bubble.innerText = e.detail.message;
+        bubble.classList.add('active');
+        setTimeout(() => bubble.classList.remove('active'), 5000);
+    });
+
+    function setAiLoading(s) { document.getElementById('ai-status').className = s ? 'mt-4 text-center' : 'd-none'; }
+
+    document.getElementById('btn-save').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-save');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Synchronizing...';
+        await builder.save();
+        btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Synchronized';
+        showToast("CLOUD_SYNC_COMPLETE");
+        setTimeout(() => btn.innerHTML = '<i class="fas fa-sync me-2"></i> Sync Digital Twin', 3000);
+    });
+});
+</script>
+{% endblock %}

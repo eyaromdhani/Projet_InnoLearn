@@ -1,0 +1,188 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Quiz{% endblock %}
+{% block page_title %}Gestion des Quiz{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 8px;
+            margin: 0 2px;
+        }
+    </style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up" style="border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 24px; overflow: hidden; background: white;">
+    <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h3 class="card-title" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0; letter-spacing: -0.02em;">Gestion des Quiz</h3>
+            <p style="color: #64748b; margin: 0.5rem 0 0 0; font-size: 0.95rem;">Créez et gérez les évaluations pédagogiques pour vos étudiants</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div class="search-box-premium">
+                <i class="fas fa-search"></i>
+                <input type="text" id="category-search" placeholder="Rechercher par catégorie..." value="{{ currentCategory|default('') }}">
+            </div>
+            <a href="{{ path('admin_quiz_new') }}" class="btn-new-project">
+                <i class="fas fa-plus-circle"></i>
+                <span>Nouveau Quiz</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="card-body" style="padding: 2rem !important;">
+        <!-- Table -->
+        <div class="table-responsive" style="border-radius: 20px; border: 1px solid #f1f5f9; background: white;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                <thead style="background: #f8fafc;">
+                    <tr>
+                        <th style="padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9;">
+                            <a href="#" data-sort="id" style="color: inherit; text-decoration: none;">ID <i class="fas fa-sort ms-1 opacity-50"></i></a>
+                        </th>
+                        <th style="padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9;">
+                            <a href="#" data-sort="titre" style="color: inherit; text-decoration: none;">Quiz <i class="fas fa-sort ms-1 opacity-50"></i></a>
+                        </th>
+                        <th style="padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9;">
+                            <a href="#" data-sort="tempsLimite" style="color: inherit; text-decoration: none;">⏳ Durée <i class="fas fa-sort ms-1 opacity-50"></i></a>
+                        </th>
+                        <th style="padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9;">
+                            <a href="#" data-sort="category" style="color: inherit; text-decoration: none;">📂 Catégorie <i class="fas fa-sort ms-1 opacity-50"></i></a>
+                        </th>
+                        <th style="padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="quiz-table-body">
+                    {{ include('admin/quiz/_table_rows.html.twig') }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section (Restored) -->
+<div class="card animate-fade-in-up mt-4" style="border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 24px; background: white;">
+    <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 1.5rem 2rem;">
+        <h3 class="card-title" style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0;">Statistiques des Durées</h3>
+    </div>
+    <div class="card-body">
+        <div id="quiz-duration-chart" style="min-height: 300px; display: flex; justify-content: center;"></div>
+    </div>
+</div>
+
+<style>
+/* PREMIUM GESTION STYLES */
+/* Search & Button Premium */
+.search-box-premium {
+    display: flex; align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1.25rem;
+    border-radius: 16px;
+    width: 320px;
+    transition: all 0.2s;
+}
+
+.search-box-premium:focus-within {
+    background: white;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.search-box-premium i { color: #94a3b8; margin-right: 1rem; }
+.search-box-premium input { border: none; background: transparent; width: 100%; font-size: 0.95rem; font-weight: 500; outline: none; color: #1e293b; }
+
+.btn-new-project {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 0.85rem 1.75rem;
+    border-radius: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.75rem;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.btn-new-project:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Chart Initialization
+    var options = {
+        series: [{{ countBelow10|default(0) }}, {{ countAbove10|default(0) }}],
+        chart: {
+            width: 380,
+            type: 'donut',
+        },
+        labels: ['< 10 minutes', '>= 10 minutes'],
+        colors: ['#f43f5e', '#10b981'],
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: true
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#quiz-duration-chart"), options);
+    chart.render();
+
+    // Table Logic
+    const tableBody = document.getElementById('quiz-table-body');
+    const searchInput = document.getElementById('category-search');
+    
+    let currentSort = '{{ currentSort }}';
+    let currentDirection = '{{ currentDirection }}';
+
+    function fetchTable() {
+        const category = encodeURIComponent(searchInput.value);
+        fetch(`{{ path('admin_quiz_index') }}?category=${category}&sort=${currentSort}&direction=${currentDirection}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.text())
+        .then(html => {
+            tableBody.innerHTML = html;
+        });
+    }
+
+    searchInput.addEventListener('input', fetchTable);
+
+    document.querySelectorAll('thead th a').forEach(header => {
+        header.addEventListener('click', e => {
+            e.preventDefault();
+            const sortField = header.dataset.sort;
+            if (currentSort === sortField) {
+                currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort = sortField;
+                currentDirection = 'asc';
+            }
+            fetchTable();
+        });
+    });
+});
+</script>
+{% endblock %}
+

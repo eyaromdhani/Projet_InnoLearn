@@ -1,0 +1,436 @@
+{% extends 'enseignant/layout.html.twig' %}
+
+{% block title %}Détails de la Catégorie - {{ category.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section */
+.category-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 400px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.category-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.4) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    width: 100%;
+    z-index: 10;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.category-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.category-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); 
+    backdrop-filter: blur(0px);
+    display: flex; align-items: center; justify-content: center; z-index: 2000;
+    opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-overlay.active { 
+    opacity: 1; 
+    visibility: visible;
+    backdrop-filter: blur(15px);
+}
+
+.modal-container {
+    background: white; width: 100%; max-width: 650px; border-radius: 30px;
+    position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+}
+.modal-overlay.active .modal-container {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.modal-close:hover { background: #e2e8f0; transform: rotate(90deg); }
+
+/* Form styling improvements */
+.form-error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; font-weight: 600; }
+.form-control:focus, .form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+.is-invalid { border-color: #ef4444 !important; }
+
+body.modal-open { overflow: hidden; }
+
+/* Grid Adjustment */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+@media (max-width: 1200px) {
+    .course-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .course-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .course-grid { grid-template-columns: 1fr; }
+}
+
+.course-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #f1f5f9;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+.course-media {
+    height: 150px;
+    background: #f1f5f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.course-media img { width: 100%; height: 100%; object-fit: cover; }
+.course-media .video-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center; color: white;
+    font-size: 2rem;
+}
+
+.course-info { padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column; }
+.course-info h4 { margin-bottom: 0.5rem; color: #1e293b; font-size: 1rem; font-weight: 800; line-height: 1.4; }
+.course-info p { color: #64748b; font-size: 0.85rem; line-height: 1.6; margin-bottom: 1.25rem; }
+
+.course-meta {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meta-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.btn-add {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white; border: none; padding: 1rem 2rem; border-radius: 15px;
+    font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    transition: transform 0.2s;
+}
+.btn-add:hover { transform: scale(1.02); }
+
+/* Form styling */
+.form-group { margin-bottom: 1.25rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1e293b; }
+.form-control { width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+.form-select { width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="category-hero">
+    <div class="hero-container">
+        <a href="{{ path('app_enseignant_courses') }}" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-weight: 600;">
+            <i class="fas fa-arrow-left"></i> Retour aux catégories
+        </a>
+        <span class="category-badge">{{ category.niveau }}</span>
+        <h1 class="category-title">{{ category.titre }}</h1>
+        <p class="category-description">{{ category.description }}</p>
+        <div style="margin-top: 2rem;">
+            <button class="btn-add" id="openModalBtnHero" style="width: fit-content; transition: transform 0.2s;">
+                <i class="fas fa-plus"></i> Ajouter un Cours
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 2rem 5rem 6rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 3rem; gap: 1rem;">
+        <h2 style="color: #1e293b; margin: 0; font-size: 2rem; font-weight: 800;">Liste des cours</h2>
+        <span style="background: #f1f5f9; padding: 0.6rem 1.25rem; border-radius: 12px; color: #64748b; font-weight: 700; font-size: 0.9rem;">
+            {{ courses|length }} cours disponibles
+        </span>
+    </div>
+    
+    {% if courses is empty %}
+        <div style="text-align: center; padding: 5rem 0; background: white; border-radius: 30px; border: 2px dashed #e2e8f0;">
+            <i class="fas fa-graduation-cap" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 1.5rem;"></i>
+            <h3 style="color: #64748b;">Aucun cours dans cette catégorie pour le moment.</h3>
+            <p style="color: #94a3b8; margin-bottom: 2rem;">Soyez le premier à ajouter du contenu !</p>
+        </div>
+    {% else %}
+        <div class="course-grid">
+            {% set colors = ['#6366f1', '#a855f7', '#ec4899', '#f97316', '#10b981', '#06b6d4'] %}
+            {% for course in courses %}
+                {% set accentColor = colors[loop.index0 % colors|length] %}
+                <div class="course-card" style="border-top: 5px solid {{ accentColor }};">
+                    <div class="course-media">
+                        {% set isValidUrl = course.mediaUrl and (course.mediaUrl starts with 'http' or course.mediaUrl starts with '/' or course.mediaUrl starts with 'data:') %}
+                        {% set fallbackBg = accentColor %}
+                        <div class="course-img-container" style="width: 100%; height: 100%; background: {{ fallbackBg }}; position: relative; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: 800; font-size: 1.5rem; text-transform: uppercase; opacity: 0.3; position: absolute; z-index: 1;">{{ course.nom|slice(0, 2) }}</span>
+                            
+                            {% if course.typeMedia == 'video_intro' %}
+                                <img src="https://placehold.co/600x400/1e1b4b/white?text={{ course.nom|url_encode }}" 
+                                     alt="{{ course.nom }}"
+                                     style="width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2;"
+                                     onerror="this.style.display='none'">
+                                <div class="video-overlay" style="color: {{ accentColor }}; z-index: 3;">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            {% else %}
+                                <img src="{{ isValidUrl ? course.mediaUrl : '' }}" 
+                                     alt="{{ course.nom }}"
+                                     style="width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2; {{ not isValidUrl ? 'display: none;' : '' }}"
+                                     onerror="this.style.display='none'">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <span style="font-size: 0.7rem; color: {{ accentColor }}; font-weight: 800; text-transform: uppercase; background: {{ accentColor }}15; padding: 0.2rem 0.6rem; border-radius: 6px;">{{ course.niveau }}</span>
+                        </div>
+                        <h4>{{ course.nom }}</h4>
+                        <p>{{ course.description|length > 80 ? course.description|slice(0, 80) ~ '...' : course.description }}</p>
+                        <div class="course-meta">
+                            <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                <div class="meta-info-item">
+                                    <i class="fas fa-clock"></i> {{ course.duree }}h
+                                </div>
+                                <div class="meta-info-item">
+                                    <i class="fas fa-user-circle"></i> {{ course.enseignant }}
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                                <button class="btn-enroll edit-course-btn" 
+                                        data-id="{{ course.id }}" 
+                                        data-nom="{{ course.nom }}" 
+                                        data-slug="{{ course.slug }}" 
+                                        data-description="{{ course.description }}" 
+                                        data-type-media="{{ course.typeMedia }}" 
+                                        data-media-url="{{ course.mediaUrl }}" 
+                                        data-duree="{{ course.duree }}" 
+                                        data-niveau="{{ course.niveau }}" 
+                                        style="background: #f1f5f9; color: #475569; padding: 0.5rem 0.7rem; font-size: 0.7rem; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; font-weight: 700;" title="Modifier">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </button>
+                                <form action="{{ path('app_enseignant_course_delete', {'id': course.id}) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ course.id) }}">
+                                    <button type="submit" style="background: #fef2f2; color: #ef4444; padding: 0.5rem 0.7rem; font-size: 0.7rem; border-radius: 8px; border: 1px solid #fee2e2; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; font-weight: 700;" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i> Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Add Course -->
+<div class="modal-overlay" id="addCourseModal">
+    <div class="modal-container">
+        <button class="modal-close" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 style="margin-bottom: 2rem; font-size: 1.8rem; text-align: center; color: #1e293b;">Nouveau cours pour {{ category.titre }}</h2>
+        
+        {{ form_start(form, {'attr': {'id': 'courseForm'}}) }}
+            {% if not form.vars.valid %}
+                <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 1rem; border-radius: 15px; margin-bottom: 1.5rem; color: #991b1b; font-size: 0.9rem;">
+                    <strong>Oups !</strong> Veuillez corriger les erreurs ci-dessous.
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    {{ form_label(form.nom) }}
+                    {{ form_widget(form.nom, {'attr': {'class': form.nom.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.slug) }}
+                    {{ form_widget(form.slug, {'attr': {'class': form.slug.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+                    {{ form_errors(form.slug) }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': form.description.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    {{ form_label(form.typeMedia) }}
+                    {{ form_widget(form.typeMedia, {'attr': {'class': form.typeMedia.vars.errors|length > 0 ? 'form-select is-invalid' : 'form-select'}}) }}
+                    {{ form_errors(form.typeMedia) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.mediaUrl) }}
+                    {{ form_widget(form.mediaUrl, {'attr': {'class': form.mediaUrl.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+                    {{ form_errors(form.mediaUrl) }}
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1.5fr 1.5fr; gap: 1rem;">
+                <div class="form-group">
+                    {{ form_label(form.duree) }}
+                    {{ form_widget(form.duree, {'attr': {'class': form.duree.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+                    {{ form_errors(form.duree) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.niveau) }}
+                    {{ form_widget(form.niveau, {'attr': {'class': form.niveau.vars.errors|length > 0 ? 'form-select is-invalid' : 'form-select'}}) }}
+                    {{ form_errors(form.niveau) }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.enseignant) }}
+                {{ form_widget(form.enseignant, {'attr': {'class': form.enseignant.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+                {{ form_errors(form.enseignant) }}
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.quiz) }}
+                {{ form_widget(form.quiz, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.quiz) }}
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn-add" style="width: 100%; justify-content: center; padding: 1rem;">
+                    Enregistrer le cours
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addCourseModal');
+    const openBtn = document.getElementById('openModalBtnHero');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const courseForm = document.getElementById('courseForm');
+
+    if(openBtn) {
+        openBtn.onclick = () => {
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+            // Reset form for addition
+            if(courseForm) {
+                courseForm.action = "{{ path('app_enseignant_category_show', {'id': category.id}) }}";
+                document.querySelector('#addCourseModal h2').textContent = "Nouveau cours pour {{ category.titre }}";
+                courseForm.reset();
+            }
+        };
+    }
+    
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+    };
+
+    if(closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
+    
+    window.onclick = (e) => { 
+        if(e.target === modal) closeModal();
+    };
+
+    {% if not form.vars.valid or edit_mode|default(false) %}
+        modal.classList.add('active');
+        document.body.classList.add('modal-open');
+    {% endif %}
+
+    // Edit logic
+    document.querySelectorAll('.edit-course-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            if(courseForm) {
+                courseForm.action = `/enseignant/course/edit/${id}`;
+            }
+            
+            // Update modal title
+            document.querySelector('#addCourseModal h2').textContent = `Modifier le cours: ${this.dataset.nom}`;
+            
+            // Fill form fields
+            document.querySelector('#cours_nom').value = this.dataset.nom;
+            document.querySelector('#cours_slug').value = this.dataset.slug;
+            document.querySelector('#cours_description').value = this.dataset.description;
+            document.querySelector('#cours_typeMedia').value = this.dataset.typeMedia;
+            document.querySelector('#cours_mediaUrl').value = this.dataset.mediaUrl;
+            document.querySelector('#cours_duree').value = this.dataset.duree;
+            document.querySelector('#cours_niveau').value = this.dataset.niveau;
+            
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+        });
+    });
+});
+</script>
+{% endblock %}

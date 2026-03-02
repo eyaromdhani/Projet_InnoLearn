@@ -1,0 +1,190 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails de la Catégorie de Cours{% endblock %}
+
+{% block page_title %}Détails de la Catégorie de Cours{% endblock %}
+
+{% block admin_content %}
+<style>
+    .detail-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .detail-table th { text-align: left; padding: 1rem 1.5rem; color: #64748b; font-weight: 600; width: 250px; border-bottom: 1px solid #f1f5f9; }
+    .detail-table td { padding: 1rem 1.5rem; color: #334155; border-bottom: 1px solid #f1f5f9; }
+    .detail-table tr:last-child th, .detail-table tr:last-child td { border-bottom: none; }
+    
+    .stats-card {
+        background: white; border-radius: 16px; padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 1rem;
+    }
+    .stats-icon {
+        width: 48px; height: 48px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.25rem;
+    }
+</style>
+
+<div class="glass-card animate-fade-in-up" style="background: white; border-radius: 20px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02); overflow: hidden;">
+    <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="{{ path('admin_categorie_cours_index') }}" style="color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h3 class="card-title" style="font-size: 1.25rem; font-weight: 700; color: #1e1b4b; margin: 0;">{{ categorie_cour.titre }}</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; margin-top: 0.25rem;">Détails de la catégorie</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{{ path('admin_categorie_cours_edit', {'id': categorie_cour.id}) }}" style="background: #6366f1; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);">
+                <i class="fas fa-edit"></i>
+                Modifier
+            </a>
+        </div>
+    </div>
+    
+    <div style="padding: 0;">
+        <table class="detail-table" style="width: 100%; border-collapse: collapse;">
+            <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.85rem; color: #94a3b8; width: 300px; font-weight: 600;">ID de la Catégorie</th>
+                    <td style="padding: 1.5rem 2.5rem; color: #94a3b8; font-family: monospace; font-weight: 600;">#{{ categorie_cour.id }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Titre</th>
+                    <td style="padding: 1.5rem 2.5rem; color: #1e1b4b; font-weight: 700; font-size: 1.1rem;">{{ categorie_cour.titre }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Description</th>
+                    <td style="padding: 1.5rem 2.5rem; color: #1e1b4b; line-height: 1.7; font-weight: 500;">{{ categorie_cour.description }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Niveau</th>
+                    <td style="padding: 1.5rem 2.5rem;">
+                        {% set badgeColor = categorie_cour.niveau == 'Débutant' ? '#10b981' : (categorie_cour.niveau == 'Intermédiaire' ? '#6366f1' : '#a855f7') %}
+                        <span class="badge" style="background: {{ badgeColor }}15; color: {{ badgeColor }}; padding: 0.5rem 1.25rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+                            {{ categorie_cour.niveau }}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Date Publication</th>
+                    <td style="padding: 1.5rem 2.5rem; color: #1e1b4b; font-weight: 600;">
+                        <i class="far fa-calendar-alt" style="color: #6366f1; margin-right: 0.5rem;"></i>
+                        {{ categorie_cour.datepublication ? categorie_cour.datepublication|date('d F Y à H:i') : 'Non publié' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="padding: 1.5rem 2.5rem; background: #f8fafc; display: flex; justify-content: flex-end;">
+             {{ include('admin/categorie_cours/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+
+<!-- Section Statistiques -->
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem;">
+    <div class="stats-card animate-fade-in-up">
+        <div class="stats-icon" style="background: #e0e7ff; color: #4f46e5;">
+            <i class="fas fa-eye"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Consultations</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">1,284</div>
+        </div>
+    </div>
+    <div class="stats-card animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="stats-icon" style="background: #dcfce7; color: #166534;">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Croissance</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">+12%</div>
+        </div>
+    </div>
+    <div class="stats-card animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="stats-icon" style="background: #fef2f2; color: #991b1b;">
+            <i class="fas fa-star"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Top Cours</div>
+            <div style="font-size: 1rem; font-weight: 800; color: #1e293b;">{{ categorie_cour.cours|length > 0 ? categorie_cour.cours|first.nom : 'N/A' }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="glass-card animate-fade-in-up" style="margin-top: 2rem; background: white; border-radius: 20px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02); overflow: hidden;">
+    <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 2rem 2.5rem;">
+        <div>
+            <h3 class="card-title" style="font-size: 1.25rem; font-weight: 700; color: #1e1b4b;">Cours associés à cette catégorie</h3>
+            <p style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; margin-top: 0.25rem;">{{ categorie_cour.cours|length }} cours trouvés</p>
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">#ID</th>
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Nom du cours</th>
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Enseignant</th>
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Durée / Niveau</th>
+                    <th style="padding: 1.5rem 2.5rem; text-align: left; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Création</th>
+                    <th style="padding: 1.5rem 2.5rem; text-align: right; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for course in categorie_cour.cours %}
+                <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                    <td style="padding: 1.5rem 2.5rem; color: #94a3b8; font-weight: 600; font-size: 0.9rem;">#{{ course.id }}</td>
+                    <td style="padding: 1.5rem 2.5rem;">
+                        <div style="color: #1e1b4b; font-weight: 700; font-size: 1rem;">{{ course.nom }}</div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.1rem; font-weight: 500;">{{ course.description|slice(0, 50) }}...</div>
+                    </td>
+                    <td style="padding: 1.5rem 2.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 32px; height: 32px; border-radius: 10px; background: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white; font-weight: 800;">
+                                {{ course.enseignant|first|upper }}
+                            </div>
+                            <span style="color: #1e1b4b; font-weight: 600;">{{ course.enseignant }}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 1.5rem 2.5rem;">
+                        <div style="color: #1e1b4b; font-size: 0.9rem; margin-bottom: 0.35rem; font-weight: 600;">
+                            <i class="far fa-clock" style="color: #94a3b8; margin-right: 0.35rem;"></i> {{ course.duree }}h
+                        </div>
+                        {% set badgeColor = course.niveau == 'Débutant' ? '#10b981' : (course.niveau == 'Intermédiaire' ? '#6366f1' : '#a855f7') %}
+                        <span class="badge" style="background: {{ badgeColor }}15; color: {{ badgeColor }}; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">
+                            {{ course.niveau }}
+                        </span>
+                    </td>
+                    <td style="padding: 1.5rem 2.5rem; color: #64748b; font-weight: 600; font-size: 0.9rem;">
+                        {{ course.dateCreation|date('d M Y') }}
+                    </td>
+                    <td style="padding: 1.5rem 2.5rem; text-align: right;">
+                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                            <a href="{{ path('admin_course_pdf', {'id': course.id}) }}" style="color: #64748b; background: white; border: 1px solid #e2e8f0; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 0.35rem;" title="Télécharger PDF">
+                                <i class="far fa-file-pdf" style="color: #ef4444;"></i> PDF
+                            </a>
+                            <a href="{{ path('app_student_course_show', {'id': course.id}) }}" style="color: #64748b; background: white; border: 1px solid #e2e8f0; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; text-decoration: none;">
+                                Voir
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 5rem 2rem;">
+                        <div style="background: #f8fafc; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                            <i class="fas fa-folder-open" style="font-size: 1.5rem; color: #cbd5e1;"></i>
+                        </div>
+                        <p style="color: #94a3b8; font-size: 0.9rem; font-weight: 500;">Aucun cours n'est actuellement associé à cette catégorie.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

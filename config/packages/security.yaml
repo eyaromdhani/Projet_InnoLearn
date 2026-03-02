@@ -1,0 +1,55 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        App\Entity\User: 'auto'
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+    
+    role_hierarchy:
+        ROLE_INSTRUCTOR: ROLE_STUDENT
+        ROLE_RECRUITER:  ROLE_STUDENT
+        ROLE_ADMIN:      [ROLE_INSTRUCTOR, ROLE_RECRUITER, ROLE_STUDENT]
+
+    firewalls:
+        ddev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        admin:
+            pattern: ^/admin
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+                username_parameter: _username
+                password_parameter: _password
+                default_target_path: admin_verify_access
+            logout:
+                path: admin_logout
+                target: admin_login
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            user_checker: App\Security\UserChecker
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                username_parameter: identifier
+                password_parameter: password
+                success_handler: App\Security\LoginSuccessHandler
+            logout:
+                path: app_logout
+                target: app_login
+
+    access_control:
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/student, roles: ROLE_STUDENT }
+        - { path: ^/enseignant, roles: ROLE_INSTRUCTOR }
+        - { path: ^/recruteur, roles: ROLE_RECRUITER }
+

@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Modifier l'événement{% endblock %}
+
+{% block page_title %}Modifier l'événement{% endblock %}
+
+{% block admin_content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="glass-card" style="background: white; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 style="margin: 0; color: #1e1b4b; font-size: 1.5rem;">Modifier Événement</h2>
+            {{ include('admin/event/_delete_form.html.twig') }}
+        </div>
+        
+        {{ include('admin/event/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div>
+</div>
+{% endblock %}

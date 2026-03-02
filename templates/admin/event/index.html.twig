@@ -1,0 +1,325 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Événements{% endblock %}
+
+{% block page_title %}Gestion des Événements{% endblock %}
+
+{% block admin_content %}
+
+<style>
+    .glass-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .btn-primary {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+        background: #2563eb;
+    }
+
+    /* Tabs */
+    .tabs-header {
+        display: flex;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+    }
+
+    .tab-btn {
+        padding: 1rem 2rem;
+        border: none;
+        background: none;
+        font-weight: 600;
+        color: #6b7280;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+    }
+
+    .tab-btn:hover {
+        color: #3b82f6;
+    }
+
+    .tab-btn.active {
+        color: #3b82f6;
+        border-bottom-color: #3b82f6;
+    }
+
+    /* Table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th {
+        text-align: left;
+        padding: 1rem 2rem;
+        background: #f9fafb;
+        color: #6b7280;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .table td {
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #f3f4f6;
+        color: #1f2937;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+
+    .table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .status-active, .status-confirme { background: #dcfce7; color: #166534; }
+    .status-annule, .status-annulee { background: #fee2e2; color: #991b1b; }
+    .status-termine { background: #f1f5f9; color: #475569; }
+    .status-pending, .status-en_attente { background: #fef9c3; color: #854d0e; }
+
+    .action-link {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-left: 1rem;
+    }
+    
+    .action-link:hover {
+        text-decoration: underline;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+</style>
+
+<div class="glass-card animate-fade-in-up">
+    <!-- Header -->
+    <div class="card-header">
+        <h3 class="card-title">Recent Événements</h3>
+        <a href="{{ path('admin_event_new') }}" class="btn-primary">
+            Ajouter Nouveau
+        </a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="switchTab('events')">Liste des Événements</button>
+        <button class="tab-btn" onclick="switchTab('inscriptions')">Inscriptions</button>
+    </div>
+
+    <!-- Tab 1: Events List -->
+    <div id="tab-events" class="tab-content active">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Type</th>
+                        <th>Date Début</th>
+                        <th>Statut</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ event.titre }}</td>
+                        <td>{{ event.typeEvenement ? event.typeEvenement.value : '' }}</td>
+                        <td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i') : '' }}</td>
+                        <td>
+                            {% if event.statut %}
+                                {% set statusClass = 'status-' ~ event.statut.value|lower %}
+                                <span class="status-badge {{ statusClass }}">
+                                    {{ event.statut.value|capitalize }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="{{ path('admin_event_edit', {'id': event.id}) }}" class="action-link">Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            Aucun événement trouvé
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab 2: Inscriptions List -->
+    <div id="tab-inscriptions" class="tab-content">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Événement</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Date Inscrit</th>
+                        <th>Statut</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for inscription in inscriptions %}
+                    <tr>
+                        <td>#{{ inscription.id }}</td>
+                        <td style="font-weight: 600;">{{ inscription.event ? inscription.event.titre : 'N/A' }}</td>
+                        <td>{{ inscription.name }}</td>
+                        <td>{{ inscription.email }}</td>
+                        <td>{{ inscription.dateInscrit ? inscription.dateInscrit|date('Y-m-d H:i') : '' }}</td>
+                        <td>
+                            {% set statusClass = 'status-' ~ inscription.status|lower|replace({' ': '_', 'é': 'e'}) %}
+                            <span class="status-badge {{ statusClass }}">
+                                {{ inscription.status }}
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            {% if inscription.status != 'Confirmé' %}
+                            <form method="post" action="{{ path('admin_event_confirm_inscription', {'id': inscription.id}) }}" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('confirm' ~ inscription.id) }}">
+                                <button type="submit" style="background: none; border: none; color: #16a34a; font-weight: 600; cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;" title="Valider">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                            
+                           <form method="post" action="{{ path('admin_event_delete_inscription', {'id': inscription.id}) }}" onsubmit="return confirm('{{ inscription.status == 'Confirmé' ? 'Supprimer cette inscription ?' : 'Refuser cette inscription ?' }}');" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ inscription.id) }}">
+                                <button type="submit" style="background: none; border: none; color: #ef4444; font-weight: 600; cursor: pointer; font-size: 0.9rem;" title="Supprimer/Refuser">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            Aucune inscription trouvée
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Data Correlation Table -->
+        <div style="margin-top: 3rem; padding: 0 2rem 2rem;">
+            <h4 style="font-size: 1rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-project-diagram" style="color: #3b82f6;"></i> Détails des Participations (Corrélation Utilisateurs)
+            </h4>
+            <div class="table-responsive" style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                <table class="table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th style="background: #f8fafc;">Nom (Formulaire)</th>
+                            <th style="background: #f8fafc;">Email (Formulaire)</th>
+                            <th style="background: #f8fafc;">ID Utilisateur</th>
+                            <th style="background: #f8fafc;">Email Utilisateur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for inscription in inscriptions %}
+                        <tr>
+                            <td style="font-weight: 500;">{{ inscription.name }}</td>
+                            <td style="color: #4b5563;">{{ inscription.email }}</td>
+                            <td>
+                                {% if inscription.user %}
+                                    <span style="font-family: monospace; background: #e0e7ff; color: #4338ca; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem;">
+                                        ID: #{{ inscription.user.id }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: #94a3b8; font-style: italic; font-size: 0.85rem;">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if inscription.user %}
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; color: #1f2937; font-weight: 500;">
+                                        <i class="fas fa-user-circle" style="color: #3b82f6;"></i>
+                                        {{ inscription.user.email }}
+                                    </div>
+                                {% else %}
+                                    <span class="status-badge" style="background: #f1f5f9; color: #64748b; font-size: 0.7rem; letter-spacing: 0.5px; text-transform: uppercase;">Compte Invité</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabName) {
+        // Hide all contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Deactivate all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Activate selected
+        document.getElementById('tab-' + tabName).classList.add('active');
+        event.target.classList.add('active');
+    }
+</script>
+{% endblock %}

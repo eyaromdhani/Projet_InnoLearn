@@ -1,0 +1,16 @@
+/vendor/
+/node_modules/
+/.env.local
+/.env.*.local
+/var/
+/public/bundles/
+/public/uploads/
+/public/build/
+/config/secrets/
+/config/jwt/
+/phpstan_report.txt
+/phpstan_report_utf8.txt
+/.phpunit.result.cache
+/tests/_output/
+/tests/_support/_generated/
+/public/3d/

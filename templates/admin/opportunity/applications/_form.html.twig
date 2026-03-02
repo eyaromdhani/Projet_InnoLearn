@@ -1,0 +1,233 @@
+    <style>
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #475569; }
+        .form-control { width: 100%; padding: 0.625rem; border: 1px solid #e2e8f0; border-radius: 6px; transition: all 0.2s; }
+        .form-control:focus { border-color: #4f46e5; outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .form-control.is-invalid { border-color: #ef4444; }
+        .error-feedback { color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem; display: none; }
+        .btn-save { background: #4f46e5; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.2s; }
+        .btn-save:hover { background: #4338ca; }
+
+        /* Custom File Upload Styles */
+        .file-upload-wrapper { position: relative; cursor: pointer; }
+        .file-upload-surrogate {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .file-upload-wrapper:hover .file-upload-surrogate {
+            border-color: #4f46e5;
+            background: #f1f5f9;
+        }
+        .file-upload-icon {
+            width: 32px;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .file-upload-wrapper:hover .file-upload-icon {
+            background: #4f46e5;
+            color: white;
+        }
+        .file-upload-text { flex: 1; }
+        .file-upload-filename { font-weight: 600; color: #1e293b; font-size: 0.85rem; }
+        .file-upload-info { font-size: 0.75rem; color: #94a3b8; }
+        
+        .file-upload-surrogate.has-file {
+            border-style: solid;
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        .file-upload-surrogate.has-file .file-upload-icon {
+            background: #10b981;
+            color: white;
+        }
+        .file-upload-surrogate.has-file .file-upload-filename {
+            color: #065f46;
+        }
+    </style>
+    
+    <div class="form-group">
+        {{ form_label(form.type_request) }}
+        {{ form_widget(form.type_request, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.type_request.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.titre) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.titre.vars.id }}"></div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.domaine) }}
+        {{ form_widget(form.domaine, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.domaine.vars.id }}"></div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+        <div class="error-feedback" id="error-{{ form.description.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.competences) }}
+        {{ form_widget(form.competences, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.competences.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.cv) }}
+        <div class="file-upload-wrapper">
+            {{ form_widget(form.cv, {'attr': {'style': 'position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;' }}) }}
+            <div id="cv-surrogate" class="file-upload-surrogate">
+                <div class="file-upload-icon">
+                    <i class="fas fa-file-upload"></i>
+                </div>
+                <div class="file-upload-text">
+                    <div id="cv-filename" class="file-upload-filename">Choisir un fichier PDF...</div>
+                    <div class="file-upload-info">Taille maximale : 5 Mo</div>
+                </div>
+            </div>
+        </div>
+        <div class="error-feedback" id="error-{{ form.cv.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.lettre_motivation) }}
+        {{ form_widget(form.lettre_motivation, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+        <div class="error-feedback" id="error-{{ form.lettre_motivation.vars.id }}"></div>
+    </div>
+
+
+
+    <div class="form-group">
+        {{ form_label(form.statut) }}
+        {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.statut.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.id_etudiant) }}
+        {{ form_widget(form.id_etudiant, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.id_etudiant.vars.id }}"></div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.id_offre) }}
+        {{ form_widget(form.id_offre, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-feedback" id="error-{{ form.id_offre.vars.id }}"></div>
+    </div>
+    
+    <button class="btn-save">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.validated-form');
+    if (!form) return;
+
+    const cvInput = document.getElementById('{{ form.cv.vars.id }}');
+    const cvSurrogate = document.getElementById('cv-surrogate');
+    const cvFilename = document.getElementById('cv-filename');
+
+    if (cvInput) {
+        cvInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                cvFilename.textContent = file.name;
+                cvSurrogate.classList.add('has-file');
+                
+                // Optional validation check
+                if (file.type !== 'application/pdf') {
+                    alert('Seuls les fichiers PDF sont acceptés.');
+                    this.value = '';
+                    cvFilename.textContent = 'Choisir un fichier PDF...';
+                    cvSurrogate.classList.remove('has-file');
+                }
+            } else {
+                cvFilename.textContent = 'Choisir un fichier PDF...';
+                cvSurrogate.classList.remove('has-file');
+            }
+        });
+    }
+
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    const validationRules = {
+        '{{ form.titre.vars.id }}': { required: true, minLength: 5, label: "Le titre" },
+        '{{ form.description.vars.id }}': { required: true, minLength: 20, label: "La description" },
+        '{{ form.domaine.vars.id }}': { required: true, label: "Le domaine" },
+        '{{ form.competences.vars.id }}': { required: true, label: "Les compétences" },
+        '{{ form.type_request.vars.id }}': { required: true, label: "Le type de requête" },
+        '{{ form.cv.vars.id }}': { required: false, label: "Le CV" }, // Required false for edit, handled by server/html5 for new
+        '{{ form.lettre_motivation.vars.id }}': { required: true, minLength: 50, label: "La lettre de motivation" }
+    };
+
+    function validateField(input) {
+        const rules = validationRules[input.id];
+        if (!rules) return true;
+
+        const value = input.value.trim();
+        const errorDiv = document.getElementById('error-' + input.id);
+        let isValid = true;
+        let message = "";
+
+        if (rules.required && !value) {
+            isValid = false;
+            message = `${rules.label} est obligatoire.`;
+        } else if (value) {
+            if (rules.minLength && value.length < rules.minLength) {
+                isValid = false;
+                message = `${rules.label} doit faire au moins ${rules.minLength} caractères.`;
+            }
+        }
+
+        if (!isValid) {
+            input.classList.add('is-invalid');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+        } else {
+            input.classList.remove('is-invalid');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        }
+        return isValid;
+    }
+
+    inputs.forEach(input => {
+        ['input', 'blur'].forEach(evt => {
+            input.addEventListener(evt, () => validateField(input));
+        });
+    });
+
+    form.addEventListener('submit', function(e) {
+        let isFormValid = true;
+        inputs.forEach(input => {
+            if (!validateField(input)) {
+                isFormValid = false;
+            }
+        });
+
+        if (!isFormValid) {
+            e.preventDefault();
+            alert('Veuillez remplir correctement tous les champs obligatoires.');
+        }
+    });
+});
+</script>

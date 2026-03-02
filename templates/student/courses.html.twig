@@ -1,0 +1,806 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Catalogue des Cat&eacute;gories - InnoLearn{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Make header transparent on this page */
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.dashboard-header .header-brand,
+.dashboard-header .nav-item,
+.dashboard-header .icon-btn,
+.dashboard-header .search-bar-compact i {
+    color: white !important;
+}
+
+.dashboard-header .nav-item:hover,
+.dashboard-header .nav-item.active {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.dashboard-header .nav-item.active::after {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-header .search-bar-compact {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-header .search-bar-compact input {
+    color: white !important;
+}
+
+.dashboard-header .search-bar-compact input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dashboard-header .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dashboard-header .user-profile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hero Section */
+.courses-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 550px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible; /* Changed from hidden to allow dropdowns to show */
+    padding-top: 100px;
+    margin-bottom: 4rem;
+}
+
+.courses-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.3) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.hero-content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ffb82b 0%, #f97316 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+/* Vertical Filter Bar */
+.hero-filter-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 350px;
+    position: relative; /* Ensure children can be absolute */
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.hero-filter-bar .dropdown-toggle, .hero-search-wrapper, .hero-sort-select-wrapper {
+    padding: 1rem 1.25rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hero-sort-select-wrapper {
+    position: relative;
+    padding-right: 2.5rem;
+}
+
+.hero-sort-select-wrapper span:first-child {
+    color: #64748b;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.hero-sort-select-wrapper .selected-sort {
+    color: #6366f1;
+    font-weight: 700;
+}
+
+.hero-sort-select-wrapper i.arrow {
+    position: absolute;
+    right: 1.25rem;
+    color: #94a3b8;
+    transition: transform 0.3s;
+}
+
+.custom-dropdown.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem;
+    z-index: 2000; /* Higher than waves */
+    max-height: 300px; /* Prevent too long lists */
+    overflow-y: auto; /* Enable scroll if needed */
+}
+
+/* Custom Scrollbar for Dropdowns */
+.dropdown-options::-webkit-scrollbar {
+    width: 6px;
+}
+.dropdown-options::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+.dropdown-options::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+.dropdown-options::-webkit-scrollbar-thumb:hover {
+    background: #6366f1;
+}
+
+.custom-dropdown.active .dropdown-options {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    animation: dropdownAnim 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes dropdownAnim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-opt {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.dropdown-opt:hover {
+    background: #f8fafc;
+    color: #6366f1;
+}
+
+.dropdown-opt.active {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
+.hero-search-wrapper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+}
+
+.hero-search-wrapper input::placeholder {
+    color: #94a3b8;
+}
+
+.hero-filter-bar i { color: #6366f1; }
+
+/* Waves */
+.hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 5;
+    overflow: hidden; /* Specifically clip the waves here */
+}
+
+.hero-waves .wave {
+    position: relative;
+    display: block;
+    width: 200%;
+    height: 70px;
+    animation: waveMove 15s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.hero-waves .wave-1 {
+    height: 90px;
+    margin-bottom: -70px;
+    opacity: 0.3;
+    animation-duration: 7s;
+    animation-direction: reverse;
+}
+
+.hero-waves .wave-2 {
+    height: 80px;
+    margin-bottom: -50px;
+    opacity: 0.5;
+    animation-duration: 10s;
+}
+
+.hero-waves .wave-3 { 
+    fill: #f8fafc; 
+    height: 60px;
+    animation-duration: 13s;
+}
+
+@keyframes waveMove {
+    0% { transform: translate3d(-50%, 0, 0); }
+    50% { transform: translate3d(-25%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Visual Side */
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.hero-illustration-wrapper {
+    width: 450px;
+    height: 450px;
+    background: #3b3898;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: float 6s ease-in-out infinite;
+}
+.hero-illustration { width: 100%; height: 100%; object-fit: cover; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-frame { position: absolute; z-index: 15; opacity: 0.6; animation: float-around 20s ease-in-out infinite; }
+.frame-1 { width: 180px; height: 180px; background: radial-gradient(circle, #fbbf24 0%, transparent 70%); top: -5%; left: -5%; border-radius: 50%; filter: blur(15px); }
+.frame-2 { width: 70px; height: 70px; background: radial-gradient(circle, #ddd6fe 0%, transparent 75%); top: 25%; left: 30%; border-radius: 50%; opacity: 0.8; }
+.frame-3 { width: 140px; height: 140px; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: 5%; right: 5%; border-radius: 50%; filter: blur(15px); animation-delay: -5s; }
+.frame-4 { width: 120px; height: 60px; background: #06b6d4; bottom: 15%; left: 5%; border-radius: 30px; filter: blur(20px); opacity: 0.5; animation-delay: -10s; }
+.frame-5 { width: 45px; height: 45px; background: #fff; bottom: 20%; left: 40%; border-radius: 50%; filter: blur(8px); opacity: 0.7; }
+.frame-6 { width: 100px; height: 100px; background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); top: 10%; right: -10%; border-radius: 50%; filter: blur(10px); }
+
+@keyframes float-around {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* Grid Adjustment */
+.dashboard-main { padding: 0 !important; background: #f8fafc; min-height: 100vh; }
+.course-catalog-grid { padding: 0 10% 5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
+
+/* Course Card Enhancements */
+.course-card-premium {
+    background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s; border: 1px solid #e2e8f0; display: flex; flex-direction: column;
+}
+.course-card-premium:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+.course-image-wrapper { position: relative; height: 200px; overflow: hidden; }
+.course-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.course-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 10px; font-size: 0.75rem; font-weight: 800; color: #1e293b; }
+.course-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+.course-content h3 { font-size: 1.25rem; margin-bottom: 0.5rem; color: #1e293b; font-weight: 700; }
+.course-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid #f1f5f9; }
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="dashboard-main">
+    <!-- Hero Section -->
+    <section class="courses-hero">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-content">
+                <span class="hero-label">Catalogue InnoLearn</span>
+                <h1 class="hero-title">
+                    Explorez les<br>
+                    <span>Meilleures Cat&eacute;gories</span>
+                </h1>
+                
+                <div class="hero-filter-bar">
+                    <!-- Category Dropdown -->
+                    <div class="custom-dropdown" id="pageCategoryDropdown">
+                        <div class="dropdown-toggle">
+                            <i class="fas fa-filter"></i>
+                            <span class="selected-category">Toutes les cat&eacute;gories</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="all">
+                                <i class="fas fa-th-large"></i> Toutes les cat&eacute;gories
+                            </div>
+{% for cat in categories %}
+                                {% if cat.name != 'Tout' %}
+                                <div class="dropdown-opt" data-value="{{ cat.name|lower }}">
+                                    <i class="fas {{ cat.icon|default('fa-tag') }}"></i> {{ cat.name }}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Search Wrapper -->
+                    <div class="hero-search-wrapper">
+                        <i class="fas fa-search" style="color: #6366f1;"></i>
+                        <input type="text" id="localSearch" placeholder="Rechercher une cat&eacute;gorie...">
+                    </div>
+                    
+                    <!-- Sort Dropdown -->
+                    <div class="custom-dropdown" id="pageSortDropdown">
+                        <div class="dropdown-toggle hero-sort-select-wrapper">
+                            <i class="fas fa-sort-amount-down"></i>
+                            <span>Trier par:</span>
+                            <span class="selected-sort">Plus récents</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-opt active" data-value="newest">Plus r&eacute;cents</div>
+                            <div class="dropdown-opt" data-value="rating">Mieux not&eacute;s</div>
+                            <div class="dropdown-opt" data-value="level">Niveau</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="hero-illustration-wrapper">
+                    <img src="{{ asset('images/student_hero.png') }}" class="hero-illustration" alt="Courses illustration">
+                </div>
+                <div class="hero-frame frame-1"></div>
+                <div class="hero-frame frame-2"></div>
+                <div class="hero-frame frame-3"></div>
+                <div class="hero-frame frame-4"></div>
+                <div class="hero-frame frame-5"></div>
+                <div class="hero-frame frame-6"></div>
+            </div>
+        </div>
+
+        <div class="hero-waves">
+            <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.3)" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(255,255,255,0.5)" d="M0,32L48,37.3C96,43,192,53,288,64C384,75,480,85,576,80C672,75,768,53,864,48C960,43,1056,53,1152,58.7C1248,64,1344,64,1392,64L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+            <svg class="wave wave-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,96L48,90.7C96,85,192,75,288,69.3C384,64,480,64,576,69.3C672,75,768,85,864,85.3C960,85,1056,75,1152,64C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Content Grid -->
+    <div class="course-catalog-grid" id="courseGrid">
+        {% for course in courses %}
+        <a href="{{ path('app_student_category_show', {'id': course.id}) }}" 
+           class="course-card-premium" 
+           data-category="{{ course.titre|lower }}" 
+           data-title="{{ course.titre|lower }}" 
+           data-level="{{ course.niveau }}" 
+           data-rating="{{ course.cours|length }}"
+           data-date="{{ course.datepublication is defined ? course.datepublication|date('U') : 0 }}"
+           style="text-decoration: none;">
+            <div class="course-image-wrapper">
+                <img src="https://placehold.co/600x400/6366f1/white?text={{ course.titre|url_encode }}" alt="{{ course.titre }}">
+                <div class="course-badge">{{ course.niveau }}</div>
+            </div>
+            <div class="course-content">
+                <h3>{{ course.titre }}</h3>
+                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;">
+                    {{ course.description|length > 100 ? course.description|slice(0, 100) ~ '...' : course.description }}
+                </p>
+                <div class="course-meta" style="border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-top: auto;">
+                    <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                        <i class="fas fa-layer-group"></i>
+                        {{ course.niveau }}
+                    </span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('courseGrid');
+
+    // Unified Dropdown Logic (Reinforced)
+    function setupDropdown(dropdownId, onSelect) {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) {
+            console.error('Dropdown not found:', dropdownId);
+            return;
+        }
+        
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const selectedSpan = dropdown.querySelector('.selected-category') || dropdown.querySelector('.selected-sort');
+        const options = dropdown.querySelectorAll('.dropdown-opt');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = dropdown.classList.contains('active');
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+            
+            if (!isActive) {
+                dropdown.classList.add('active');
+            }
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const val = opt.getAttribute('data-value');
+                selectedSpan.textContent = opt.textContent.trim();
+                
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                
+                dropdown.classList.remove('active');
+                onSelect(val);
+            });
+        });
+    }
+
+    // Close dropdowns on outside click
+    window.onclick = (e) => { 
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+        }
+    };
+
+    // Unified Filtering & Sorting Logic
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+    let currentSort = 'newest';
+
+    const levelOrder = {
+        'Débutant': 1,
+        'Intermédiaire': 2,
+        'Avancé': 3
+    };
+
+    function updateGrid() {
+        let cards = Array.from(grid.querySelectorAll('.course-card-premium'));
+        
+        // Filter
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title') || '';
+            const cat = card.getAttribute('data-category') || '';
+            const level = card.getAttribute('data-level') || '';
+            
+            const searchLower = currentSearchQuery.toLowerCase();
+            const matchesSearch = title.toLowerCase().includes(searchLower) || 
+                                 cat.toLowerCase().includes(searchLower) || 
+                                 level.toLowerCase().includes(searchLower);
+            
+            const matchesCat = currentCategory === 'all' || cat === currentCategory;
+            
+            card.style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+        });
+
+        // Sort
+        cards.sort((a, b) => {
+            if (currentSort === 'rating') {
+                return parseInt(b.getAttribute('data-rating') || 0) - parseInt(a.getAttribute('data-rating') || 0);
+            } else if (currentSort === 'level') {
+                const levelA = a.getAttribute('data-level') || '';
+                const levelB = b.getAttribute('data-level') || '';
+                return (levelOrder[levelA] || 99) - (levelOrder[levelB] || 99);
+            } else if (currentSort === 'newest') {
+                return parseInt(b.getAttribute('data-date') || 0) - parseInt(a.getAttribute('data-date') || 0);
+            }
+            return 0;
+        });
+        
+        cards.forEach(card => grid.appendChild(card));
+    }
+
+    // Setup Category Dropdown
+    setupDropdown('pageCategoryDropdown', (val) => {
+        currentCategory = val;
+        updateGrid();
+    });
+
+    // Setup Sort Dropdown
+    setupDropdown('pageSortDropdown', (val) => {
+        currentSort = val;
+        updateGrid();
+    });
+
+    document.getElementById('localSearch').addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        updateGrid();
+    });
+});
+</script>
+
+{# ═══════════════════════════════════════════════
+   AI TEXT-TO-IMAGE  -  Panneau latéral
+   Ajouté sans toucher aucune autre fonctionnalité
+   ═══════════════════════════════════════════════ #}
+<style>
+.ai-fab{position:fixed;bottom:2rem;right:2rem;z-index:9000;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);border:none;cursor:pointer;box-shadow:0 8px 30px rgba(99,102,241,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;animation:fab-breathe 3s ease-in-out infinite}
+.ai-fab:hover{transform:scale(1.12);box-shadow:0 12px 40px rgba(99,102,241,.6)}
+@keyframes fab-breathe{0%,100%{box-shadow:0 8px 30px rgba(99,102,241,.45)}50%{box-shadow:0 8px 40px rgba(168,85,247,.6)}}
+.ai-fab-tooltip{position:fixed;bottom:3rem;right:5.5rem;z-index:9001;background:#1e293b;color:#fff;padding:.45rem 1rem;border-radius:10px;font-size:.8rem;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+.ai-fab-tooltip::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);border:6px solid transparent;border-right:none;border-left-color:#1e293b}
+.ai-fab:hover+.ai-fab-tooltip{opacity:1}
+.ai-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(6px);z-index:9100;opacity:0;visibility:hidden;transition:all .35s}
+.ai-overlay.open{opacity:1;visibility:visible}
+.ai-panel{position:fixed;top:0;right:-480px;width:460px;height:100vh;background:#fff;z-index:9200;box-shadow:-20px 0 60px rgba(0,0,0,.15);display:flex;flex-direction:column;transition:right .4s cubic-bezier(.34,1.56,.64,1);border-radius:24px 0 0 24px;overflow:hidden}
+.ai-panel.open{right:0}
+.ai-panel-header{background:linear-gradient(135deg,#1e1b4b,#4338ca 60%,#7c3aed);padding:1.5rem 1.75rem;color:#fff;position:relative;flex-shrink:0}
+.ai-panel-header h2{font-size:1.2rem;font-weight:900;margin-bottom:.2rem;display:flex;align-items:center;gap:.6rem}
+.ai-beta-tag{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);padding:.15rem .6rem;border-radius:20px;font-size:.65rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.ai-panel-header p{font-size:.8rem;color:#c7d2fe;font-weight:500}
+.ai-panel-close{position:absolute;top:1.25rem;right:1.25rem;background:rgba(255,255,255,.15);border:none;width:34px;height:34px;border-radius:10px;color:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.ai-panel-close:hover{background:rgba(255,255,255,.3)}
+.ai-panel-body{flex:1;overflow-y:auto;padding:1.75rem;display:flex;flex-direction:column;gap:1.25rem}
+.ai-label{font-size:.75rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.5rem}
+.ai-textarea{width:100%;min-height:110px;padding:1rem;border:2px solid #e2e8f0;border-radius:16px;font-size:.9rem;font-weight:500;color:#1e293b;resize:vertical;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit;line-height:1.6}
+.ai-textarea:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.1)}
+.ai-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.ai-chip{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:.35rem .9rem;font-size:.75rem;font-weight:600;color:#475569;cursor:pointer;transition:all .2s}
+.ai-chip:hover{background:#ede9fe;border-color:#6366f1;color:#6366f1}
+.ai-btn-generate{width:100%;padding:.9rem;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border:none;border-radius:16px;font-size:.95rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:all .3s;box-shadow:0 4px 15px rgba(99,102,241,.3)}
+.ai-btn-generate:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 25px rgba(99,102,241,.45)}
+.ai-btn-generate:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.ai-spinner{width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-result-box{display:none;flex-direction:column;gap:1rem;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.ai-result-box img{width:100%;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.12);border:2px solid #f1f5f9}
+.ai-result-meta{font-size:.72rem;color:#94a3b8;font-weight:500;text-align:center;font-style:italic}
+.ai-btn-download{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem;background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;font-size:.85rem;font-weight:700;color:#475569;cursor:pointer;text-decoration:none;transition:all .2s}
+.ai-btn-download:hover{background:#ede9fe;border-color:#6366f1;color:#6366f1}
+.ai-error-box{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:.9rem 1rem;font-size:.85rem;color:#dc2626;font-weight:600}
+.ai-skeleton{display:none;width:100%;aspect-ratio:3/2;border-radius:16px;background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+</style>
+
+{# ── Floating Button ── #}
+<button class="ai-fab" id="aiOpenBtn"><i class="fas fa-magic"></i></button>
+<div class="ai-fab-tooltip">Générer une image avec l'IA</div>
+
+{# ── Overlay ── #}
+<div class="ai-overlay" id="aiOverlay"></div>
+
+{# ── Side Panel ── #}
+<div class="ai-panel" id="aiPanel">
+    <div class="ai-panel-header">
+        <button class="ai-panel-close" id="aiCloseBtn"><i class="fas fa-times"></i></button>
+        <h2><i class="fas fa-magic"></i> AI Image Generator <span class="ai-beta-tag">BETA</span></h2>
+        <p>Décrivez votre idée, l'IA la visualise pour vous ✨</p>
+    </div>
+
+    <div class="ai-panel-body">
+        <div>
+            <div class="ai-label">Votre description</div>
+            <textarea class="ai-textarea" id="aiPrompt" placeholder="Ex : a futuristic classroom in space, digital art, vibrant colors..." maxlength="500"></textarea>
+            <div style="text-align:right;font-size:.72rem;color:#94a3b8;margin-top:.25rem;"><span id="aiCharCount">0</span> / 500</div>
+        </div>
+
+        <div>
+            <div class="ai-label">Suggestions rapides</div>
+            <div class="ai-chips">
+                <span class="ai-chip" data-prompt="a futuristic AI classroom, neon lights, digital art">🤖 Classe IA</span>
+                <span class="ai-chip" data-prompt="a student studying under stars in a magical library, fantasy art">📚 Bibliothèque</span>
+                <span class="ai-chip" data-prompt="a modern tech campus with holographic screens and green trees">🏫 Campus tech</span>
+                <span class="ai-chip" data-prompt="abstract visualization of mathematics and code, colorful 3D">💻 Code & Maths</span>
+                <span class="ai-chip" data-prompt="a brain made of circuits and light beams, neuroscience art">🧠 IA & Cerveau</span>
+            </div>
+        </div>
+
+        <button class="ai-btn-generate" id="aiGenerateBtn">
+            <span class="ai-spinner" id="aiSpinner"></span>
+            <i class="fas fa-wand-magic-sparkles" id="aiWandIcon"></i>
+            <span id="aiGenerateBtnText">G&eacute;n&eacute;rer l'image</span>
+        </button>
+
+        <div class="ai-error-box" id="aiErrorBox"></div>
+        <div class="ai-skeleton" id="aiSkeleton"></div>
+
+        <div class="ai-result-box" id="aiResultBox">
+            <img id="aiResultImg" src="" alt="Image générée par IA">
+            <div class="ai-result-meta" id="aiResultMeta"></div>
+            <a class="ai-btn-download" id="aiDownloadBtn" href="#" target="_blank">
+                <i class="fas fa-download"></i> Télécharger l'image
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const openBtn     = document.getElementById('aiOpenBtn');
+    const closeBtn    = document.getElementById('aiCloseBtn');
+    const overlay     = document.getElementById('aiOverlay');
+    const panel       = document.getElementById('aiPanel');
+    const promptEl    = document.getElementById('aiPrompt');
+    const charCount   = document.getElementById('aiCharCount');
+    const genBtn      = document.getElementById('aiGenerateBtn');
+    const spinner     = document.getElementById('aiSpinner');
+    const wandIcon    = document.getElementById('aiWandIcon');
+    const btnText     = document.getElementById('aiGenerateBtnText');
+    const errorBox    = document.getElementById('aiErrorBox');
+    const skeleton    = document.getElementById('aiSkeleton');
+    const resultBox   = document.getElementById('aiResultBox');
+    const resultImg   = document.getElementById('aiResultImg');
+    const resultMeta  = document.getElementById('aiResultMeta');
+    const downloadBtn = document.getElementById('aiDownloadBtn');
+    const endpoint    = '{{ path("app_student_ai_text_to_image") }}';
+
+    const open  = () => { panel.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { panel.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; };
+
+    if(openBtn) openBtn.addEventListener('click', open);
+    if(closeBtn) closeBtn.addEventListener('click', close);
+    if(overlay) overlay.addEventListener('click', close);
+
+    if(promptEl) promptEl.addEventListener('input', () => charCount.textContent = promptEl.value.length);
+
+    document.querySelectorAll('.ai-chip').forEach(c => {
+        c.addEventListener('click', () => { promptEl.value = c.dataset.prompt; charCount.textContent = promptEl.value.length; promptEl.focus(); });
+    });
+
+    if(genBtn) {
+        genBtn.addEventListener('click', async () => {
+            const prompt = promptEl.value.trim();
+            if (!prompt) { showError('Veuillez saisir une description.'); return; }
+            
+            setLoading(true); hideResult(); hideError();
+            
+            // Dynamic status updates during long generation
+            const statuses = [
+                "Initialisation des mod&egrave;les...",
+                "Scan du serveur principal (Pollinations)...",
+                "Tentative de mod&egrave;les rapides (Flux/Turbo)...",
+                "Surcharge d&eacute;tect&eacute;e, rotation des mod&egrave;les...",
+                "Passage sur le serveur de secours (Hercai AI)...",
+                "Finalisation de l'image..."
+            ];
+            let statusIdx = 0;
+            const statusInterval = setInterval(() => {
+                if (statusIdx < statuses.length - 1) {
+                    statusIdx++;
+                    btnText.textContent = statuses[statusIdx];
+                }
+            }, 5000);
+
+            try {
+                const resp = await fetch(endpoint, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ prompt }) 
+                });
+                
+                clearInterval(statusInterval);
+                const data = await resp.json();
+                
+                if (!resp.ok || data.error) { 
+                    showError(data.error || 'Désolé, tous les serveurs sont saturés actuellement.'); 
+                    setLoading(false); 
+                    return; 
+                }
+
+                if (data.fallback) {
+                    // All backend providers failed, try direct load
+                    resultImg.onload = () => {
+                        downloadBtn.href = data.imageUrl;
+                        resultMeta.innerHTML = `<span style="color:#f59e0b"><i class="fas fa-life-ring"></i> Mode Secours Direct Activé</span><br>"${prompt.slice(0,50)}..."`;
+                        setLoading(false); showResult();
+                    };
+                    resultImg.onerror = () => {
+                        showError('<i class="fas fa-plug"></i> Échec critique : tous les services AI sont inaccessibles. <button onclick="document.getElementById(\'aiGenerateBtn\').click()" style="background:none;border:none;color:#dc2626;font-weight:800;cursor:pointer;text-decoration:underline;padding:0;margin-left:5px;">Réessayer</button>');
+                        setLoading(false);
+                    };
+                    resultImg.src = data.imageUrl;
+                } else {
+                    // Success via one of our backend providers
+                    resultImg.src = data.dataUri;
+                    downloadBtn.href = data.dataUri;
+                    resultMeta.innerHTML = `<span style="color:#10b981"><i class="fas fa-check-double"></i> ${data.info || 'Généré par IA'}</span><br>"${prompt.slice(0,50)}..."`;
+                    setLoading(false); showResult();
+                }
+            } catch(e) { 
+                clearInterval(statusInterval);
+                showError('Erreur réseau. Vérifiez votre connexion.'); 
+                setLoading(false); 
+            }
+        });
+    }
+
+    function setLoading(on){
+        if(genBtn) genBtn.disabled = on;
+        if(spinner) spinner.style.display   = on ? 'block' : 'none';
+        if(wandIcon) wandIcon.style.display  = on ? 'none'  : 'inline';
+        if(btnText) btnText.textContent     = on ? 'G&eacute;n&eacute;ration en cours&hellip;' : "G&eacute;n&eacute;rer l'image";
+        if(skeleton) skeleton.style.display  = on ? 'block' : 'none';
+    }
+    function showResult(){ if(resultBox) resultBox.style.display='flex'; }
+    function hideResult(){ if(resultBox) resultBox.style.display='none'; }
+    function showError(m){ if(errorBox) { errorBox.innerHTML=m; errorBox.style.display='block'; } }
+    function hideError() { if(errorBox) errorBox.style.display='none'; }
+
+})();
+</script>
+{% endblock %}

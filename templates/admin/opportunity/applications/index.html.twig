@@ -1,0 +1,379 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Candidatures{% endblock %}
+
+{% block admin_content %}
+<style>
+/* Stats Cards Premium */
+.stats-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+.stat-card-p {
+    position: relative;
+    background: white;
+    padding: 1.75rem;
+    border-radius: 20px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+.stat-card-p:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.card-glow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.stat-card-p:hover .card-glow { opacity: 1; }
+.stat-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+.stat-info { display: flex; flex-direction: column; }
+.stat-title { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.stat-value { font-size: 2.25rem; font-weight: 800; color: #1e293b; line-height: 1; }
+.stat-icon-wrap {
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+}
+.stat-card-p.total .stat-icon-wrap { background: #eef2ff; color: #4f46e5; }
+.stat-card-p.draft .stat-icon-wrap { background: #fef9c3; color: #a16207; }
+.stat-card-p.active .stat-icon-wrap { background: #dcfce7; color: #15803d; }
+.stat-card-p.completed .stat-icon-wrap { background: #e0f2fe; color: #0369a1; }
+.stat-card-p.cancelled .stat-icon-wrap { background: #fee2e2; color: #b91c1c; }
+.stat-progress {
+    margin-top: 1.5rem;
+    height: 4px;
+    background: #f1f5f9;
+    border-radius: 99px;
+    overflow: hidden;
+}
+.progress-bar { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+.stat-card-p.total .progress-bar { background: #4f46e5; }
+.stat-card-p.draft .progress-bar { background: #eab308; }
+.stat-card-p.active .progress-bar { background: #22c55e; }
+.stat-card-p.completed .progress-bar { background: #0ea5e9; }
+.stat-card-p.cancelled .progress-bar { background: #ef4444; }
+
+/* Search & Buttons */
+.search-box-premium {
+    display: flex; align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1.25rem;
+    border-radius: 16px;
+    width: 320px;
+    transition: all 0.2s;
+}
+.search-box-premium:focus-within {
+    background: white;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+.search-box-premium i { color: #94a3b8; margin-right: 1rem; }
+.search-box-premium input { border: none; background: transparent; width: 100%; font-size: 0.95rem; font-weight: 500; outline: none; color: #1e293b; }
+
+.btn-new-project {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 0.85rem 1.75rem;
+    border-radius: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.75rem;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+.btn-new-project:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4); color: white; }
+
+.btn-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none !important;
+    border: 1px solid transparent;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+.btn-export.primary {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+}
+.btn-export.primary i {
+    color: #ef4444 !important;
+    font-size: 1rem;
+}
+.btn-export.primary:hover {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.15);
+}
+
+/* Table */
+.table-responsive { border-radius: 20px; border: 1px solid #f1f5f9; background: white; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; }
+thead th { background: #f8fafc; padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9; }
+tbody td { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #fbfcfe; }
+</style>
+
+<div class="animate-fade-in-up">
+    <div class="card" style="border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 24px; overflow: hidden; background: white;">
+        <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 class="card-title" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0; letter-spacing: -0.02em;">Candidatures</h3>
+                <p style="color: #64748b; margin: 0.5rem 0 0 0; font-size: 0.95rem;">Suivez et gérez les candidatures des étudiants</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1.25rem;">
+                <div class="search-box-premium">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchApplications" placeholder="Rechercher une candidature..." oninput="filterTable('applicationsTable', this.value)">
+                </div>
+                <button onclick="exportToPDF()" class="btn-export primary" title="Exporter en PDF">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>PDF</span>
+                </button>
+                <a href="{{ path('admin_opportunity_applications_new') }}" class="btn-new-project">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Nouvelle Candidature</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body" style="padding: 2rem;">
+            {{ include('admin/opportunity/_tabs.html.twig') }}
+
+            <!-- KPI Cards & Chart Section -->
+            <div style="display: grid; grid-template-columns: 1fr 200px; gap: 1.5rem; margin-bottom: 2.5rem; align-items: start;">
+                <!-- Premium Stats Grid -->
+                <div class="stats-grid-premium">
+                    <div class="stat-card-p total">
+                        <div class="card-glow"></div>
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <span class="stat-title">Total</span>
+                                <div class="stat-value" data-target="{{ stats.total }}">{{ stats.total }}</div>
+                            </div>
+                            <div class="stat-icon-wrap">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card-p draft">
+                        <div class="card-glow"></div>
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <span class="stat-title">En Attente</span>
+                                <div class="stat-value" data-target="{{ stats.pending }}">{{ stats.pending }}</div>
+                            </div>
+                            <div class="stat-icon-wrap">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.pending / stats.total * 100) : 0 }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card-p active">
+                        <div class="card-glow"></div>
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <span class="stat-title">Acceptées</span>
+                                <div class="stat-value" data-target="{{ stats.accepted }}">{{ stats.accepted }}</div>
+                            </div>
+                            <div class="stat-icon-wrap">
+                                <i class="fas fa-check-double"></i>
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.accepted / stats.total * 100) : 0 }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card-p cancelled">
+                        <div class="card-glow"></div>
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <span class="stat-title">Refusées</span>
+                                <div class="stat-value" data-target="{{ stats.rejected }}">{{ stats.rejected }}</div>
+                            </div>
+                            <div class="stat-icon-wrap">
+                                <i class="fas fa-user-times"></i>
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.rejected / stats.total * 100) : 0 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div style="background: white; border-radius: 16px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <h4 style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Répartition</h4>
+                    <div style="width: 100%; max-width: 130px;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table id="applicationsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Domaine</th>
+                            <th>Date Pub.</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for application in applications %}
+                        <tr>
+                            <td>{{ application.id }}</td>
+                            <td>
+                                <div style="font-weight: 600;">{{ application.titre }}</div>
+                            </td>
+                            <td><span class="badge" style="background: #e0e7ff; color: #4338ca; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">{{ application.domaine }}</span></td>
+                            <td>{{ application.datePublication ? application.datePublication|date('Y-m-d') : '' }}</td>
+                            <td>
+                                {% if application.statut == 'en_attente' %}
+                                    <span class="badge" style="background: #fef3c7; color: #92400e; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">En attente</span>
+                                {% elseif application.statut == 'acceptée' %}
+                                    <span class="badge" style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">Acceptée</span>
+                                {% elseif application.statut == 'refusée' %}
+                                    <span class="badge" style="background: #fee2e2; color: #b91c1c; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">Refusée</span>
+                                {% else %}
+                                    <span class="badge" style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">{{ application.statut }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <a href="{{ path('admin_opportunity_applications_edit', {'id': application.id}) }}" style="color: #4f46e5;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                        </svg>
+                                    </a>
+                                    <form method="post" action="{{ path('admin_opportunity_applications_delete', {'id': application.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ application.id) }}">
+                                        <button style="background: none; border: none; padding: 0; color: #ef4444; cursor: pointer;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: #64748b;">
+                                Aucune candidature trouvée
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    const data = {{ chartData|raw }};
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                data: data.data,
+                backgroundColor: data.colors,
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            },
+            cutout: '70%',
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    });
+});
+
+function filterTable(tableId, query) {
+    const table = document.getElementById(tableId);
+    const rows = table.querySelectorAll('tbody tr');
+    const q = query.toLowerCase();
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+
+function exportToPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.setTextColor(30, 41, 59);
+    doc.text('Rapport des Candidatures', 14, 22);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    doc.text('InnoLearn - ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    doc.text('Total: {{ stats.total }}  |  En attente: {{ stats.pending }}  |  Acceptees: {{ stats.accepted }}  |  Refusees: {{ stats.rejected }}', 14, 40);
+    
+    doc.autoTable({
+        html: '#applicationsTable',
+        startY: 48,
+        styles: { fontSize: 9, cellPadding: 3 },
+        headStyles: { fillColor: [99, 102, 241], textColor: 255, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
+        columnStyles: { 5: { cellWidth: 0 } }
+    });
+    
+    doc.save('candidatures_' + new Date().toISOString().slice(0,10) + '.pdf');
+}
+</script>
+{% endblock %}

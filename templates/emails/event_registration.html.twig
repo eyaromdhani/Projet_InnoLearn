@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation d'inscription</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 800;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .welcome {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .event-card {
+            background: #f1f5f9;
+            border-left: 4px solid #6366f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .event-title {
+            font-weight: 800;
+            font-size: 18px;
+            color: #1e1b4b;
+            margin-bottom: 10px;
+        }
+        .event-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        .footer {
+            padding: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            border-top: 1px solid #f1f5f9;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #6366f1;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Inscription Confirmée !</h1>
+        </div>
+        <div class="content">
+            <p class="welcome">Bonjour {{ participant_name }},</p>
+            <p>Nous sommes ravis de vous confirmer votre inscription à l'événement suivant :</p>
+            
+            <div class="event-card">
+                <div class="event-title">{{ event.titre }}</div>
+                <div class="event-info">
+                    <strong>📅 Date :</strong> {{ event.dateDebut|date('d/m/Y') }} à {{ event.dateDebut|date('H:i') }}
+                </div>
+                <div class="event-info">
+                    <strong>📍 Lieu :</strong> {{ event.lieu|default('En ligne') }}
+                </div>
+            </div>
+            
+            <p>Veuillez noter que votre inscription est actuellement en attente de validation par notre équipe. Vous recevrez un nouvel email dès que votre participation sera confirmée.</p>
+            
+            <a href="#" class="btn">Voir l'événement</a>
+        </div>
+        <div class="footer">
+            &copy; 2026 InnoLearn Academy. Tous droits réservés.<br>
+            Ceci est un message automatique, merci de ne pas y répondre.
+        </div>
+    </div>
+</body>
+</html>

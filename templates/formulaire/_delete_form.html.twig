@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_formulaire_delete', {'id': formulaire.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce quiz ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formulaire.id) }}">
+    <button class="btn btn-action btn-light" title="Supprimer" data-bs-toggle="tooltip">
+        <i class="bi bi-trash text-danger"></i>
+    </button>
+</form>

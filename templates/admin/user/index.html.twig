@@ -1,0 +1,141 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Utilisateurs - Admin{% endblock %}
+{% block page_title %}Gestion des Utilisateurs{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid #f1f5f9;">
+        <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600; color: #1e293b;">Liste des Utilisateurs</h3>
+        <div style="display:flex; gap:0.6rem; align-items:center;">
+            <a href="{{ path('admin_user_export', {'q': search|default(''), 'status': status|default('all'), 'role': role|default('all')}) }}" class="btn-primary" style="text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; background:#0f766e;">
+                <i class="fas fa-file-csv" style="margin-right: 0.5rem;"></i> Export CSV
+            </a>
+            <a href="{{ path('admin_user_new') }}" class="btn-primary" style="text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500;">
+                <i class="fas fa-plus" style="margin-right: 0.5rem;"></i> Nouvel Utilisateur
+            </a>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:1rem; padding:1rem 1rem 0 1rem;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:0.9rem;">
+            <div style="font-size:0.75rem; color:#64748b;">Total</div>
+            <div style="font-size:1.35rem; font-weight:800; color:#0f172a;">{{ stats.total|default(0) }}</div>
+        </div>
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:0.9rem;">
+            <div style="font-size:0.75rem; color:#15803d;">Actifs</div>
+            <div style="font-size:1.35rem; font-weight:800; color:#166534;">{{ stats.active|default(0) }}</div>
+        </div>
+        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:0.9rem;">
+            <div style="font-size:0.75rem; color:#b91c1c;">Bannis</div>
+            <div style="font-size:1.35rem; font-weight:800; color:#991b1b;">{{ stats.banned|default(0) }}</div>
+        </div>
+        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:0.9rem;">
+            <div style="font-size:0.75rem; color:#1d4ed8;">Résultats filtrés</div>
+            <div style="font-size:1.35rem; font-weight:800; color:#1e3a8a;">{{ stats.filtered|default(0) }}</div>
+        </div>
+    </div>
+
+    <form method="get" action="{{ path('admin_user_index') }}" style="display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:0.75rem; padding:1rem; align-items:end;">
+        <div>
+            <label style="display:block; font-size:0.75rem; color:#64748b; margin-bottom:0.35rem;">Recherche</label>
+            <input type="text" name="q" value="{{ search|default('') }}" placeholder="Nom, username, email" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:0.6rem 0.75rem;">
+        </div>
+        <div>
+            <label style="display:block; font-size:0.75rem; color:#64748b; margin-bottom:0.35rem;">Statut</label>
+            <select name="status" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:0.6rem 0.75rem;">
+                <option value="all" {{ (status|default('all')) == 'all' ? 'selected' : '' }}>Tous</option>
+                <option value="active" {{ (status|default('all')) == 'active' ? 'selected' : '' }}>Actifs</option>
+                <option value="banned" {{ (status|default('all')) == 'banned' ? 'selected' : '' }}>Bannis</option>
+            </select>
+        </div>
+        <div>
+            <label style="display:block; font-size:0.75rem; color:#64748b; margin-bottom:0.35rem;">Rôle</label>
+            <select name="role" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:0.6rem 0.75rem;">
+                <option value="all" {{ (role|default('all')) == 'all' ? 'selected' : '' }}>Tous</option>
+                <option value="ROLE_ADMIN" {{ (role|default('all')) == 'ROLE_ADMIN' ? 'selected' : '' }}>Admin</option>
+                <option value="ROLE_STUDENT" {{ (role|default('all')) == 'ROLE_STUDENT' ? 'selected' : '' }}>Student</option>
+                <option value="ROLE_INSTRUCTOR" {{ (role|default('all')) == 'ROLE_INSTRUCTOR' ? 'selected' : '' }}>Instructor</option>
+                <option value="ROLE_RECRUITER" {{ (role|default('all')) == 'ROLE_RECRUITER' ? 'selected' : '' }}>Recruiter</option>
+            </select>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+            <button type="submit" class="btn-primary" style="padding:0.6rem 1rem; border:none; border-radius:8px;">Filtrer</button>
+            <a href="{{ path('admin_user_index') }}" style="text-decoration:none; padding:0.6rem 1rem; border:1px solid #cbd5e1; border-radius:8px; color:#334155;">Reset</a>
+        </div>
+    </form>
+
+    <div class="table-responsive" style="padding: 1rem;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid #f8fafc;">
+                    <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.75rem; text-transform: uppercase;">Nom</th>
+                    <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.75rem; text-transform: uppercase;">Email</th>
+                    <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.75rem; text-transform: uppercase;">Rôles</th>
+                    <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.75rem; text-transform: uppercase;">Statut</th>
+                    <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr style="border-bottom: 1px solid #f8fafc; transition: background 0.2s; opacity: {{ user.isIsActive ? '1' : '0.6' }}">
+                        <td style="padding: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 32px; height: 32px; border-radius: 8px; background: {{ user.isIsActive ? '#e0e7ff' : '#f1f5f9' }}; color: {{ user.isIsActive ? '#4338ca' : '#64748b' }}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">
+                                    {{ user.name|slice(0, 1)|upper }}
+                                </div>
+                                <span style="font-weight: 500; color: #1e293b;">{{ user.name }}</span>
+                            </div>
+                        </td>
+                        <td style="padding: 1rem; color: #64748b;">{{ user.email }}</td>
+                        <td style="padding: 1rem;">
+                            {% for role in user.roles %}
+                                <span style="padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.7rem; font-weight: 600; background: {% if role == 'ROLE_ADMIN' %}#fee2e2; color: #991b1b{% else %}#f1f5f9; color: #475569{% endif %}; margin-right: 0.25rem;">
+                                    {{ role|replace({'ROLE_': ''}) }}
+                                </span>
+                            {% endfor %}
+                        </td>
+                        <td style="padding: 1rem;">
+                            {% if user.isIsActive %}
+                                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; background: #dcfce7; color: #166534;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e;"></span>
+                                    Actif
+                                </span>
+                            {% else %}
+                                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; background: #fee2e2; color: #991b1b;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #ef4444;"></span>
+                                    Inactif
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1rem; text-align: right;">
+                            <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                                <a href="{{ path('admin_user_edit', {id: user.id}) }}" style="color: #6366f1; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" title="Modifier">
+                                    <i class="fas fa-edit" style="font-size: 0.875rem;"></i>
+                                </a>
+                                
+                                <form method="post" action="{{ path('admin_user_toggle', {id: user.id}) }}" style="display: inline-block;">
+                                    <button style="border: 1px solid #e2e8f0; background: {{ user.isIsActive ? '#fff7ed' : '#f0fdf4' }}; color: {{ user.isIsActive ? '#c2410c' : '#15803d' }}; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s;" title="{{ user.isIsActive ? 'Désactiver' : 'Activer' }}">
+                                        <i class="fas {{ user.isIsActive ? 'fa-user-slash' : 'fa-user-check' }}" style="font-size: 0.875rem;"></i>
+                                    </button>
+                                </form>
+
+                                <form method="post" action="{{ path('admin_user_delete', {id: user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');" style="display: inline-block;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                    <button style="background: none; border: 1px solid #fee2e2; color: #ef4444; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s;" title="Supprimer">
+                                        <i class="fas fa-trash" style="font-size: 0.875rem;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" style="padding: 3rem; text-align: center; color: #94a3b8;">Aucun utilisateur trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

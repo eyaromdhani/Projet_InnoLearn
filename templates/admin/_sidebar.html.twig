@@ -1,0 +1,95 @@
+<aside class="sidebar">
+    <div class="sidebar-header" style="justify-content: flex-start; gap: 0.75rem; padding-left: 2rem; margin-bottom: 2rem;">
+        <a href="{{ path('admin_dashboard') }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
+            <div style="background: #6366f1; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-graduation-cap" style="color: white; font-size: 1.2rem;"></i>
+            </div>
+            <span style="font-size: 1.4rem; font-weight: 800; color: #1e1b4b; letter-spacing: -0.5px;">InnoLearn</span>
+        </a>
+        <button class="mobile-close-btn" id="mobile-close-btn" style="color: #64748b;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <p class="nav-label" style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; padding: 0 2rem 1rem;">MENU</p>
+        
+        {% set current_route = app.request.attributes.get('_route') %}
+        
+        <a href="{{ path('admin_dashboard') }}" class="nav-item {{ current_route == 'admin_dashboard' ? 'active' : '' }}">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Dashboard</span>
+        </a>
+        
+        <a href="{{ path('admin_projects') }}" class="nav-item {{ current_route starts with 'admin_projects' ? 'active' : '' }}">
+            <i class="fas fa-project-diagram nav-icon"></i>
+            <span>Projets</span>
+        </a>
+        
+        <a href="{{ path('admin_subscriptions') }}" class="nav-item {{ current_route == 'admin_subscriptions' ? 'active' : '' }}">
+            <i class="fas fa-credit-card nav-icon"></i>
+            <span>Abonnements</span>
+        </a>
+        
+        <a href="{{ path('admin_user_index') }}" class="nav-item {{ current_route starts with 'admin_user' ? 'active' : '' }}">
+            <i class="fas fa-users nav-icon"></i>
+            <span>Utilisateurs</span>
+        </a>
+        
+        <a href="{{ path('admin_categorie_cours_index') }}" class="nav-item {{ current_route starts with 'admin_categorie_cours' ? 'active' : '' }}">
+            <i class="fas fa-th-large nav-icon"></i>
+            <span>Catégories</span>
+        </a>
+
+        <a href="{{ path('admin_quiz_index') }}" class="nav-item {{ current_route starts with 'admin_quiz' ? 'active' : '' }}">
+            <i class="fas fa-file-alt nav-icon"></i>
+            <span>Quiz</span>
+        </a>
+        
+        <a href="{{ path('admin_book_index') }}" class="nav-item {{ current_route starts with 'admin_book' ? 'active' : '' }}">
+            <i class="fas fa-book nav-icon"></i>
+            <span>Livres</span>
+        </a>
+
+        <p class="nav-label" style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; padding: 2rem 2rem 1rem 2rem;">SUPPORT</p>
+
+        <a href="{{ path('admin_event_index') }}" class="nav-item {{ current_route starts with 'admin_event' ? 'active' : '' }}">
+            <i class="fas fa-calendar-alt nav-icon"></i>
+            <span>Événements</span>
+        </a>
+        
+        <a href="{{ path('admin_opportunity_offres_index') }}" class="nav-item {{ current_route starts with 'admin_opportunity' ? 'active' : '' }}">
+            <i class="fas fa-briefcase nav-icon"></i>
+            <span>Opportunités</span>
+        </a>
+        
+        <a href="{{ path('admin_security_report') }}" class="nav-item {{ (current_route starts with 'admin_security_report') or current_route == 'admin_security' ? 'active' : '' }}">
+            <i class="fas fa-shield-alt nav-icon"></i>
+            <span>Sécurité</span>
+        </a>
+
+        <a href="{{ path('app_admin_advanced_stats') }}" class="nav-item {{ current_route == 'app_admin_advanced_stats' ? 'active' : '' }}">
+            <i class="fas fa-brain nav-icon" style="color: #a855f7;"></i>
+            <span>Stats Avancées</span>
+        </a>
+        
+        <a href="{{ path('admin_settings') }}" class="nav-item {{ current_route == 'admin_settings' ? 'active' : '' }}">
+            <i class="fas fa-cog nav-icon"></i>
+            <span>Paramètres</span>
+        </a>
+
+        <a href="{{ path('admin_stats_advanced') }}" class="nav-item {{ current_route == 'admin_stats_advanced' ? 'active' : '' }}">
+            <i class="fas fa-face-viewfinder nav-icon"></i>
+            <span>FACE ID</span>
+        </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <a href="{{ path('app_home') }}" class="nav-item logout">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <span>Retour au site</span>
+        </a>
+    </div>
+</aside>

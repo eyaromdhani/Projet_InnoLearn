@@ -1,0 +1,149 @@
+<div class="modal-header" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+        <div>
+            <span class="domain-badge" style="position: static; margin-bottom: 0.5rem; display: inline-block;">{{ offre.domaine }}</span>
+            <h2 style="font-size: 2rem; font-weight: 800; color: #1e293b; margin: 0;">{{ offre.titre }}</h2>
+            <p style="color: #64748b; font-size: 1.1rem; margin-top: 0.5rem;">
+                <i class="fas fa-building" style="color: #6366f1;"></i> {{ offre.entreprise }}
+            </p>
+        </div>
+        <button class="close-modal" onclick="closeOfferDetailsModal()" style="background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; transition: all 0.2s;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>
+
+<div class="modal-body" style="padding: 0 1rem;">
+    <!-- Top Section: Meta Info Bar -->
+    <div style="display: flex; gap: 2rem; margin-bottom: 2rem; padding: 1.25rem; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; color: #475569; font-weight: 600;">
+            <i class="fas fa-map-marker-alt" style="color: #6366f1;"></i>
+            <span>{{ offre.lieu }}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; color: #475569; font-weight: 600;">
+            <i class="fas fa-clock" style="color: #6366f1;"></i>
+            <span>Durée: {{ offre.duree }} mois</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; color: #475569; font-weight: 600;">
+            <i class="fas fa-calendar-alt" style="color: #6366f1;"></i>
+            <span>Publié le {{ offre.datePublication|date('d/m/Y') }}</span>
+        </div>
+    </div>
+
+    <!-- Main Content: Description & Skills -->
+    <div class="modal-main-content">
+        <div style="margin-bottom: 2.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-align-left" style="color: #6366f1;"></i> Description du Poste
+            </h3>
+            <div style="line-height: 1.7; color: #475569; font-size: 1.05rem;">
+                {{ offre.description|nl2br }}
+            </div>
+        </div>
+
+        <!-- AI Interview Preparation -->
+        <div style="margin-bottom: 2.5rem; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 20px; padding: 1.5rem; border: 1px solid #e2e8f0;">
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-question-circle" style="color: #6366f1;"></i> Préparation à l'Entretien (IA)
+            </h3>
+            <div id="aiInterviewInitial">
+                <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1rem;">Générez 5 questions probables pour vous préparer au mieux à ce stage.</p>
+                <button class="btn-primary-gradient" style="margin-top: 0; font-size: 0.85rem;" onclick="runAiInterviewPrep({{ offre.id }})">
+                    <i class="fas fa-lightbulb"></i> Générer les questions d'entretien
+                </button>
+            </div>
+            <div id="aiInterviewLoading" style="display: none; text-align: center; padding: 1rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: #6366f1;"></i>
+            </div>
+            <div id="aiInterviewResults" style="display: none; margin-top: 1rem; flex-direction: column; gap: 1rem;">
+                <!-- Questions will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid #e2e8f0; margin-bottom: 3rem;">
+
+    <!-- Application Form: Now at the bottom -->
+    <div class="application-form-section" style="max-width: 800px; margin: 0 auto 2rem;">
+        <div style="background: #ffffff; border-radius: 24px; padding: 2.5rem; border: 2px solid #f1f5f9; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.05);">
+            <h4 style="font-size: 1.5rem; font-weight: 800; color: #6366f1; margin-bottom: 2rem; text-align: center;">Postuler à cette offre</h4>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="grid-column: span 2;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">Titre de la demande *</label>
+                    <input type="text" id="applicationTitre" value="{{ profile.domaine ? 'Candidature : ' ~ profile.domaine : '' }}" placeholder="Ex: Stage en développement web" style="width: 100%; padding: 0.85rem 1.1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='#6366f1'; this.style.background='white'" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'" style="background: #f8fafc;">
+                    <div id="titreError" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">Domaine *</label>
+                    <input type="text" id="applicationDomaine" value="{{ profile.domaine|default('') }}" placeholder="Ex: Informatique, Marketing..." style="width: 100%; padding: 0.85rem 1.1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='#6366f1'; this.style.background='white'" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'" style="background: #f8fafc;">
+                    <div id="domaineError" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">Compétences *</label>
+                    <input type="text" id="applicationCompetences" value="{{ profile.competences|default('') }}" placeholder="Ex: PHP, Symfony, JavaScript..." style="width: 100%; padding: 0.85rem 1.1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='#6366f1'; this.style.background='white'" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'" style="background: #f8fafc;">
+                    <div id="competencesError" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">Description de votre profil *</label>
+                <textarea id="applicationDescription" placeholder="Décrivez votre profil et vos motivations..." style="width: 100%; padding: 0.85rem 1.1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.2s; resize: vertical; min-height: 100px; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.background='white'" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'">{{ profile.description|default('') }}</textarea>
+                <div id="descriptionError" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">CV (fichier PDF) *</label>
+                    <div class="file-upload-wrapper" style="position: relative;">
+                        <input type="file" id="applicationCvFile" accept=".pdf,application/pdf" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;">
+                        <div id="applicationCvBox" style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 12px; transition: all 0.2s; cursor: pointer;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem;">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; color: #1e293b; font-size: 0.9rem;" id="applicationCvFileName">Choisir un PDF</div>
+                                <div style="font-size: 0.7rem; color: #94a3b8;">Max 5 Mo</div>
+                            </div>
+                        </div>
+                        {% if profile and profile.cv %}
+                            <div style="margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #10b981; cursor: pointer;">
+                                    <input type="checkbox" id="useProfileCvOffer" name="use_profile_cv" value="1" checked>
+                                    <i class="fas fa-check-circle"></i> Utiliser le CV de mon profil
+                                </label>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div id="cvError" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="font-size: 0.85rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">Lettre de motivation *</label>
+                        <button type="button" class="btn-primary-gradient" style="margin-top: 0; padding: 0.25rem 0.6rem; font-size: 0.7rem; background: #6366f1;" onclick="generateAiCoverLetter({{ offre.id }})">
+                            <i class="fas fa-magic"></i> Aide IA
+                        </button>
+                    </div>
+                    <div id="aiLetterLoading" style="display: none; font-size: 0.7rem; color: #6366f1; margin-bottom: 0.5rem;"><i class="fas fa-spinner fa-spin"></i> Génération par l'IA...</div>
+                    <textarea id="motivationLetter" 
+                              placeholder="Expliquez votre motivation..." 
+                              style="width: 100%; padding: 0.85rem 1.1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; transition: all 0.2s; outline: none; resize: vertical; min-height: 90px; background: #f8fafc;"
+                              onfocus="this.style.borderColor='#6366f1'; this.style.background='white'"
+                              onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'">{{ profile.lettreMotivation|default('') }}</textarea>
+                    <div id="motivationError" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
+                </div>
+            </div>
+
+            <button class="btn-primary-gradient" onclick="submitApplication({{ offre.id }})" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.1rem;">
+                <i class="fas fa-paper-plane"></i> Envoyer ma candidature
+            </button>
+            
+            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #94a3b8; line-height: 1.5; text-align: center;">
+                En postulant, votre profil complet sera partagé avec <strong>{{ offre.entreprise }}</strong>.
+            </p>
+        </div>
+    </div>
+</div>

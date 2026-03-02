@@ -1,0 +1,46 @@
+<header class="dashboard-header">
+    <div class="header-brand-wrapper">
+        <a href="{{ path('app_home') }}" class="header-brand">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn">
+            <span>InnoLearn</span>
+        </a>
+    </div>
+
+    <nav class="header-nav">
+        <a href="{{ path('app_enseignant_home') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_home' ? 'active' : '' }}">
+            Accueil
+        </a>
+        <a href="{{ path('app_enseignant_courses') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_courses' ? 'active' : '' }}">
+            Mes Cours
+        </a>
+        <a href="{{ path('app_enseignant_events') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_events' ? 'active' : '' }}">
+            Événements
+        </a>
+        <a href="{{ path('app_enseignant_quizzes') }}" class="nav-item {{ app.request.attributes.get('_route') == 'app_enseignant_quizzes' ? 'active' : '' }}">
+            Quiz
+        </a>
+    </nav>
+    
+    <div class="header-actions">
+        <div class="search-bar-compact">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher...">
+        </div>
+
+        <a href="{{ path('app_enseignant_home') }}" class="logo">
+            <i class="fas fa-chalkboard-teacher"></i>
+            InnoLearn <span class="badge-pro">Teacher</span>
+        </a>
+        <button class="icon-btn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge-dot"></span>
+        </button>
+        
+        <div class="user-profile-toggle" id="profileToggle">
+            <div class="avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name={{ app.user.name|url_encode }}&background=6366f1&color=fff&bold=true" alt="User Avatar">
+                <span class="status-indicator online"></span>
+            </div>
+        </div>
+    </div>
+</header>

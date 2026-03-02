@@ -1,0 +1,154 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Quiz{% endblock %}
+{% block page_title %}Gestion des Quiz{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/formulaire.css') }}?v={{ 'now'|date('YmdHi') }}">
+{% endblock %}
+
+{% block admin_content %}
+
+<!-- Page Header -->
+<div class="quiz-page-header animate-fade-in-up">
+    <h1 class="quiz-page-title">Gestion des <span>Quiz</span></h1>
+</div>
+
+<!-- Main Table Card -->
+<div class="quiz-card animate-fade-in-up">
+
+    <!-- Card Header -->
+    <div class="quiz-card-header">
+        <h3><i class="bi bi-journals me-2"></i>Liste des Quiz</h3>
+        <a href="{{ path('app_formulaire_new') }}" class="btn-add-quiz">
+            <i class="bi bi-plus-circle-fill"></i> Ajouter Nouveau
+        </a>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="quiz-search-bar">
+        <div class="search-input-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" id="category-search"
+                   placeholder="Rechercher par catégorie..."
+                   value="{{ currentCategory|default('') }}">
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="quiz-table-wrap">
+        <table class="quiz-table">
+            <thead>
+                <tr>
+                    <th><a href="#" data-sort="id">ID <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="titre">Titre <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="description">Description <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="tempsLimite">Temps Limite <i class="bi bi-chevron-expand"></i></a></th>
+                    <th><a href="#" data-sort="category">Catégorie <i class="bi bi-chevron-expand"></i></a></th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="quiz-table-body">
+                {{ include('formulaire/_table_rows.html.twig') }}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Statistics Card -->
+<div class="stats-card animate-fade-in-up">
+    <div class="stats-card-header">
+        <div class="stats-icon"><i class="bi bi-bar-chart-fill"></i></div>
+        <h3>Statistiques des Durées</h3>
+    </div>
+    <div class="stats-card-body">
+        <div id="quiz-duration-chart" style="min-height: 300px; display: flex; justify-content: center;"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var options = {
+        series: [{{ countBelow10|default(0) }}, {{ countAbove10|default(0) }}],
+        chart: {
+            width: 380,
+            type: 'donut',
+            fontFamily: 'Inter, sans-serif',
+        },
+        labels: ['< 10 minutes', '>= 10 minutes'],
+        colors: ['#f43f5e', '#6366f1'],
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '65%',
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            color: '#1e293b',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: { enabled: true },
+        legend: {
+            position: 'bottom',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 600,
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: { width: 200 },
+                legend: { position: 'bottom' }
+            }
+        }]
+    };
+    var chart = new ApexCharts(document.querySelector("#quiz-duration-chart"), options);
+    chart.render();
+});
+</script>
+
+<!-- Dynamic search & sorting JS -->
+<script>
+const tableBody = document.getElementById('quiz-table-body');
+const searchInput = document.getElementById('category-search');
+
+let currentSort = 'id';
+let currentDirection = 'asc';
+
+function fetchTable() {
+    const category = encodeURIComponent(searchInput.value);
+    fetch(`{{ path('app_formulaire_index') }}?category=${category}&sort=${currentSort}&direction=${currentDirection}`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.text())
+    .then(html => { tableBody.innerHTML = html; });
+}
+
+searchInput.addEventListener('input', () => fetchTable());
+
+document.querySelectorAll('thead th a').forEach(header => {
+    header.addEventListener('click', e => {
+        e.preventDefault();
+        const sortField = header.dataset.sort;
+        if (currentSort === sortField) {
+            currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort = sortField;
+            currentDirection = 'asc';
+        }
+        fetchTable();
+    });
+});
+</script>
+
+{% endblock %}

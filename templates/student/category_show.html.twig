@@ -1,0 +1,479 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Catalogue - {{ category.titre }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section */
+.category-hero {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: 350px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 60px;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.category-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.4) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem 6rem;
+    width: 100%;
+    z-index: 10;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.category-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.category-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); 
+    backdrop-filter: blur(0px);
+    display: flex; align-items: center; justify-content: center; z-index: 2000;
+    opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-overlay.active { 
+    opacity: 1; 
+    visibility: visible;
+    backdrop-filter: blur(15px);
+}
+
+.modal-container {
+    background: white; width: 100%; max-width: 650px; border-radius: 30px;
+    position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+}
+.modal-overlay.active .modal-container {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.modal-close:hover { background: #e2e8f0; transform: rotate(90deg); }
+
+/* Form styling improvements */
+.form-error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; font-weight: 600; }
+.form-control:focus, .form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+.is-invalid { border-color: #ef4444 !important; }
+
+body.modal-open { overflow: hidden; }
+
+/* Course Grid */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+.course-card {
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.03);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+}
+
+.course-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.course-media {
+    height: 200px;
+    background: #f1f5f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.course-media img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.course-card:hover .course-media img {
+    transform: scale(1.08);
+}
+
+.course-media .video-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.2);
+    display: flex; align-items: center; justify-content: center; color: white;
+    font-size: 2.5rem;
+    backdrop-filter: blur(2px);
+    transition: all 0.3s;
+}
+
+.course-info { 
+    padding: 1.5rem; 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.8rem;
+}
+
+.course-info h4 { 
+    margin: 0; 
+    color: #1e293b; 
+    font-size: 1.25rem; 
+    font-weight: 800; 
+    line-height: 1.3; 
+}
+
+.course-info p { 
+    color: #64748b; 
+    font-size: 0.9rem; 
+    line-height: 1.6; 
+    margin: 0;
+    opacity: 0.8;
+}
+
+.course-meta {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.meta-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.meta-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.meta-info-item i {
+    color: #94a3b8;
+    width: 16px;
+    text-align: center;
+}
+
+.btn-enroll {
+    background: #6366f1;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.btn-enroll:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    filter: brightness(1.05);
+}
+
+/* Recommendation Section */
+.recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.recommendation-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+    border: 1px solid #f1f5f9;
+    height: 100%;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.rec-media {
+    height: 140px;
+    background: #f1f5f9;
+    position: relative;
+}
+
+.rec-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rec-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(99, 102, 241, 0.9);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.rec-content {
+    padding: 1.25rem;
+}
+
+.rec-content h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+}
+
+.rec-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.btn-hero-primary {
+    padding: 0.8rem 1.5rem;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.btn-hero-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Congratulations Badge */
+.congrats-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24, #f97316);
+    color: #fff;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+    animation: badge-pulse 2.4s ease-in-out infinite;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.congrats-badge i {
+    font-size: 0.85rem;
+}
+
+@keyframes badge-pulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45); transform: scale(1); }
+    50%       { box-shadow: 0 6px 22px rgba(245, 158, 11, 0.7);  transform: scale(1.05); }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<div class="category-hero">
+    <div class="hero-container">
+        <a href="{{ path('app_student_courses') }}" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-weight: 600;">
+            <i class="fas fa-arrow-left"></i> Retour au catalogue
+        </a>
+        <span class="category-badge">{{ category.niveau }}</span>
+        <h1 class="category-title">{{ category.titre }}</h1>
+        <p class="category-description">{{ category.description }}</p>
+    </div>
+</div>
+
+<div class="container-fluid" style="padding: 0 2rem 5rem 6rem;">
+    <!-- Featured for You Section -->
+    {% if recommendations is defined and recommendations|length > 0 %}
+    <div style="margin-bottom: 5rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+            <div style="width: 48px; height: 48px; background: #6366f115; color: #6366f1; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-magic"></i>
+            </div>
+            <div>
+                <h3 style="color: #1e293b; margin: 0; font-size: 1.5rem; font-weight: 800;">Sugg&eacute;r&eacute; pour vous</h3>
+                <p style="color: #64748b; margin: 0; font-size: 0.9rem;">Bas&eacute; sur vos int&eacute;r&ecirc;ts et performances</p>
+            </div>
+        </div>
+        
+        <div class="recommendation-grid">
+            {% for rec in recommendations %}
+                <div class="recommendation-card">
+                    <div class="rec-media">
+                        <img src="{{ rec.mediaUrl }}" alt="{{ rec.nom }}" onerror="this.src='https://placehold.co/600x400/6366f1/ffffff?text={{ rec.nom|url_encode }}'">
+                        <span class="rec-badge">{{ rec.niveau }}</span>
+                    </div>
+                    <div class="rec-content">
+                        <h4>{{ rec.nom }}</h4>
+                        <div class="rec-meta">
+                            <span><i class="far fa-user me-1"></i> {{ rec.enseignant }}</span>
+                            <span><i class="far fa-clock me-1"></i> {{ rec.duree }}h</span>
+                        </div>
+                        <a href="{{ path('app_student_course_show', {id: rec.id}) }}" class="btn-hero-primary" style="display: block; margin-top: 1.25rem; text-align: center;">D&eacute;couvrir</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <hr style="border: 0; border-top: 1px solid #f1f5f9; margin-bottom: 5rem;">
+    {% endif %}
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 3rem; gap: 1rem;">
+        <h2 style="color: #1e293b; margin: 0; font-size: 2rem; font-weight: 800;">Cours disponibles</h2>
+        <span style="background: #f1f5f9; padding: 0.6rem 1.25rem; border-radius: 12px; color: #64748b; font-weight: 700; font-size: 0.9rem;">
+            {{ courses|length }} modules
+        </span>
+    </div>
+    
+    {% if courses is empty %}
+        <div style="text-align: center; padding: 5rem 0; background: white; border-radius: 30px; border: 2px dashed #e2e8f0;">
+            <i class="fas fa-graduation-cap" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 1.5rem;"></i>
+            <h3 style="color: #64748b;">Aucun cours dans cette catégorie pour le moment.</h3>
+            <p style="color: #94a3b8;">Revenez plus tard pour voir les nouveautés !</p>
+        </div>
+    {% else %}
+        <div class="course-grid">
+            {% set colors = ['#6366f1', '#a855f7', '#ec4899', '#f97316', '#10b981', '#06b6d4'] %}
+            {% for course in courses %}
+                {% set accentColor = colors[loop.index0 % colors|length] %}
+                <div class="course-card" style="border-top: 6px solid {{ accentColor }};">
+                    {% if completedCourseIds is defined and course.id in completedCourseIds %}
+                        <div class="congrats-badge">
+                            <i class="fas fa-trophy"></i> F&eacute;licitations !
+                        </div>
+                    {% endif %}
+                    <div class="course-media">
+                        {% set isValidUrl = course.mediaUrl and (course.mediaUrl starts with 'http' or course.mediaUrl starts with '/' or course.mediaUrl starts with 'data:') %}
+                        <div class="course-img-container" style="width: 100%; height: 100%; background: {{ accentColor }}; position: relative; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: 900; font-size: 2.5rem; text-transform: uppercase; opacity: 0.15; position: absolute; z-index: 1; letter-spacing: -2px;">{{ course.nom|slice(0, 2) }}</span>
+                            
+                            {% if course.typeMedia == 'video_intro' %}
+                                <img src="https://placehold.co/600x400/1e1b4b/white?text={{ course.nom|url_encode }}" 
+                                     alt="{{ course.nom }}"
+                                     onerror="this.style.display='none'">
+                                <div class="video-overlay" style="color: white;">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            {% else %}
+                                <img src="{{ isValidUrl ? course.mediaUrl : '' }}" 
+                                     alt="{{ course.nom }}"
+                                     style="{{ not isValidUrl ? 'display: none;' : '' }}"
+                                     onerror="this.style.display='none'">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                            <span style="font-size: 0.65rem; color: {{ accentColor }}; font-weight: 800; text-transform: uppercase; background: {{ accentColor }}10; padding: 0.3rem 0.7rem; border-radius: 8px; letter-spacing: 0.5px;">{{ course.niveau }}</span>
+                        </div>
+                        <h4>{{ course.nom }}</h4>
+                        <p>{{ course.description|length > 100 ? course.description|slice(0, 100) ~ '...' : course.description }}</p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-details">
+                                <div class="meta-info-container">
+                                    <div class="meta-info-item">
+                                        <i class="far fa-clock"></i>
+                                        <span>{{ course.duree }} Heures</span>
+                                    </div>
+                                    <div class="meta-info-item">
+                                        <i class="far fa-user"></i>
+                                        <span>{{ course.enseignant }}</span>
+                                    </div>
+                                </div>
+                                <a href="{{ path('app_student_course_show', {'id': course.id}) }}" class="btn-enroll" style="background: {{ accentColor }};" title="Voir les d&eacute;tails du cours">
+                                    <i class="fas fa-arrow-right"></i> D&eacute;tails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // No specific logic needed for now
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1010 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Projets - InnoLearn{% endblock %}
+
+{% block page_title %}Gestion des Projets{% endblock %}
+
+{% block admin_content %}
+<div class="card animate-fade-in-up" style="border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 24px; overflow: hidden; background: white;">
+    <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9; padding: 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h3 class="card-title" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0; letter-spacing: -0.02em;">Liste des Projets</h3>
+            <p style="color: #64748b; margin: 0.5rem 0 0 0; font-size: 0.95rem;">Gérez et suivez l'évolution de vos projets collaboratifs</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div class="search-box-premium">
+                <i class="fas fa-search"></i>
+                <form method="GET" style="display: contents;">
+                    <input type="text" name="search" placeholder="Rechercher un projet..." value="{{ search_query }}">
+                </form>
+            </div>
+            <a href="{{ path('admin_projects_export_excel') }}" class="btn-export secondary" title="Exporter en Excel">
+                <i class="fas fa-file-excel"></i>
+                <span>Excel</span>
+            </a>
+            <a href="{{ path('admin_projects_export_word') }}" class="btn-export primary" title="Exporter en Word">
+                <i class="fas fa-file-word"></i>
+                <span>Word</span>
+            </a>
+            <button class="btn-import" onclick="openImportModal()" title="Importer depuis Excel">
+                <i class="fas fa-file-import"></i>
+                <span>Import</span>
+            </button>
+            <a href="{{ path('admin_projects_new') }}" class="btn-new-project">
+                <i class="fas fa-plus-circle"></i>
+                <span>Nouveau Projet</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        <!-- Premium Stats Grid -->
+        <div class="stats-grid-premium" style="margin-bottom: 2.5rem;">
+            <div class="stat-card-p total">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Total Projets</span>
+                        <div class="stat-value" data-target="{{ stats.total }}">{{ stats.total }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card-p draft">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Brouillons</span>
+                        <div class="stat-value" data-target="{{ stats.draft }}">{{ stats.draft }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.draft / stats.total * 100) : 0 }}%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card-p active">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Actifs</span>
+                        <div class="stat-value" data-target="{{ stats.active }}">{{ stats.active }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.active / stats.total * 100) : 0 }}%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card-p completed">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Terminés</span>
+                        <div class="stat-value" data-target="{{ stats.completed }}">{{ stats.completed }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.completed / stats.total * 100) : 0 }}%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card-p cancelled">
+                <div class="card-glow"></div>
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <span class="stat-title">Annulés</span>
+                        <div class="stat-value" data-target="{{ stats.cancelled }}">{{ stats.cancelled }}</div>
+                    </div>
+                    <div class="stat-icon-wrap">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: {{ stats.total > 0 ? (stats.cancelled / stats.total * 100) : 0 }}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Filters -->
+        <!-- Premium Status Filters -->
+        <div class="filters-wrap-premium" style="margin-bottom: 2rem;">
+            <a href="{{ path('admin_projects') }}" class="filter-pill {{ current_status is null ? 'active' : '' }}">
+                <i class="fas fa-list-ul"></i> Tous
+            </a>
+            <a href="{{ path('admin_projects', {status: 'draft'}) }}" class="filter-pill {{ current_status == 'draft' ? 'active' : '' }}">
+                <i class="fas fa-file-alt"></i> Brouillons
+            </a>
+            <a href="{{ path('admin_projects', {status: 'active'}) }}" class="filter-pill {{ current_status == 'active' ? 'active' : '' }}">
+                <i class="fas fa-play-circle"></i> Actifs
+            </a>
+            <a href="{{ path('admin_projects', {status: 'completed'}) }}" class="filter-pill {{ current_status == 'completed' ? 'active' : '' }}">
+                <i class="fas fa-check-double"></i> Terminés
+            </a>
+            <a href="{{ path('admin_projects', {status: 'cancelled'}) }}" class="filter-pill {{ current_status == 'cancelled' ? 'active' : '' }}">
+                <i class="fas fa-ban"></i> Annulés
+            </a>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Statut</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Créé le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr class="project-row" data-semantic="{{ project.title|lower }} {{ project.description|lower }}">
+                        <td>
+                            <strong class="project-title">{{ project.title }}</strong>
+                            <span class="project-desc">
+                                {{ project.description|length > 80 ? project.description|slice(0, 80) ~ '...' : project.description }}
+                            </span>
+                        </td>
+                        <td>
+                            {% set status_labels = {
+                                'draft': 'Brouillon',
+                                'active': 'Actif', 
+                                'completed': 'Terminé',
+                                'cancelled': 'Annulé'
+                            } %}
+                            
+                            <span class="status-pill {{ project.status }}">
+                                {% if project.status == 'draft' %}<i class="fas fa-edit"></i>
+                                {% elseif project.status == 'active' %}<i class="fas fa-bolt"></i>
+                                {% elseif project.status == 'completed' %}<i class="fas fa-check"></i>
+                                {% else %}<i class="fas fa-ban"></i>{% endif %}
+                                {{ status_labels[project.status] }}
+                            </span>
+                        </td>
+                        <td>{{ project.startDate|date('d/m/Y') }}</td>
+                        <td>
+                            {% if project.endDate %}
+                                {{ project.endDate|date('d/m/Y') }}
+                            {% else %}
+                                <span style="color: #94a3b8; font-style: italic;">—</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ project.createdAt|date('d/m/Y') }}</td>
+                        <td>
+                            <div class="action-box">
+                                <a href="{{ path('admin_projects_show', {id: project.id}) }}" class="icon-btn-p" title="Voir les détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ path('admin_projects_edit', {id: project.id}) }}" class="icon-btn-p edit" title="Modifier le projet">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="POST" action="{{ path('admin_projects_delete', {id: project.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
+                                    <button type="submit" class="icon-btn-p delete" title="Supprimer définitivement">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                                <a href="#" class="icon-btn-p lien-btn" data-title="{{ project.title|lower }}" title="Installer le logiciel" target="_blank">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem; color: #64748b;">
+                            Aucun projet trouvé.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+/* PREMIUM DESIGN OVERRIDES */
+
+/* Layout & Spacing */
+.card-body { padding: 2rem !important; }
+
+/* Stats Cards Premium */
+.stats-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card-p {
+    position: relative;
+    background: white;
+    padding: 1.75rem;
+    border-radius: 20px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.stat-card-p:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.card-glow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.stat-card-p:hover .card-glow { opacity: 1; }
+
+.stat-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-info { display: flex; flex-direction: column; }
+.stat-title { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.stat-value { font-size: 2.25rem; font-weight: 800; color: #1e293b; line-height: 1; }
+
+.stat-icon-wrap {
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+}
+
+/* Specific Card Colors */
+.stat-card-p.total .stat-icon-wrap { background: #eef2ff; color: #4f46e5; }
+.stat-card-p.draft .stat-icon-wrap { background: #fef9c3; color: #a16207; }
+.stat-card-p.active .stat-icon-wrap { background: #dcfce7; color: #15803d; }
+.stat-card-p.completed .stat-icon-wrap { background: #e0f2fe; color: #0369a1; }
+.stat-card-p.cancelled .stat-icon-wrap { background: #fee2e2; color: #b91c1c; }
+
+.stat-progress {
+    margin-top: 1.5rem;
+    height: 4px;
+    background: #f1f5f9;
+    border-radius: 99px;
+    overflow: hidden;
+}
+.progress-bar { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+.stat-card-p.total .progress-bar { background: #4f46e5; }
+.stat-card-p.draft .progress-bar { background: #eab308; }
+.stat-card-p.active .progress-bar { background: #22c55e; }
+.stat-card-p.completed .progress-bar { background: #0ea5e9; }
+.stat-card-p.cancelled .progress-bar { background: #ef4444; }
+
+/* Search & Button Premium */
+.search-box-premium {
+    display: flex; align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1.25rem;
+    border-radius: 16px;
+    width: 320px;
+    transition: all 0.2s;
+}
+
+.search-box-premium:focus-within {
+    background: white;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.search-box-premium i { color: #94a3b8; margin-right: 1rem; }
+.search-box-premium input { border: none; background: transparent; width: 100%; font-size: 0.95rem; font-weight: 500; outline: none; color: #1e293b; }
+
+.btn-new-project {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 0.85rem 1.75rem;
+    border-radius: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.75rem;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.btn-new-project:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4); }
+
+/* Filter Pills Premium */
+.filters-wrap-premium { display: flex; gap: 1rem; flex-wrap: wrap; }
+.filter-pill {
+    padding: 0.75rem 1.5rem;
+    border-radius: 14px;
+    background: white;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 1px solid #e2e8f0;
+    display: flex; align-items: center; gap: 0.75rem;
+    transition: all 0.2s;
+}
+
+.filter-pill:hover { background: #f8fafc; border-color: #cbd5e1; color: #1e293b; }
+.filter-pill.active { background: #1e293b; border-color: #1e293b; color: white; box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.2); }
+
+/* Table Premium Style */
+.table-responsive { border-radius: 20px; border: 1px solid #f1f5f9; background: white; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; }
+thead th { background: #f8fafc; padding: 1.25rem 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 0.1em; border-bottom: 2px solid #f1f5f9; }
+tbody td { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #fbfcfe; }
+
+.project-title { font-size: 1.05rem; font-weight: 800; color: #1e293b; margin-bottom: 0.35rem; display: block; }
+.project-desc { font-size: 0.875rem; color: #94a3b8; font-weight: 500; line-height: 1.5; }
+
+/* Status Badges Premium */
+.status-pill {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1.15rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.status-pill.draft { background: #fffbeb; color: #b45309; }
+.status-pill.active { background: #f0fdf4; color: #15803d; }
+.status-pill.completed { background: #f0f9ff; color: #0369a1; }
+.status-pill.cancelled { background: #fef2f2; color: #b91c1c; }
+
+/* Actions Icons Premium */
+.action-box { display: flex; gap: 0.75rem; }
+.icon-btn-p {
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.icon-btn-p:hover { background: #f1f5f9; color: #1e293b; transform: scale(1.1); }
+.icon-btn-p.edit:hover { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+.icon-btn-p.delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.icon-btn-p.delete { background: #fff5f5; color: #ff5a5a; }
+.icon-btn-p.lien-btn { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.icon-btn-p.lien-btn:hover { background: #dcfce7; color: #15803d; border-color: #86efac; transform: scale(1.1); }
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-box-premium input');
+    const projectRows = document.querySelectorAll('.project-row');
+    
+    // Synonym mapping for "Semantic" search simulation
+    const synonyms = {
+        'web': ['site', 'internet', 'portail', 'ligne', 'browser', 'html', 'css'],
+        'app': ['application', 'logiciel', 'software', 'outil', 'programme'],
+        'mobile': ['telephone', 'smartphone', 'ios', 'android', 'appli'],
+        'data': ['données', 'base', 'sql', 'analyse', 'statistiques'],
+        'design': ['maquette', 'interface', 'ui', 'ux', 'graphisme', 'visuel'],
+        'ia': ['intelligence', 'artificielle', 'robot', 'auto', 'prediction'],
+        'commerce': ['vente', 'boutique', 'shop', 'ecommerce', 'client'],
+        'crypto': ['blockchain', 'bitcoin', 'monnaie', 'decentralise']
+    };
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            if (query.length < 2) {
+                showAllRows();
+                return;
+            }
+
+            // Get semantic concepts from query
+            const concepts = findConcepts(query);
+            
+            projectRows.forEach(row => {
+                const content = row.getAttribute('data-semantic');
+                let match = false;
+
+                // 1. Classic Keyword Match
+                if (content.includes(query)) match = true;
+
+                // 2. Semantic Match (via concepts)
+                if (!match) {
+                    concepts.forEach(concept => {
+                        if (content.includes(concept)) match = true;
+                    });
+                }
+
+                row.style.display = match ? '' : 'none';
+                
+                // Add highlight effect if semantic match
+                if (match && !content.includes(query)) {
+                    row.style.borderLeft = "4px solid #4f46e5";
+                    row.style.background = "#f5f3ff";
+                } else {
+                    row.style.borderLeft = "none";
+                    row.style.background = "";
+                }
+            });
+        });
+    }
+
+    function findConcepts(query) {
+        let results = [];
+        for (const [concept, words] of Object.entries(synonyms)) {
+            // If query is a synonym, add the core concept
+            if (words.some(w => query.includes(w) || w.includes(query))) {
+                results.push(concept);
+            }
+            // If query is the concept, add the synonyms
+            if (query.includes(concept)) {
+                results = [...results, ...words];
+            }
+        }
+        return [...new Set(results)]; // Unique
+    }
+
+    function showAllRows() {
+        projectRows.forEach(row => {
+            row.style.display = '';
+            row.style.borderLeft = "none";
+            row.style.background = "";
+        });
+    }
+
+    // === SOFTWARE LINK MAPPING (120+ entries) ===
+    const softwareLinks = {
+        // --- Langages de programmation ---
+        'python':        'https://www.python.org/downloads/',
+        'python3':       'https://www.python.org/downloads/',
+        'jupyter':       'https://jupyter.org/install',
+        'anaconda':      'https://www.anaconda.com/download',
+        'miniconda':     'https://docs.conda.io/en/latest/miniconda.html',
+        'c++':           'https://www.qt.io/download',
+        'cpp':           'https://www.qt.io/download',
+        'c':             'https://www.codeblocks.org/downloads/',
+        'c#':            'https://dotnet.microsoft.com/download',
+        'csharp':        'https://dotnet.microsoft.com/download',
+        'java':          'https://www.oracle.com/java/technologies/downloads/',
+        'jdk':           'https://www.oracle.com/java/technologies/downloads/',
+        'openjdk':       'https://openjdk.org/',
+        'javascript':    'https://nodejs.org/en/download/',
+        'js':            'https://nodejs.org/en/download/',
+        'typescript':    'https://www.typescriptlang.org/download',
+        'ts':            'https://www.typescriptlang.org/download',
+        'php':           'https://www.php.net/downloads',
+        'ruby':          'https://www.ruby-lang.org/en/downloads/',
+        'go':            'https://go.dev/dl/',
+        'golang':        'https://go.dev/dl/',
+        'rust':          'https://www.rust-lang.org/tools/install',
+        'swift':         'https://www.swift.org/download/',
+        'kotlin':        'https://kotlinlang.org/docs/getting-started.html',
+        'dart':          'https://dart.dev/get-dart',
+        'scala':         'https://www.scala-lang.org/download/',
+        'perl':          'https://www.perl.org/get.html',
+        'lua':           'https://www.lua.org/download.html',
+        'haskell':       'https://www.haskell.org/downloads/',
+        'elixir':        'https://elixir-lang.org/install.html',
+        'erlang':        'https://www.erlang.org/downloads',
+        'clojure':       'https://clojure.org/guides/install_clojure',
+        'fortran':       'https://fortran-lang.org/learn/os_setup/install_gfortran',
+        'pascal':        'https://www.freepascal.org/download.html',
+        'delphi':        'https://www.embarcadero.com/products/delphi',
+        'assembly':      'https://www.nasm.us/pub/nasm/releasebuilds/',
+        'asm':           'https://www.nasm.us/pub/nasm/releasebuilds/',
+        'r':             'https://cran.r-project.org/',
+        'rstudio':       'https://posit.co/download/rstudio-desktop/',
+        'objective-c':   'https://developer.apple.com/xcode/',
+        'groovy':        'https://groovy-lang.org/download.html',
+        'cobol':         'https://gnucobol.sourceforge.io/',
+        'julia':         'https://julialang.org/downloads/',
+        'nim':           'https://nim-lang.org/install.html',
+        'zig':           'https://ziglang.org/download/',
+        'v':             'https://vlang.io/',
+        'ocaml':         'https://ocaml.org/install',
+
+        // --- IDEs et éditeurs de code ---
+        'vscode':        'https://code.visualstudio.com/Download',
+        'vs code':       'https://code.visualstudio.com/Download',
+        'visual studio': 'https://visualstudio.microsoft.com/downloads/',
+        'visual studio code': 'https://code.visualstudio.com/Download',
+        'intellij':      'https://www.jetbrains.com/idea/download/',
+        'intellij idea': 'https://www.jetbrains.com/idea/download/',
+        'pycharm':       'https://www.jetbrains.com/pycharm/download/',
+        'webstorm':      'https://www.jetbrains.com/webstorm/download/',
+        'phpstorm':      'https://www.jetbrains.com/phpstorm/download/',
+        'rider':         'https://www.jetbrains.com/rider/download/',
+        'clion':         'https://www.jetbrains.com/clion/download/',
+        'goland':        'https://www.jetbrains.com/go/download/',
+        'rubymine':      'https://www.jetbrains.com/ruby/download/',
+        'datagrip':      'https://www.jetbrains.com/datagrip/download/',
+        'eclipse':       'https://www.eclipse.org/downloads/',
+        'netbeans':      'https://netbeans.apache.org/download/',
+        'atom':          'https://github.com/nickvdp/atom-archived/releases',
+        'sublime':       'https://www.sublimetext.com/download',
+        'sublime text':  'https://www.sublimetext.com/download',
+        'notepad++':     'https://notepad-plus-plus.org/downloads/',
+        'notepadpp':     'https://notepad-plus-plus.org/downloads/',
+        'vim':           'https://www.vim.org/download.php',
+        'neovim':        'https://neovim.io/',
+        'emacs':         'https://www.gnu.org/software/emacs/download.html',
+        'xcode':         'https://developer.apple.com/xcode/',
+        'codeblocks':    'https://www.codeblocks.org/downloads/',
+        'code blocks':   'https://www.codeblocks.org/downloads/',
+        'code::blocks':  'https://www.codeblocks.org/downloads/',
+        'qt':            'https://www.qt.io/download',
+        'qtcreator':     'https://www.qt.io/download',
+        'qt creator':    'https://www.qt.io/download',
+        'dev-c++':       'https://sourceforge.net/projects/orwelldevcpp/',
+        'devc++':        'https://sourceforge.net/projects/orwelldevcpp/',
+        'turbo c':       'https://developerinsider.co/download-turbo-c-for-windows-7-8-8-1-and-windows-10/',
+        'android studio':'https://developer.android.com/studio',
+        'spyder':        'https://www.spyder-ide.org/',
+        'thonny':        'https://thonny.org/',
+        'idle':          'https://www.python.org/downloads/',
+        'brackets':      'https://brackets.io/',
+
+        // --- Frameworks web ---
+        'react':         'https://react.dev/learn/installation',
+        'reactjs':       'https://react.dev/learn/installation',
+        'react native':  'https://reactnative.dev/docs/environment-setup',
+        'angular':       'https://angular.io/guide/setup-local',
+        'vue':           'https://vuejs.org/guide/quick-start.html',
+        'vuejs':         'https://vuejs.org/guide/quick-start.html',
+        'svelte':        'https://svelte.dev/docs/introduction',
+        'nextjs':        'https://nextjs.org/docs/getting-started/installation',
+        'next.js':       'https://nextjs.org/docs/getting-started/installation',
+        'nuxt':          'https://nuxt.com/docs/getting-started/installation',
+        'nuxtjs':        'https://nuxt.com/docs/getting-started/installation',
+        'express':       'https://expressjs.com/en/starter/installing.html',
+        'expressjs':     'https://expressjs.com/en/starter/installing.html',
+        'django':        'https://www.djangoproject.com/download/',
+        'flask':         'https://flask.palletsprojects.com/en/latest/installation/',
+        'fastapi':       'https://fastapi.tiangolo.com/',
+        'laravel':       'https://laravel.com/docs/installation',
+        'symfony':       'https://symfony.com/download',
+        'spring':        'https://spring.io/quickstart',
+        'spring boot':   'https://spring.io/quickstart',
+        'rails':         'https://rubyonrails.org/',
+        'ruby on rails': 'https://rubyonrails.org/',
+        'asp.net':       'https://dotnet.microsoft.com/download',
+        '.net':          'https://dotnet.microsoft.com/download',
+        'dotnet':        'https://dotnet.microsoft.com/download',
+        'blazor':        'https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor',
+        'bootstrap':     'https://getbootstrap.com/docs/5.3/getting-started/download/',
+        'tailwind':      'https://tailwindcss.com/docs/installation',
+        'tailwindcss':   'https://tailwindcss.com/docs/installation',
+        'jquery':        'https://jquery.com/download/',
+        'ember':         'https://emberjs.com/',
+        'backbone':      'https://backbonejs.org/',
+        'gatsby':        'https://www.gatsbyjs.com/docs/quick-start/',
+        'remix':         'https://remix.run/docs/en/main/start/quickstart',
+        'astro':         'https://docs.astro.build/en/install/',
+
+        // --- Mobile ---
+        'flutter':       'https://docs.flutter.dev/get-started/install',
+        'android':       'https://developer.android.com/studio',
+        'ios':           'https://developer.apple.com/xcode/',
+        'ionic':         'https://ionicframework.com/docs/intro/cli',
+        'xamarin':       'https://dotnet.microsoft.com/apps/xamarin',
+        'cordova':       'https://cordova.apache.org/',
+        'expo':          'https://expo.dev/tools',
+        'swiftui':       'https://developer.apple.com/xcode/',
+
+        // --- Bases de données ---
+        'mysql':         'https://dev.mysql.com/downloads/',
+        'postgresql':    'https://www.postgresql.org/download/',
+        'postgres':      'https://www.postgresql.org/download/',
+        'mongodb':       'https://www.mongodb.com/try/download/community',
+        'sqlite':        'https://www.sqlite.org/download.html',
+        'redis':         'https://redis.io/download/',
+        'mariadb':       'https://mariadb.org/download/',
+        'oracle db':     'https://www.oracle.com/database/technologies/oracle-database-software-downloads.html',
+        'firebase':      'https://firebase.google.com/',
+        'supabase':      'https://supabase.com/docs/guides/getting-started',
+        'cassandra':     'https://cassandra.apache.org/_/download.html',
+        'neo4j':         'https://neo4j.com/download/',
+        'elasticsearch': 'https://www.elastic.co/downloads/elasticsearch',
+        'dynamodb':      'https://aws.amazon.com/dynamodb/',
+        'phpmyadmin':    'https://www.phpmyadmin.net/downloads/',
+        'dbeaver':       'https://dbeaver.io/download/',
+        'pgadmin':       'https://www.pgadmin.org/download/',
+        'sql server':    'https://www.microsoft.com/en-us/sql-server/sql-server-downloads',
+
+        // --- DevOps & Outils ---
+        'docker':        'https://www.docker.com/products/docker-desktop/',
+        'kubernetes':    'https://kubernetes.io/docs/tasks/tools/',
+        'k8s':           'https://kubernetes.io/docs/tasks/tools/',
+        'git':           'https://git-scm.com/downloads',
+        'github':        'https://desktop.github.com/',
+        'github desktop':'https://desktop.github.com/',
+        'gitlab':        'https://about.gitlab.com/install/',
+        'jenkins':       'https://www.jenkins.io/download/',
+        'terraform':     'https://developer.hashicorp.com/terraform/downloads',
+        'ansible':       'https://docs.ansible.com/ansible/latest/installation_guide/',
+        'vagrant':       'https://developer.hashicorp.com/vagrant/downloads',
+        'nginx':         'https://nginx.org/en/download.html',
+        'apache':        'https://httpd.apache.org/download.cgi',
+        'tomcat':        'https://tomcat.apache.org/download-10.cgi',
+        'heroku':        'https://devcenter.heroku.com/articles/heroku-cli',
+        'vercel':        'https://vercel.com/docs/cli',
+        'netlify':       'https://docs.netlify.com/cli/get-started/',
+        'aws cli':       'https://aws.amazon.com/cli/',
+        'azure':         'https://learn.microsoft.com/en-us/cli/azure/install-azure-cli',
+        'gcloud':        'https://cloud.google.com/sdk/docs/install',
+        'postman':       'https://www.postman.com/downloads/',
+        'insomnia':      'https://insomnia.rest/download',
+        'cmake':         'https://cmake.org/download/',
+        'make':          'https://gnuwin32.sourceforge.net/packages/make.htm',
+        'gradle':        'https://gradle.org/install/',
+        'maven':         'https://maven.apache.org/download.cgi',
+        'npm':           'https://nodejs.org/en/download/',
+        'yarn':          'https://yarnpkg.com/getting-started/install',
+        'pnpm':         'https://pnpm.io/installation',
+        'composer':      'https://getcomposer.org/download/',
+        'pip':           'https://pip.pypa.io/en/stable/installation/',
+        'homebrew':      'https://brew.sh/',
+        'chocolatey':    'https://chocolatey.org/install',
+        'winget':        'https://learn.microsoft.com/en-us/windows/package-manager/winget/',
+        'wsl':           'https://learn.microsoft.com/en-us/windows/wsl/install',
+
+        // --- Runtime & serveurs ---
+        'node':          'https://nodejs.org/en/download/',
+        'nodejs':        'https://nodejs.org/en/download/',
+        'node.js':       'https://nodejs.org/en/download/',
+        'deno':          'https://deno.land/',
+        'bun':           'https://bun.sh/',
+        'xampp':         'https://www.apachefriends.org/download.html',
+        'wamp':          'https://www.wampserver.com/',
+        'laragon':       'https://laragon.org/download/',
+        'mamp':          'https://www.mamp.info/en/downloads/',
+
+        // --- Design & Multimédia ---
+        'figma':         'https://www.figma.com/downloads/',
+        'adobe xd':      'https://www.adobe.com/products/xd.html',
+        'sketch':        'https://www.sketch.com/downloads/',
+        'photoshop':     'https://www.adobe.com/products/photoshop.html',
+        'illustrator':   'https://www.adobe.com/products/illustrator.html',
+        'gimp':          'https://www.gimp.org/downloads/',
+        'inkscape':      'https://inkscape.org/release/',
+        'canva':         'https://www.canva.com/download/',
+        'premiere':      'https://www.adobe.com/products/premiere.html',
+        'after effects': 'https://www.adobe.com/products/aftereffects.html',
+        'davinci':       'https://www.blackmagicdesign.com/products/davinciresolve',
+        'obs':           'https://obsproject.com/download',
+        'obs studio':    'https://obsproject.com/download',
+        'audacity':      'https://www.audacityteam.org/download/',
+        'kdenlive':      'https://kdenlive.org/en/download/',
+
+        // --- Jeux & 3D ---
+        'unity':         'https://unity.com/download',
+        'unreal':        'https://www.unrealengine.com/en-US/download',
+        'unreal engine': 'https://www.unrealengine.com/en-US/download',
+        'godot':         'https://godotengine.org/download/',
+        'blender':       'https://www.blender.org/download/',
+        'maya':          'https://www.autodesk.com/products/maya/overview',
+        '3ds max':       'https://www.autodesk.com/products/3ds-max/overview',
+
+        // --- Data Science & IA ---
+        'tensorflow':    'https://www.tensorflow.org/install',
+        'pytorch':       'https://pytorch.org/get-started/locally/',
+        'keras':         'https://keras.io/getting_started/',
+        'scikit-learn':  'https://scikit-learn.org/stable/install.html',
+        'sklearn':       'https://scikit-learn.org/stable/install.html',
+        'pandas':        'https://pandas.pydata.org/getting_started.html',
+        'numpy':         'https://numpy.org/install/',
+        'matplotlib':    'https://matplotlib.org/stable/users/installing/',
+        'opencv':        'https://opencv.org/releases/',
+        'tableau':       'https://www.tableau.com/products/desktop/download',
+        'power bi':      'https://powerbi.microsoft.com/en-us/downloads/',
+        'hadoop':        'https://hadoop.apache.org/releases.html',
+        'spark':         'https://spark.apache.org/downloads.html',
+        'apache spark':  'https://spark.apache.org/downloads.html',
+        'matlab':        'https://www.mathworks.com/products/matlab.html',
+        'octave':        'https://octave.org/download',
+        'orange':        'https://orangedatamining.com/download/',
+        'weka':          'https://www.cs.waikato.ac.nz/ml/weka/downloading.html',
+        'colab':         'https://colab.research.google.com/',
+        'huggingface':   'https://huggingface.co/',
+
+        // --- Cybersécurité ---
+        'wireshark':     'https://www.wireshark.org/download.html',
+        'nmap':          'https://nmap.org/download.html',
+        'metasploit':    'https://www.metasploit.com/download',
+        'kali':          'https://www.kali.org/get-kali/',
+        'kali linux':    'https://www.kali.org/get-kali/',
+        'burp suite':    'https://portswigger.net/burp/communitydownload',
+        'john':          'https://www.openwall.com/john/',
+        'hashcat':       'https://hashcat.net/hashcat/',
+
+        // --- Systèmes & Virtualisation ---
+        'virtualbox':    'https://www.virtualbox.org/wiki/Downloads',
+        'vmware':        'https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html',
+        'ubuntu':        'https://ubuntu.com/download',
+        'linux':         'https://www.linux.org/pages/download/',
+        'fedora':        'https://fedoraproject.org/workstation/download/',
+        'debian':        'https://www.debian.org/distrib/',
+        'centos':        'https://www.centos.org/download/',
+        'arch linux':    'https://archlinux.org/download/',
+        'mint':          'https://linuxmint.com/download.php',
+        'raspberry pi':  'https://www.raspberrypi.com/software/',
+
+        // --- IoT & Embarqué ---
+        'arduino':       'https://www.arduino.cc/en/software',
+        'platformio':    'https://platformio.org/install',
+        'raspberry':     'https://www.raspberrypi.com/software/',
+        'micropython':   'https://micropython.org/download/',
+        'esp-idf':       'https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/',
+
+        // --- Productivité & Outils ---
+        'slack':         'https://slack.com/downloads/',
+        'discord':       'https://discord.com/download',
+        'teams':         'https://www.microsoft.com/en-us/microsoft-teams/download-app',
+        'zoom':          'https://zoom.us/download',
+        'notion':        'https://www.notion.so/desktop',
+        'trello':        'https://trello.com/platforms',
+        'jira':          'https://www.atlassian.com/software/jira',
+
+        // --- Web générique ---
+        'web':           'https://code.visualstudio.com/Download',
+        'html':          'https://code.visualstudio.com/Download',
+        'css':           'https://code.visualstudio.com/Download',
+        'sass':          'https://sass-lang.com/install/',
+        'less':          'https://lesscss.org/',
+        'webpack':       'https://webpack.js.org/guides/installation/',
+        'vite':          'https://vitejs.dev/guide/',
+        'parcel':        'https://parceljs.org/getting-started/webapp/'
+    };
+
+    // Find best matching link for a project title
+    function findSoftwareLink(title) {
+        title = title.toLowerCase().trim();
+        // Exact match first
+        if (softwareLinks[title]) return softwareLinks[title];
+        // Partial match: check if title contains a known keyword
+        for (const [key, url] of Object.entries(softwareLinks)) {
+            if (title.includes(key) || key.includes(title)) return url;
+        }
+        // Default: Google search for download
+        return 'https://www.google.com/search?q=' + encodeURIComponent(title + ' download installer');
+    }
+
+    // Assign links to all Lien buttons
+    document.querySelectorAll('.lien-btn').forEach(btn => {
+        const title = btn.getAttribute('data-title');
+        const link = findSoftwareLink(title);
+        btn.href = link;
+    });
+});
+</script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    /* Premium Export/Import Buttons Styles */
+    .btn-export, .btn-import {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.7rem 1.4rem;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none !important;
+        border: 1px solid transparent;
+        cursor: pointer;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .btn-export.secondary {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+        color: #15803d !important;
+        border-color: #bbf7d0 !important;
+    }
+
+    .btn-export.secondary i {
+        color: #16a34a !important;
+        font-size: 1rem;
+    }
+
+    .btn-export.secondary:hover {
+        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.15);
+    }
+
+    .btn-export.primary {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+        color: #1d4ed8 !important;
+        border-color: #bfdbfe !important;
+    }
+
+    .btn-export.primary i {
+        color: #2563eb !important;
+        font-size: 1rem;
+    }
+
+    .btn-export.primary:hover {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.15);
+    }
+
+    .btn-import {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%) !important;
+        color: #c2410c !important;
+        border-color: #fed7aa !important;
+    }
+
+    .btn-import i {
+        color: #ea580c !important;
+        font-size: 1rem;
+    }
+
+    .btn-import:hover {
+        background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.15);
+    }
+
+    /* Modern Import Modal */
+    .import-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .import-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .import-modal {
+        background: white;
+        width: 100%;
+        max-width: 500px;
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        transform: scale(0.95);
+        transition: all 0.3s ease;
+    }
+
+    .import-modal-overlay.active .import-modal {
+        transform: scale(1);
+    }
+
+    .modal-h {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .modal-h i { color: #f59e0b; }
+    .modal-p { color: #64748b; margin-bottom: 2rem; line-height: 1.6; }
+
+    .file-drop-area {
+        border: 2px dashed #cbd5e1;
+        border-radius: 16px;
+        padding: 2.5rem;
+        text-align: center;
+        background: #f8fafc;
+        transition: all 0.2s;
+        cursor: pointer;
+        margin-bottom: 2rem;
+    }
+    .file-drop-area:hover, .file-drop-area.active {
+        border-color: #6366f1;
+        background: #f5f3ff;
+    }
+    .file-drop-area i { font-size: 2.5rem; color: #94a3b8; margin-bottom: 1rem; }
+    .file-name { display: block; margin-top: 1rem; font-weight: 600; color: #6366f1; }
+
+    .modal-actions { display: flex; gap: 1rem; }
+    .btn-cancel, .btn-confirm { flex: 1; padding: 0.9rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-cancel { background: #f1f5f9; color: #64748b; }
+    .btn-cancel:hover { background: #e2e8f0; }
+    .btn-confirm { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; box-shadow: 0 8px 15px rgba(99,102,241,0.2); }
+    .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 12px 20px rgba(99,102,241,0.3); }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<div id="importModal" class="import-modal-overlay">
+    <div class="import-modal">
+        <h3 class="modal-h"><i class="fas fa-file-excel"></i> Import de Projets</h3>
+        <p class="modal-p">Sélectionnez un fichier Excel (.xlsx) pour importer vos projets en masse.</p>
+        
+        <form action="{{ path('admin_projects_import_excel') }}" method="POST" enctype="multipart/form-data">
+            <div class="file-drop-area" id="dropArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div>Cliquez pour choisir un fichier</div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">Fichiers acceptés : .xlsx</div>
+                <input type="file" name="import_file" id="importInput" style="display: none;" accept=".xlsx">
+                <span id="fileName" class="file-name" style="display: none;"></span>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeImportModal()">Annuler</button>
+                <button type="submit" class="btn-confirm">Démarrer l'import</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openImportModal() {
+        document.getElementById('importModal').classList.add('active');
+    }
+
+    function closeImportModal() {
+        document.getElementById('importModal').classList.remove('active');
+        document.getElementById('fileName').style.display = 'none';
+        document.getElementById('importInput').value = '';
+    }
+
+    const dropArea = document.getElementById('dropArea');
+    const input = document.getElementById('importInput');
+    const fileNameDisplay = document.getElementById('fileName');
+
+    if (dropArea) {
+        dropArea.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+                fileNameDisplay.style.display = 'block';
+            }
+        });
+    }
+
+    // Close on click outside
+    const modalOverlay = document.getElementById('importModal');
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === this) closeImportModal();
+        });
+    }
+</script>
+{% endblock %}

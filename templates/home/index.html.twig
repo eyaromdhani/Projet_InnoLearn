@@ -1,0 +1,328 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}InnoLearn - Redesigned E-Learning Platform{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-blob-bg"></div>
+    <div class="container">
+        <div class="hero-text-content">
+            <span class="section-tag" style="color: #818cf8;">Innover pour apprendre</span>
+            <h1 class="hero-title">
+                E-Learning
+                <span>Revolutionized</span>
+            </h1>
+            <p class="hero-desc">
+                Project-based Learning with downloadable materials and real-time collaboration. 
+                Everything you need to succeed in one organic place.
+            </p>
+            <div style="display: flex; gap: 1.5rem;">
+                <a href="{{ path('app_signup') }}" class="btn btn-primary">Get Started Now</a>
+                <a href="#featured" class="btn btn-pill">Explore Courses</a>
+            </div>
+            
+            <div style="margin-top: 4rem; display: flex; gap: 3rem; align-items: center;">
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 800;">309</div>
+                    <div style="opacity: 0.7;">Featured Courses</div>
+                </div>
+                <div style="width: 2px; height: 50px; background: rgba(255,255,255,0.2);"></div>
+                <div>
+                    <div style="display: flex; gap: -10px;">
+                        <img src="https://i.pravatar.cc/40?u=1" style="border-radius: 50%; border: 2px solid var(--bg-dark);" alt="">
+                        <img src="https://i.pravatar.cc/40?u=2" style="border-radius: 50%; border: 2px solid var(--bg-dark); margin-left: -15px;" alt="">
+                        <img src="https://i.pravatar.cc/40?u=3" style="border-radius: 50%; border: 2px solid var(--bg-dark); margin-left: -15px;" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-image-container">
+            <div class="hero-image-main">
+                <img src="{{ asset('images/hero_student.png') }}" alt="Student" class="hero-person-img">
+                
+                <!-- Floating Icons -->
+                <div class="floating-icon" style="top: 10%; left: -10%; animation-delay: 0s;">
+                    <svg width="24" height="24" fill="var(--primary)" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div class="floating-icon" style="bottom: 20%; right: -10%; animation-delay: 1s;">
+                    <svg width="24" height="24" fill="var(--secondary)" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+                </div>
+                <div class="floating-icon" style="top: 60%; left: -15%; animation-delay: 2s;">
+                    <svg width="24" height="24" fill="var(--accent)" viewBox="0 0 24 24"><path d="M21 11.5v6.5h-18v-13h7.5c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-8c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h20c.6 0 1-.4 1-1v-7.5c0-.3-.2-.5-.5-.5s-.5.2-.5.5z"/></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wave Transition -->
+    <div class="wave-transition">
+        <div class="waves">
+            <svg class="wave" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(248, 250, 252, 0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(248, 250, 252, 0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(248, 250, 252, 0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#f8fafc" />
+                </g>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="section-content" style="background: white; padding-bottom: 0;">
+    <div class="container" style="text-align: center;">
+        <div style="margin-bottom: 4rem;">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="InnoLearn" style="height: 60px; margin-bottom: 2rem; filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.1));">
+            <h2 class="section-title" style="color: var(--text-main);">About InnoLearn</h2>
+        </div>
+        
+        <div class="features-grid" style="text-align: left;">
+            <div class="info-card-light">
+                <h3 style="color: var(--primary-dark);">Our Mission</h3>
+                <p style="color: var(--text-muted);">To provide a unified platform that eliminates the need for students to navigate multiple websites and services. Everything you need for academic success in one place.</p>
+            </div>
+            <div class="info-card-light">
+                <h3 style="color: var(--primary-dark);">For All Students</h3>
+                <p style="color: var(--text-muted);">Whether you're studying engineering, arts, business, or sciences, InnoLearn adapts to your field and provides relevant resources tailored to your needs.</p>
+            </div>
+            <div class="info-card-light">
+                <h3 style="color: var(--primary-dark);">Complete Journey</h3>
+                <p style="color: var(--text-muted);">From your first day as a student to building a successful career, we accompany you every step of the way with tools, guidance, and opportunities.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Wave Transition (White to Blue) -->
+    <div class="waves" style="height: 100px; margin-top: 0;">
+        <svg class="wave" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" style="width: 100%; height: 100px;">
+            <defs>
+                <path id="transition-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#transition-wave" x="48" y="0" fill="rgba(26, 25, 83, 0.3)" />
+                <use xlink:href="#transition-wave" x="48" y="3" fill="rgba(99, 102, 241, 0.2)" />
+                <use xlink:href="#transition-wave" x="48" y="5" fill="rgba(129, 140, 248, 0.4)" />
+                <use xlink:href="#transition-wave" x="48" y="7" fill="#1a1953" />
+            </g>
+        </svg>
+    </div>
+</section>
+
+<!-- Platform Features Section -->
+<section class="section-dark" style="background: #1a1953; position: relative; padding-top: 2rem;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 5rem;">
+            <h2 class="section-title">Platform Features</h2>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-pill">
+                <div class="feature-pill-icon">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.5rem;">Centralized Resources</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Access all your educational materials, textbooks, research papers, and study guides in one organized library.</p>
+                </div>
+            </div>
+            <div class="feature-pill">
+                <div class="feature-pill-icon" style="background: var(--secondary);">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.5rem;">Academic Support</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Get personalized learning paths, tutoring services, and academic counseling tailored to your program.</p>
+                </div>
+            </div>
+            <div class="feature-pill">
+                <div class="feature-pill-icon" style="background: var(--accent);">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.5rem;">Career Development</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Explore internships, job opportunities, and professional development resources to build your career.</p>
+                </div>
+            </div>
+            <div class="feature-pill">
+                <div class="feature-pill-icon" style="background: #fbbf24;">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.5rem;">Collaboration Tools</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Connect with peers, form study groups, and work on projects together with integrated collaboration features.</p>
+                </div>
+            </div>
+            <div class="feature-pill">
+                <div class="feature-pill-icon" style="background: #10b981;">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.5rem;">Progress Tracking</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Monitor your academic progress, set goals, and receive insights to optimize your learning journey.</p>
+                </div>
+            </div>
+            <div class="feature-pill">
+                <div class="feature-pill-icon" style="background: #3b82f6;">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.5rem;">Global Community</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Join a worldwide network of students, share experiences, and learn from diverse perspectives.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Educational Resources Section -->
+<section class="section-content" style="background: white; padding-bottom: 0; position: relative;">
+    <!-- Top Wave Transition (Blue to White) -->
+    <div class="waves" style="height: 100px; position: absolute; top: 0; left: 0; width: 100%; transform: translateY(-100%); line-height: 0;">
+        <svg class="wave" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" style="width: 100%; height: 100px;">
+            <defs>
+                <path id="edu-top-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#edu-top-wave" x="48" y="0" fill="rgba(255, 255, 255, 0.7)" />
+                <use xlink:href="#edu-top-wave" x="48" y="3" fill="rgba(255, 255, 255, 0.5)" />
+                <use xlink:href="#edu-top-wave" x="48" y="5" fill="rgba(255, 255, 255, 0.3)" />
+                <use xlink:href="#edu-top-wave" x="48" y="7" fill="#ffffff" />
+            </g>
+        </svg>
+    </div>
+
+    <div class="container" style="text-align: center;">
+        <div style="margin-bottom: 4rem;">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="Resources" style="height: 60px; margin-bottom: 2rem; filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.1));">
+            <h2 class="section-title" style="color: var(--text-main);">Educational Resources</h2>
+        </div>
+        
+        <div class="features-grid" style="text-align: left;">
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Digital Library</h4>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Access thousands of e-books, journals, and academic publications from anywhere in the world.</p>
+                <a href="#" class="btn btn-primary" style="width: 100%; border-radius: 12px; font-size: 0.9rem; justify-content: center;">Browse Library</a>
+            </div>
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Video Lectures</h4>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Watch recorded high-quality lectures from top universities and industry experts on demand.</p>
+                <a href="#" class="btn btn-primary" style="width: 100%; border-radius: 12px; font-size: 0.9rem; justify-content: center;">Watch Now</a>
+            </div>
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Study Materials</h4>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Download course notes, practice exams, and supplementary materials curated for your courses.</p>
+                <a href="#" class="btn btn-primary" style="width: 100%; border-radius: 12px; font-size: 0.9rem; justify-content: center;">Get Materials</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Wave Transition (White to Dark) -->
+    <div class="waves" style="height: 100px; margin-top: 4rem;">
+        <svg class="wave" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" style="width: 100%; height: 100px;">
+            <defs>
+                <path id="edu-bottom-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#edu-bottom-wave" x="48" y="0" fill="rgba(13, 12, 43, 0.3)" />
+                <use xlink:href="#edu-bottom-wave" x="48" y="3" fill="rgba(13, 12, 43, 0.5)" />
+                <use xlink:href="#edu-bottom-wave" x="48" y="5" fill="rgba(13, 12, 43, 0.7)" />
+                <use xlink:href="#edu-bottom-wave" x="48" y="7" fill="#0d0c2b" />
+            </g>
+        </svg>
+    </div>
+</section>
+
+<!-- Career Opportunities Section -->
+<section class="section-dark" style="background: #0d0c2b;">
+    <div class="container">
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin-bottom: 4rem;">
+            <h2 class="section-title" style="margin-bottom: 0;">Career Opportunities</h2>
+            <div style="width: 4px; height: 40px; background: var(--secondary); border-radius: 2px;"></div>
+        </div>
+        
+        <div class="courses-grid">
+            <div class="info-card">
+                <span class="section-tag" style="font-size: 0.7rem;">500+ Available</span>
+                <h4>Internship Programs</h4>
+                <p style="margin-bottom: 1.5rem;">Connect with leading companies offering internships. Gain real-world experience.</p>
+                <ul style="list-style: none; font-size: 0.85rem; opacity: 0.6;">
+                    <li>• Paid internships</li>
+                    <li>• Remote and on-site</li>
+                    <li>• Academic credit available</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <span class="section-tag" style="font-size: 0.7rem; color: var(--secondary);">200+ Programs</span>
+                <h4>Scholarships & Grants</h4>
+                <p style="margin-bottom: 1.5rem;">Discover funding opportunities to support your education.</p>
+                <ul style="list-style: none; font-size: 0.85rem; opacity: 0.6;">
+                    <li>• Merit-based awards</li>
+                    <li>• Need-based assistance</li>
+                    <li>• Field-specific grants</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <span class="section-tag" style="font-size: 0.7rem; color: var(--accent);">1000+ Openings</span>
+                <h4>Job Placements</h4>
+                <p style="margin-bottom: 1.5rem;">Access exclusive job listings from partner companies actively recruiting.</p>
+                <ul style="list-style: none; font-size: 0.85rem; opacity: 0.6;">
+                    <li>• Entry-level positions</li>
+                    <li>• Graduate programs</li>
+                    <li>• Career counseling</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Collaboration Section -->
+<section class="section-content" style="background: white; padding-bottom: 8rem; position: relative;">
+    <!-- Top Wave Transition (Dark to White) -->
+    <div class="waves" style="height: 100px; position: absolute; top: 0; left: 0; width: 100%; transform: translateY(-100%); line-height: 0;">
+        <svg class="wave" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" style="width: 100%; height: 100px;">
+            <defs>
+                <path id="collab-top-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#collab-top-wave" x="48" y="0" fill="rgba(255, 255, 255, 0.7)" />
+                <use xlink:href="#collab-top-wave" x="48" y="3" fill="rgba(255, 255, 255, 0.5)" />
+                <use xlink:href="#collab-top-wave" x="48" y="5" fill="rgba(255, 255, 255, 0.3)" />
+                <use xlink:href="#collab-top-wave" x="48" y="7" fill="#ffffff" />
+            </g>
+        </svg>
+    </div>
+
+    <div class="container" style="text-align: center;">
+        <div style="margin-bottom: 5rem;">
+            <img src="{{ asset('images/logo_icon.png') }}" alt="Collaboration" style="height: 60px; margin-bottom: 2rem; filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.1));">
+            <h2 class="section-title" style="color: var(--text-main);">Collaboration</h2>
+        </div>
+        
+        <div class="features-grid" style="text-align: left;">
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Study Groups</h4>
+                <p style="color: var(--text-muted);">Form or join study groups with classmates. Share notes, discuss concepts, and prepare for exams together in a dedicated space.</p>
+            </div>
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Peer Mentoring</h4>
+                <p style="color: var(--text-muted);">Connect with senior students who can guide you through your academic journey and share their valuable experience.</p>
+            </div>
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Project Teams</h4>
+                <p style="color: var(--text-muted);">Collaborate on group projects with integrated tools for task management, file sharing, and real-time communication.</p>
+            </div>
+            <div class="info-card-light">
+                <h4 style="color: var(--primary-dark);">Discussion Forums</h4>
+                <p style="color: var(--text-muted);">Participate in subject-specific forums to ask questions, share insights, and engage with the global student community.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,845 @@
+{% extends 'student/layout.html.twig' %}
+
+{% block title %}Nouveau Dépôt - {{ project.title }}{% endblock %}
+
+{% block page_stylesheets %}
+<style>
+/* Hero Section */
+.depot-hero {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6d28d9 100%);
+    padding: 3rem 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.breadcrumb a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.breadcrumb a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.page-header {
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.page-header p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+}
+
+/* Form Container */
+.depot-form-container {
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+}
+
+.form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    margin-bottom: 2.5rem;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.section-title i {
+    color: #6366f1;
+    font-size: 1.2rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.75rem;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.form-label.required::after {
+    content: '*';
+    color: #ef4444;
+    margin-left: 0.25rem;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: all 0.3s;
+    color: #1f2937;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.5em;
+    padding-right: 3rem;
+}
+
+/* File Upload Area */
+.file-upload-area {
+    border: 3px dashed #e5e7eb;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: #f8fafc;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+}
+
+.file-upload-area:hover {
+    border-color: #6366f1;
+    background: #f1f5f9;
+}
+
+.file-upload-area.dragover {
+    border-color: #6366f1;
+    background: #eef2ff;
+}
+
+.file-upload-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.file-upload-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.file-upload-text h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.file-upload-text p {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Selected File */
+.selected-file {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-top: 1.5rem;
+    border: 2px solid #e5e7eb;
+}
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    background: #6366f1;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.file-info {
+    flex: 1;
+}
+
+.file-name {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.file-size {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.remove-file {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.remove-file:hover {
+    background: #fee2e2;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e5e7eb;
+}
+
+.btn-cancel,
+.btn-submit {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-cancel:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.btn-submit:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Form Errors */
+.form-errors {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #dc2626;
+}
+
+/* Info Box */
+.info-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.info-box-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.info-box-header i {
+    color: #3b82f6;
+    font-size: 1.25rem;
+}
+
+.info-box-header h4 {
+    margin: 0;
+    color: #1e40af;
+    font-weight: 700;
+}
+
+.info-box p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Flash Messages */
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: #10b981;
+    color: white;
+    border-left: 4px solid #059669;
+}
+
+.alert-error {
+    background: #ef4444;
+    color: white;
+    border-left: 4px solid #dc2626;
+}
+
+.alert-info {
+    background: #3b82f6;
+    color: white;
+    border-left: 4px solid #1d4ed8;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Validation Styles */
+.is-invalid {
+    border-color: #ef4444 !important;
+}
+
+.invalid-feedback {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Character Counter */
+.char-counter {
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.char-counter.warning {
+    color: #f59e0b;
+}
+
+.char-counter.error {
+    color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .depot-hero {
+        padding: 2rem 1rem;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .depot-form-container {
+        padding: 0 1rem;
+    }
+    
+    .form-card {
+        padding: 2rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .file-upload-area {
+        padding: 2rem 1rem;
+    }
+    
+    .flash-messages {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+    }
+}
+</style>
+{% endblock %}
+
+{% block student_content %}
+<!-- Flash Messages -->
+<div class="flash-messages">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Hero Section -->
+<section class="depot-hero">
+    <div class="hero-content">
+        <div class="breadcrumb">
+            <a href="{{ path('app_student_projects') }}"><i class="fas fa-arrow-left"></i> Projets</a>
+            <span>/</span>
+            <a href="{{ path('app_student_project_detail', {'id': project.id}) }}">{{ project.title }}</a>
+            <span>/</span>
+            <span>Nouveau dépôt</span>
+        </div>
+        
+        <div class="page-header">
+            <h1>Nouveau Dépôt</h1>
+            <p>Soumettez votre travail pour le projet "{{ project.title }}"</p>
+        </div>
+    </div>
+</section>
+
+<!-- Form Container -->
+<div class="depot-form-container">
+    <div class="form-card">
+        <!-- Project Info -->
+        <div class="info-box">
+            <div class="info-box-header">
+                <i class="fas fa-info-circle"></i>
+                <h4>Informations du projet</h4>
+            </div>
+            <p>
+                Vous allez soumettre un dépôt pour le projet <strong>"{{ project.title }}"</strong>.
+                Assurez-vous que votre fichier respecte les consignes du projet.
+            </p>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'depot-form', 'enctype': 'multipart/form-data'}}) }}
+        
+        <!-- Form Errors -->
+        {% if form.vars.errors|length > 0 %}
+        <div class="form-errors">
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+
+        <!-- Basic Information -->
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> Informations de base</h2>
+            
+            <!-- Title Field -->
+            <div class="form-group">
+                <label for="{{ form.title.vars.id }}" class="form-label required">
+                    Titre du dépôt
+                </label>
+                {{ form_widget(form.title, {'attr': {
+                    'class': 'form-input' ~ (form.title.vars.errors|length > 0 ? ' is-invalid' : ''),
+                    'placeholder': 'Ex: Rapport intermédiaire, Code source, Présentation...'
+                }}) }}
+                {% if form.title.vars.errors|length > 0 %}
+                    <div class="invalid-feedback">
+                        {% for error in form.title.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Type Field -->
+            <div class="form-group">
+                <label for="{{ form.type.vars.id }}" class="form-label required">
+                    Type de fichier
+                </label>
+                {{ form_widget(form.type, {'attr': {
+                    'class': 'form-select' ~ (form.type.vars.errors|length > 0 ? ' is-invalid' : '')
+                }}) }}
+                {% if form.type.vars.errors|length > 0 %}
+                    <div class="invalid-feedback">
+                        {% for error in form.type.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-group">
+                <label for="{{ form.description.vars.id }}" class="form-label">
+                    Description (optionnel)
+                </label>
+                {{ form_widget(form.description, {'attr': {
+                    'class': 'form-textarea' ~ (form.description.vars.errors|length > 0 ? ' is-invalid' : ''),
+                    'placeholder': 'Décrivez brièvement votre dépôt...',
+                    'rows': 4,
+                    'maxlength': '500'
+                }}) }}
+                <div class="char-counter" id="charCounter">0/500 caractères</div>
+                {% if form.description.vars.errors|length > 0 %}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- File Upload -->
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-upload"></i> Fichier à déposer</h2>
+            
+            <div class="form-group">
+                <label class="form-label required">
+                    Sélectionnez votre fichier
+                </label>
+                
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div class="file-upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="file-upload-text">
+                        <h3>Glissez-déposez votre fichier ici</h3>
+                        <p>ou cliquez pour parcourir</p>
+                        <button type="button" class="btn-submit" style="width: auto; padding: 0.75rem 1.5rem;">
+                            <i class="fas fa-folder-open"></i> Parcourir les fichiers
+                        </button>
+                    </div>
+                    {{ form_widget(form.file, {'attr': {
+                        'class': 'file-input',
+                        'accept': '.pdf,.doc,.docx,.zip,.rar,.jpg,.jpeg,.png,.ppt,.pptx,.xls,.xlsx,.txt,.md,.gif'
+                    }}) }}
+                </div>
+                
+                <div id="selectedFileContainer" style="display: none;">
+                    <div class="selected-file">
+                        <div class="file-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name" id="fileName">Nom du fichier</div>
+                            <div class="file-size" id="fileSize">Taille</div>
+                        </div>
+                        <button type="button" class="remove-file" id="removeFile">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem; color: #6b7280; font-size: 0.9rem;">
+                    <p><i class="fas fa-info-circle"></i> Formats acceptés: PDF, Word, Excel, PowerPoint, images, archives, texte</p>
+                    <p><i class="fas fa-exclamation-triangle"></i> Taille maximale: 50 Mo</p>
+                </div>
+                {% if form.file.vars.errors|length > 0 %}
+                    <div class="invalid-feedback">
+                        {% for error in form.file.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <a href="{{ path('app_student_project_detail', {'id': project.id}) }}" class="btn-cancel">
+                <i class="fas fa-times"></i> Annuler
+            </a>
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-paper-plane"></i> Soumettre le dépôt
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('{{ form.file.vars.id }}');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const selectedFileContainer = document.getElementById('selectedFileContainer');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFileBtn = document.getElementById('removeFile');
+    const submitBtn = document.querySelector('.btn-submit');
+    const descriptionTextarea = document.getElementById('{{ form.description.vars.id }}');
+    const charCounter = document.getElementById('charCounter');
+
+    // Drag and drop events
+    fileUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+
+    fileUploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
+
+    fileUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            updateSelectedFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    // Click to select file
+    fileUploadArea.addEventListener('click', function(e) {
+        if (e.target !== fileInput) {
+            fileInput.click();
+        }
+    });
+
+    // File input change event
+    fileInput.addEventListener('change', function(e) {
+        if (this.files.length) {
+            updateSelectedFile(this.files[0]);
+        }
+    });
+
+    // Remove selected file
+    removeFileBtn.addEventListener('click', function() {
+        fileInput.value = '';
+        selectedFileContainer.style.display = 'none';
+        submitBtn.disabled = true;
+    });
+
+    // Update selected file display
+    function updateSelectedFile(file) {
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        selectedFileContainer.style.display = 'block';
+        submitBtn.disabled = false;
+        
+        // Update file icon
+        const extension = file.name.split('.').pop().toLowerCase();
+        const icon = getFileIcon(extension);
+        document.querySelector('.file-icon i').className = `fas fa-${icon}`;
+    }
+
+    // Format file size
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Form validation
+    const form = document.querySelector('.depot-form');
+    form.addEventListener('submit', function(e) {
+        if (!fileInput.files.length) {
+            e.preventDefault();
+            alert('Veuillez sélectionner un fichier à déposer.');
+            return false;
+        }
+
+        const file = fileInput.files[0];
+        const maxSize = 50 * 1024 * 1024; // 50 MB
+        
+        if (file.size > maxSize) {
+            e.preventDefault();
+            alert('Le fichier est trop volumineux. Taille maximale: 50 Mo.');
+            return false;
+        }
+
+        // Validate file type
+        const allowedExtensions = ['pdf', 'doc', 'docx', 'zip', 'rar', 'jpg', 'jpeg', 
+                                  'png', 'ppt', 'pptx', 'xls', 'xlsx', 'txt', 'md', 'gif'];
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            e.preventDefault();
+            alert('Type de fichier non autorisé. Formats acceptés: ' + allowedExtensions.join(', '));
+            return false;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        
+        return true;
+    });
+
+    // File type icon based on extension
+    function getFileIcon(extension) {
+        const icons = {
+            'pdf': 'file-pdf',
+            'doc': 'file-word',
+            'docx': 'file-word',
+            'zip': 'file-archive',
+            'rar': 'file-archive',
+            'jpg': 'file-image',
+            'jpeg': 'file-image',
+            'png': 'file-image',
+            'ppt': 'file-powerpoint',
+            'pptx': 'file-powerpoint',
+            'xls': 'file-excel',
+            'xlsx': 'file-excel',
+            'txt': 'file-alt',
+            'md': 'file-alt',
+            'gif': 'file-image'
+        };
+        return icons[extension] || 'file';
+    }
+
+    // Character counter for description
+    if (descriptionTextarea) {
+        descriptionTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = length + '/500 caractères';
+            
+            if (length > 450) {
+                charCounter.className = 'char-counter warning';
+            } else if (length > 500) {
+                charCounter.className = 'char-counter error';
+            } else {
+                charCounter.className = 'char-counter';
+            }
+        });
+        
+        // Initialize counter
+        descriptionTextarea.dispatchEvent(new Event('input'));
+    }
+
+    // Auto-hide flash messages after 5 seconds
+    setTimeout(function() {
+        const flashMessages = document.querySelector('.flash-messages');
+        if (flashMessages) {
+            flashMessages.style.transition = 'opacity 0.5s';
+            flashMessages.style.opacity = '0';
+            setTimeout(function() {
+                if (flashMessages.parentNode) {
+                    flashMessages.parentNode.removeChild(flashMessages);
+                }
+            }, 500);
+        }
+    }, 5000);
+});
+</script>
+{% endblock %}

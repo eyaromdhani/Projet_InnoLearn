@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard-unified.css') }}?v=5">
+    {% block page_stylesheets %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+<div class="dashboard-wrapper">
+    <!-- Main Content Area -->
+    <main class="dashboard-content">
+        <!-- Unified Global Header -->
+        {{ include('student/_header.html.twig') }}
+
+        <!-- Dynamic Content -->
+        {% block student_content %}{% endblock %}
+    </main>
+</div>
+
+<!-- Shared Modals -->
+{{ include('student/_modals.html.twig') }}
+
+{% block page_javascripts %}{% endblock %}
+{% endblock %}
