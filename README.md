@@ -1,5 +1,11 @@
 # 🚀 Innolearn Platform
-This is a comprehensive educational platform implemented with **Symfony** using MVC architecture. The platform manages 6 core modules with support for modern web features.
+
+Innolearn is a comprehensive **educational platform** developed with **Symfony** (MVC architecture).  
+It manages 6 core modules and integrates modern web features such as responsive design, light/dark theme, secure authentication and user-friendly dashboard interfaces.
+
+**Developed at** Esprit School of Engineering – Tunisia  
+**Academic Year** 2025–2026  
+**Program** PIDEV – 3rd Year Engineering
 
 ## ✨ Features
 👥 **User Management**: Multi-role system with customizable permissions
@@ -53,93 +59,40 @@ This is a comprehensive educational platform implemented with **Symfony** using 
     ├── config/                            # ⚙️ Configuration files
     └── migrations/                        # 📊 Database migrations
 
-## 🔧 Implementation Details
 
-### 🧩 Model (Entities)
-The Entity classes define the data structure for all modules:
-- **User**: Manages authentication, profiles, and roles
-- **Event**: Handles calendar events, participants, and scheduling
-- **Subscription**: Manages plans, payments, and billing cycles
-- **Opportunity**: Tracks leads, sales pipeline, and conversions
-- **Course**: Handles course content, lessons, and enrollments
-- **Project**: Manages team projects, tasks, and timelines
 
-### 🎨 View (Templates)
-The Twig templates provide the user interface:
-- **Modular structure**: Separate templates for each module
-- **Responsive design**: Mobile-first approach
-- **Theme support**: Light/dark mode with CSS variables
-- **Dynamic content**: Real-time updates with JavaScript
+## Tech Stack
 
-### 🎮 Controller (Business Logic)
-Controllers handle the application flow:
-- **UserController**: Registration, authentication, profile management
-- **EventController**: Event creation, booking, calendar management
-- **SubscriptionController**: Plan selection, payment processing
-- **OpportunityController**: Lead tracking, pipeline management
-- **CourseController**: Content management, enrollment, progress
-- **ProjectController**: Task assignment, collaboration, tracking
+### Frontend
+- Twig (templating engine)
+- HTML5 / CSS3 (avec variables CSS pour les thèmes)
+- JavaScript (interactions dynamiques)
+- Responsive design (mobile-first)
 
-🖼️ Dashboard Views
-Each module includes dedicated dashboard views:
+### Backend
+- PHP 8+
+- Symfony (framework principal – MVC)
+- Doctrine ORM
+- MySQL / MariaDB
 
-👥 User Dashboard
-Profile overview and statistics
+## Architecture
+Application classique **Symfony MVC** :
+- **Entities** → Modèles de données (User, Event, Subscription, Opportunity, Course, Project)
+- **Controllers** → Logique métier et gestion des requêtes
+- **Twig Templates** → Vues modulaires par entité
+- **Repository** → Couche d’accès aux données
 
-Activity history and notifications
 
-Role-specific interfaces
+## Contributors
+- Eya Allah Romdhani
+- Myriam ben Azzoun
+- Rayen Sboui
+- Mohamed Aziz Mesalmani
+- Zied Ibrahim
+- Alae Naoui
 
-📅 Event Dashboard
-Interactive calendar view
+## Academic Context
+This project was realized as part of the **PIDEV** course (Projet d'Intégration et Développement) in the **3rd year engineering cycle** at **Esprit School of Engineering**, Tunisia — Academic Year **2025–2026**.
 
-Event creation and management
 
-Participant tracking
 
-💳 Subscription Dashboard
-Plan overview and billing
-
-Payment history
-
-Subscription analytics
-
-💼 Opportunity Dashboard
-Sales pipeline visualization
-
-Lead conversion tracking
-
-Performance metrics
-
-📚 Course Dashboard
-Course catalog and management
-
-Student progress tracking
-
-Content creation interface
-
-🏢 Project Dashboard
-Project timeline view
-
-Task management board
-
-Team collaboration space
-
-🔮 Future Enhancements
-🤖 AI-Powered Features
-Intelligent course recommendations: Implement machine learning algorithms to analyze user behavior, learning patterns, and preferences to suggest personalized course recommendations. This would include adaptive learning paths and skill gap analysis.
-
-📱 Mobile Application
-Native mobile apps: Develop iOS and Android applications with offline capabilities, push notifications for course updates, and mobile-optimized learning interfaces. This would include synchronized progress across devices.
-
-🎓 Advanced Learning Tools
-Interactive learning environment: Add virtual labs, code playgrounds, interactive quizzes with instant feedback, and peer-to-peer learning features. This would include real-time collaboration tools for group projects.
-
-📊 Advanced Analytics
-Comprehensive analytics dashboard: Implement detailed analytics for administrators including student performance metrics, course effectiveness analysis, revenue forecasting, and user engagement insights.
-
-🔗 Integration Ecosystem
-Third-party integrations: Add support for popular tools like Google Classroom, Microsoft Teams, Slack, and learning management systems (LMS) through API integrations and webhooks for seamless workflow integration.
-
-🌍 Multi-language Support
-Internationalization: Add support for multiple languages, regional pricing, and localized content to make the platform accessible globally. This would include automatic language detection and translation features.
