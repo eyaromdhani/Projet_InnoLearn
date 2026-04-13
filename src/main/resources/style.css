@@ -1,0 +1,105 @@
+/* style.css - Modern Theme for Formulaire Management */
+
+.root {
+    -fx-font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -fx-background-color: #f4f7f6;
+}
+
+/* Header Styling */
+.header-pane {
+    -fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af);
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+/* Card Styling */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+/* Form Styling */
+.label {
+    -fx-text-fill: #34495e;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-background-color: #fff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+}
+
+/* Button Styling */
+.button {
+    -fx-background-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-transition: 0.3s;
+}
+
+.button-add {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+}
+
+.button-add:hover {
+    -fx-background-color: #2ecc71;
+}
+
+.button-delete {
+    -fx-background-color: #c0392b;
+    -fx-text-fill: white;
+}
+
+.button-delete:hover {
+    -fx-background-color: #e74c3c;
+}
+
+.button-refresh {
+    -fx-background-color: #2980b9;
+    -fx-text-fill: white;
+}
+
+.button-refresh:hover {
+    -fx-background-color: #3498db;
+}
+
+/* TableView Styling */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 5px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}

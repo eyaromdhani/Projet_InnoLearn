@@ -1,0 +1,209 @@
+/* modern_style.css */
+.root {
+    -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Backgrounds */
+.main-bg {
+    -fx-background-color: #F8F9FE;
+}
+
+.hero-gradient {
+    -fx-background-color: linear-gradient(to right, #6366F1, #8B5CF6);
+}
+
+/* Typography */
+.text-white {
+    -fx-fill: white;
+}
+
+.text-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E293B;
+}
+
+.text-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748B;
+}
+
+/* Cards */
+.quiz-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.card-header-purple {
+    -fx-background-color: #A36CFE; /* Or a gradient if preferred */
+    -fx-background-radius: 15 15 0 0;
+}
+
+/* Buttons */
+.button-primary {
+    -fx-background-color: #6366F1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.button-primary:hover {
+    -fx-background-color: #4F46E5;
+}
+
+.button-modify {
+    -fx-background-color: #FFC107;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.button-delete {
+    -fx-background-color: #EF4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.button-questions {
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+/* Inputs */
+.text-field-custom {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 20;
+    -fx-padding: 10 15;
+}
+
+.combo-box-custom {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 20;
+}
+
+/* Selection Cards */
+.selection-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 10);
+    -fx-padding: 40;
+    -fx-cursor: hand;
+}
+
+.selection-card:hover {
+    -fx-translate-y: -5;
+    -fx-effect: dropshadow(three-pass-box, rgba(99, 102, 241, 0.3), 20, 0, 0, 15);
+}
+
+.button-secondary {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #475569;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.button-secondary:hover {
+    -fx-background-color: #E2E8F0;
+}
+
+.button-primary-purple {
+    -fx-background-color: #A36CFE;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.button-primary-purple:hover {
+    -fx-background-color: #925FE6;
+}
+
+.text-area-custom {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 15;
+    -fx-padding: 10;
+}
+
+.text-area-custom .content {
+    -fx-background-color: transparent;
+}
+
+.list-item-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 15;
+}
+
+.badge-index {
+    -fx-background-color: #EEF2FF;
+    -fx-text-fill: #6366F1;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 16;
+}
+
+.badge-type {
+    -fx-background-color: #EEF2FF;
+    -fx-text-fill: #6366F1;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10;
+}
+
+.badge-points {
+    -fx-background-color: #FFFBEB;
+    -fx-text-fill: #D97706;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10;
+}
+
+.badge-answer {
+    -fx-background-color: #ECFDF5;
+    -fx-text-fill: #059669;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10;
+}
+
+.btn-icon-edit {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #D97706;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-cursor: hand;
+}
+
+.btn-icon-edit:hover {
+    -fx-background-color: #FDE68A;
+}
+
+.btn-icon-delete {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #DC2626;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-cursor: hand;
+}
+
+.btn-icon-delete:hover {
+    -fx-background-color: #FECACA;
+}

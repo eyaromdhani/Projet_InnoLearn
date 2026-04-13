@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.QuestionListItemController"
+      styleClass="list-item-card"
+      stylesheets="@modern_style.css"
+      alignment="CENTER_LEFT"
+      spacing="20"
+      prefHeight="120"
+      maxWidth="Infinity"
+      style="-fx-padding: 20;">
+
+    <!-- Index Number Badge -->
+    <Label fx:id="lblIndex" text="1" styleClass="badge-index"/>
+
+    <VBox spacing="10" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+        <Label fx:id="lblQuestionText" text="Qu'est-ce qu'une attaque DDoS ?" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+        
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Label fx:id="lblType" text="🏷️ Text" styleClass="badge-type"/>
+            <Label fx:id="lblPoints" text="⭐ 2 Points" styleClass="badge-points"/>
+            <Label fx:id="lblAnswer" text="✔ Distributed Denial of Service" styleClass="badge-answer"/>
+        </HBox>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="✏️" onAction="#handleEdit" styleClass="btn-icon-edit"/>
+        <Button text="🗑️" onAction="#handleDelete" styleClass="btn-icon-delete"/>
+    </HBox>
+
+</HBox>

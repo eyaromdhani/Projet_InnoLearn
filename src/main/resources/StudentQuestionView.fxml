@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.StudentQuestionViewController"
+      stylesheets="@modern_style.css"
+      styleClass="main-bg"
+      prefHeight="800.0" prefWidth="1200.0">
+
+    <!-- Top Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 15 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+        <Label text="InnoLearn" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #6366F1;"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Retour aux Quiz" styleClass="button-modify" onAction="#handleBack"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+        <VBox spacing="30" style="-fx-padding: 40 100;">
+            <VBox spacing="10">
+                <Label fx:id="quizTitleLabel" text="Titre du Quiz" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Label fx:id="quizDescLabel" text="Description du quiz" styleClass="text-subtitle"/>
+            </VBox>
+
+            <!-- Container for Question Cards -->
+            <VBox fx:id="questionsContainer" spacing="20">
+                <!-- Question cards will be injected here dynamically -->
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+</VBox>

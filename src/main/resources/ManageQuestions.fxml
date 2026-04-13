@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.ManageQuestionsController"
+      stylesheets="@modern_style.css"
+      styleClass="main-bg"
+      prefHeight="900.0" prefWidth="1200.0">
+
+    <!-- Top Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 15 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+        <Label text="InnoLearn" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #6366F1;"/>
+        
+        <HBox alignment="CENTER" spacing="20">
+            <Hyperlink text="Accueil" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
+            <Hyperlink text="Mes Cours" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
+            <Hyperlink text="Événements" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
+            <Hyperlink text="Quiz" style="-fx-text-fill: #6366F1; -fx-underline: true; -fx-font-weight: bold;"/>
+        </HBox>
+        
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <HBox alignment="CENTER" spacing="15">
+            <Button text="Rechercher" style="-fx-background-color: transparent; -fx-text-fill: #64748B;"/>
+            <Label text="InnoLearn Teacher" style="-fx-text-fill: #6366F1; -fx-font-weight: bold;"/>
+            <Circle radius="15" fill="#E2E8F0"/>
+        </HBox>
+    </HBox>
+
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+        <VBox alignment="TOP_CENTER" spacing="30" style="-fx-padding: 40 100;">
+
+            <HBox alignment="CENTER_LEFT">
+                <Button text="← Retour à la liste des Quiz" onAction="#handleRetour" styleClass="button-secondary"/>
+            </HBox>
+
+            <!-- Quiz Info Banner -->
+            <VBox spacing="10" maxWidth="800" style="-fx-background-color: linear-gradient(to right, #4338CA, #6366F1); -fx-background-radius: 20; -fx-padding: 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5);">
+                <Label fx:id="lblQuizTitle" text="Quiz : Fondation TCP/IP" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label fx:id="lblQuizDesc" text="Testez vos connaissances sur le modèle OSI et les protocoles réseau." style="-fx-font-size: 16px; -fx-text-fill: #E0E7FF;" wrapText="true"/>
+                
+                <HBox spacing="20" style="-fx-padding: 15 0 0 0;">
+                    <Label fx:id="lblQuizTime" text="⏱ 10 minutes" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblQuestionCount" text="❓ 0 questions" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+
+            <!-- Add/Edit Form Card -->
+            <VBox maxWidth="800" spacing="20" styleClass="form-card" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);">
+                
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label fx:id="formIcon" text="+" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #6366F1; -fx-background-radius: 20; -fx-min-width: 32; -fx-min-height: 32; -fx-alignment: center;"/>
+                    <Label fx:id="formTitle" text="Ajouter une Question" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                </HBox>
+
+                <VBox spacing="8">
+                    <Label text="Texte de la Question" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                    <TextArea fx:id="tfQuestionText" promptText="Saisissez votre question ici..." styleClass="text-area-custom" prefHeight="80" wrapText="true"/>
+                </VBox>
+
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Type de Question" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                        <ComboBox fx:id="cbType" promptText="Choix Multiple" styleClass="combo-box-custom" prefHeight="45" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Points" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                        <TextField fx:id="tfPoints" promptText="1" styleClass="text-field-custom" prefHeight="45"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="8">
+                    <Label text="Réponse Correcte" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                    <TextField fx:id="tfCorrectAnswer" promptText="La réponse attendue..." styleClass="text-field-custom" prefHeight="45"/>
+                    <Label text="Pour Vrai/Faux, utilisez 'Vrai' ou 'Faux'." style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10 0 0 0;">
+                    <Button fx:id="btnCancelEdit" text="Annuler l'édition" onAction="#handleCancelEdit" styleClass="button-secondary" prefHeight="45" visible="false" managed="false"/>
+                    <Button fx:id="btnSubmit" text="💾 Enregistrer la Question" onAction="#handleEnregistrer" styleClass="button-primary-purple" prefHeight="45" prefWidth="250"/>
+                </HBox>
+            </VBox>
+
+            <!-- List Section -->
+            <VBox maxWidth="800" spacing="20" style="-fx-padding: 20 0 0 0;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📑 Liste des Questions" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                </HBox>
+                
+                <VBox fx:id="listContainer" spacing="15">
+                    <!-- Cards will go here -->
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>
