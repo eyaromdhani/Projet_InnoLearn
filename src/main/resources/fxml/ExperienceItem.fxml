@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+
+<HBox spacing="15.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ExperienceItemController">
+    <children>
+        <VBox alignment="TOP_CENTER">
+            <children>
+                <Circle fill="#2ecc71" radius="6.0" />
+                <Line fx:id="timelineConnector" endY="100.0" stroke="#f0f0f0" strokeWidth="2.0" />
+            </children>
+        </VBox>
+        <VBox spacing="8.0" styleClass="timeline-item" HBox.hgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label fx:id="lblTitre" styleClass="timeline-title" text="Titre" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblBadge" styleClass="timeline-badge" text="Type" />
+                    </children>
+                </HBox>
+                <HBox spacing="15.0">
+                    <children>
+                        <Label fx:id="lblPeriode" styleClass="timeline-meta" text="📅 Période" />
+                        <Label fx:id="lblEtablissement" styleClass="timeline-meta" text="🏫 Établissement" />
+                    </children>
+                </HBox>
+                <Label fx:id="lblDescription" styleClass="timeline-desc" text="Description..." wrapText="true" />
+                <Button onAction="#handleDelete" styleClass="btn-timeline-delete" text="🗑 Supprimer" />
+            </children>
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+        </VBox>
+    </children>
+</HBox>

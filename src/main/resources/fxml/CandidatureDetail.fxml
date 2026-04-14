@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox styleClass="form-modal-container"
+      style="-fx-background-color: white; -fx-background-radius: 22px; -fx-effect: dropshadow(three-pass-box, rgba(99,88,255,0.13), 28, 0, 0, 10);"
+      prefWidth="540.0"
+      xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controllers.CandidatureDetailController">
+    <padding>
+        <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
+    </padding>
+    <children>
+
+        <!-- ═══ COLORED HEADER BANNER ═══ -->
+        <VBox fx:id="headerBanner" style="-fx-background-color: linear-gradient(to right, #1b004a, #4a00b4); -fx-background-radius: 22px 22px 0 0; -fx-padding: 28 35 25 35;" spacing="10.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="14.0">
+                    <children>
+                        <!-- Avatar Circle -->
+                        <StackPane style="-fx-background-color: rgba(255,255,255,0.18); -fx-background-radius: 50%; -fx-min-width: 52px; -fx-min-height: 52px; -fx-max-width: 52px; -fx-max-height: 52px; -fx-alignment: CENTER;">
+                            <children>
+                                <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                                         fill="white" scaleX="1.0" scaleY="1.0" />
+                            </children>
+                        </StackPane>
+
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label fx:id="lblCandidatName" style="-fx-font-size: 19px; -fx-font-weight: 900; -fx-text-fill: white;" text="Candidat #—" />
+                                <Label fx:id="lblCandidatSubtitle" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.7);" text="Candidature pour : —" />
+                            </children>
+                        </VBox>
+
+                        <Region HBox.hgrow="ALWAYS" />
+
+                        <!-- Status badge -->
+                        <Label fx:id="lblStatut" text="En attente"
+                               style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 6 14; -fx-background-radius: 20px;" />
+
+                        <!-- Close button -->
+                        <Button onAction="#handleClose" styleClass="btn-close-circle"
+                                style="-fx-background-color: rgba(255,255,255,0.18);">
+                            <graphic>
+                                <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                         fill="white" />
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+
+                <!-- Meta info bar -->
+                <HBox spacing="20.0" style="-fx-padding: 10 0 0 0;">
+                    <children>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                            <children>
+                                <SVGPath content="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                                         fill="rgba(255,255,255,0.7)" scaleX="0.7" scaleY="0.7" />
+                                <Label fx:id="lblDomaine" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 12px;" text="—" />
+                            </children>
+                        </HBox>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                            <children>
+                                <SVGPath content="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"
+                                         fill="rgba(255,255,255,0.7)" scaleX="0.7" scaleY="0.7" />
+                                <Label fx:id="lblDate" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 12px;" text="—" />
+                            </children>
+                        </HBox>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                            <children>
+                                <SVGPath content="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
+                                         fill="rgba(255,255,255,0.7)" scaleX="0.7" scaleY="0.7" />
+                                <Label fx:id="lblIdOffre" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 12px;" text="Offre : —" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <!-- ═══ BODY ═══ -->
+        <VBox spacing="20.0" style="-fx-padding: 28 35 10 35;">
+            <children>
+
+                <!-- Compétences -->
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: #6358ff; -fx-font-size: 11px;" text="COMPÉTENCES" />
+                        <Label fx:id="lblCompetences" wrapText="true"
+                               style="-fx-background-color: #f4f6fb; -fx-background-radius: 10px; -fx-padding: 10 14; -fx-text-fill: #2c3e50; -fx-font-size: 13px;"
+                               text="—" />
+                    </children>
+                </VBox>
+
+                <!-- Description -->
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: #6358ff; -fx-font-size: 11px;" text="DESCRIPTION / PRÉSENTATION" />
+                        <TextArea fx:id="txtDescription" editable="false" wrapText="true" prefHeight="90.0"
+                                  styleClass="profile-textarea"
+                                  style="-fx-background-color: #f4f6fb; -fx-border-color: transparent; -fx-font-size: 13px;" />
+                    </children>
+                </VBox>
+
+                <!-- Lettre de motivation -->
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: #6358ff; -fx-font-size: 11px;" text="LETTRE DE MOTIVATION" />
+                        <TextArea fx:id="txtMotivation" editable="false" wrapText="true" prefHeight="120.0"
+                                  styleClass="profile-textarea"
+                                  style="-fx-background-color: #f8f9ff; -fx-border-color: #ebe8ff; -fx-font-size: 13px;" />
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <!-- ═══ FOOTER ACTIONS ═══ -->
+        <HBox spacing="12.0" style="-fx-padding: 16 35 28 35;" alignment="CENTER_RIGHT">
+            <children>
+                <Button onAction="#handleClose" styleClass="btn-form-cancel" text="Fermer" />
+                <Button fx:id="btnRefuser" onAction="#handleRefuser"
+                        style="-fx-background-color: #fee2e2; -fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 11 25; -fx-background-radius: 12px; -fx-cursor: hand;"
+                        text="Refuser" />
+                <Button fx:id="btnAccepter" onAction="#handleAccepter"
+                        style="-fx-background-color: linear-gradient(to right, #10b981, #059669); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 11 25; -fx-background-radius: 12px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(16,185,129,0.35), 12, 0, 0, 4);"
+                        text="Accepter" />
+            </children>
+        </HBox>
+
+    </children>
+</VBox>

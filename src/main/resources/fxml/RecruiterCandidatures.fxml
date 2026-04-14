@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" styleClass="main-scroll-pane" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.RecruiterCandidaturesController">
+   <content>
+      <VBox spacing="0.0" styleClass="home-container">
+         <children>
+            <!-- Header Section -->
+            <VBox spacing="10.0" styleClass="hero-full-container" style="-fx-background-color: linear-gradient(to right, #1b004a, #27ae60);">
+               <children>
+                  <fx:include source="Navbar.fxml" />
+                  <HBox alignment="CENTER_LEFT" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#handleBack" styleClass="btn-back" text="← Retour" />
+                        <VBox>
+                           <children>
+                              <Label styleClass="hero-title" text="Candidatures" />
+                              <Label styleClass="hero-subtitle" text="Gérez les candidatures sur vos offres de stage et parcourez les demandes étudiantes." />
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="40.0" left="80.0" right="80.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+
+            <!-- Card Grid Section -->
+            <VBox spacing="30.0">
+               <padding>
+                  <Insets bottom="60.0" left="80.0" right="80.0" top="40.0" />
+               </padding>
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Suivi et Recrutement" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#handleActualiser" styleClass="btn-secondary" text="Actualiser" />
+                     </children>
+                  </HBox>
+
+                  <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="admin-tab-pane">
+                      <tabs>
+                          <Tab text="Candidatures à mes offres">
+                              <content>
+                                  <VBox spacing="30.0" style="-fx-padding: 30 0 0 0;">
+                                      <children>
+                                          <FlowPane fx:id="cardsContainerCandidatures" hgap="30.0" vgap="30.0" />
+                                      </children>
+                                  </VBox>
+                              </content>
+                          </Tab>
+                          <Tab text="Demandes ouvertes (Marché des talents)">
+                              <content>
+                                  <VBox spacing="30.0" style="-fx-padding: 30 0 0 0;">
+                                      <children>
+                                          <FlowPane fx:id="cardsContainerDemandes" hgap="30.0" vgap="30.0" />
+                                      </children>
+                                  </VBox>
+                              </content>
+                          </Tab>
+                      </tabs>
+                  </TabPane>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

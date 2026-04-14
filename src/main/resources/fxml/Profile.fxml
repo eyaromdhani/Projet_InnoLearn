@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="40.0" styleClass="profile-main-container" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfileController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
+    </padding>
+    <children>
+        <HBox spacing="30.0">
+            <children>
+                <!-- Left Column: Informations Générales -->
+                <VBox spacing="25.0" styleClass="profile-form-container" HBox.hgrow="ALWAYS" minWidth="600.0">
+                    <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                    </padding>
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <children>
+                                <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="#6358ff" scaleX="1.2" scaleY="1.2" />
+                                <Label styleClass="profile-section-title" text="Informations Générales" />
+                            </children>
+                        </HBox>
+
+                        <GridPane hgap="20.0" vgap="15.0">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50.0" />
+                                <ColumnConstraints percentWidth="50.0" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="DOMAINE" />
+                                        <TextField fx:id="txtDomaine" promptText="Ex: Psychologie clinique" styleClass="profile-input" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="8.0" GridPane.columnIndex="1">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="NIVEAU ACADÉMIQUE" />
+                                        <ComboBox fx:id="comboNiveau" maxWidth="1.7976931348623157E308" styleClass="profile-combo" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label styleClass="profile-input-label" text="COMPÉTENCES" />
+                                <TextArea fx:id="txtCompetences" prefHeight="60.0" promptText="Ex: Analyse statistique, Tests psychométriques..." styleClass="profile-textarea" wrapText="true" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label styleClass="profile-input-label" text="LANGUES" />
+                                <TextField fx:id="txtLangues" promptText="Ex: anglais, français, arabe" styleClass="profile-input" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label styleClass="profile-input-label" text="DESCRIPTION" />
+                                <TextArea fx:id="txtDescription" prefHeight="100.0" promptText="Décrivez votre parcours..." styleClass="profile-textarea" wrapText="true" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label styleClass="profile-input-label" text="LETTRE DE MOTIVATION" />
+                                <TextArea fx:id="txtLettreMotivation" prefHeight="120.0" promptText="Votre motivation par défaut..." styleClass="profile-textarea" wrapText="true" />
+                            </children>
+                        </VBox>
+                        
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="CV (PDF): " />
+                                        <Button fx:id="btnChooseFile" onAction="#handleUploadPDF" styleClass="btn-upload-cv" text="Choisir un fichier" />
+                                        <Label fx:id="lblFileName" style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;" text="Aucun fichier choisi" />
+                                    </children>
+                                </HBox>
+                                <Button onAction="#handleSaveProfile" styleClass="btn-save-profile" text="Enregistrer mon profil" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <!-- Right Column: Sidebar Cards -->
+                <VBox spacing="30.0" minWidth="320.0" prefWidth="350.0" maxWidth="350.0">
+                    <children>
+                        <!-- CV Upload Card (Top) -->
+                        <VBox spacing="20.0" styleClass="cv-upload-card">
+                            <padding>
+                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                            </padding>
+                            <children>
+                                <HBox alignment="CENTER">
+                                    <children>
+                                        <StackPane styleClass="cv-icon-container">
+                                            <children>
+                                                <SVGPath content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" fill="white" scaleX="1.8" scaleY="1.8" />
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <VBox alignment="CENTER" spacing="10.0">
+                                    <children>
+                                        <Label styleClass="cv-card-title" text="Votre CV est prêt ?" />
+                                        <Label alignment="CENTER" styleClass="cv-card-subtitle" text="Optimisez votre profil en téléchargeant un CV professionnel au format PDF." textAlignment="CENTER" wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <Button maxWidth="1.7976931348623157E308" onAction="#handleUploadPDF" styleClass="btn-cv-action" text="Télécharger mon CV (PDF)" />
+                            </children>
+                        </VBox>
+
+                        <!-- Timeline Card (Education & Experience) -->
+                        <VBox spacing="20.0" styleClass="side-card">
+                            <padding>
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                            </padding>
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                    <children>
+                                        <SVGPath content="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#6358ff" scaleX="1.1" scaleY="1.1" />
+                                        <Label styleClass="side-card-title" text="Parcours &amp; Expériences" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button fx:id="btnAddExperience" onAction="#handleToggleExperienceForm" styleClass="btn-add-mini" text="+ Ajouter" />
+                                    </children>
+                                </HBox>
+
+                                <!-- Experience Entry Form (Hidden by default) -->
+                                <VBox fx:id="experienceForm" managed="false" spacing="20.0" styleClass="experience-form-container" visible="false">
+                                    <padding>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    </padding>
+                                    <children>
+                                        <GridPane hgap="15.0" vgap="15.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints percentWidth="50.0" />
+                                                <ColumnConstraints percentWidth="50.0" />
+                                            </columnConstraints>
+                                            <children>
+                                                <VBox spacing="8.0">
+                                                    <children>
+                                                        <Label styleClass="profile-input-label" text="TYPE D'ENTRÉE" />
+                                                        <ComboBox fx:id="expType" maxWidth="1.7976931348623157E308" styleClass="profile-combo" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="8.0" GridPane.columnIndex="1">
+                                                    <children>
+                                                        <Label styleClass="profile-input-label" text="ANNÉE / PÉRIODE" />
+                                                        <TextField fx:id="expPeriode" promptText="2023-2024" styleClass="profile-input" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="8.0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Label styleClass="profile-input-label" text="ÉTABLISSEMENT / ENTREPRISE" />
+                                                        <TextField fx:id="expEtablissement" promptText="Université, Poste..." styleClass="profile-input" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Label styleClass="profile-input-label" text="DOMAINE / POSTE" />
+                                                        <TextField fx:id="expDomaine" promptText="Génie Logistique..." styleClass="profile-input" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </GridPane>
+                                        
+                                        <VBox spacing="8.0">
+                                            <children>
+                                                <Label styleClass="profile-input-label" text="NIVEAU (POUR FORMATION)" />
+                                                <TextField fx:id="expNiveau" promptText="Ex: Licence, Master..." styleClass="profile-input" />
+                                            </children>
+                                        </VBox>
+                                        
+                                        <VBox spacing="8.0">
+                                            <children>
+                                                <Label styleClass="profile-input-label" text="PETITE DESCRIPTION" />
+                                                <TextArea fx:id="expDesc" prefHeight="80.0" promptText="Décrivez brièvement vos acquis..." styleClass="profile-textarea" wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                        
+                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                            <children>
+                                                <Button onAction="#handleConfirmAddExperience" styleClass="btn-save-profile" text="+ Confirmer l'ajout" />
+                                                <Button onAction="#handleToggleExperienceForm" styleClass="btn-timeline-delete" text="Annuler" />
+                                            </children>
+                                            <padding>
+                                                <Insets top="10.0" />
+                                            </padding>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                
+                                <VBox fx:id="timelineList" spacing="0.0">
+                                    <children>
+                                        <!-- Dynamic entries will be loaded here -->
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>

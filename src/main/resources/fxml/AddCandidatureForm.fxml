@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox styleClass="form-modal-container"
+      style="-fx-background-color: white; -fx-background-radius: 20px;"
+      prefWidth="520.0"
+      xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controllers.AddCandidatureController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="35.0" />
+    </padding>
+    <children>
+
+        <!-- ═══ HEADER ═══ -->
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <children>
+                <StackPane styleClass="form-header-icon-box">
+                    <children>
+                        <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"
+                                 fill="white" scaleX="0.85" scaleY="0.85" />
+                    </children>
+                </StackPane>
+                <VBox spacing="2.0">
+                    <children>
+                        <Label style="-fx-font-size: 21px; -fx-font-weight: 900; -fx-text-fill: #1a1a3d;" text="Ajouter une Candidature" />
+                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" text="Remplissez les informations ci-dessous" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <Region prefHeight="8.0" />
+        <Separator opacity="0.4" />
+        <Region prefHeight="8.0" />
+
+        <!-- ═══ FORMULAIRE ═══ -->
+        <VBox spacing="16.0">
+            <children>
+
+                <!-- TITRE -->
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="5.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label styleClass="profile-input-label" text="TITRE" />
+                                <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                            </children>
+                        </HBox>
+                        <TextField fx:id="txtTitre" promptText="Ex: Candidature développeur backend" styleClass="profile-input" />
+                        <Label fx:id="errTitre" styleClass="error-label" text="⚠ Titre requis (min. 3 caractères)." managed="false" visible="false" />
+                    </children>
+                </VBox>
+
+                <!-- ID ÉTUDIANT + ID OFFRE -->
+                <GridPane hgap="20.0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50.0" />
+                        <ColumnConstraints percentWidth="50.0" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="5.0">
+                            <children>
+                                <HBox spacing="5.0" alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="ID ÉTUDIANT" />
+                                        <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                                    </children>
+                                </HBox>
+                                <TextField fx:id="txtIdEtudiant" promptText="Ex: 10" styleClass="profile-input" />
+                                <Label fx:id="errIdEtudiant" styleClass="error-label" text="⚠ Entier positif requis." managed="false" visible="false" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                            <children>
+                                <Label styleClass="profile-input-label" text="ID OFFRE (optionnel)" />
+                                <TextField fx:id="txtIdOffre" promptText="Ex: 3" styleClass="profile-input" />
+                                <Label fx:id="errIdOffre" styleClass="error-label" text="⚠ Doit être un entier positif." managed="false" visible="false" />
+                            </children>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <!-- DOMAINE + STATUT -->
+                <GridPane hgap="20.0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50.0" />
+                        <ColumnConstraints percentWidth="50.0" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label styleClass="profile-input-label" text="DOMAINE" />
+                                <TextField fx:id="txtDomaine" promptText="Ex: Informatique" styleClass="profile-input" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                            <children>
+                                <HBox spacing="5.0" alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="STATUT" />
+                                        <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                                    </children>
+                                </HBox>
+                                <ComboBox fx:id="comboStatut" maxWidth="Infinity" styleClass="filter-combo" />
+                                <Label fx:id="errStatut" styleClass="error-label" text="⚠ Veuillez choisir un statut." managed="false" visible="false" />
+                            </children>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <!-- LETTRE DE MOTIVATION -->
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="profile-input-label" text="LETTRE DE MOTIVATION" />
+                        <TextArea fx:id="txtMotivation" prefHeight="105.0"
+                                  promptText="Présentez vos motivations et compétences clés..."
+                                  styleClass="profile-textarea" wrapText="true" />
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <Region prefHeight="18.0" />
+
+        <!-- ═══ ACTIONS ═══ -->
+        <VBox spacing="10.0">
+            <children>
+                <Button fx:id="btnSave" onAction="#handleSave" styleClass="btn-form-submit" text="Enregistrer la candidature" maxWidth="Infinity" />
+                <Button onAction="#handleCancel" styleClass="btn-form-cancel" text="Annuler" maxWidth="Infinity" />
+            </children>
+        </VBox>
+
+    </children>
+</VBox>

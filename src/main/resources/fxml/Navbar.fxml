@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="navbar-home" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.NavbarController">
+    <children>
+        <!-- Logo -->
+        <HBox fx:id="logoContainer" alignment="CENTER_LEFT" onMouseClicked="#handleLogoClick" spacing="10.0" style="-fx-cursor: hand;">
+            <children>
+                <SVGPath content="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="white" scaleX="1.5" scaleY="1.5" />
+                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" text="InnoLearn" />
+            </children>
+        </HBox>
+        
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <!-- Menu Links -->
+        <HBox alignment="CENTER" spacing="10.0">
+            <children>
+                <Label fx:id="linkAccueil" styleClass="nav-link" text="Accueil" />
+                <Label fx:id="linkCours" styleClass="nav-link" text="Cours" />
+                <Label fx:id="linkProjets" styleClass="nav-link" text="Projets" />
+                <Label fx:id="linkEvenements" styleClass="nav-link" text="Événements" />
+                <Label fx:id="linkStages" onMouseClicked="#handleStagesClick" styleClass="nav-link" style="-fx-cursor: hand;" text="Stages" />
+                <Label fx:id="linkLivres" styleClass="nav-link" text="Livres" />
+                <Label fx:id="linkQuiz" styleClass="nav-link" text="Quiz" />
+            </children>
+        </HBox>
+        
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <!-- Right Actions Group -->
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <children>
+                <!-- Search Bar -->
+                <HBox styleClass="search-container">
+                    <children>
+                        <SVGPath content="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="white" />
+                        <TextField promptText="Rechercher" styleClass="search-input" />
+                    </children>
+                </HBox>
+                
+                <!-- User Profile Icons -->
+                <HBox alignment="CENTER" spacing="12.0">
+                    <children>
+                        <StackPane>
+                            <children>
+                                <Circle fill="rgba(255,255,255,0.2)" radius="18.0" stroke="WHITE" strokeWidth="1.0" />
+                                <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white" scaleX="0.8" scaleY="0.8" />
+                                <Circle styleClass="status-online" StackPane.alignment="BOTTOM_RIGHT">
+                                    <StackPane.margin>
+                                        <Insets bottom="2.0" right="2.0" />
+                                    </StackPane.margin>
+                                </Circle>
+                            </children>
+                        </StackPane>
+                        
+                        <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="white" />
+                        <SVGPath content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="white" />
+                        
+                        <!-- JI Initial Circle -->
+                        <StackPane fx:id="profileInitials" onMouseClicked="#handleProfileClick" style="-fx-cursor: hand;" styleClass="profile-initials">
+                            <children>
+                                <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" text="JI" />
+                                <Circle fill="#2ecc71" radius="5.0" StackPane.alignment="BOTTOM_RIGHT">
+                                    <StackPane.margin>
+                                        <Insets bottom="2.0" right="2.0" />
+                                    </StackPane.margin>
+                                </Circle>
+                            </children>
+                        </StackPane>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="15.0" left="40.0" right="40.0" top="15.0" />
+    </padding>
+</HBox>

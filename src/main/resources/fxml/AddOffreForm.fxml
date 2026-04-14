@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.shape.Rectangle?>
+
+<ScrollPane fitToWidth="true" prefHeight="720.0" prefWidth="620.0" styleClass="main-scroll-pane"
+            style="-fx-background-color: transparent; -fx-background: transparent;"
+            xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.AddOffreController">
+   <content>
+      <VBox styleClass="form-modal-container" style="-fx-background-color: white; -fx-background-radius: 20px;">
+         <padding>
+            <Insets bottom="45.0" left="45.0" right="45.0" top="35.0" />
+         </padding>
+         <children>
+
+            <!-- ═══ HEADER ═══ -->
+            <HBox alignment="CENTER_LEFT" spacing="16.0">
+               <children>
+                  <!-- Icon Badge -->
+                  <StackPane styleClass="form-header-icon-box">
+                     <children>
+                        <SVGPath content="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.01 15.99 0 13.34 0c-1.3 0-2.48.56-3.34 1.44L9 3.5 7.99 2.44C7.13.56 5.95 0 4.66 0 2.01 0 0 2.01 0 4.66c0 .46.11.9.18 1.34H0v2h20V6z"
+                                fill="white" scaleX="0.9" scaleY="0.9" />
+                     </children>
+                  </StackPane>
+
+                  <VBox spacing="2.0">
+                     <children>
+                        <Label fx:id="formTitleLabel" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #1a1a3d;" text="Nouvelle Offre de Stage" />
+                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Remplissez les informations de l'offre" />
+                     </children>
+                  </VBox>
+
+                  <Region HBox.hgrow="ALWAYS" />
+
+                  <!-- Close Button -->
+                  <Button onAction="#handleRetour" styleClass="btn-close-circle">
+                     <graphic>
+                        <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#7f8c8d" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+
+            <Region prefHeight="5.0" />
+            <Separator opacity="0.4" />
+            <Region prefHeight="5.0" />
+
+            <!-- ═══ CHAMPS DU FORMULAIRE ═══ -->
+            <VBox spacing="18.0">
+               <children>
+
+                  <!-- TITRE -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="profile-input-label" text="TITRE DE L'OFFRE" />
+                              <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="txtTitre" promptText="Ex: Développeur Fullstack Java / React" styleClass="profile-input" />
+                        <Label fx:id="errTitre" styleClass="error-label" text="⚠ Le titre doit contenir au moins 5 caractères." managed="false" visible="false" />
+                     </children>
+                  </VBox>
+
+                  <!-- DOMAINE + LIEU -->
+                  <GridPane hgap="20.0">
+                     <columnConstraints>
+                        <ColumnConstraints percentWidth="50.0" />
+                        <ColumnConstraints percentWidth="50.0" />
+                     </columnConstraints>
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <HBox spacing="6.0" alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label styleClass="profile-input-label" text="DOMAINE" />
+                                    <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="txtDomaine" promptText="Ex: Informatique" styleClass="profile-input" />
+                              <Label fx:id="errDomaine" styleClass="error-label" text="⚠ Domaine obligatoire." managed="false" visible="false" />
+                           </children>
+                        </VBox>
+
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                           <children>
+                              <HBox spacing="6.0" alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label styleClass="profile-input-label" text="LIEU" />
+                                    <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="txtLieu" promptText="Ex: Tunis / Remote / Hybride" styleClass="profile-input" />
+                              <Label fx:id="errLieu" styleClass="error-label" text="⚠ Lieu obligatoire." managed="false" visible="false" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+
+                  <!-- ENTREPRISE -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="profile-input-label" text="ENTREPRISE" />
+                              <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="txtEntreprise" promptText="Nom de l'entreprise" styleClass="profile-input" />
+                        <Label fx:id="errEntreprise" styleClass="error-label" text="⚠ Nom de l'entreprise obligatoire." managed="false" visible="false" />
+                     </children>
+                  </VBox>
+
+                  <!-- DESCRIPTION -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="profile-input-label" text="DESCRIPTION" />
+                              <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                           </children>
+                        </HBox>
+                        <TextArea fx:id="txtDescription" prefHeight="105.0" promptText="Décrivez les missions, le contexte et les attentes..." styleClass="profile-textarea" wrapText="true" />
+                        <Label fx:id="errDescription" styleClass="error-label" text="⚠ Description trop courte (min. 20 caractères)." managed="false" visible="false" />
+                     </children>
+                  </VBox>
+
+                  <!-- COMPÉTENCES -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label styleClass="profile-input-label" text="COMPÉTENCES REQUISES" />
+                        <TextArea fx:id="txtCompetences" prefHeight="80.0" promptText="Ex: Java, Spring Boot, SQL, React..." styleClass="profile-textarea" wrapText="true" />
+                     </children>
+                  </VBox>
+
+                  <!-- DURÉE + DATE + STATUT -->
+                  <GridPane hgap="20.0" vgap="5.0">
+                     <columnConstraints>
+                        <ColumnConstraints percentWidth="33.0" />
+                        <ColumnConstraints percentWidth="34.0" />
+                        <ColumnConstraints percentWidth="33.0" />
+                     </columnConstraints>
+                     <children>
+                        <!-- Durée -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <HBox spacing="6.0" alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label styleClass="profile-input-label" text="DURÉE (mois)" />
+                                    <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="txtDuree" promptText="Ex: 3" styleClass="profile-input" />
+                              <Label fx:id="errDuree" styleClass="error-label" text="⚠ Entier entre 1 et 24." managed="false" visible="false" />
+                           </children>
+                        </VBox>
+
+                        <!-- Date (auto) -->
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label styleClass="profile-input-label" text="DATE PUBLICATION" />
+                              <TextField fx:id="txtDate" editable="false" styleClass="profile-input-readonly" />
+                           </children>
+                        </VBox>
+
+                        <!-- Statut (auto) -->
+                        <VBox spacing="5.0" GridPane.columnIndex="2">
+                           <children>
+                              <Label styleClass="profile-input-label" text="STATUT" />
+                              <ComboBox fx:id="cmbStatut" styleClass="profile-input" promptText="Sélectionner..." prefWidth="150" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+
+               </children>
+            </VBox>
+
+            <Region prefHeight="15.0" />
+
+            <!-- ═══ ACTIONS ═══ -->
+            <VBox spacing="12.0">
+               <children>
+                  <Button fx:id="btnSave" onAction="#handleSave" styleClass="btn-primary" text="Enregistrer l'offre" maxWidth="Infinity" />
+                  <Button onAction="#handleRetour" styleClass="btn-secondary" text="Annuler" maxWidth="Infinity" />
+               </children>
+            </VBox>
+
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

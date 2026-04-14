@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToWidth="true" styleClass="main-scroll-pane" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.RecruiterDashboardController">
+    <content>
+        <VBox spacing="0.0" styleClass="home-container">
+            <children>
+                <!-- Hero Section for Recruiter -->
+                <VBox styleClass="recruiter-hero-container">
+                    <children>
+                        <!-- Top Navbar -->
+                        <fx:include fx:id="navbar" source="Navbar.fxml" />
+
+                        <HBox alignment="CENTER_LEFT" spacing="50.0">
+                            <children>
+                                <!-- Left Content -->
+                                <VBox alignment="CENTER_LEFT" spacing="25.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" styleClass="recruiter-badge">
+                                            <children>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;" text="ESPACE RECRUTEUR" />
+                                            </children>
+                                        </HBox>
+
+                                        <VBox spacing="0.0">
+                                            <children>
+                                                <Label styleClass="recruiter-title" text="Découvrez les" />
+                                                <Label styleClass="recruiter-title recruiter-title-highlight" text="Opportunités" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Filter Panel -->
+                                        <VBox spacing="15.0" styleClass="filter-container">
+                                            <children>
+                                                <TextField fx:id="txtSearch" promptText="Rechercher une offre (titre, entreprise...)" styleClass="recruiter-search-field" />
+                                                
+                                                <HBox spacing="15.0">
+                                                    <children>
+                                                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                                            <children>
+                                                                <Label styleClass="filter-label" text="Entreprises" />
+                                                                <ComboBox fx:id="comboEnterprise" maxWidth="Infinity" promptText="Toutes" styleClass="filter-combo" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                                            <children>
+                                                                <Label styleClass="filter-label" text="Durées" />
+                                                                <ComboBox fx:id="comboDuration" maxWidth="Infinity" promptText="Toutes" styleClass="filter-combo" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                        
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button fx:id="btnPublier" maxWidth="Infinity" onAction="#handlePublish" styleClass="btn-primary" text="Publier un stage" />
+                                                <Button mnemonicParsing="false" onAction="#handleMyOffers" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-background-radius: 25px; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;" text="Les Offres" />
+                                                <Button mnemonicParsing="false" onAction="#handleCandidatures" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 25px; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;" text="Candidatures" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- Right Illustration (3D Recruiter) -->
+                                <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <StackPane styleClass="hero-image-container">
+                                            <children>
+                                                <Circle fx:id="heroCircle" radius="180.0" styleClass="hero-circle-image" fill="#ffffff22" stroke="WHITE" strokeWidth="2" strokeDashArray="10, 10" />
+                                                <!-- We can add an ImageView here for the recruiter illustration -->
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </VBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="60.0" left="80.0" right="80.0" top="40.0" />
+                            </padding>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <!-- Cards Grid -->
+                <VBox spacing="30.0" style="-fx-background-color: #f8f9fa;">
+                    <padding>
+                        <Insets bottom="60.0" left="80.0" right="80.0" top="40.0" />
+                    </padding>
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <children>
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Toutes les offres de stage" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="lblCount" style="-fx-text-fill: #95a5a6; -fx-font-weight: bold;" text="0 Offres" />
+                            </children>
+                        </HBox>
+
+                        <FlowPane fx:id="cardsContainer" hgap="30.0" vgap="30.0">
+                            <!-- Dynamically loaded cards -->
+                        </FlowPane>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

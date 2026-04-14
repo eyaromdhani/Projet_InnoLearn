@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToWidth="true" styleClass="main-scroll-pane" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HomeController">
+    <content>
+        <VBox spacing="10.0" styleClass="home-container">
+            <children>
+                <!-- Hero Full Container (Combined Navbar + Hero Content) -->
+                <VBox styleClass="hero-full-container">
+                    <children>
+                        <!-- Navigation Bar (Included) -->
+                        <fx:include fx:id="navbar" source="Navbar.fxml" />
+
+                        <!-- Hero Content Section -->
+                        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="hero-section">
+                            <children>
+                                <VBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="hero-badge" text="INNOVER POUR APPRENDRE" />
+                                        <Label styleClass="hero-title" text="E-Learning" />
+                                        <Label styleClass="hero-title" style="-fx-text-fill: #a2d2ff;" text="Revolutionized" />
+                                        <Label maxWidth="600.0" styleClass="hero-subtitle" text="Project-based Learning with downloadable materials and real-time collaboration. Everything you need to succeed in one organic place." wrapText="true" />
+                                        <HBox spacing="15.0">
+                                            <children>
+                                                <Button mnemonicParsing="false" styleClass="btn-primary" text="Get Started Now" />
+                                                <Button mnemonicParsing="false" styleClass="btn-secondary" text="Explore Courses" />
+                                            </children>
+                                        </HBox>
+                                        
+                                        <Region prefHeight="40.0" />
+                                        
+                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                            <children>
+                                                <VBox>
+                                                    <children>
+                                                        <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;" text="309" />
+                                                        <Region style="-fx-background-color: #6358ff; -fx-min-height: 4px; -fx-max-width: 50px;" />
+                                                    </children>
+                                                </VBox>
+                                                <HBox spacing="-10.0">
+                                                    <children>
+                                                        <Circle fill="#bdc3c7" radius="20.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
+                                                        <Circle fill="#95a5a6" radius="20.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
+                                                        <Circle fill="#7f8c8d" radius="20.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                
+                                <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <StackPane styleClass="hero-image-container">
+                                            <children>
+                                                <Circle fx:id="heroCircle" radius="180.0" styleClass="hero-circle-image" />
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <!-- About Section in Big White Card -->
+                <VBox style="-fx-padding: 40 80;">
+                    <children>
+                        <VBox spacing="40.0" styleClass="big-white-card">
+                            <children>
+                                <VBox alignment="CENTER" spacing="10.0">
+                                    <children>
+                                        <Label style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1a1a3d;" text="About InnoLearn" />
+                                        <Region style="-fx-background-color: #6358ff; -fx-min-height: 4px; -fx-max-width: 60px;" />
+                                    </children>
+                                </VBox>
+                                
+                                <HBox alignment="CENTER" spacing="30.0">
+                                    <children>
+                                        <VBox spacing="15.0" styleClass="feature-card" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                                    <children>
+                                                        <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(52, 152, 219, 0.1);">
+                                                            <children>
+                                                                <StackPane>
+                                                                    <children>
+                                                                        <SVGPath content="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-12.5c-2.48 0-4.5 2.02-4.5 4.5s2.02 4.5 4.5 4.5 4.5-2.02 4.5-4.5-2.02-4.5-4.5-4.5z" fill="#3498db" scaleX="1.2" scaleY="1.2" />
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+                                                        <Label styleClass="feature-card-title" text="Our Mission" />
+                                                    </children>
+                                                </HBox>
+                                                <Label styleClass="feature-card-description" text="To provide a unified platform that eliminates the need for students to navigate multiple websites and services." wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="15.0" styleClass="feature-card" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                                    <children>
+                                                        <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(46, 204, 113, 0.1);">
+                                                            <children>
+                                                                <StackPane>
+                                                                    <children>
+                                                                        <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="#2ecc71" scaleX="1.2" scaleY="1.2" />
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+                                                        <Label styleClass="feature-card-title" text="For All Students" />
+                                                    </children>
+                                                </HBox>
+                                                <Label styleClass="feature-card-description" text="Whether you're studying engineering, arts, business, or sciences, InnoLearn adapts to your needs." wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="15.0" styleClass="feature-card" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                                    <children>
+                                                        <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(155, 89, 182, 0.1);">
+                                                            <children>
+                                                                <StackPane>
+                                                                    <children>
+                                                                        <SVGPath content="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z" fill="#9b59b2" scaleX="1.2" scaleY="1.2" />
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+                                                        <Label styleClass="feature-card-title" text="Complete Journey" />
+                                                    </children>
+                                                </HBox>
+                                                <Label styleClass="feature-card-description" text="From your first day as a student to building a successful career, we accompany you every step of the way." wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Platform Features (Dark) -->
+                <VBox spacing="40.0" styleClass="dark-section">
+                    <children>
+                        <Label styleClass="dark-section-title" text="Platform Features" />
+                        <GridPane hgap="20.0" vgap="20.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <VBox spacing="10.0" styleClass="dark-feature-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(52, 152, 219, 0.15);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" fill="#3498db" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Centralized Resources" />
+                                            </children>
+                                        </HBox>
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Access all your educational materials in one organized library." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="10.0" styleClass="dark-feature-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(241, 196, 15, 0.15);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="#f1c40f" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Academic Support" />
+                                            </children>
+                                        </HBox>
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Get personalized learning paths and tutoring services." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="10.0" styleClass="dark-feature-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(230, 126, 34, 0.15);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" fill="#e67e22" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Career Development" />
+                                            </children>
+                                        </HBox>
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Explore internships and professional development resources." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="10.0" styleClass="dark-feature-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(231, 76, 60, 0.15);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="#e74c3c" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Collaboration Tools" />
+                                            </children>
+                                        </HBox>
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Connect with peers, form study groups, and work on projects." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="10.0" styleClass="dark-feature-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(26, 188, 156, 0.15);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="#1abc9c" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Progress Tracking" />
+                                            </children>
+                                        </HBox>
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Monitor your academic progress and set goals." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="10.0" styleClass="dark-feature-card" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(155, 89, 182, 0.15);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="#9b59b2" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Global Community" />
+                                            </children>
+                                        </HBox>
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" text="Join a worldwide network of students and share experiences." wrapText="true" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="40.0" />
+                    </VBox.margin>
+                </VBox>
+
+                <!-- Collaboration Section -->
+                <VBox styleClass="collaboration-section">
+                    <children>
+                        <VBox styleClass="collaboration-header">
+                            <children>
+                                <StackPane prefHeight="60.0">
+                                    <children>
+                                        <SVGPath content="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="#6358ff" scaleX="2.5" scaleY="2.5" />
+                                    </children>
+                                </StackPane>
+                                <Label styleClass="collaboration-title" text="Collaboration" />
+                            </children>
+                        </VBox>
+                        
+                        <GridPane alignment="CENTER" hgap="30.0" vgap="30.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="15.0" styleClass="feature-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(99, 88, 255, 0.1);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2 M9 7a4 4 0 100-8 4 4 0 000 8z" fill="#6358ff" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #6358ff;" text="Study Groups" />
+                                            </children>
+                                        </HBox>
+                                        <Label styleClass="feature-card-description" text="Form or join study groups with classmates. Share notes, discuss concepts, and prepare for exams together in a dedicated space." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="15.0" styleClass="feature-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(46, 204, 113, 0.1);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#2ecc71" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #6358ff;" text="Peer Mentoring" />
+                                            </children>
+                                        </HBox>
+                                        <Label styleClass="feature-card-description" text="Connect with senior students who can provide guidance and share their valuable experience." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="15.0" styleClass="feature-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(230, 126, 34, 0.1);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 14h-2v-4h-3l4-4 4 4h-3z" fill="#e67e22" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #6358ff;" text="Project Teams" />
+                                            </children>
+                                        </HBox>
+                                        <Label styleClass="feature-card-description" text="Collaborate on group projects with integrated tools for task management and communication." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="15.0" styleClass="feature-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                            <children>
+                                                <HBox styleClass="feature-icon-container" style="-fx-background-color: rgba(231, 76, 60, 0.1);">
+                                                    <children>
+                                                        <StackPane>
+                                                            <children>
+                                                                <SVGPath content="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" fill="#e74c3c" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </HBox>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #6358ff;" text="Discussion Forums" />
+                                            </children>
+                                        </HBox>
+                                        <Label styleClass="feature-card-description" text="Participate in subject-specific forums to ask questions and share insights." wrapText="true" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+
+                <!-- Premium Footer -->
+                <VBox styleClass="footer-container">
+                    <children>
+                        <!-- Wavy Divider -->
+                        <SVGPath content="M0,40 C300,-20 900,100 1200,40 L1200,100 L0,100 Z" styleClass="footer-divider-top" />
+                        
+                        <HBox alignment="TOP_CENTER" styleClass="footer-content">
+                            <children>
+                                <!-- Brand Column -->
+                                <VBox prefWidth="300.0" spacing="20.0" styleClass="footer-brand" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                            <children>
+                                                <StackPane styleClass="footer-logo-box">
+                                                    <children>
+                                                        <SVGPath content="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="white" scaleX="1.2" scaleY="1.2" />
+                                                    </children>
+                                                </StackPane>
+                                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" text="InnoLearn" />
+                                            </children>
+                                        </HBox>
+                                        <Label styleClass="footer-tagline" text="Revolutionizing education through organic design and project-based learning. Join 10k+ students today." wrapText="true" />
+                                        <HBox spacing="15.0">
+                                            <children>
+                                                <StackPane styleClass="social-btn">
+                                                    <children>
+                                                        <SVGPath content="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" fill="white" />
+                                                    </children>
+                                                </StackPane>
+                                                <StackPane styleClass="social-btn">
+                                                    <children>
+                                                        <SVGPath content="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" fill="white" />
+                                                    </children>
+                                                </StackPane>
+                                                <StackPane styleClass="social-btn">
+                                                    <children>
+                                                        <SVGPath content="M16 3c-1.3 0-1.7.02-2.3.05a5 5 0 00-3.4 3.4c-.03.6-.05 1-.05 2.3s.02 1.7.05 2.3a5 5 0 003.4 3.4c.6.03 1 .05 2.3.05s1.7-.02 2.3-.05a5 5 0 003.4-3.4c.03-.6.05-1 .05-2.3s-.02-1.7-.05-2.3a5 5 0 00-3.4-3.4C17.7 3.02 17.3 3 16 3zm0 2.3a3.6 3.6 0 013.7 3.7c0 1.2 0 1.5-.03 2a2.8 2.8 0 01-1.9 1.9c-.5.03-.8.03-2 .03s-1.5 0-2-.03a2.8 2.8 0 01-1.9-1.9c-.03-.5-.03-.8-.03-2s0-1.5.03-2a2.8 2.8 0 011.9-1.9c.5-.03.8-.03 2-.03z" fill="white" />
+                                                    </children>
+                                                </StackPane>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                
+                                <Region HBox.hgrow="ALWAYS" />
+                                
+                                <!-- Link Columns -->
+                                <VBox minWidth="150.0" spacing="10.0">
+                                    <children>
+                                        <Label styleClass="footer-column-title" text="Ressources" />
+                                        <Label styleClass="footer-link" text="Cours en ligne" />
+                                        <Label styleClass="footer-link" text="Projets étudiants" />
+                                        <Label styleClass="footer-link" text="Documentation" />
+                                        <Label styleClass="footer-link" text="Forum" />
+                                    </children>
+                                </VBox>
+                                
+                                <Region minWidth="80.0" />
+                                
+                                <VBox minWidth="150.0" spacing="10.0">
+                                    <children>
+                                        <Label styleClass="footer-column-title" text="InnoLearn" />
+                                        <Label styleClass="footer-link" text="À propos" />
+                                        <Label styleClass="footer-link" text="Blog" />
+                                        <Label styleClass="footer-link" text="Carrières" />
+                                        <Label styleClass="footer-link" text="Partenaires" />
+                                    </children>
+                                </VBox>
+                                
+                                <Region minWidth="80.0" />
+                                
+                                <!-- Newsletter Column -->
+                                <VBox minWidth="300.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="footer-column-title" text="Stay Inspired" />
+                                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 14px;" text="Subscribe to our newsletter for latest updates." />
+                                        <HBox styleClass="newsletter-box">
+                                            <children>
+                                                <TextField promptText="Your email here..." styleClass="newsletter-input" HBox.hgrow="ALWAYS" />
+                                                <Button styleClass="newsletter-btn">
+                                                    <graphic>
+                                                        <SVGPath content="M22 2L11 13 M22 2l-7 20-4-9-9-4 20-7z" fill="white" scaleX="0.8" scaleY="0.8" />
+                                                    </graphic>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        
+                        <!-- Bottom Bar -->
+                        <VBox styleClass="footer-bottom-bar">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 13px;" text="© 2026 InnoLearn. Designed with ♥ for students worldwide." />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <HBox spacing="20.0">
+                                            <children>
+                                                <Label styleClass="legal-link" text="Vie privée" />
+                                                <Label styleClass="legal-link" text="Conditions" />
+                                                <Label styleClass="legal-link" text="Cookies" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

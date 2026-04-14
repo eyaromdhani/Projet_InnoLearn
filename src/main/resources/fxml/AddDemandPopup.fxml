@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox spacing="20.0"
+      style="-fx-background-color: white; -fx-background-radius: 22px; -fx-effect: dropshadow(three-pass-box, rgba(99,88,255,0.13), 28, 0, 0, 10);"
+      xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controllers.AddDemandPopupController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
+    </padding>
+    <children>
+
+        <!-- ═══ HEADER ═══ -->
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <children>
+                <StackPane styleClass="form-header-icon-box">
+                    <children>
+                        <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="white" scaleX="1.1" scaleY="1.1" />
+                    </children>
+                </StackPane>
+                <VBox spacing="2.0">
+                    <children>
+                        <Label style="-fx-font-size: 21px; -fx-font-weight: 900; -fx-text-fill: #1a1a3d;" text="Nouvelle Demande" />
+                        <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" text="Publiez votre profil pour attirer les recruteurs" />
+                    </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleCancel" styleClass="btn-close-circle">
+                    <graphic>
+                        <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#7f8c8d" />
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+
+        <Separator opacity="0.4" />
+
+        <!-- ═══ FORMULAIRE ═══ -->
+        <VBox spacing="16.0">
+            <children>
+
+                <!-- TITRE -->
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="5.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 12px;" text="TITRE DE LA DEMANDE" />
+                                <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                            </children>
+                        </HBox>
+                        <TextField fx:id="txtTitle" promptText="Ex: Étudiant Fullstack cherchant un stage de fin d'études" styleClass="profile-input" />
+                        <Label fx:id="errTitle" styleClass="error-label" text="⚠ Titre requis (min. 10 caractères)." managed="false" visible="false" />
+                    </children>
+                </VBox>
+
+                <!-- DOMAINE -->
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="5.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 12px;" text="DOMAINE D'EXPERTISE" />
+                                <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="*" />
+                            </children>
+                        </HBox>
+                        <TextField fx:id="txtDomain" promptText="Ex: Informatique / Design / Marketing" styleClass="profile-input" />
+                        <Label fx:id="errDomain" styleClass="error-label" text="⚠ Domaine requis (min. 3 caractères)." managed="false" visible="false" />
+                    </children>
+                </VBox>
+
+                <!-- COMPÉTENCES -->
+                <VBox spacing="5.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 12px;" text="COMPÉTENCES PRINCIPALES" />
+                        <TextField fx:id="txtCompetences" promptText="Ex: Java, React, Python, SQL..." styleClass="profile-input" />
+                    </children>
+                </VBox>
+
+                <!-- DESCRIPTION + compteur -->
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 12px;" text="PRÉSENTATION DU PROFIL" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="charCounter" styleClass="char-counter-label" text="0 / 500" />
+                            </children>
+                        </HBox>
+                        <TextArea fx:id="txtDescription" prefHeight="80.0"
+                                  promptText="Décrivez vos objectifs, votre parcours et ce que vous recherchez..."
+                                  styleClass="profile-textarea" wrapText="true" />
+                        <Label fx:id="errDescription" styleClass="error-label" text="⚠ Description trop longue (max. 500 caractères)." managed="false" visible="false" />
+                    </children>
+                </VBox>
+
+                <!-- LETTRE DE MOTIVATION -->
+                <VBox spacing="5.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 12px;" text="LETTRE DE MOTIVATION" />
+                        <TextArea fx:id="txtMotivation" prefHeight="80.0"
+                                  promptText="Décrivez brièvement pourquoi vous recherchez ce type de stage..."
+                                  styleClass="profile-textarea" wrapText="true" />
+                    </children>
+                </VBox>
+
+                <!-- CV UPLOAD -->
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 12px;" text="CURRICULUM VITAE (CV)" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblCVName" style="-fx-text-fill: #7f8c8d; -fx-font-style: italic;" text="Aucun fichier sélectionné" />
+                        <Button mnemonicParsing="false" onAction="#handleUploadCV" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-background-radius: 10px; -fx-font-size: 12px; -fx-cursor: hand;" text="Importer PDF" />
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+
+        <!-- ═══ ACTIONS ═══ -->
+        <VBox spacing="10.0">
+            <children>
+                <Button onAction="#handlePublish" styleClass="btn-form-submit" text="Publier la demande" maxWidth="Infinity" />
+                <Button onAction="#handleCancel" styleClass="btn-form-cancel" text="Annuler" maxWidth="Infinity" />
+            </children>
+        </VBox>
+
+    </children>
+</VBox>

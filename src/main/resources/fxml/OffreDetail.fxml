@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.image.ImageView?>
+
+<ScrollPane fitToWidth="true" styleClass="main-scroll-pane" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.OffreDetailController">
+    <content>
+        <VBox spacing="40.0" styleClass="offre-detail-vbox">
+            <padding>
+                <Insets bottom="60.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
+            <children>
+                <!-- TOP HEADER -->
+                <VBox spacing="15.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <children>
+                                <Label text="Validation" style="-fx-text-fill: #95a5a6; -fx-font-size: 13px;" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleBack" styleClass="btn-close-circle">
+                                    <graphic>
+                                        <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#7f8c8d" />
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </HBox>
+                        
+                        <Label fx:id="lblTitle" styleClass="detail-redesign-title" text="Validation 1.0" />
+                        
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <HBox alignment="CENTER" spacing="8.0" styleClass="detail-redesign-badge">
+                                    <children>
+                                        <SVGPath content="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm14 12h-8v-2h8v2zm0-4h-8v-2h8v2zm0-4h-8V9h8v2z" fill="#6358ff" scaleX="0.8" scaleY="0.8" />
+                                        <Label fx:id="lblCompany" text="Validation" style="-fx-text-fill: #6358ff; -fx-font-weight: bold; -fx-font-size: 13px;" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <!-- METADATA BAR -->
+                <HBox alignment="CENTER_LEFT" spacing="30.0" styleClass="detail-meta-bar">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <SVGPath content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="#6358ff" scaleX="0.8" scaleY="0.8" />
+                                <Label fx:id="lblDomaine" text="Domaine" styleClass="detail-meta-value" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <SVGPath content="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" fill="#6358ff" scaleX="0.8" scaleY="0.8" />
+                                <Label fx:id="lblLieu" text="Validation" styleClass="detail-meta-value" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <SVGPath content="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#6358ff" scaleX="0.8" scaleY="0.8" />
+                                <Label fx:id="lblDuree" text="Durée: 4 mois" styleClass="detail-meta-value" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <SVGPath content="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" fill="#6358ff" scaleX="0.8" scaleY="0.8" />
+                                <Label fx:id="lblDate" text="Publié le 12/02/2026" styleClass="detail-meta-value" />
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
+                    </padding>
+                </HBox>
+
+                <!-- DESCRIPTION DU POSTE -->
+                <VBox spacing="15.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <children>
+                                <SVGPath content="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="#6358ff" scaleX="1.2" scaleY="1.2" />
+                                <Label styleClass="detail-redesign-section-title" text="Description du Poste" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="lblDescription" styleClass="detail-redesign-desc-text" text="Validation..." wrapText="true" />
+                    </children>
+                </VBox>
+
+                <!-- COMPÉTENCES REQUISES -->
+                <VBox spacing="15.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <children>
+                                <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.82v-1.91c-.06-.02-.13-.05-.19-.08-1.27-.64-2.22-1.85-2.58-3.23h1.96c.32.78.93 1.41 1.7 1.73.18.08.37.13.56.16V13.5l-3.32-3.32c-.17-.17-.26-.4-.26-.64 0-.49.4-.89.89-.89.24 0 .47.09.64.26L12 11.12V8h1.41v3.12l1.32-1.32c.17-.17.4-.26.64-.26.49 0 .89.4.89.89 0 .24-.09.47-.26.64L12.68 14.39c.19-.03.38-.08.56-.16.77-.32 1.38-.95 1.7-1.73h1.96c-.36 1.38-1.31 2.59-2.58 3.23-.06.03-.13.06-.19.08v2.28h-1.41v-1.91c-.06-.02-.13-.05-.19-.08-.34-.17-.63-.42-.85-.72l.85-.85c.12.18.29.32.49.42.12.06.25.09.38.1l.01.01z" fill="#6358ff" scaleX="1.2" scaleY="1.2" />
+                                <Label styleClass="detail-redesign-section-title" text="Compétences Requises" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="lblCompetences" styleClass="detail-redesign-desc-text" text="Java, JavaFX, MySQL..." wrapText="true" />
+                    </children>
+                </VBox>
+
+                <!-- SPACE BEFORE APPLY -->
+                <Region prefHeight="40.0" />
+
+                <!-- POSTULER SECTION -->
+                <VBox fx:id="applySection" alignment="CENTER" spacing="40.0" styleClass="detail-apply-container">
+                    <padding>
+                        <Insets bottom="50.0" left="60.0" right="60.0" top="50.0" />
+                    </padding>
+                    <children>
+                        <Label styleClass="detail-apply-main-title" text="Postuler à cette offre" />
+                        
+                        <VBox spacing="25.0" maxWidth="800.0">
+                            <children>
+                                <VBox spacing="10.0">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="TITRE DE LA DEMANDE *" />
+                                        <TextField fx:id="txtApplyTitle" promptText="Candidature: Titre de l'offre" styleClass="profile-input" />
+                                    </children>
+                                </VBox>
+                                
+                                <GridPane hgap="25.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50.0" />
+                                        <ColumnConstraints percentWidth="50.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <VBox spacing="10.0">
+                                            <children>
+                                                <Label styleClass="profile-input-label" text="DOMAINE *" />
+                                                <TextField fx:id="txtApplyDomain" promptText="Domaine de l'offre" styleClass="profile-input" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="10.0" GridPane.columnIndex="1">
+                                            <children>
+                                                <Label styleClass="profile-input-label" text="COMPÉTENCES *" />
+                                                <TextField fx:id="txtApplyCompetences" promptText="Vos compétences..." styleClass="profile-input" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </GridPane>
+                                
+                                <VBox spacing="10.0">
+                                    <children>
+                                        <Label styleClass="profile-input-label" text="DESCRIPTION DE VOTRE PROFIL *" />
+                                        <TextArea fx:id="txtApplyProfileDesc" prefHeight="100.0" promptText="Présentez brièvement votre profil..." styleClass="profile-textarea" wrapText="true" />
+                                    </children>
+                                </VBox>
+                                
+                                <GridPane hgap="25.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50.0" />
+                                        <ColumnConstraints percentWidth="50.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <VBox spacing="10.0">
+                                            <children>
+                                                <Label styleClass="profile-input-label" text="CV (FICHIER PDF) *" />
+                                                <VBox fx:id="boxUploadCV" alignment="CENTER" onMouseClicked="#handleUploadCV" spacing="10.0" styleClass="cv-upload-placeholder">
+                                                    <children>
+                                                        <HBox alignment="CENTER" spacing="15.0">
+                                                            <children>
+                                                                <StackPane styleClass="cv-mini-icon-container">
+                                                                    <children>
+                                                                        <SVGPath content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" fill="white" scaleX="0.8" scaleY="0.8" />
+                                                                    </children>
+                                                                </StackPane>
+                                                                <VBox alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <Label text="Choisir un PDF" style="-fx-font-weight: bold; -fx-text-fill: #1a1a3d; -fx-font-size: 13px;" />
+                                                                        <Label fx:id="lblCVName" text="Max 5 Mo" style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;" />
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                    <padding>
+                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                    </padding>
+                                                </VBox>
+                                            </children>
+                                        </VBox>
+                                        
+                                        <VBox spacing="10.0" GridPane.columnIndex="1">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                    <children>
+                                                        <Label styleClass="profile-input-label" text="LETTRE DE MOTIVATION *" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label styleClass="badge-ia" text="✦ Aide IA" />
+                                                    </children>
+                                                </HBox>
+                                                <TextArea fx:id="txtApplyMotivation" prefHeight="82.0" promptText="Votre motivation..." styleClass="profile-textarea" wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </GridPane>
+                                
+                                <Button fx:id="btnApply" maxWidth="1.7976931348623157E308" onAction="#handleApply" styleClass="btn-redesign-submit" text="Envoyer ma candidature" />
+                                
+                                <Label text="En postulant, votre profil complet sera partagé avec Validation." style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;" alignment="CENTER" maxWidth="1.7976931348623157E308" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>
