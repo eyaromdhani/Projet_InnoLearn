@@ -10,7 +10,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Formulaire;
 import models.Question;
+import services.GroqService;
 import services.ServiceQuestion;
+import javafx.application.Platform;
+import java.util.ArrayList;
+
+import utils.AlertUtils;
+import utils.ValidationUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -46,15 +52,39 @@ public class ManageQuestionsController {
 
     @FXML
     private VBox listContainer;
+    @FXML
+    private Label lblCharCount;
+    @FXML
+    private TextArea taAIContext;
+    @FXML
+    private ProgressIndicator aiLoader;
+    @FXML
+    private Button btnGenerateAI;
+    @FXML
+    private VBox aiPreviewContainer;
+    @FXML
+    private VBox aiDraftsList;
 
     private Formulaire currentQuiz;
     private Question editingQuestion = null;
     private ServiceQuestion serviceQuestion = new ServiceQuestion();
+    private GroqService groqService = new GroqService();
 
     @FXML
     public void initialize() {
         cbType.getItems().addAll("Choix Multiple", "Vrai/Faux", "Texte");
         cbType.getSelectionModel().selectFirst();
+
+        // Professional Touch: Character count listener
+        taAIContext.textProperty().addListener((observable, oldValue, newValue) -> {
+            int count = newValue != null ? newValue.length() : 0;
+            lblCharCount.setText(count + " caractères");
+            if (count > 2000) {
+                lblCharCount.setStyle("-fx-text-fill: #dc2626;");
+            } else {
+                lblCharCount.setStyle("-fx-text-fill: #94A3B8;");
+            }
+        });
     }
 
     public void initData(Formulaire f) {
@@ -66,7 +96,7 @@ public class ManageQuestionsController {
     }
 
     public void reloadQuestions() {
-        listContainer.getChildren().clear();
+            listContainer.getChildren().clear();
         try {
             List<Question> questions = serviceQuestion.getQuestionsByFormulaire(currentQuiz.getId());
             lblQuestionCount.setText("❓ " + questions.size() + " questions");
@@ -88,29 +118,45 @@ public class ManageQuestionsController {
 
     @FXML
     private void handleEnregistrer() {
+        // Reset styles
+        ValidationUtils.clearErrorStyle(tfQuestionText);
+        ValidationUtils.clearErrorStyle(tfPoints);
+        ValidationUtils.clearErrorStyle(tfCorrectAnswer);
+
         String text = tfQuestionText.getText();
         String type = cbType.getValue();
         String pointsStr = tfPoints.getText();
         String answer = tfCorrectAnswer.getText();
 
-        if (text.isEmpty() || pointsStr.isEmpty() || answer.isEmpty()) {
-            showAlert("Erreur", "Veuillez remplir tous les champs.");
+        // Validation Question Text
+        if (!ValidationUtils.isValidLength(text, 5, 1000)) {
+            ValidationUtils.setErrorStyle(tfQuestionText);
+            AlertUtils.showError("Validation échouée", "Le texte de la question doit contenir entre 5 et 1000 caractères.");
             return;
         }
 
-        int points;
-        try {
-            points = Integer.parseInt(pointsStr);
-        } catch (NumberFormatException e) {
-            showAlert("Erreur", "Les points doivent être un nombre entier.");
+        // Validation Points
+        if (!ValidationUtils.isPositive(pointsStr)) {
+            ValidationUtils.setErrorStyle(tfPoints);
+            AlertUtils.showError("Validation échouée", "Les points doivent être un nombre entier positif.");
             return;
         }
+
+        // Validation Answer
+        if (ValidationUtils.isEmpty(answer)) {
+            ValidationUtils.setErrorStyle(tfCorrectAnswer);
+            AlertUtils.showError("Validation échouée", "La réponse correcte est obligatoire.");
+            return;
+        }
+
+        int points = Integer.parseInt(pointsStr);
 
         try {
             if (editingQuestion == null) {
                 // Ajouter
                 Question q = new Question(text, answer, points, type, currentQuiz.getId());
                 serviceQuestion.ajouter(q);
+                AlertUtils.showInfo("Succès", "Question ajoutée !");
             } else {
                 // Modifier
                 editingQuestion.setQuestionText(text);
@@ -118,6 +164,7 @@ public class ManageQuestionsController {
                 editingQuestion.setPoints(points);
                 editingQuestion.setType(type);
                 serviceQuestion.modifier(editingQuestion);
+                AlertUtils.showInfo("Succès", "Question modifiée !");
             }
 
             handleCancelEdit(); // Reset form
@@ -125,7 +172,7 @@ public class ManageQuestionsController {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur DB", "Impossible d'enregistrer: " + e.getMessage());
+            AlertUtils.showError("Erreur SQL", "Impossible d'enregistrer la question: " + e.getMessage());
         }
     }
 
@@ -158,6 +205,10 @@ public class ManageQuestionsController {
         cbType.getSelectionModel().selectFirst();
         tfPoints.clear();
         tfCorrectAnswer.clear();
+        
+        ValidationUtils.clearErrorStyle(tfQuestionText);
+        ValidationUtils.clearErrorStyle(tfPoints);
+        ValidationUtils.clearErrorStyle(tfCorrectAnswer);
     }
 
     @FXML
@@ -171,11 +222,77 @@ public class ManageQuestionsController {
         }
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
+    @FXML
+    private void handleGenerateAI() {
+        String context = taAIContext.getText();
+        if (context == null || context.trim().isEmpty()) {
+            AlertUtils.showError("Erreur AI", "Veuillez saisir un texte source (résumé, cours...) pour générer des questions.");
+            return;
+        }
+
+        aiLoader.setVisible(true);
+        aiLoader.setManaged(true);
+        btnGenerateAI.setDisable(true);
+        aiPreviewContainer.setVisible(false);
+        aiPreviewContainer.setManaged(false);
+        aiDraftsList.getChildren().clear();
+
+        groqService.generateQuestions(context, currentQuiz.getId())
+                .thenAccept(questions -> {
+                    Platform.runLater(() -> {
+                        try {
+                            int index = 1;
+                            for (Question q : questions) {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/GeneratePreviewItem.fxml"));
+                                VBox item = loader.load();
+                                GeneratePreviewItemController controller = loader.getController();
+                                controller.setData(q, index++, this);
+                                aiDraftsList.getChildren().add(item);
+                            }
+                            aiPreviewContainer.setVisible(true);
+                            aiPreviewContainer.setManaged(true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            AlertUtils.showError("Erreur UI", "Impossible de charger l'aperçu des questions.");
+                        } finally {
+                            aiLoader.setVisible(false);
+                            aiLoader.setManaged(false);
+                            btnGenerateAI.setDisable(false);
+                        }
+                    });
+                })
+                .exceptionally(ex -> {
+                    Platform.runLater(() -> {
+                        aiLoader.setVisible(false);
+                        aiLoader.setManaged(false);
+                        btnGenerateAI.setDisable(false);
+                        AlertUtils.showError("Erreur AI", "La génération a échoué: " + ex.getMessage());
+                    });
+                    return null;
+                });
+    }
+
+    public void addQuestionFromAI(Question q) {
+        try {
+            serviceQuestion.ajouter(q);
+            AlertUtils.showInfo("Succès AI", "Question ajoutée avec succès !");
+            reloadQuestions();
+            
+            // Remove the card from preview once added
+            aiDraftsList.getChildren().removeIf(node -> {
+                VBox card = (VBox) node;
+                // Simple check if this card contains the text of the added question
+                // (In a real app, we might use a more robust way to match)
+                return card.toString().contains(q.getQuestionText());
+            });
+
+            if (aiDraftsList.getChildren().isEmpty()) {
+                aiPreviewContainer.setVisible(false);
+                aiPreviewContainer.setManaged(false);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            AlertUtils.showError("Erreur SQL", "Impossible d'ajouter la question: " + e.getMessage());
+        }
     }
 }

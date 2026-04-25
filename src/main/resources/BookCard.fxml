@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.BookCardController"
+      styleClass="quiz-card"
+      prefWidth="220" spacing="10">
+    
+    <StackPane prefHeight="120" style="-fx-background-color: linear-gradient(to bottom right, #6366F1, #8B5CF6); -fx-background-radius: 15 15 0 0;">
+        <Label text="📚" style="-fx-font-size: 50px;"/>
+        <Label fx:id="typeBadge" text="LIVRE" styleClass="badge-type" StackPane.alignment="TOP_RIGHT">
+            <StackPane.margin><Insets top="10" right="10"/></StackPane.margin>
+        </Label>
+    </StackPane>
+
+    <VBox spacing="5" style="-fx-padding: 0 15 15 15;">
+        <Label fx:id="titleLabel" text="Titre du Livre" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" wrapText="true"/>
+        <Label fx:id="authorLabel" text="Par Auteur" styleClass="text-subtitle" />
+        
+        <Region prefHeight="10" />
+
+        <HBox spacing="8" alignment="CENTER">
+            <Button text="Éditer" styleClass="button-modify" onAction="#handleEdit" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button text="Suppr." styleClass="button-delete" onAction="#handleDelete" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+        </HBox>
+    </VBox>
+</VBox>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.web.WebView?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.BookDetailsController"
+      stylesheets="@modern_style.css"
+      styleClass="main-bg"
+      prefHeight="800.0" prefWidth="1200.0" spacing="0">
+
+    <!-- Top Bar Navigation (Minimal) -->
+    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white; -fx-padding: 10 40;">
+        <Button text="← Retour" onAction="#handleBack" styleClass="button-secondary" style="-fx-font-size: 14px;"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Détails du Livre" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+    </HBox>
+
+    <StackPane VBox.vgrow="ALWAYS">
+        <!-- Purple Hero Background -->
+        <VBox style="-fx-background-color: #5544D7;" prefHeight="350" maxHeight="350" StackPane.alignment="TOP_CENTER">
+            <VBox spacing="10" style="-fx-padding: 60 100;">
+                <Label fx:id="titleLabel" text="Book Title" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Auteur:" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Label fx:id="authorLabel" text="Author" style="-fx-text-fill: white; -fx-font-size: 16px;"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Date:" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Label fx:id="yearLabel" text="2024" style="-fx-text-fill: white; -fx-font-size: 16px;"/>
+                    </HBox>
+                </HBox>
+            </VBox>
+        </VBox>
+        
+        <!-- Large White Icon on Right of Hero -->
+        <VBox alignment="TOP_RIGHT" style="-fx-padding: 60 100 0 0;" pickOnBounds="false">
+             <Label text="📖" style="-fx-font-size: 120px; -fx-text-fill: white; -fx-opacity: 0.8;"/>
+        </VBox>
+
+        <!-- Main Content Card -->
+        <VBox style="-fx-padding: 220 100 40 100;" pickOnBounds="false">
+            <HBox spacing="0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 10);" VBox.vgrow="ALWAYS">
+                
+                <!-- Left: Preview Zone -->
+                <VBox fx:id="previewZone" alignment="CENTER" prefWidth="600" style="-fx-background-color: #E2E8F0; -fx-background-radius: 25 0 0 25;">
+                    <StackPane VBox.vgrow="ALWAYS" style="-fx-background-radius: 25 0 0 25;">
+                        <ScrollPane fx:id="pdfScrollPane" visible="false" fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+                             <VBox fx:id="pdfPagesContainer" alignment="TOP_CENTER" spacing="10"/>
+                        </ScrollPane>
+                        
+                        <VBox fx:id="fallbackView" alignment="CENTER" spacing="15">
+                            <Label text="📄" style="-fx-font-size: 80px; -fx-opacity: 0.2;"/>
+                            <Label text="Chargement du contenu..." style="-fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                            <Button text="Ouvrir Externe" onAction="#handleOpenExternal" styleClass="button-secondary"/>
+                        </VBox>
+                    </StackPane>
+                </VBox>
+
+                <!-- Right: Information & AI -->
+                <VBox spacing="25" HBox.hgrow="ALWAYS" style="-fx-padding: 40;">
+                    <VBox spacing="10">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Description" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        </HBox>
+                        <Label fx:id="descLabel" text="Just a book description..." wrapText="true" style="-fx-font-size: 15px; -fx-text-fill: #64748B; -fx-line-spacing: 5;"/>
+                    </VBox>
+
+                    <Region VBox.vgrow="ALWAYS" />
+
+                    <VBox spacing="15">
+                        <Button text="Analyse IA &amp; Lecture" onAction="#handleAIAnalysis" styleClass="button-primary" maxWidth="Infinity" 
+                                style="-fx-background-color: linear-gradient(to right, #F59E0B, #EA580C); -fx-padding: 15; -fx-font-size: 16px; -fx-background-radius: 12;"/>
+                        
+                        <HBox spacing="10">
+                            <Button text="Version Vocale (AI)" onAction="#handleVoice" styleClass="button-secondary" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-padding: 12;"/>
+                            <Button fx:id="stopButton" text="Arrêter" onAction="#handleStopVoice" visible="false" styleClass="button-secondary" style="-fx-padding: 12; -fx-background-color: #EF4444; -fx-text-fill: white;"/>
+                            <Button text="Générer Résumé" onAction="#handleSummary" styleClass="button-secondary" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-padding: 12;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </StackPane>
+</VBox>

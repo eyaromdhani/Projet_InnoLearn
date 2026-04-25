@@ -8,7 +8,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.StudentDashboardController"
+      fx:controller="controllers.ManageBooksController"
       stylesheets="@modern_style.css"
       styleClass="main-bg"
       prefHeight="800.0" prefWidth="1200.0">
@@ -18,16 +18,15 @@
         <Label text="InnoLearn" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #6366F1;"/>
         
         <HBox alignment="CENTER" spacing="20">
-            <Hyperlink text="Cours" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
-            <Hyperlink text="Bibliothèque" style="-fx-text-fill: #64748B; -fx-underline: false;" onAction="#handleGoToLibrary"/>
-            <Hyperlink text="Quiz" style="-fx-text-fill: #6366F1; -fx-underline: true; -fx-font-weight: bold;"/>
-            <Hyperlink text="Mes Progrès" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
+            <Hyperlink text="Dashboard" style="-fx-text-fill: #64748B; -fx-underline: false;" onAction="#handleGoBack"/>
+            <Hyperlink text="Quiz" style="-fx-text-fill: #64748B; -fx-underline: false;" onAction="#handleGoToQuiz"/>
+            <Hyperlink text="Bibliothèque" style="-fx-text-fill: #6366F1; -fx-underline: true; -fx-font-weight: bold;"/>
         </HBox>
         
         <Region HBox.hgrow="ALWAYS" />
         
         <HBox alignment="CENTER" spacing="15">
-            <Label text="Espace Étudiant" style="-fx-text-fill: #6366F1; -fx-font-weight: bold;"/>
+            <Label text="Espace Enseignant" style="-fx-text-fill: #6366F1; -fx-font-weight: bold;"/>
             <Circle radius="15" fill="#E2E8F0"/>
         </HBox>
     </HBox>
@@ -36,22 +35,22 @@
         <VBox spacing="0">
             <!-- Hero Section -->
             <VBox spacing="15" styleClass="hero-gradient" style="-fx-padding: 60 100;">
-                <Label text="BIENVENUE" style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-padding: 5 15; -fx-background-radius: 20; -fx-font-size: 12px;"/>
-                <Label text="Découvrez et" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                <Label text="Testez Vos Connaissances" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #FECACA;"/>
+                <Label text="BIBLIOTHÈQUE" style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-padding: 5 15; -fx-background-radius: 20; -fx-font-size: 12px;"/>
+                <Label text="Gérez vos" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label text="Ressources &amp; Livres" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #DBEAFE;"/>
                 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="searchField" promptText="Rechercher un quiz..." styleClass="text-field-custom" prefWidth="400"/>
+                <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 20 0 0 0;">
+                    <TextField fx:id="searchField" promptText="Rechercher un livre..." styleClass="text-field-custom" prefWidth="350"/>
+                    <Button text="Ajouter un Livre" styleClass="button-primary" onAction="#handleAddBook"/>
                 </HBox>
             </VBox>
 
             <!-- Grid Section -->
             <VBox spacing="30" style="-fx-padding: 40 100;">
-                <FlowPane fx:id="quizGrid" hgap="30" vgap="30" alignment="CENTER_LEFT">
+                <FlowPane fx:id="booksGrid" hgap="30" vgap="40" alignment="CENTER_LEFT">
                     <!-- Cards will be injected here -->
                 </FlowPane>
             </VBox>
         </VBox>
     </ScrollPane>
-
 </VBox>

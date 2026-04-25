@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.QuizResultViewController"
+      stylesheets="@modern_style.css"
+      styleClass="main-bg"
+      prefHeight="800.0" prefWidth="1200.0">
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+        <VBox alignment="TOP_CENTER" spacing="30" style="-fx-padding: 50 100;">
+            
+            <!-- Main Result Card (Symfony Style) -->
+            <VBox alignment="CENTER" spacing="25" style="-fx-background-color: white; -fx-background-radius: 30; -fx-padding: 50; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 30, 0, 0, 15);" maxWidth="800">
+                
+                <Label fx:id="statusBadge" text="RÉUSSI !" styleClass="status-badge" style="-fx-padding: 8 25; -fx-background-radius: 50;"/>
+                
+                <StackPane>
+                    <Circle fx:id="scoreCircle" radius="90" fill="white" stroke="#dcfce7" strokeWidth="10"/>
+                    <VBox alignment="CENTER">
+                        <Label fx:id="scoreLabel" text="15" style="-fx-font-size: 56px; -fx-font-weight: 800; -fx-text-fill: #10B981; -fx-line-spacing: -10;"/>
+                        <Label fx:id="totalLabel" text="sur 20" style="-fx-font-size: 16px; -fx-text-fill: #64748B; -fx-font-weight: 600;"/>
+                    </VBox>
+                </StackPane>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Label fx:id="feedbackTitle" text="Bon travail !" style="-fx-font-size: 28px; -fx-font-weight: 800; -fx-text-fill: #1E293B;"/>
+                    <Label fx:id="quizTitleLabel" text="Vous avez complété le quiz Java" style="-fx-font-size: 16px; -fx-text-fill: #64748B;"/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Retour aux Quiz" onAction="#handleBackToDashboard" styleClass="btn-primary-custom" prefHeight="50" prefWidth="200"/>
+                    <Button text="Télécharger PDF" onAction="#handleDownloadPDF" style="-fx-background-color: #10B981;" styleClass="btn-primary-custom" prefHeight="50" prefWidth="200"/>
+                </HBox>
+            </VBox>
+
+            <!-- Detailed Breakdown Section -->
+            <VBox spacing="20" maxWidth="800">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="📋" style="-fx-font-size: 24px;"/>
+                    <Label text="Détails des Réponses" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                </HBox>
+                
+                <VBox fx:id="detailsContainer" spacing="15">
+                    <!-- Breakdown cards injected here -->
+                </VBox>
+            </VBox>
+            
+        </VBox>
+    </ScrollPane>
+
+</VBox>

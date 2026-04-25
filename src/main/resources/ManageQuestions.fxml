@@ -86,6 +86,65 @@
                 </HBox>
             </VBox>
 
+            <!-- INTELLIGENT GENERATOR (AI SECTION) -->
+            <VBox maxWidth="900" spacing="25" alignment="TOP_CENTER">
+                
+                <!-- AI Header -->
+                <VBox alignment="CENTER" spacing="10">
+                    <HBox alignment="CENTER" spacing="15">
+                        <Label text="🧠" style="-fx-font-size: 32px;"/>
+                        <Label text="Générateur Intelligent" styleClass="ai-header-title"/>
+                        <Label text="TECH AI v2.0" styleClass="ai-badge-tech"/>
+                    </HBox>
+                    <Label text="Transformez vos cours en questions en un clic" styleClass="text-subtitle"/>
+                </VBox>
+
+                <!-- Reference Content Card (Screenshot 1) -->
+                <VBox styleClass="ai-container-premium" spacing="20" style="-fx-padding: 30;">
+                    <HBox alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                            <Label text="📄" style="-fx-font-size: 16px;"/>
+                            <Label text="Contenu de référence" styleClass="ai-input-label"/>
+                        </HBox>
+                        <Label fx:id="lblCharCount" text="0 caractères" styleClass="ai-char-count"/>
+                    </HBox>
+
+                    <TextArea fx:id="taAIContext" 
+                              promptText="Surchargez ici le contenu de votre cours ou une description détaillée..." 
+                              styleClass="text-area-custom" 
+                              prefHeight="200" 
+                              wrapText="true"/>
+                    
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="ℹ️" style="-fx-text-fill: #64748B;"/>
+                        <Label text="Plus votre contenu est détaillé, plus les questions seront précises." style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Button fx:id="btnGenerateAI" 
+                                text="🪄 Analyser et Générer les Questions" 
+                                onAction="#handleGenerateAI" 
+                                styleClass="ai-button-main"/>
+                        <ProgressIndicator fx:id="aiLoader" visible="false" managed="false" prefWidth="30" prefHeight="30"/>
+                    </HBox>
+                </VBox>
+
+                <!-- AI Results Preview (Screenshot 2) -->
+                <VBox fx:id="aiPreviewContainer" spacing="20" visible="false" managed="false" alignment="TOP_CENTER">
+                    <HBox alignment="CENTER_LEFT" style="-fx-padding: 20 0 10 0;">
+                        <HBox alignment="CENTER_LEFT" spacing="15" HBox.hgrow="ALWAYS">
+                            <Label text="✨" style="-fx-font-size: 20px;"/>
+                            <Label text="Questions Suggérées" styleClass="ai-suggestion-header"/>
+                        </HBox>
+                        <Label text="✅ PRÊT À IMPORTER" styleClass="ai-badge-ready"/>
+                    </HBox>
+
+                    <VBox fx:id="aiDraftsList" spacing="20">
+                        <!-- GeneratePreviewItem.fxml items will be injected here -->
+                    </VBox>
+                </VBox>
+            </VBox>
+
             <!-- List Section -->
             <VBox maxWidth="800" spacing="20" style="-fx-padding: 20 0 0 0;">
                 <HBox alignment="CENTER_LEFT" spacing="10">

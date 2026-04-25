@@ -6,6 +6,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import models.Formulaire;
 import services.ServiceFormulaire;
 
@@ -51,6 +54,17 @@ public class StudentDashboardController implements Initializable {
             controller.setQuizData(f);
             
             quizGrid.getChildren().add(card);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGoToLibrary() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/StudentLibrary.fxml"));
+            Stage stage = (Stage) quizGrid.getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }

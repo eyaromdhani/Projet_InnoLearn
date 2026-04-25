@@ -31,23 +31,59 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private ComboBox<String> categoryFilter;
 
+    @FXML
+    private ComboBox<String> sortByCombo;
+
     private ServiceFormulaire serviceFormulaire = new ServiceFormulaire();
+    private List<Formulaire> allQuizzes = new java.util.ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadQuizzes();
         setupFilters();
+        loadQuizzes();
     }
 
     public void loadQuizzes() {
-        quizGrid.getChildren().clear();
         try {
-            List<Formulaire> formulaires = serviceFormulaire.afficher();
-            for (Formulaire f : formulaires) {
-                addQuizCard(f);
-            }
+            allQuizzes = serviceFormulaire.afficher();
+            refreshQuizzes();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void refreshQuizzes() {
+        quizGrid.getChildren().clear();
+        
+        String query = (searchField.getText() == null) ? "" : searchField.getText().toLowerCase();
+        String category = categoryFilter.getValue();
+        String sortBy = sortByCombo.getValue();
+
+        List<Formulaire> filteredList = allQuizzes.stream()
+                .filter(f -> f.getTitre().toLowerCase().contains(query))
+                .filter(f -> category == null || category.equals("Toutes les catégories") || f.getCategory().equals(category))
+                .collect(java.util.stream.Collectors.toList());
+
+        // Sorting logic
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Temps (Moins long)":
+                    filteredList.sort((a, b) -> Integer.compare(a.getTempsLimite(), b.getTempsLimite()));
+                    break;
+                case "Temps (Plus long)":
+                    filteredList.sort((a, b) -> Integer.compare(b.getTempsLimite(), a.getTempsLimite()));
+                    break;
+                case "Nouveautés":
+                    filteredList.sort((a, b) -> Integer.compare(b.getId(), a.getId()));
+                    break;
+                case "Plus anciens":
+                    filteredList.sort((a, b) -> Integer.compare(a.getId(), b.getId()));
+                    break;
+            }
+        }
+
+        for (Formulaire f : filteredList) {
+            addQuizCard(f);
         }
     }
 
@@ -66,24 +102,17 @@ public class AdminDashboardController implements Initializable {
     }
 
     private void setupFilters() {
-        // Add categories from DB or static
         categoryFilter.getItems().addAll("Toutes les catégories", "Réseau", "Sécurité", "Développement", "Cloud");
+        sortByCombo.getItems().addAll("Nouveautés", "Plus anciens", "Temps (Moins long)", "Temps (Plus long)");
         
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterQuizzes(newValue);
-        });
+        searchField.textProperty().addListener((obs, old, val) -> refreshQuizzes());
+        categoryFilter.valueProperty().addListener((obs, old, val) -> refreshQuizzes());
+        sortByCombo.valueProperty().addListener((obs, old, val) -> refreshQuizzes());
     }
 
     private void filterQuizzes(String query) {
-        quizGrid.getChildren().clear();
-        try {
-            List<Formulaire> filtered = serviceFormulaire.rechercherParTitre(query);
-            for (Formulaire f : filtered) {
-                addQuizCard(f);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // Redundant with refreshQuizzes, but keeping for compatibility if needed elsewhere
+        refreshQuizzes();
     }
 
     @FXML
@@ -114,6 +143,17 @@ public class AdminDashboardController implements Initializable {
             Stage stage = (Stage) quizGrid.getScene().getWindow();
             stage.setScene(new Scene(root));
             
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGoToBooks() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/ManageBooks.fxml"));
+            Stage stage = (Stage) quizGrid.getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }

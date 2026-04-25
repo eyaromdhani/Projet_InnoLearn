@@ -1,17 +1,16 @@
-<<<<<<< HEAD
 target/
 !.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+!.mvn/wrapper/MavenWrapperDownloader.java
 !**/src/main/**/target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### Eclipse ###
 .apt_generated
@@ -37,9 +36,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
-=======
 
-###> symfony/framework-bundle ###
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### PROJECT SECRETS ###
+src/main/java/utils/Config.java
+
+### Symfony (for the PHP part if merged) ###
 /.env.local
 /.env.local.php
 /.env.*.local
@@ -47,15 +53,5 @@ build/
 /public/bundles/
 /var/
 /vendor/
-###< symfony/framework-bundle ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-/.phpunit.cache/
-###< phpunit/phpunit ###
-
-###> symfony/asset-mapper ###
-/public/assets/
-/assets/vendor/
-###< symfony/asset-mapper ###
->>>>>>> 6d53dc72986389f53e20148b7cee24ca56707746
+/var/log/
+/var/cache/

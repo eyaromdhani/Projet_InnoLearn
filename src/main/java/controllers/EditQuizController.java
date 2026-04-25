@@ -4,12 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Formulaire;
 import services.ServiceFormulaire;
+import utils.AlertUtils;
+import utils.ValidationUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -46,24 +47,46 @@ public class EditQuizController {
 
     @FXML
     private void handleEnregistrer() {
+        // Reset styles
+        ValidationUtils.clearErrorStyle(tfTitre);
+        ValidationUtils.clearErrorStyle(taDescription);
+        ValidationUtils.clearErrorStyle(tfTempsLimite);
+        ValidationUtils.clearErrorStyle(tfCategory);
+
         String titre = tfTitre.getText();
         String description = taDescription.getText();
         String tempsLimiteStr = tfTempsLimite.getText();
         String category = tfCategory.getText();
 
-        if (titre.isEmpty() || description.isEmpty() || tempsLimiteStr.isEmpty() || category.isEmpty()) {
-            showAlert("Erreur", "Veuillez remplir tous les champs.");
+        // Validation Title
+        if (!ValidationUtils.isValidLength(titre, 3, 100)) {
+            ValidationUtils.setErrorStyle(tfTitre);
+            AlertUtils.showError("Validation échouée", "Le titre doit contenir entre 3 et 100 caractères.");
             return;
         }
 
-        int tempsLimite;
-        try {
-            tempsLimite = Integer.parseInt(tempsLimiteStr);
-        } catch (NumberFormatException e) {
-            showAlert("Erreur", "Le temps limite doit être un nombre valide.");
+        // Validation Description
+        if (!ValidationUtils.isValidLength(description, 10, 500)) {
+            ValidationUtils.setErrorStyle(taDescription);
+            AlertUtils.showError("Validation échouée", "La description doit contenir entre 10 et 500 caractères.");
             return;
         }
 
+        // Validation Category
+        if (ValidationUtils.isEmpty(category)) {
+            ValidationUtils.setErrorStyle(tfCategory);
+            AlertUtils.showError("Validation échouée", "La catégorie est obligatoire.");
+            return;
+        }
+
+        // Validation Time Limit
+        if (!ValidationUtils.isPositive(tempsLimiteStr)) {
+            ValidationUtils.setErrorStyle(tfTempsLimite);
+            AlertUtils.showError("Validation échouée", "Le temps limite doit être un nombre positif (minutes).");
+            return;
+        }
+
+        int tempsLimite = Integer.parseInt(tempsLimiteStr);
         currentFormulaire.setTitre(titre);
         currentFormulaire.setDescription(description);
         currentFormulaire.setTempsLimite(tempsLimite);
@@ -71,10 +94,11 @@ public class EditQuizController {
         
         try {
             serviceFormulaire.modifier(currentFormulaire);
+            AlertUtils.showInfo("Succès", "Quiz modifié avec succès !");
             retournerDashboard();
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur DB", "Impossible de modifier le quiz: " + e.getMessage());
+            AlertUtils.showError("Erreur SQL", "Impossible de modifier le quiz: " + e.getMessage());
         }
     }
 
@@ -86,13 +110,5 @@ public class EditQuizController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

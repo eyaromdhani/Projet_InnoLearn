@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.EditBookController"
+      stylesheets="@modern_style.css"
+      styleClass="main-bg"
+      prefHeight="800.0" prefWidth="1000.0" spacing="0">
+
+    <!-- Header -->
+    <HBox styleClass="hero-gradient" style="-fx-padding: 40 60;">
+        <VBox spacing="10">
+            <Label text="MODIFIER LE LIVRE" style="-fx-text-fill: white; -fx-opacity: 0.8; -fx-font-weight: bold;"/>
+            <Label fx:id="headerTitle" text="Édition de Livre" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="30" style="-fx-padding: 40 60;">
+            <VBox spacing="20" styleClass="quiz-card" style="-fx-padding: 30;">
+                
+                <GridPane hgap="30" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Titre du Livre" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                        <TextField fx:id="titleField" promptText="Ex: Les Fondamentaux du Java" styleClass="text-field-custom"/>
+                    </VBox>
+
+                    <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Auteur" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                        <TextField fx:id="authorField" promptText="Ex: Jean Dupont" styleClass="text-field-custom"/>
+                    </VBox>
+
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                        <Label text="Description" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                        <TextArea fx:id="descArea" promptText="Résumé du livre..." styleClass="text-area-custom" prefHeight="100" wrapText="true"/>
+                    </VBox>
+
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Date de Publication" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                        <DatePicker fx:id="datePicker" styleClass="text-field-custom" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                        <HBox spacing="20" alignment="CENTER_LEFT">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Fichier PDF" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="pdfPathField" editable="false" styleClass="text-field-custom" HBox.hgrow="ALWAYS"/>
+                                    <Button text="Choisir..." styleClass="button-secondary" onAction="#handleChoosePDF"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </GridPane>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 20 0 0 0;">
+                    <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="120"/>
+                    <Button text="Mettre à jour" styleClass="button-primary-purple" onAction="#handleUpdate" prefWidth="120"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

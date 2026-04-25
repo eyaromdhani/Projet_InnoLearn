@@ -12,23 +12,48 @@
       styleClass="main-bg"
       prefHeight="800.0" prefWidth="1200.0">
 
-    <!-- Top Bar -->
-    <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 15 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+    <!-- Top Bar (Transparent or Semi-transparent) -->
+    <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 10 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);">
         <Label text="InnoLearn" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #6366F1;"/>
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #F1F5F9; -fx-background-radius: 10; -fx-padding: 5 15;">
+            <Label text="⏱" style="-fx-font-size: 18px;"/>
+            <Label fx:id="timerLabel" text="00:00" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+        </HBox>
+
         <Region HBox.hgrow="ALWAYS" />
         <Button text="Retour aux Quiz" styleClass="button-modify" onAction="#handleBack"/>
     </HBox>
 
     <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
-        <VBox spacing="30" style="-fx-padding: 40 100;">
-            <VBox spacing="10">
-                <Label fx:id="quizTitleLabel" text="Titre du Quiz" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                <Label fx:id="quizDescLabel" text="Description du quiz" styleClass="text-subtitle"/>
+        <VBox spacing="0">
+            <!-- Hero Section -->
+            <VBox spacing="15" styleClass="quiz-hero">
+                <Label fx:id="quizTitleLabel" text="Titre du Quiz" style="-fx-font-size: 36px; -fx-font-weight: 800; -fx-text-fill: white;"/>
+                <Label fx:id="quizDescLabel" text="Description du quiz" style="-fx-font-size: 16px; -fx-text-fill: white; -fx-opacity: 0.9;" wrapText="true" maxWidth="800"/>
+                
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <HBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(255,255,255,0.15); -fx-padding: 8 16; -fx-background-radius: 10;">
+                        <Label text="📋" style="-fx-text-fill: white;"/>
+                        <Label fx:id="questionCountLabel" text="0 Questions" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <HBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(255,255,255,0.15); -fx-padding: 8 16; -fx-background-radius: 10;">
+                        <Label text="⏳" style="-fx-text-fill: white;"/>
+                        <Label fx:id="timeLimitLabel" text="0 min" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+                </HBox>
             </VBox>
 
-            <!-- Container for Question Cards -->
-            <VBox fx:id="questionsContainer" spacing="20">
-                <!-- Question cards will be injected here dynamically -->
+            <!-- Questions Container -->
+            <VBox spacing="30" style="-fx-padding: 50 100 100 100;">
+                <VBox fx:id="questionsContainer" spacing="25">
+                    <!-- Question cards injected here -->
+                </VBox>
+
+                <HBox alignment="CENTER" style="-fx-padding: 40 0 0 0;">
+                    <Button text="Soumettre le Quiz" onAction="#handleSubmitQuiz" styleClass="button-primary-purple" prefHeight="60" prefWidth="350" style="-fx-font-size: 18px; -fx-background-radius: 15;"/>
+                </HBox>
             </VBox>
         </VBox>
     </ScrollPane>

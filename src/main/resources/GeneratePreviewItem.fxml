@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.GeneratePreviewItemController"
+      spacing="15"
+      styleClass="ai-card-suggestion"
+      style="-fx-padding: 0 0 20 0;">
+
+    <!-- Card Header with Suggestion Index -->
+    <HBox alignment="CENTER_RIGHT">
+        <Label fx:id="lblIndex" text="IA SUGGESTION #1" styleClass="ai-badge-suggestion-index"/>
+    </HBox>
+
+    <VBox spacing="15" style="-fx-padding: 0 30 10 30;">
+        <!-- Points Badge -->
+        <HBox alignment="CENTER_LEFT" spacing="5">
+            <Label text="⭐" style="-fx-font-size: 12px;"/>
+            <Label fx:id="lblPoints" text="2 Points" styleClass="badge-ai-points"/>
+        </HBox>
+
+        <!-- Question Text -->
+        <Label fx:id="lblQuestionText" 
+               text="Question text will appear here?" 
+               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" 
+               wrapText="true"/>
+
+        <!-- Correct Answer -->
+        <VBox spacing="5">
+            <Label text="Réponse correcte :" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+            <Label fx:id="lblAnswer" 
+                   text="The correct answer details..." 
+                   styleClass="text-correct-answer" 
+                   wrapText="true"/>
+        </VBox>
+
+        <!-- Action Button -->
+        <HBox alignment="CENTER_RIGHT">
+            <Button text="Utiliser cette question" 
+                    onAction="#handleUseThisQuestion" 
+                    styleClass="ai-button-use"/>
+        </HBox>
+    </VBox>
+</VBox>

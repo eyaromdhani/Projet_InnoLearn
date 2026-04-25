@@ -207,3 +207,202 @@
 .btn-icon-delete:hover {
     -fx-background-color: #FECACA;
 }
+/* Quiz Hero Section */
+.quiz-hero {
+    -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);
+    -fx-padding: 40 100;
+}
+
+.circle-number {
+    -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
+    -fx-min-width: 45;
+    -fx-min-height: 45;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-alignment: center;
+}
+
+/* Result Feedback Colors */
+.bg-success-light {
+    -fx-background-color: #f0fff4;
+    -fx-border-color: #c6f6d5;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.bg-danger-light {
+    -fx-background-color: #fff5f5;
+    -fx-border-color: #fed7d7;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.text-success {
+    -fx-text-fill: #059669;
+}
+
+.text-danger {
+    -fx-text-fill: #dc2626;
+}
+
+.percentage-ring {
+    -fx-background-color: transparent;
+    -fx-border-color: #6366F1;
+    -fx-border-width: 8;
+    -fx-border-radius: 100;
+    -fx-min-width: 200;
+    -fx-min-height: 200;
+}
+
+/* Mini PieChart styling */
+.chart-pie {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.chart-content {
+    -fx-padding: 0;
+}
+
+.chart-pie-label {
+    -fx-fill: transparent;
+}
+
+/* Custom ComboBox */
+.combo-box-custom {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 10;
+    -fx-padding: 5 10;
+}
+
+.combo-box-custom .label {
+    -fx-text-fill: #1E293B;
+}
+
+/* =========================================
+   AI SYSTEM - INTELLIGENT GENERATOR (PREMIUM)
+   ========================================= */
+
+.ai-header-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1E293B;
+}
+
+.ai-badge-tech {
+    -fx-background-color: #EEF2FF;
+    -fx-text-fill: #6366F1;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10;
+    -fx-border-color: #E0E7FF;
+    -fx-border-radius: 6;
+}
+
+.ai-container-premium {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 20, 0, 0, 10);
+    -fx-border-color: #F1F5F9;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+}
+
+.ai-input-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1E293B;
+}
+
+.ai-char-count {
+    -fx-font-size: 13px;
+    -fx-text-fill: #94A3B8;
+}
+
+.ai-button-main {
+    -fx-background-color: linear-gradient(to right, #6366F1, #A855F7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-radius: 12;
+    -fx-padding: 12 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(168, 85, 247, 0.4), 15, 0, 0, 5);
+    -fx-cursor: hand;
+}
+
+.ai-button-main:hover {
+    -fx-translate-y: -2;
+    -fx-effect: dropshadow(three-pass-box, rgba(168, 85, 247, 0.6), 20, 0, 0, 8);
+}
+
+.ai-suggestion-header {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1E293B;
+}
+
+.ai-badge-ready {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #166534;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10;
+}
+
+.ai-card-suggestion {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+}
+
+.ai-card-suggestion:hover {
+    -fx-border-color: #6366F1;
+    -fx-effect: dropshadow(three-pass-box, rgba(99, 102, 241, 0.1), 10, 0, 0, 5);
+}
+
+.ai-badge-suggestion-index {
+    -fx-background-color: #6366F1;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 0 15 0 15;
+    -fx-padding: 6 12;
+}
+
+.badge-ai-points {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #6366F1;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 4 12;
+}
+
+.ai-button-use {
+    -fx-background-color: linear-gradient(to right, #6366F1, #8B5CF6);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 25;
+    -fx-cursor: hand;
+}
+
+.ai-button-use:hover {
+    -fx-opacity: 0.9;
+    -fx-translate-x: 2;
+}
+
+.text-correct-answer {
+    -fx-text-fill: #059669;
+    -fx-font-weight: bold;
+}

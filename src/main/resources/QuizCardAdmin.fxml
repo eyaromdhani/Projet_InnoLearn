@@ -15,9 +15,16 @@
     <!-- Card Header (Purple) -->
     <HBox styleClass="card-header-purple" prefHeight="80" alignment="TOP_RIGHT">
         <padding>
-            <Insets top="10" right="10"/>
+            <Insets top="8" right="8"/>
         </padding>
-        <Circle radius="15" fill="white" opacity="0.8"/>
+        <StackPane fx:id="chartContainer" alignment="CENTER" prefWidth="45" prefHeight="45">
+            <!-- Background circle (always visible) -->
+            <javafx.scene.shape.Circle fx:id="bgCircle" radius="20" fill="white" opacity="0.3"/>
+            <!-- Custom Arc Chart (on top) -->
+            <Pane fx:id="chartPane" prefWidth="40" prefHeight="40" maxWidth="40" maxHeight="40" mouseTransparent="true"/>
+            <!-- Donut hole -->
+            <javafx.scene.shape.Circle radius="12" fill="#A36CFE" /> <!-- Match the header purple or white -->
+        </StackPane>
     </HBox>
 
     <!-- Card Content -->
@@ -27,8 +34,8 @@
 
         <!-- Stats -->
         <HBox spacing="10">
-            <Label text="0 réussis" style="-fx-background-color: #DCFCE7; -fx-text-fill: #166534; -fx-padding: 2 10; -fx-background-radius: 5; -fx-font-size: 11px;"/>
-            <Label text="0 échecs" style="-fx-background-color: #FEE2E2; -fx-text-fill: #991B1B; -fx-padding: 2 10; -fx-background-radius: 5; -fx-font-size: 11px;"/>
+            <Label fx:id="passesLabel" text="0 réussis" style="-fx-background-color: #DCFCE7; -fx-text-fill: #166534; -fx-padding: 2 10; -fx-background-radius: 5; -fx-font-size: 11px;"/>
+            <Label fx:id="failsLabel" text="0 échecs" style="-fx-background-color: #FEE2E2; -fx-text-fill: #991B1B; -fx-padding: 2 10; -fx-background-radius: 5; -fx-font-size: 11px;"/>
         </HBox>
 
         <!-- Meta info -->
@@ -44,6 +51,7 @@
         <HBox spacing="8" alignment="CENTER">
             <Button text="Modifier" styleClass="button-modify" onAction="#handleEdit" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             <Button text="Questions" styleClass="button-questions" onAction="#handleViewQuestions" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button text="Analyser" style="-fx-background-color: #A855F7; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" onAction="#handleAIAnalysis" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             <Button text="Supprimer" styleClass="button-delete" onAction="#handleDelete" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
         </HBox>
     </VBox>

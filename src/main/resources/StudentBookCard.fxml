@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.StudentBookCardController"
+      style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #E2E8F0; -fx-border-radius: 20; -fx-border-width: 1;"
+      prefWidth="260" spacing="0">
+    
+    <!-- Top Image Section with Gradient -->
+    <StackPane prefHeight="160" style="-fx-background-color: linear-gradient(to bottom right, #6366F1, #4F46E5); -fx-background-radius: 20 20 0 0;">
+        <VBox alignment="CENTER" spacing="10">
+            <Label text="📚" style="-fx-font-size: 60px; -fx-text-fill: white;"/>
+            <Label fx:id="authorBadge" text="AUTHOR" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-opacity: 0.8; -fx-letter-spacing: 2;"/>
+        </VBox>
+    </StackPane>
+
+    <!-- Info Section -->
+    <VBox spacing="15" style="-fx-padding: 20;">
+        <VBox spacing="5" minHeight="60">
+            <Label fx:id="titleLabel" text="Titre du Livre" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" wrapText="true"/>
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Par:" style="-fx-font-size: 13px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                <Label fx:id="authorLabel" text="Author Name" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+            </HBox>
+        </VBox>
+
+        <Button text="Ouvrir PDF" onAction="#handleOpenPDF" styleClass="button-primary" maxWidth="Infinity" 
+                style="-fx-background-color: #6366F1; -fx-background-radius: 10; -fx-padding: 10; -fx-font-weight: bold; -fx-text-fill: white;"/>
+
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 5 0 0 0; -fx-border-color: #F1F5F9; -fx-border-width: 1 0 0 0; -fx-padding: 15 0 0 0;">
+            <Label fx:id="yearLabel" text="2024" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #94A3B8;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Hyperlink text="Consulter Détails →" onAction="#handleOpenDetails" style="-fx-text-fill: #6366F1; -fx-font-weight: bold; -fx-underline: false; -fx-font-size: 13px;"/>
+        </HBox>
+    </VBox>
+</VBox>

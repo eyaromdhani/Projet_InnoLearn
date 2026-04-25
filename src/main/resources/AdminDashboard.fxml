@@ -20,7 +20,7 @@
         <HBox alignment="CENTER" spacing="20">
             <Hyperlink text="Accueil" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
             <Hyperlink text="Mes Cours" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
-            <Hyperlink text="Événements" style="-fx-text-fill: #64748B; -fx-underline: false;"/>
+            <Hyperlink text="Bibliothèque" style="-fx-text-fill: #64748B; -fx-underline: false;" onAction="#handleGoToBooks"/>
             <Hyperlink text="Quiz" style="-fx-text-fill: #6366F1; -fx-underline: true; -fx-font-weight: bold;"/>
         </HBox>
         
@@ -45,6 +45,7 @@
                     <ComboBox fx:id="categoryFilter" promptText="Toutes les catégories" styleClass="combo-box-custom" prefWidth="250"/>
                     <HBox spacing="10" alignment="CENTER_LEFT">
                         <TextField fx:id="searchField" promptText="Rechercher un quiz..." styleClass="text-field-custom" prefWidth="300"/>
+                        <ComboBox fx:id="sortByCombo" promptText="Trier par..." styleClass="combo-box-custom" prefWidth="180"/>
                         <Button text="Créer un Quiz" styleClass="button-primary" onAction="#handleCreateQuiz"/>
                     </HBox>
                 </VBox>
