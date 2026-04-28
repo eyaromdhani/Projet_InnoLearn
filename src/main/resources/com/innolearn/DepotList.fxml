@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Pos?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.DepotListController">
+    <VBox spacing="0" styleClass="content-area">
+        <!-- Hero Section -->
+        <StackPane styleClass="hero-section" style="-fx-background-color: linear-gradient(to bottom right, #4f46e5, #9333ea);">
+            <HBox alignment="CENTER_LEFT" spacing="50" style="-fx-padding: 40 80;">
+                <VBox spacing="20" maxWidth="800">
+                    <VBox spacing="5">
+                        <Label fx:id="lblProjectTitle" text="Titre du Projet" styleClass="hero-title" style="-fx-font-size: 36px;" />
+                        <Label text="Détails et Soumissions" styleClass="hero-subtitle" style="-fx-text-fill: #67e8f9;" />
+                    </VBox>
+                    
+                    <VBox spacing="15">
+                         <Label fx:id="lblProjectDescription" text="Description du projet..." 
+                                style="-fx-text-fill: white; -fx-opacity: 0.9; -fx-font-size: 16px;" wrapText="true" />
+                         
+                         <HBox spacing="15" alignment="CENTER_LEFT">
+                             <Button text="← Retour" onAction="#handleBack" styleClass="glass-combo" 
+                                     style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-border-color: rgba(255,255,255,0.3);" />
+                             <Button fx:id="btnSummarize" onAction="#handleSummarize" text="🤖 Résumer l'avancement" 
+                                     style="-fx-background-color: #06b6d4; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 8 15; -fx-cursor: hand;" />
+                         </HBox>
+                         <VBox fx:id="summaryBox" managed="false" style="-fx-background-color: rgba(255,255,255,0.1); -fx-padding: 15; -fx-background-radius: 10;" visible="false">
+                             <Label fx:id="lblSummary" style="-fx-text-fill: white; -fx-font-size: 14px;" text="..." wrapText="true" />
+                         </VBox>
+                    </VBox>
+                </VBox>
+                
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <ImageView fitHeight="280" preserveRatio="true">
+                    <Image url="@images/hero_character.png" />
+                </ImageView>
+            </HBox>
+        </StackPane>
+        
+        <!-- Add Button Placeholder (Overlapping) -->
+        <AnchorPane>
+            <Button text="+ Nouveau Dépôt" onAction="#handleAddDepot" styleClass="add-button" 
+                    AnchorPane.topAnchor="-25" AnchorPane.leftAnchor="80" style="-fx-background-color: #4f46e5; -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.4), 20, 0, 0, 8);" />
+        </AnchorPane>
+
+        <!-- Depot Table Section -->
+        <VBox spacing="30" style="-fx-padding: 60 80;">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Liste des Soumissions" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: -fx-text-main;" />
+                <Region HBox.hgrow="ALWAYS" />
+            </HBox>
+            
+            <TableView fx:id="depotTable" fixedCellSize="65" styleClass="table-view" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 15, 0, 0, 5); -fx-background-radius: 16;">
+                <columns>
+                    <TableColumn fx:id="colTitle"   text="Titre du Dépôt" prefWidth="250" />
+                    <TableColumn fx:id="colStudent" text="Étudiant"       prefWidth="130" />
+
+                    <TableColumn fx:id="colType"    text="Type"           prefWidth="80" />
+                    <TableColumn fx:id="colScore"   text="Score IA"       prefWidth="80" />
+                    <TableColumn fx:id="colResult"  text="Analyse IA"     prefWidth="300" />
+                    <TableColumn fx:id="colDate"    text="Soumis le"      prefWidth="160" />
+                    <TableColumn fx:id="colActions" text="Actions"        prefWidth="60" />
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

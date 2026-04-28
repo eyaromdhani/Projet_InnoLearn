@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefWidth="560" spacing="0" style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.ProjectFormController">
+
+    <!-- Gradient Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: linear-gradient(to right, #6366f1, #a855f7); -fx-padding: 30 35;">
+        <StackPane style="-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 14; -fx-min-width: 50; -fx-min-height: 50;">
+            <Label fx:id="lblHeaderIcon" text="📂" style="-fx-font-size: 22px;" />
+        </StackPane>
+        <VBox spacing="4">
+            <Label fx:id="lblHeaderTitle" text="Nouveau Projet" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: white;" />
+            <Label fx:id="lblHeaderSubtitle" text="Remplissez les informations ci-dessous pour créer un nouveau projet." style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.8); -fx-wrap-text: true;" maxWidth="380" />
+        </VBox>
+    </HBox>
+
+    <!-- Form Body -->
+    <VBox spacing="22" style="-fx-padding: 30 35; -fx-background-color: #f8fafc;">
+
+        <!-- Title -->
+        <VBox spacing="6">
+            <HBox spacing="4">
+                <Label text="Titre du projet" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #374151;" />
+                <Label text="*" style="-fx-text-fill: #ef4444; -fx-font-weight: 900;" />
+            </HBox>
+            <TextField fx:id="txtTitle" promptText="Ex: Application Web Moderne..." style="-fx-background-color: white; -fx-padding: 12 15; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+            <Label fx:id="errTitle" text="" style="-fx-text-fill: #ef4444; -fx-font-size: 11px;" />
+        </VBox>
+
+        <!-- Description -->
+        <VBox spacing="6">
+            <HBox spacing="4">
+                <Label text="Description" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #374151;" />
+                <Label text="*" style="-fx-text-fill: #ef4444; -fx-font-weight: 900;" />
+            </HBox>
+            <TextArea fx:id="txtDescription" promptText="Décrivez les objectifs et le périmètre du projet..." prefHeight="110" wrapText="true"
+                      style="-fx-control-inner-background: white; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+            <Label fx:id="errDescription" text="" style="-fx-text-fill: #ef4444; -fx-font-size: 11px;" />
+        </VBox>
+
+        <!-- Status Row -->
+        <HBox spacing="15">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Statut" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #374151;" />
+                <ComboBox fx:id="comboStatus" maxWidth="Infinity"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+            </VBox>
+        </HBox>
+
+        <!-- Date Row -->
+        <HBox spacing="15">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <HBox spacing="4">
+                    <Label text="Date de début" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #374151;" />
+                    <Label text="*" style="-fx-text-fill: #ef4444; -fx-font-weight: 900;" />
+                </HBox>
+                <DatePicker fx:id="dateStart" maxWidth="Infinity"
+                            style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5;" />
+                <Label fx:id="errDate" text="" style="-fx-text-fill: #ef4444; -fx-font-size: 11px;" />
+            </VBox>
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Date de fin (optionnel)" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #374151;" />
+                <DatePicker fx:id="dateEnd" maxWidth="Infinity"
+                            style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5;" />
+            </VBox>
+        </HBox>
+
+    </VBox>
+
+    <!-- Footer Actions -->
+    <HBox spacing="12" alignment="CENTER_RIGHT" style="-fx-padding: 0 35 30 35; -fx-background-color: #f8fafc;">
+        <Button text="Annuler" onAction="#handleCancel"
+                style="-fx-background-color: white; -fx-text-fill: #6b7280; -fx-font-weight: 700; -fx-font-size: 14px; -fx-padding: 12 28; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-cursor: hand;" />
+        <Button fx:id="btnSave" text="✚  Ajouter le Projet" onAction="#handleSave"
+                style="-fx-background-color: linear-gradient(to right, #6366f1, #a855f7); -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 14px; -fx-padding: 12 30; -fx-background-radius: 10; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.4), 15, 0, 0, 5);" />
+    </HBox>
+</VBox>

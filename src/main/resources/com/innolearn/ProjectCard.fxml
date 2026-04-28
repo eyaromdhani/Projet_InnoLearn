@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.ProjectCardController" 
+      spacing="0" styleClass="project-card" prefWidth="350">
+      
+    <!-- Card Header with Dynamic Color -->
+    <VBox fx:id="vboxHeader" spacing="15" styleClass="card-header, card-header-blue">
+        <Label fx:id="lblTag" text="COURS" styleClass="card-tag" />
+        <Label fx:id="lblHeaderTitle" text="Title" styleClass="card-title-hero" wrapText="true" />
+    </VBox>
+    
+    <!-- Card Body -->
+    <VBox spacing="15" styleClass="card-body">
+        <VBox spacing="8">
+            <Label fx:id="lblTitle" text="Project Title" styleClass="card-title" wrapText="true" />
+            <Label fx:id="lblDescription" text="Description placeholder with multiple lines to show the layout." 
+                   styleClass="card-description" wrapText="true" maxHeight="80" />
+        </VBox>
+        
+        <!-- Action Symbols -->
+        <HBox spacing="15" alignment="CENTER_LEFT">
+             <Button onAction="#handleEdit" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0;">
+                <graphic><Label text="✎" style="-fx-font-size: 16; -fx-text-fill: #94a3b8;" /></graphic>
+            </Button>
+            <Button onAction="#handleDelete" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0;">
+                <graphic><Label text="🗑" style="-fx-font-size: 16; -fx-text-fill: #ef4444;" /></graphic>
+            </Button>
+            <Button onAction="#handleMindMap" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0;">
+                <graphic><Label text="🌲" style="-fx-font-size: 16; -fx-text-fill: #10b981;" /></graphic>
+            </Button>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Détails" onAction="#handleView" style="-fx-background-color: transparent; -fx-text-fill: -fx-primary; -fx-font-weight: bold; -fx-padding: 0; -fx-cursor: hand;" />
+        </HBox>
+    </VBox>
+    
+    <!-- Card Footer -->
+    <HBox styleClass="card-footer">
+        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="level-badge">
+             <Label text="🎓" style="-fx-font-size: 10;" />
+             <Label fx:id="lblDifficulty" text="Intermediate" />
+        </HBox>
+    </HBox>
+</VBox>

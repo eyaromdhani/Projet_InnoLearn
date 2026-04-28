@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Pos?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.ProjectListController">
+    <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+        <!-- existing content goes here -->
+        <VBox spacing="0" styleClass="content-area">
+        <!-- Hero Section -->
+        <StackPane styleClass="hero-section">
+            <HBox alignment="CENTER_LEFT" spacing="50">
+                <VBox spacing="20" maxWidth="600">
+                    <VBox spacing="5">
+                        <Label text="Gérez et" styleClass="hero-title" />
+                        <Label text="Optimisez Vos Projets" styleClass="hero-subtitle" />
+                    </VBox>
+                    
+                    <VBox spacing="15">
+                        <ComboBox fx:id="levelCombo" promptText="Tous les niveaux" styleClass="glass-combo" prefWidth="300" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="searchField" promptText="Rechercher un projet..." styleClass="glass-input" maxWidth="350" HBox.hgrow="ALWAYS" />
+                            <Button onAction="#handleVoiceSearch" text="🎤" style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 50; -fx-cursor: hand; -fx-min-width: 45; -fx-min-height: 45;" />
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Trier par:" style="-fx-text-fill: white; -fx-opacity: 0.8;" />
+                            <ComboBox fx:id="sortCombo" promptText="Plus récents" styleClass="glass-combo" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <!-- Character Image -->
+                <ImageView fx:id="heroImage" fitHeight="400" preserveRatio="true">
+                    <Image url="@images/hero_character.png" />
+                </ImageView>
+            </HBox>
+        </StackPane>
+        
+        <!-- Projects Grid Section -->
+        <VBox spacing="30" style="-fx-padding: 60 80;">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Vos Projets" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: -fx-text-main;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button text="📊 Statistiques" onAction="#handleShowStats" styleClass="btn-action-view" />
+                <Button text="📄 PDF" onAction="#handleExportPDF" styleClass="btn-action-view" />
+                <Button text="📗 Excel" onAction="#handleExportExcel" styleClass="btn-action-view" />
+                <Hyperlink text="Voir tout" style="-fx-text-fill: -fx-primary; -fx-font-weight: bold;" />
+            </HBox>
+            
+            <FlowPane fx:id="projectContainer" hgap="120" vgap="100" prefWrapLength="1400">
+                <!-- Cards will be injected here -->
+            </FlowPane>
+        </VBox>
+        </VBox>
+    </ScrollPane>
+    
+    <!-- Floating Eye Tracking Button in StackPane -->
+    <HBox alignment="BOTTOM_RIGHT" pickOnBounds="false" style="-fx-padding: 30;">
+        <Button fx:id="btnEyeTracking" text="👁️ Suivi Oculaire" onAction="#handleToggleEyeTracking" 
+                style="-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 12 25; -fx-background-radius: 30; -fx-effect: dropshadow(gaussian, rgba(245,158,11,0.4), 15, 0, 0, 5); -fx-cursor: hand;" />
+    </HBox>
+</StackPane>

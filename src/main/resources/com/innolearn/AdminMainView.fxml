@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: -fx-admin-bg;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.AdminMainController">
+    <!-- Sidebar -->
+    <VBox prefWidth="280.0" styleClass="sidebar">
+        <!-- Logo -->
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 20 40 20;">
+            <Label text="🎓" style="-fx-font-size: 32px; -fx-text-fill: -fx-primary;" />
+            <Label text="InnoLearn" style="-fx-font-size: 24px; -fx-font-weight: 900; -fx-text-fill: -fx-text-main;" />
+        </HBox>
+        
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+            <VBox spacing="5" style="-fx-background-color: transparent;">
+                <Label text="MENU" styleClass="sidebar-section-title" />
+                
+                <Button fx:id="btnDashboard" text="📊  Dashboard" styleClass="sidebar-item" maxWidth="Infinity" onAction="#handleDashboard" />
+                <Button fx:id="btnProjects" text="📂  Projets" styleClass="sidebar-item, active" maxWidth="Infinity" onAction="#handleProjects" />
+                <Button fx:id="btnSubscriptions" text="💳  Abonnements" styleClass="sidebar-item" maxWidth="Infinity" />
+                <Button fx:id="btnUsers" text="👥  Utilisateurs" styleClass="sidebar-item" maxWidth="Infinity" />
+                <Button fx:id="btnCategories" text="🏷️  Catégories" styleClass="sidebar-item" maxWidth="Infinity" />
+                <Button fx:id="btnQuiz" text="📝  Quiz" styleClass="sidebar-item" maxWidth="Infinity" />
+                <Button fx:id="btnBooks" text="📚  Livres" styleClass="sidebar-item" maxWidth="Infinity" />
+                
+                <Label text="SUPPORT" styleClass="sidebar-section-title" />
+                
+                <Button fx:id="btnEvents" text="📅  Événements" styleClass="sidebar-item" maxWidth="Infinity" />
+                <Button fx:id="btnOpportunities" text="💡  Opportunités" styleClass="sidebar-item" maxWidth="Infinity" />
+                <Button fx:id="btnReports" text="📈  Rapports" styleClass="sidebar-item" maxWidth="Infinity" />
+            </VBox>
+        </ScrollPane>
+        
+        <!-- Bottom Section -->
+        <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
+            <Separator />
+            <Button text="🚪  Déconnexion" styleClass="sidebar-item" style="-fx-text-fill: -fx-danger;" maxWidth="Infinity" onAction="#handleLogout" />
+        </VBox>
+    </VBox>
+    
+    <!-- Main Content Area -->
+    <VBox HBox.hgrow="ALWAYS">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0" styleClass="admin-header">
+            <Label text="Dashboard Overview" style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: -fx-text-main;" />
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <HBox alignment="CENTER" spacing="20">
+                <!-- Search bar -->
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #f1f5f9; -fx-background-radius: 12; -fx-padding: 8 15;">
+                    <Label text="🔍" style="-fx-text-fill: #94a3b8;" />
+                    <TextField promptText="Rechercher..." style="-fx-background-color: transparent; -fx-prompt-text-fill: #94a3b8; -fx-min-width: 200;" />
+                </HBox>
+                
+                <Button text="🔔" style="-fx-background-color: #f1f5f9; -fx-background-radius: 12; -fx-min-width: 40; -fx-min-height: 40; -fx-font-size: 16px;" />
+                
+                <!-- Admin Profile -->
+                <HBox alignment="CENTER" spacing="12">
+                    <VBox alignment="CENTER_RIGHT">
+                        <Label text="Main Admin" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: -fx-text-main;" />
+                        <Label text="Administrateur" style="-fx-font-size: 11px; -fx-text-fill: -fx-text-muted;" />
+                    </VBox>
+                    <StackPane prefHeight="40" prefWidth="40" style="-fx-background-color: #6366f1; -fx-background-radius: 12;">
+                        <Label text="M" style="-fx-text-fill: white; -fx-font-weight: 900;" />
+                    </StackPane>
+                </HBox>
+            </HBox>
+        </HBox>
+        
+        <!-- Content Container -->
+        <StackPane fx:id="adminContentArea" VBox.vgrow="ALWAYS" style="-fx-padding: 30;">
+            <!-- Dynamic views will be loaded here -->
+        </StackPane>
+    </VBox>
+</HBox>

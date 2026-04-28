@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.MainController">
+    <!-- Content Layer -->
+    <StackPane fx:id="contentPane">
+        <!-- Content will be loaded dynamically here -->
+    </StackPane>
+
+    <!-- Navbar Layer -->
+    <HBox styleClass="navbar" spacing="40" alignment="CENTER_LEFT" prefHeight="100" maxHeight="100" StackPane.alignment="TOP_CENTER" pickOnBounds="false" style="-fx-padding: 0 140 0 80;">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="&#127891;" style="-fx-text-fill: white; -fx-font-size: 32px;" />
+            <Label text="InnoLearn" style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: 900;" />
+        </HBox>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <HBox spacing="25" alignment="CENTER">
+            <Button fx:id="btnAccueil"  text="Accueil"      onAction="#handleDashboardAction" styleClass="navbar-button, active" />
+            <Button fx:id="btnCours"    text="Cours"        onAction="#handleProjectsAction"  styleClass="navbar-button" />
+            <Button fx:id="btnProjets"  text="Projets"      onAction="#handleProjectsAction"  styleClass="navbar-button" />
+            <Button fx:id="btnEvents"   text="Evenements"   onAction="#handleEventsAction"    styleClass="navbar-button" />
+            <Button fx:id="btnCarriere" text="Carriere"     onAction="#handleEventsAction"    styleClass="navbar-button" />
+        </HBox>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <HBox spacing="20" alignment="CENTER_RIGHT">
+            <HBox styleClass="search-capsule" alignment="CENTER_LEFT">
+                <Label text="&#128269;" style="-fx-text-fill: rgba(255,255,255,0.6); -fx-padding: 0 10;" />
+                <TextField promptText="Rechercher..." styleClass="navbar-search" />
+            </HBox>
+            <StackPane styleClass="profile-circle">
+                <Label text="EU" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;" />
+            </StackPane>
+        </HBox>
+    </HBox>
+
+    <!-- ══ Chatbot Panel (hidden by default, shown on FAB click) ══ -->
+    <VBox fx:id="chatbotPanel"
+          StackPane.alignment="BOTTOM_RIGHT"
+          visible="false" managed="false"
+          style="-fx-translate-x: -30; -fx-translate-y: -110;" />
+
+    <!-- ══ Floating Chat Button (FAB) ══ -->
+    <Button fx:id="btnChat"
+            text="&#128172;"
+            onAction="#handleToggleChat"
+            styleClass="chat-fab"
+            StackPane.alignment="BOTTOM_RIGHT" />
+
+</StackPane>

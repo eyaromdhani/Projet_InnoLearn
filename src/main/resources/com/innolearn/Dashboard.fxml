@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.DashboardController">
+    <VBox spacing="0" styleClass="content-area">
+        <!-- Hero Section -->
+        <StackPane styleClass="hero-section">
+            <HBox alignment="CENTER_LEFT" spacing="50">
+                <VBox spacing="20" maxWidth="600" minWidth="600">
+                    <VBox spacing="5">
+                        <Label text="Ravi de vous revoir," styleClass="hero-title" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Étudiant" styleClass="hero-subtitle" />
+                            <Label text="!" styleClass="hero-title" />
+                            <Label text="👋" style="-fx-font-size: 40;" />
+                        </HBox>
+                    </VBox>
+                    
+                    <VBox spacing="15">
+                        <HBox spacing="15">
+                            <ComboBox promptText="Toutes les catégories" styleClass="glass-combo" prefWidth="250" />
+                        </HBox>
+                        <TextField promptText="Rechercher vos cours, activités..." styleClass="glass-input" maxWidth="450" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Trier par:" style="-fx-text-fill: white; -fx-opacity: 0.8;" />
+                            <ComboBox promptText="Plus récents" styleClass="glass-combo" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <!-- Character Image Placeholder -->
+                <ImageView fitHeight="380" preserveRatio="true">
+                    <Image url="@images/hero_character.png" />
+                </ImageView>
+            </HBox>
+        </StackPane>
+
+        <!-- Stats Section -->
+        <VBox spacing="30" style="-fx-padding: 60 80;">
+            <Label text="Aperçu des Activités" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: -fx-text-main;" />
+            
+            <FlowPane hgap="30" vgap="30" prefWrapLength="1200">
+                <!-- Stat Cards -->
+                <VBox styleClass="project-card" prefWidth="320" spacing="20" style="-fx-padding: 30;">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📊" style="-fx-font-size: 24;" />
+                        <Label text="Total Projets" styleClass="stat-label" />
+                    </HBox>
+                    <Label fx:id="statProjects" text="-" styleClass="stat-value" />
+                    <ProgressBar progress="0.6" maxWidth="Infinity" style="-fx-accent: -fx-primary;" />
+                </VBox>
+                
+                <VBox styleClass="project-card" prefWidth="320" spacing="20" style="-fx-padding: 30;">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📚" style="-fx-font-size: 24;" />
+                        <Label text="Cours Actifs" styleClass="stat-label" />
+                    </HBox>
+                    <Label fx:id="statCourses" text="-" styleClass="stat-value" />
+                    <ProgressBar progress="0.4" maxWidth="Infinity" style="-fx-accent: -fx-secondary;" />
+                </VBox>
+                
+                <VBox styleClass="project-card" prefWidth="320" spacing="20" style="-fx-padding: 30;">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="✅" style="-fx-font-size: 24;" />
+                        <Label text="Achèvement" styleClass="stat-label" />
+                    </HBox>
+                    <Label fx:id="statCompletion" text="-" styleClass="stat-value" />
+                    <ProgressBar progress="0.85" maxWidth="Infinity" style="-fx-accent: #22c55e;" />
+                </VBox>
+            </FlowPane>
+        </VBox>
+    </VBox>
+</ScrollPane>

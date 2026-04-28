@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefWidth="550" spacing="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 30, 0, 0, 10);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.DepotFormController">
+    
+    <!-- ══ Premium Header ══ -->
+    <VBox spacing="10" style="-fx-background-color: linear-gradient(to right, #6366f1, #a855f7); -fx-padding: 30; -fx-background-radius: 20 20 0 0;">
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <StackPane style="-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 12; -fx-padding: 10;">
+                <Label text="📤" style="-fx-font-size: 24px;" />
+            </StackPane>
+            <VBox spacing="2">
+                <Label fx:id="lblHeaderTitle" text="Nouveau Dépôt" style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: 900;" />
+                <Label fx:id="lblHeaderSubtitle" text="Soumettez vos livrables et évaluez votre progression" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 13px;" />
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background-insets: 0;" prefHeight="600">
+        <VBox spacing="25" style="-fx-padding: 30;">
+            
+            <!-- ══ Form Fields ══ -->
+            <VBox spacing="15">
+                <VBox spacing="8">
+                    <Label text="Titre du dépôt *" style="-fx-font-weight: 700; -fx-text-fill: #374151; -fx-font-size: 13px;" />
+                    <TextField fx:id="txtTitle" promptText="Ex: Rapport Final - Module 1" 
+                               style="-fx-background-color: #f8fafc; -fx-padding: 12 15; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+                </VBox>
+
+                <HBox spacing="15">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Nom de l'étudiant *" style="-fx-font-weight: 700; -fx-text-fill: #374151; -fx-font-size: 13px;" />
+                        <TextField fx:id="txtStudent" promptText="Prénom et NOM..." 
+                                   style="-fx-background-color: #f8fafc; -fx-padding: 12 15; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+                    </VBox>
+                    <VBox spacing="8" minWidth="150">
+                        <Label text="Type de fichier" style="-fx-font-weight: 700; -fx-text-fill: #374151; -fx-font-size: 13px;" />
+                        <ComboBox fx:id="comboType" maxWidth="Infinity"
+                                  style="-fx-background-color: #f8fafc; -fx-padding: 8 10; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="8">
+                    <Label text="Fichier joint *" style="-fx-font-weight: 700; -fx-text-fill: #374151; -fx-font-size: 13px;" />
+                    <HBox spacing="10">
+                        <TextField fx:id="txtFilePath" editable="false" promptText="Cliquez sur Parcourir..." HBox.hgrow="ALWAYS"
+                                   style="-fx-background-color: #f8fafc; -fx-padding: 12 15; -fx-background-radius: 10; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-border-width: 1.5; -fx-font-size: 14px;" />
+                        <Button text="Parcourir" onAction="#handleBrowse"
+                                style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 20; -fx-background-radius: 10; -fx-cursor: hand;" />
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <Separator style="-fx-opacity: 0.5;" />
+
+            <!-- ══ Checklist Section ══ -->
+            <VBox spacing="15" style="-fx-background-color: #f8fafc; -fx-padding: 20; -fx-background-radius: 15; -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 15;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📋" style="-fx-font-size: 18px;" />
+                    <VBox spacing="1">
+                        <Label text="Checklist de réalisation" style="-fx-font-weight: 800; -fx-font-size: 14px; -fx-text-fill: #1e1b4b;" />
+                        <Label text="Détaillez les tâches accomplies pour l'analyse IA" style="-fx-font-size: 11px; -fx-text-fill: #64748b;" />
+                    </VBox>
+                </HBox>
+                
+                <VBox spacing="12">
+                    <HBox spacing="10">
+                        <TextField fx:id="txtNewTask" promptText="Ajouter une tâche (ex: Tests unitaires finis)..." HBox.hgrow="ALWAYS"
+                                   style="-fx-background-color: white; -fx-padding: 10 15; -fx-background-radius: 10; -fx-border-color: #cbd5e1; -fx-border-radius: 10;" />
+                        <Button text="Ajouter" onAction="#handleAddTask"
+                                style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 15; -fx-background-radius: 10; -fx-cursor: hand;" />
+                    </HBox>
+                    
+                    <ListView fx:id="listTodos" prefHeight="180" 
+                              style="-fx-background-color: white; -fx-background-insets: 0; -fx-padding: 5; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-background-radius: 10;" />
+                </VBox>
+            </VBox>
+
+            <!-- ══ Action Buttons ══ -->
+            <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                <Button text="Annuler" onAction="#handleCancel"
+                        style="-fx-background-color: transparent; -fx-text-fill: #64748b; -fx-font-weight: 700; -fx-padding: 12 25; -fx-cursor: hand;" />
+                <Button fx:id="btnSave" text="✚  Soumettre le Dépôt" onAction="#handleSave"
+                        style="-fx-background-color: linear-gradient(to right, #4f46e5, #7c3aed); -fx-text-fill: white; -fx-font-weight: 900; -fx-font-size: 14px; -fx-padding: 12 35; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.3), 15, 0, 0, 5); -fx-cursor: hand;" />
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

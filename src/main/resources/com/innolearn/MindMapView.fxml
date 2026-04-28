@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+ 
+<StackPane prefWidth="800" prefHeight="600" style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innolearn.controller.MindMapController">
+    
+    <Pane fx:id="drawingPane" />
+    
+    <VBox alignment="TOP_RIGHT" pickOnBounds="false">
+        <padding>
+            <Insets top="20" right="20" />
+        </padding>
+        <Button text="✕" onAction="#handleClose" 
+                style="-fx-background-color: rgba(0,0,0,0.1); -fx-background-radius: 50; -fx-min-width: 40; -fx-min-height: 40; -fx-font-size: 18; -fx-cursor: hand;" />
+    </VBox>
+    
+    <VBox alignment="BOTTOM_LEFT" pickOnBounds="false">
+        <padding>
+            <Insets bottom="20" left="20" />
+        </padding>
+        <Label fx:id="lblStatus" text="Visualisation Arborescente" 
+               style="-fx-background-color: rgba(255,255,255,0.8); -fx-padding: 10 20; -fx-background-radius: 20; -fx-font-weight: bold; -fx-text-fill: #6366f1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);" />
+    </VBox>
+
+</StackPane>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox spacing="0" styleClass="content-area">
+        <StackPane styleClass="hero-section" style="-fx-background-color: linear-gradient(to bottom right, #f43f5e, #fb7185);">
+            <HBox alignment="CENTER_LEFT" spacing="50">
+                <VBox spacing="20" maxWidth="600">
+                    <VBox spacing="5">
+                        <Label text="Événements" styleClass="hero-title" />
+                        <Label text="&amp; Webinaires" styleClass="hero-subtitle" style="-fx-text-fill: white;" />
+                    </VBox>
+                    <Label text="Ne manquez aucune actualité, conférence ou atelier pratique sur InnoLearn." 
+                           style="-fx-text-fill: white; -fx-opacity: 0.9; -fx-font-size: 18px;" wrapText="true" />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <ImageView fitHeight="350" preserveRatio="true">
+                    <Image url="@images/hero_character.png" />
+                </ImageView>
+            </HBox>
+        </StackPane>
+        
+        <VBox spacing="30" style="-fx-padding: 60 80;">
+            <Label text="Prochainement" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: -fx-text-main;" />
+            <FlowPane hgap="30" vgap="30">
+                <!-- Event Card Placeholders -->
+                <VBox styleClass="project-card" prefWidth="350" spacing="15" style="-fx-padding: 20;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <VBox alignment="CENTER" style="-fx-background-color: #f43f5e; -fx-background-radius: 8; -fx-padding: 10;">
+                            <Label text="14" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18;" />
+                            <Label text="AVR" style="-fx-text-fill: white; -fx-font-size: 12;" />
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Atelier Design System" style="-fx-font-weight: bold; -fx-font-size: 16;" />
+                            <Label text="14:00 - 16:00 | Zoom" style="-fx-text-fill: -fx-text-muted;" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </FlowPane>
+        </VBox>
+    </VBox>
+</ScrollPane>

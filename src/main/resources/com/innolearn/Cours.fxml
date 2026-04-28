@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox spacing="0" styleClass="content-area">
+        <StackPane styleClass="hero-section" style="-fx-background-color: linear-gradient(to bottom right, #6366f1, #a855f7);">
+            <HBox alignment="CENTER_LEFT" spacing="50">
+                <VBox spacing="20" maxWidth="600">
+                    <VBox spacing="5">
+                        <Label text="Explorez Vos" styleClass="hero-title" />
+                        <Label text="Cours en Ligne" styleClass="hero-subtitle" style="-fx-text-fill: #99f6e4;" />
+                    </VBox>
+                    <Label text="Accédez à vos supports de cours, vidéos et ressources pédagogiques en un clic." 
+                           style="-fx-text-fill: white; -fx-opacity: 0.8; -fx-font-size: 18px;" wrapText="true" />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <ImageView fitHeight="350" preserveRatio="true">
+                    <Image url="@images/hero_character.png" />
+                </ImageView>
+            </HBox>
+        </StackPane>
+        
+        <VBox spacing="30" style="-fx-padding: 60 80;">
+            <Label text="Mes Cours" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: -fx-text-main;" />
+            <FlowPane hgap="30" vgap="30">
+                <!-- Course Card Placeholders -->
+                <VBox styleClass="project-card" prefWidth="300" spacing="15" style="-fx-padding: 20;">
+                    <Region prefHeight="150" style="-fx-background-color: #f1f5f9; -fx-background-radius: 12;" />
+                    <Label text="Développement JavaFX" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+                    <ProgressBar progress="0.7" maxWidth="Infinity" />
+                </VBox>
+                <VBox styleClass="project-card" prefWidth="300" spacing="15" style="-fx-padding: 20;">
+                    <Region prefHeight="150" style="-fx-background-color: #f1f5f9; -fx-background-radius: 12;" />
+                    <Label text="Architecture MVC" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+                    <ProgressBar progress="0.3" maxWidth="Infinity" />
+                </VBox>
+            </FlowPane>
+        </VBox>
+    </VBox>
+</ScrollPane>

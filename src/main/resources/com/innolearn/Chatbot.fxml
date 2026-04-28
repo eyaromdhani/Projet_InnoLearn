@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.innolearn.controller.ChatbotController"
+      styleClass="chatbot-window"
+      prefWidth="400" prefHeight="560"
+      spacing="0">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="chatbot-header">
+        <Label text="🤖" style="-fx-font-size: 22px;" />
+        <VBox spacing="1">
+            <Label text="InnoBot" styleClass="chatbot-title" />
+            <Label text="Assistant IA • En ligne" styleClass="chatbot-status" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="clearButton" text="🗑" styleClass="chatbot-icon-btn"
+                onAction="#handleClear" />
+    </HBox>
+
+    <!-- Messages Area -->
+    <ScrollPane fx:id="chatScrollPane" VBox.vgrow="ALWAYS"
+                fitToWidth="true" hbarPolicy="NEVER"
+                styleClass="chatbot-scroll">
+        <VBox fx:id="chatMessages" spacing="8" styleClass="chat-messages-area">
+            <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+        </VBox>
+    </ScrollPane>
+
+    <!-- Input Row -->
+    <HBox alignment="CENTER" spacing="10" styleClass="chatbot-input-row">
+        <TextField fx:id="messageInput"
+                   promptText="Pose ta question..."
+                   HBox.hgrow="ALWAYS"
+                   styleClass="chatbot-input" />
+        <Button fx:id="sendButton" text="➤"
+                styleClass="chatbot-send-btn"
+                onAction="#handleSend" />
+    </HBox>
+
+</VBox>
